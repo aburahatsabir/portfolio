@@ -2,16 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Abu Rahat Sabir – Portfolio</title>
-    <!-- Favicon -->
-  <link rel="icon" href="data:image/svg+xml,
-    <svg xmlns='http://www.w3.org/2000/svg' width='64' height='64'>
-      <circle cx='32' cy='32' r='32' fill='%23FF5722'/>
-      <text x='32' y='42' font-size='32' text-anchor='middle' fill='white' font-family='Inter' font-weight='700'>A</text>
-    </svg>
-  ">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- ✅ Add this -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Abu Rahat Sabir | Executive Admin & Automation Specialist</title>
+
+
+  <!-- SEO Description -->
+  <meta name="description"
+        content="Abu Rahat Sabir – Executive Admin and operations strategist in Dhaka, specialising in workflow design, automation, digital systems, and high-level business coordination.">
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
@@ -34,8 +34,10 @@
     }
 
     html {
-      scroll-behavior: smooth;
-    }
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px; /* Prevents sections from hiding under sticky header */
+}
+
 
     body {
       font-family: 'Inter', sans-serif;
@@ -44,6 +46,11 @@
       background-color: #ffffff;
       color: #111;
       overflow-x: hidden;
+    }
+
+    /* Make anchor scroll stop below the sticky header */
+    section[id] {
+      scroll-margin-top: 90px;  /* you can try 80 or 100 if you like */
     }
 
     /* Simple helper so content doesn’t go too wide */
@@ -69,23 +76,31 @@
     ========================== */
 
 header {
-  position: sticky;      /* makes it stay in view while scrolling */
-  top: 0;                /* stick to very top */
-  z-index: 999;          /* keep it above other content */
-  background: #ffffff;   /* white background so content doesn't show through */
-  
-  max-width: 1200px;
-  margin: 0 auto 20px;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  background: rgba(255, 255, 255, 0.95); /* clean translucent white */
+  backdrop-filter: blur(10px);           /* modern glass effect */
+  box-shadow: 0 2px 20px rgba(0,0,0,0.05); /* soft shadow when scrolling */
+  width: 100%;
+  margin: 0; /* remove the gap at top */
+  padding: 10px 0; /* breathing room */
 }
 
+
     .top-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 20px;  
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
 
     .logo-circle {
       width: 50px;
@@ -774,10 +789,12 @@ header {
     }
 
     .skill-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(255, 87, 34, 0.15);
-      border-color: #FF5722;
-    }
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(255, 87, 34, 0.15);
+  border-color: #FF5722;
+  background: #FFF3EB; /* soft orange tint to match your theme */
+}
+
 
     .icon-box {
       width: 60px;
@@ -1139,15 +1156,16 @@ header {
     }
 
     .logo-item img {
-      height: 45px;
-      width: auto;
-      max-width: 160px;
-      object-fit: contain;
-      filter: grayscale(100%);
-      opacity: 0.5;
-      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-      cursor: pointer;
-    }
+  height: 50px;   /* Force consistent size for smooth infinite scroll */
+  width: auto;
+  max-width: 160px;
+  object-fit: contain;
+  filter: grayscale(100%);
+  opacity: 0.5;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  cursor: pointer;
+}
+
 
     .logo-item img:hover {
       filter: grayscale(0%);
@@ -1523,22 +1541,56 @@ header {
       }
     }
 
-    @media (max-width: 768px) {
-      body {
-        padding: 16px 10px 60px;
-      }
+@media (max-width: 768px) {
 
-      .top-bar {
-        justify-content: center;
-        text-align: center;
-      }
+  body {
+    padding: 16px 10px 60px;
+  }
 
-      .top-nav {
-        justify-content: center;
-      }
-      
-      .hero-section h1 { font-size: 36px; }
-      .hero-section .subtitle { font-size: 28px; }
+  .top-bar {
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* Mobile Navigation Improvements */
+  .top-nav {
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+
+  .btn-resume {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* HERO MOBILE IMPROVEMENTS */
+  .hero-section {
+    flex-direction: column;        /* Ensures proper stacking */
+    padding-top: 40px;             /* Prevent overlap with sticky header */
+    padding-bottom: 30px;
+    gap: 30px;                     /* Space between text + image */
+    text-align: center;
+  }
+
+  .hero-section h1 {
+    font-size: 36px;
+  }
+
+  .hero-section .subtitle {
+    font-size: 28px;
+  }
+
+  .hero-image {
+    width: 70%;
+    max-width: 280px;
+    margin: 0 auto;
+  }
+
+}
+
+
 
       .stats-container {
         gap: 30px;
@@ -1600,7 +1652,7 @@ header {
 
   <header>
     <div class="top-bar">
-      <div class="logo-circle">A</div>
+      <div class="logo-circle" aria-label="Abu Rahat Sabir logo">A</div>
 
       <nav class="top-nav">
         <a href="#home">Home</a>
@@ -1610,7 +1662,13 @@ header {
         <a href="#contact">Contact</a>
       </nav>
 
-      <a href="#" class="btn-resume" target="_blank" rel="noopener noreferrer">Download PDF Resume</a>
+      <a href="AbuRahatSabir-Resume.pdf"
+   class="btn-resume"
+   target="_blank"
+   rel="noopener noreferrer">
+   Download PDF Resume
+</a>
+
     </div>
   </header>
 
@@ -1620,7 +1678,7 @@ header {
         <div class="hero-left reveal">
           <span class="section-tag">Welcome to my portfolio</span>
           <h1>Hi, I'm Rahat
-            <img src="https://lh3.googleusercontent.com/d/1fg5Tnpjoo-IN5CJcKCmpgsIjFjULAduU" alt="Wave" class="hand-icon">
+            <img src="images/hand.jpg" alt="Wave" class="hand-icon">
           </h1>
           <div class="subtitle">Strategic Architect.</div>
           <p class="description">
@@ -1633,14 +1691,51 @@ header {
           </div>
     
           <div class="social-strip">
-            <a href="https://linkedin.com/in/aburahatsabir78" target="_blank" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-            <a href="#" class="social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>
-            <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="https://linkedin.com/in/aburahatsabir78"
+   class="social-link"
+   target="_blank"
+   rel="noopener noreferrer"
+   aria-label="LinkedIn">
+   <i class="fab fa-linkedin"></i>
+</a>
+
+<a href="https://github.com/aburahatsabir"
+   class="social-link"
+   target="_blank"
+   rel="noopener noreferrer"
+   aria-label="GitHub">
+   <i class="fab fa-github"></i>
+</a>
+
+<a href="https://x.com/AbuRahatSabir"
+   class="social-link"
+   target="_blank"
+   rel="noopener noreferrer"
+   aria-label="Twitter X">
+   <i class="fab fa-twitter"></i>
+</a>
+
+<a href="https://www.instagram.com/aburahat.sabir/"
+   class="social-link"
+   target="_blank"
+   rel="noopener noreferrer"
+   aria-label="Instagram">
+   <i class="fab fa-instagram"></i>
+</a>
+
+<a href="https://facebook.com/aburahatsabir.178"
+   class="social-link"
+   target="_blank"
+   rel="noopener noreferrer"
+   aria-label="Facebook">
+   <i class="fab fa-facebook"></i>
+</a>
+
           </div>
         </div>
     
         <div class="hero-right reveal">
-          <img src="https://lh3.googleusercontent.com/d/1Nj8eFq07nMYg9RxQmDrNzxHfju0_4HWg" alt="Abu Rahat Sabir" class="hero-image">
+          <img src="images/hero.jpg" alt="Abu Rahat Sabir" class="hero-image">
         </div>
       </section>
 
@@ -1670,14 +1765,16 @@ header {
     <section id="about" class="section-shell" style="margin-bottom:40px;">
       <div class="about-container reveal">
         <div class="about-left">
-          <img src="https://lh3.googleusercontent.com/d/15w4T96kjods9Jr7ayrQluAg0MIhdCVbM"
-               alt="Rahat working with digital tools">
+          <img src="images/about.png"
+     alt="Rahat working with digital tools"
+     loading="lazy">
         </div>
 
         <div class="about-right">
           <div class="about-top-line"></div>
-          <h1>ABOUT.</h1>
-          <h2>Part strategy, part coordination, and part digital problem-solving.</h2>
+          <h2>ABOUT.</h2>
+            <h3>Part strategy, part coordination, and part digital problem-solving.</h3>
+
 
           <p>
             For the past several years, I’ve worked at the intersection of administration and technology.
@@ -1709,7 +1806,9 @@ header {
       <div class="timeline-container reveal">
         <div class="exp-header-row">
           <div class="exp-header-left">
-            <h1>Experience.</h1>
+            <!-- was h1 -->
+<h2>Experience.</h2>
+
           </div>
         </div>
 
@@ -1830,7 +1929,7 @@ header {
 
         <div class="header-row">
           <div class="header-left">
-            <h1>Education & Skills</h1>
+            <h2>Education & Skills</h2>
           </div>
           <div class="header-right"></div>
         </div>
@@ -2002,7 +2101,7 @@ header {
     <section id="services" class="section-shell">
       <div class="what-wrapper reveal">
         <section class="what-left">
-          <h1>What I do.</h1>
+          <h2>What I do.</h2>
           <p>
             I help leadership teams move from messy, manual work to clear, reliable
             systems. My focus is on <strong>executive operations, workflow design,
@@ -2085,43 +2184,87 @@ header {
         </div>
 
         <div class="marquee-container">
-          <div class="marquee-content">
-            <div class="logo-item"><img src="https://prominenttec.com/wp-content/uploads/2025/09/Prominent-Tec-Logo-2048x672.webp" alt="Prominent Tec"></div>
-            <div class="logo-item"><img src="https://modernacc.com/wp-content/uploads/2025/10/Modern-Accessories-Logo-1-2048x1277.png" alt="Modern Accessories"></div>
-            <div class="logo-item"><img src="https://texiconbd.com/wp-content/uploads/2025/09/LOGO-01-2-2048x656.png" alt="Texicon BD"></div>
-            <div class="logo-item"><img src="https://greenosoft.com/assets/Greenosoft-Logo-No-Background-light.png" alt="Greenosoft"></div>
-            <div class="logo-item"><img src="https://greenotex.com/wp-content/uploads/2025/04/WhatsApp_Image_2025-04-17_at_21.12.11_225b8d2a-removebg-preview.png" alt="Greenotex"></div>
-            <div class="logo-item"><img src="https://www.daricomma.com/_next/static/media/Logo.d4f5e34c.svg" alt="Daricomma"></div>
-            <div class="logo-item"><img src="https://prominenttec.com/wp-content/uploads/2025/09/Prominent-Tec-Logo-2048x672.webp" alt="Prominent Tec"></div>
-            <div class="logo-item"><img src="https://modernacc.com/wp-content/uploads/2025/10/Modern-Accessories-Logo-1-2048x1277.png" alt="Modern Accessories"></div>
-            <div class="logo-item"><img src="https://texiconbd.com/wp-content/uploads/2025/09/LOGO-01-2-2048x656.png" alt="Texicon BD"></div>
-            <div class="logo-item"><img src="https://greenosoft.com/assets/Greenosoft-Logo-No-Background-light.png" alt="Greenosoft"></div>
-            <div class="logo-item"><img src="https://greenotex.com/wp-content/uploads/2025/04/WhatsApp_Image_2025-04-17_at_21.12.11_225b8d2a-removebg-preview.png" alt="Greenotex"></div>
-            <div class="logo-item"><img src="https://www.daricomma.com/_next/static/media/Logo.d4f5e34c.svg" alt="Daricomma"></div>
-          </div>
-        </div>
-      </div>
-    </section>
+  <div class="marquee-content">
 
-    <section id="elearnex" class="section-shell reveal">
-      <div class="ele-section">
-        <div class="ele-kicker">E-LearnEx</div>
-        <h2 class="ele-title">Opening doors to global learning.</h2>
-        <p class="ele-text">
-          E-LearnEx is a community initiative I founded to help learners in Bangladesh and beyond
-          access international courses, scholarships, and learning opportunities.
-        </p>
-        <p class="ele-text">
-          From Coursera and Udemy to university-hosted MOOCs, I curate resources, share updates,
-          and guide students on how to choose the right programs for their goals.
-        </p>
-        <p class="ele-text">
-          The community has now grown to 30,000+ members who share success stories, opportunities,
-          and peer support around one central idea: learning should be accessible.
-        </p>
-      </div>
-    </section>
+    <div class="logo-item">
+      <img src="https://prominenttec.com/wp-content/uploads/2025/09/Prominent-Tec-Logo-2048x672.webp"
+           alt="Prominent Tec"
+           loading="lazy">
+    </div>
 
+    <div class="logo-item">
+      <img src="https://modernacc.com/wp-content/uploads/2025/10/Modern-Accessories-Logo-1-2048x1277.png"
+           alt="Modern Accessories"
+           loading="lazy">
+    </div>
+
+    <div class="logo-item">
+      <img src="https://texiconbd.com/wp-content/uploads/2025/09/LOGO-01-2-2048x656.png"
+           alt="Texicon BD"
+           loading="lazy">
+    </div>
+
+    <div class="logo-item">
+      <img src="https://greenosoft.com/assets/Greenosoft-Logo-No-Background-light.png"
+           alt="Greenosoft"
+           loading="lazy">
+    </div>
+
+    <div class="logo-item">
+      <img src="https://greenotex.com/wp-content/uploads/2025/04/WhatsApp_Image_2025-04-17_at_21.12.11_225b8d2a-removebg-preview.png"
+           alt="Greenotex"
+           loading="lazy">
+    </div>
+
+    <div class="logo-item">
+      <img src="https://www.daricomma.com/_next/static/media/Logo.d4f5e34c.svg"
+           alt="Daricomma"
+           loading="lazy">
+    </div>
+
+    <!-- duplicates start -->
+
+    <div class="logo-item">
+      <img src="https://prominenttec.com/wp-content/uploads/2025/09/Prominent-Tec-Logo-2048x672.webp"
+           alt="Prominent Tec"
+           loading="lazy">
+    </div>
+
+    <div class="logo-item">
+      <img src="https://modernacc.com/wp-content/uploads/2025/10/Modern-Accessories-Logo-1-2048x1277.png"
+           alt="Modern Accessories"
+           loading="lazy">
+    </div>
+
+    <div class="logo-item">
+      <img src="https://texiconbd.com/wp-content/uploads/2025/09/LOGO-01-2-2048x656.png"
+           alt="Texicon BD"
+           loading="lazy">
+    </div>
+
+    <div class="logo-item">
+      <img src="https://greenosoft.com/assets/Greenosoft-Logo-No-Background-light.png"
+           alt="Greenosoft"
+           loading="lazy">
+    </div>
+
+    <div class="logo-item">
+      <img src="https://greenotex.com/wp-content/uploads/2025/04/WhatsApp_Image_2025-04-17_at_21.12.11_225b8d2a-removebg-preview.png"
+           alt="Greenotex"
+           loading="lazy">
+    </div>
+
+    <div class="logo-item">
+      <img src="https://www.daricomma.com/_next/static/media/Logo.d4f5e34c.svg"
+           alt="Daricomma"
+           loading="lazy">
+    </div>
+
+  </div>
+</div>
+
+    </section>
+    
     <section id="contact" class="section-shell reveal">
       <div class="contact-wrapper">
         <div class="contact-left">
@@ -2189,13 +2332,41 @@ header {
           </div>
 
           <div class="social-row">
-            <div class="social-label">Or connect with me here:</div>
-            <div class="social-links">
-              <a href="https://linkedin.com/in/aburahatsabir78" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
-              <a href="#" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
-              <a href="#" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
-            </div>
-          </div>
+  <div class="social-label">Or connect with me here:</div>
+
+  <div class="social-links">
+
+    <a href="https://linkedin.com/in/aburahatsabir78"
+       target="_blank"
+       rel="noopener noreferrer"
+       aria-label="LinkedIn">
+      <i class="fab fa-linkedin-in"></i>
+    </a>
+
+    <a href="https://github.com/aburahatsabir"
+       target="_blank"
+       rel="noopener noreferrer"
+       aria-label="GitHub">
+      <i class="fab fa-github"></i>
+    </a>
+
+    <a href="https://facebook.com/aburahatsabir.178"
+       target="_blank"
+       rel="noopener noreferrer"
+       aria-label="Facebook">
+      <i class="fab fa-facebook-f"></i>
+    </a>
+
+    <a href="https://x.com/AbuRahatSabir"
+       target="_blank"
+       rel="noopener noreferrer"
+       aria-label="Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+
+  </div>
+</div>
+
         </div>
       </div>
     </section>
@@ -2205,9 +2376,13 @@ header {
     <div class="ars-footer-grid">
       <div class="ars-footer-logo-block">
         <img
-          src="https://lh3.googleusercontent.com/d/1rPYniO_1TxqSXiS4UEWxUvy8XMiMcJ33"
-          alt="ARS personal logo"
-          class="ars-footer-logo">
+  <img
+  src="images/footer-logo.png"
+  alt="ARS personal logo"
+  class="ars-footer-logo"
+  loading="lazy">
+
+
       </div>
 
       <div>
@@ -2233,7 +2408,6 @@ header {
       <div>
         <div class="ars-footer-title">Elsewhere</div>
         <ul class="ars-footer-links">
-          <li><a href="#elearnex">E-LearnEx</a></li>
           <li><a href="#experience">Case Studies</a></li>
         </ul>
       </div>
@@ -2304,6 +2478,7 @@ header {
 </body>
 
 </html>
+
 
 
 

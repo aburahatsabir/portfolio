@@ -474,14 +474,14 @@ header {
       padding-bottom: 20px;
     }
 
-    .exp-header-left h1 {
-      font-size: 52px;
-      font-weight: 900;
-      margin: 0;
-      line-height: 1;
-      letter-spacing: -1px;
-      color: #111;
-    }
+    .exp-header-left h2 {
+  font-size: 52px;
+  font-weight: 900;
+  margin: 0;
+  line-height: 1;
+  letter-spacing: -1px;
+  color: #111;
+}
 
     .timeline-item {
       display: flex;
@@ -662,7 +662,7 @@ header {
       padding-bottom: 20px;
     }
 
-    .header-left h1 {
+    .header-left h2 {
       font-size: 48px;
       font-weight: 900;
       margin: 0;
@@ -1567,10 +1567,10 @@ header {
 
   /* HERO MOBILE IMPROVEMENTS */
   .hero-section {
-    flex-direction: column;        /* Ensures proper stacking */
-    padding-top: 40px;             /* Prevent overlap with sticky header */
+    flex-direction: column;        /* stack text + image */
+    padding-top: 40px;             /* clear the sticky header */
     padding-bottom: 30px;
-    gap: 30px;                     /* Space between text + image */
+    gap: 30px;
     text-align: center;
   }
 
@@ -1588,64 +1588,70 @@ header {
     margin: 0 auto;
   }
 
+  /* Stats on mobile */
+  .stats-container {
+    gap: 30px;
+  }
+
+  .stat-number {
+    font-size: 42px;
+  }
+
+  /* Steps & services stacking */
+  .steps-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Logos */
+  .logo-item {
+    padding: 0 30px;
+  }
+
+  .marquee-container::before,
+  .marquee-container::after {
+    width: 80px;
+  }
+
+  .header-section h2 {
+    font-size: 28px;
+  }
+
+  /* Footer layout */
+  .ars-footer-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .ars-footer-logo-block {
+    align-items: center;
+    grid-column: span 1;
+  }
+
+  /* Timeline mobile layout */
+  .timeline-item {
+    flex-direction: column;
+  }
+
+  .col-date {
+    text-align: left;
+    padding-right: 0;
+    margin-bottom: 8px;
+  }
+
+  .col-line {
+    display: none;
+  }
+
+  .col-details {
+    padding-left: 0;
+  }
 }
 
-
-
-      .stats-container {
-        gap: 30px;
-      }
-
-      .stat-number {
-        font-size: 42px;
-      }
-
-      .steps-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-      }
-
-      .logo-item {
-        padding: 0 30px;
-      }
-
-      .marquee-container::before,
-      .marquee-container::after {
-        width: 80px;
-      }
-
-      .header-section h2 {
-        font-size: 28px;
-      }
-
-      .ars-footer-grid {
-        grid-template-columns: 1fr;
-        text-align: center;
-      }
-
-      .ars-footer-logo-block {
-        align-items: center;
-        grid-column: span 1;
-      }
-
-      .timeline-item {
-        flex-direction: column;
-      }
-
-      .col-date {
-        text-align: left;
-        padding-right: 0;
-        margin-bottom: 8px;
-      }
-
-      .col-line {
-        display: none;
-      }
-
-      .col-details {
-        padding-left: 0;
-      }
-    }
   </style>
 </head>
 <body>
@@ -2375,15 +2381,13 @@ header {
   <footer class="ars-footer">
     <div class="ars-footer-grid">
       <div class="ars-footer-logo-block">
-        <img
   <img
-  src="images/footer-logo.png"
-  alt="ARS personal logo"
-  class="ars-footer-logo"
-  loading="lazy">
+    src="images/footer-logo.png"
+    alt="ARS personal logo"
+    class="ars-footer-logo"
+    loading="lazy">
+</div>
 
-
-      </div>
 
       <div>
         <div class="ars-footer-title">Navigation</div>
@@ -2478,6 +2482,7 @@ header {
 </body>
 
 </html>
+
 
 
 

@@ -1,20 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-
-  <!-- ✅ Add this -->
+  <!-- Responsive -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Abu Rahat Sabir | Executive Admin & Automation Specialist</title>
-
 
   <!-- SEO Description -->
   <meta name="description"
         content="Abu Rahat Sabir – Executive Admin and operations strategist in Dhaka, specialising in workflow design, automation, digital systems, and high-level business coordination.">
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <!-- ⭐ SOCIAL PREVIEW (PUT THIS HERE) ⭐ -->
+  <!-- Open Graph -->
+  <meta property="og:title" content="Abu Rahat Sabir – Portfolio" />
+  <meta property="og:description" content="Executive Admin & Operations Specialist skilled in workflow automation, digital systems, and business coordination." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://aburahatsabir178.github.io/portfolio/" />
+  <meta property="og:image" content="images/preview.webp">
+
+  <!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Abu Rahat Sabir – Portfolio">
+<meta name="twitter:description" content="Executive Admin & Operations Specialist skilled in workflow automation and digital systems.">
+<meta name="twitter:image" content="images/preview.webp">
+
+<!-- Preload hero image for better LCP -->
+<link rel="preload" as="image" href="images/hero.webp" type="image/webp">
+
+<!-- Google Fonts: Inter -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<!-- Font Awesome (non-blocking) -->
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      media="print"
+      onload="this.media='all'">
+<noscript>
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</noscript>
+
+
+
 
   <style>
     :root {
@@ -1178,9 +1207,7 @@ header {
       100% { transform: translateX(-50%); }
     }
 
-    /* =========================
-       E-LEARNEX SECTION (From Code 1)
-    ========================== */
+
 
     .ele-section {
       max-width: 900px;
@@ -1459,6 +1486,20 @@ header {
       color: var(--text-muted);
     }
 
+    /* Screen-reader only utility (for accessibility) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+  white-space: nowrap;
+}
+
+
     /* =========================
        RESPONSIVE
     ========================== */
@@ -1684,8 +1725,18 @@ header {
         <div class="hero-left reveal">
           <span class="section-tag">Welcome to my portfolio</span>
           <h1>Hi, I'm Rahat
-            <img src="images/hand.jpg" alt="Wave" class="hand-icon">
-          </h1>
+  <picture>
+  <source srcset="images/hand.webp" type="image/webp">
+  <img
+    src="images/hand.webp"
+    alt=""
+    class="hand-icon"
+    aria-hidden="true"
+  >
+</picture>
+
+      </h1>
+
           <div class="subtitle">Strategic Architect.</div>
           <p class="description">
             Bridging the gap between C-suite operations and digital innovation. I streamline workflows, automate data, and empower teams through technology.
@@ -1740,8 +1791,20 @@ header {
           </div>
         </div>
     
-        <div class="hero-right reveal">
-          <img src="images/hero.jpg" alt="Abu Rahat Sabir" class="hero-image">
+<div class="hero-right reveal">
+  <img
+    src="images/hero.webp"
+    alt="Abu Rahat Sabir"
+    class="hero-image"
+    fetchpriority="high"
+    decoding="async"
+    loading="eager"
+    width="450"
+    height="600">
+</div>
+
+
+
         </div>
       </section>
 
@@ -1771,9 +1834,15 @@ header {
     <section id="about" class="section-shell" style="margin-bottom:40px;">
       <div class="about-container reveal">
         <div class="about-left">
-          <img src="images/about.png"
-     alt="Rahat working with digital tools"
-     loading="lazy">
+          <picture>
+  <source srcset="images/about.webp" type="image/webp">
+  <img
+    src="images/about.webp"
+    alt="Rahat working with digital tools"
+    loading="lazy"
+  >
+</picture>
+
         </div>
 
         <div class="about-right">
@@ -2179,97 +2248,109 @@ header {
       </div>
     </section>
 
-    <section class="section-shell reveal">
-      <div class="partners-shell">
-        <div class="header-section">
-          <h2>Trusted Partners</h2>
-          <p>
-            I’ve had the privilege of collaborating with forward-thinking companies
-            to streamline operations and drive digital growth.
-          </p>
+    <section class="section-shell reveal" aria-labelledby="trusted-partners-heading">
+  <div class="partners-shell">
+    <div class="header-section">
+      <h2 id="trusted-partners-heading">Trusted Partners</h2>
+      <p>
+        I’ve had the privilege of collaborating with forward-thinking companies
+        to streamline operations and drive digital growth.
+      </p>
+    </div>
+
+    <!-- Decorative marquee: hidden from screen readers -->
+    <div class="marquee-container" aria-hidden="true">
+      <div class="marquee-content">
+
+        <div class="logo-item">
+          <img src="https://prominenttec.com/wp-content/uploads/2025/09/Prominent-Tec-Logo-2048x672.webp"
+               alt=""
+               loading="lazy">
         </div>
 
-        <div class="marquee-container">
-  <div class="marquee-content">
+        <div class="logo-item">
+          <img src="https://modernacc.com/wp-content/uploads/2025/10/Modern-Accessories-Logo-1-2048x1277.png"
+               alt=""
+               loading="lazy">
+        </div>
 
-    <div class="logo-item">
-      <img src="https://prominenttec.com/wp-content/uploads/2025/09/Prominent-Tec-Logo-2048x672.webp"
-           alt="Prominent Tec"
-           loading="lazy">
+        <div class="logo-item">
+          <img src="https://texiconbd.com/wp-content/uploads/2025/09/LOGO-01-2-2048x656.png"
+               alt=""
+               loading="lazy">
+        </div>
+
+        <div class="logo-item">
+          <img src="https://greenosoft.com/assets/Greenosoft-Logo-No-Background-light.png"
+               alt=""
+               loading="lazy">
+        </div>
+
+        <div class="logo-item">
+          <img src="https://greenotex.com/wp-content/uploads/2025/04/WhatsApp_Image_2025-04-17_at_21.12.11_225b8d2a-removebg-preview.png"
+               alt=""
+               loading="lazy">
+        </div>
+
+        <div class="logo-item">
+          <img src="https://www.daricomma.com/_next/static/media/Logo.d4f5e34c.svg"
+               alt=""
+               loading="lazy">
+        </div>
+
+        <!-- duplicates for smooth infinite scroll -->
+        <div class="logo-item">
+          <img src="https://prominenttec.com/wp-content/uploads/2025/09/Prominent-Tec-Logo-2048x672.webp"
+               alt=""
+               loading="lazy">
+        </div>
+
+        <div class="logo-item">
+          <img src="https://modernacc.com/wp-content/uploads/2025/10/Modern-Accessories-Logo-1-2048x1277.png"
+               alt=""
+               loading="lazy">
+        </div>
+
+        <div class="logo-item">
+          <img src="https://texiconbd.com/wp-content/uploads/2025/09/LOGO-01-2-2048x656.png"
+               alt=""
+               loading="lazy">
+        </div>
+
+        <div class="logo-item">
+          <img src="https://greenosoft.com/assets/Greenosoft-Logo-No-Background-light.png"
+               alt=""
+               loading="lazy">
+        </div>
+
+        <div class="logo-item">
+          <img src="https://greenotex.com/wp-content/uploads/2025/04/WhatsApp_Image_2025-04-17_at_21.12.11_225b8d2a-removebg-preview.png"
+               alt=""
+               loading="lazy">
+        </div>
+
+        <div class="logo-item">
+          <img src="https://www.daricomma.com/_next/static/media/Logo.d4f5e34c.svg"
+               alt=""
+               loading="lazy">
+        </div>
+
+      </div>
     </div>
 
-    <div class="logo-item">
-      <img src="https://modernacc.com/wp-content/uploads/2025/10/Modern-Accessories-Logo-1-2048x1277.png"
-           alt="Modern Accessories"
-           loading="lazy">
-    </div>
-
-    <div class="logo-item">
-      <img src="https://texiconbd.com/wp-content/uploads/2025/09/LOGO-01-2-2048x656.png"
-           alt="Texicon BD"
-           loading="lazy">
-    </div>
-
-    <div class="logo-item">
-      <img src="https://greenosoft.com/assets/Greenosoft-Logo-No-Background-light.png"
-           alt="Greenosoft"
-           loading="lazy">
-    </div>
-
-    <div class="logo-item">
-      <img src="https://greenotex.com/wp-content/uploads/2025/04/WhatsApp_Image_2025-04-17_at_21.12.11_225b8d2a-removebg-preview.png"
-           alt="Greenotex"
-           loading="lazy">
-    </div>
-
-    <div class="logo-item">
-      <img src="https://www.daricomma.com/_next/static/media/Logo.d4f5e34c.svg"
-           alt="Daricomma"
-           loading="lazy">
-    </div>
-
-    <!-- duplicates start -->
-
-    <div class="logo-item">
-      <img src="https://prominenttec.com/wp-content/uploads/2025/09/Prominent-Tec-Logo-2048x672.webp"
-           alt="Prominent Tec"
-           loading="lazy">
-    </div>
-
-    <div class="logo-item">
-      <img src="https://modernacc.com/wp-content/uploads/2025/10/Modern-Accessories-Logo-1-2048x1277.png"
-           alt="Modern Accessories"
-           loading="lazy">
-    </div>
-
-    <div class="logo-item">
-      <img src="https://texiconbd.com/wp-content/uploads/2025/09/LOGO-01-2-2048x656.png"
-           alt="Texicon BD"
-           loading="lazy">
-    </div>
-
-    <div class="logo-item">
-      <img src="https://greenosoft.com/assets/Greenosoft-Logo-No-Background-light.png"
-           alt="Greenosoft"
-           loading="lazy">
-    </div>
-
-    <div class="logo-item">
-      <img src="https://greenotex.com/wp-content/uploads/2025/04/WhatsApp_Image_2025-04-17_at_21.12.11_225b8d2a-removebg-preview.png"
-           alt="Greenotex"
-           loading="lazy">
-    </div>
-
-    <div class="logo-item">
-      <img src="https://www.daricomma.com/_next/static/media/Logo.d4f5e34c.svg"
-           alt="Daricomma"
-           loading="lazy">
-    </div>
-
+    <!-- Accessible list for screen readers only -->
+    <ul class="sr-only">
+      <li>Prominent Tec</li>
+      <li>Modern Accessories</li>
+      <li>Texicon BD</li>
+      <li>Greenosoft</li>
+      <li>Greenotex</li>
+      <li>Daricomma</li>
+    </ul>
   </div>
-</div>
+</section>
 
-    </section>
+
     
     <section id="contact" class="section-shell reveal">
       <div class="contact-wrapper">
@@ -2381,11 +2462,16 @@ header {
   <footer class="ars-footer">
     <div class="ars-footer-grid">
       <div class="ars-footer-logo-block">
+  <picture>
+  <source srcset="images/footer-logo.webp" type="image/webp">
   <img
-    src="images/footer-logo.png"
+    src="images/footer-logo.webp"
     alt="ARS personal logo"
     class="ars-footer-logo"
-    loading="lazy">
+    loading="lazy"
+  >
+</picture>
+
 </div>
 
 
@@ -2482,6 +2568,7 @@ header {
 </body>
 
 </html>
+
 
 
 

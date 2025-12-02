@@ -355,24 +355,24 @@
     }
 
     .hero-right {
-      flex: 1;
-      display: flex;
-      justify-content: flex-end;
-      position: relative;
-    }
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;   /* keep the image sitting on the bottom of this column */
+  position: relative;
+}
 
-    .hero-image {
-      width: 100%;
-      /* FIX: Reduced max-width for better balance */
-      max-width: 350px;       
-      height: auto;             
-      /* FIX: Reduced border-radius to prevent shoulder cropping */
-      border-radius: 20px;
-      object-fit: contain;      
-      /* FIX: Slightly smaller shadow to match new size */
-      box-shadow: 15px 15px 0px rgba(255, 87, 34, 0.1);
-      transition: var(--transition);
-    }
+.hero-image {
+  width: 100%;
+  max-width: 360px;        /* smaller than before so it doesn’t hang below the text */
+  height: auto;            /* keep the real photo ratio – no stretching */
+  border-radius: 30px;
+  object-fit: contain;     /* don’t crop the shoulders */
+  box-shadow: 20px 20px 0 rgba(255, 87, 34, 0.1);
+  transition: var(--transition);
+  display: block;
+}
+
 
     .hero-image:hover {
       transform: scale(1.02);
@@ -539,16 +539,16 @@
     }
 
     .about-left img {
-      width: 100%;
-      /* FIX: Reduced max-width and max-height so it lines up with text */
-      max-width: 320px;       
-      max-height: 380px;      
-      height: auto;           
-      border-radius: 10px;
-      object-fit: contain;    
-      display: block;
-      margin: 0 auto;         
-    }
+  width: 100%;
+  max-width: 360px;
+  max-height: 460px;      /* prevent it from becoming taller than the text card */
+  height: auto;
+  border-radius: 10px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
+
 
     .about-right {
       flex: 3;
@@ -1690,8 +1690,11 @@
 /* Desktop-only fine tuning */
 /* FIX: Removed 'align-items: flex-end' so image stays centered vertically */
 @media (min-width: 1024px) {
-  /* No specific overrides needed now */
+  .hero-section {
+    align-items: flex-end;   /* bottom of left text and right image line up */
+  }
 }
+
 
 @media (max-width: 1024px) {
   .hero-section {
@@ -1713,7 +1716,9 @@
         flex-direction: column;
         padding: 20px;
       }
-
+.about-container {
+  align-items: stretch;         /* both columns same height on desktop */
+}
       .about-left {
         padding: 10px;
       }
@@ -1726,7 +1731,10 @@
       .about-right {
         padding-left: 0;
       }
-
+        .about-right {
+  display: flex;
+  flex-direction: column;
+}
       .content-grid {
         grid-template-columns: 1fr;
         row-gap: 60px;
@@ -2945,3 +2953,4 @@
   </script>
 </body>
 </html>
+

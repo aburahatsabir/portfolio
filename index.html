@@ -363,13 +363,15 @@
     }
 
     .hero-image {
-      width: 100%;
-      max-width: 450px;
-      border-radius: 30px;
-      object-fit: cover;
-      box-shadow: 20px 20px 0px rgba(255, 87, 34, 0.1);
-      transition: var(--transition);
-    }
+  width: 100%;
+  max-width: 410px;          /* was 450px – a bit smaller */
+  height: auto;              /* always keep natural image ratio */
+  border-radius: 30px;
+  object-fit: contain;       /* no cropping inside the frame */
+  box-shadow: 20px 20px 0px rgba(255, 87, 34, 0.1);
+  transition: var(--transition);
+}
+
 
     .hero-image:hover {
       transform: scale(1.02);
@@ -536,11 +538,16 @@
     }
 
     .about-left img {
-      width: 100%;
-      max-width: 400px;
-      border-radius: 10px;
-      object-fit: cover;
-    }
+  width: 100%;
+  max-width: 360px;       /* slightly smaller to better match text height */
+  max-height: 460px;      /* cap the height so it doesn’t grow too tall */
+  height: auto;           /* keep natural aspect ratio */
+  border-radius: 10px;
+  object-fit: contain;    /* no cropping of the illustration */
+  display: block;
+  margin: 0 auto;         /* nicely centered in its column */
+}
+
 
     .about-right {
       flex: 3;
@@ -1679,20 +1686,28 @@
        RESPONSIVE
        ========================= */
 
-    @media (max-width: 1024px) {
-      .hero-section {
-        flex-direction: column;
-        text-align: center;
-        padding-top: 20px;
-      }
+/* Desktop-only fine tuning */
+@media (min-width: 1024px) {
+  .hero-section {
+    align-items: flex-end;  /* align both columns by their bottom edge */
+  }
+}
 
-      .hero-right {
-        justify-content: center;
-      }
+@media (max-width: 1024px) {
+  .hero-section {
+    flex-direction: column;
+    text-align: center;
+    padding-top: 20px;
+  }
 
-      .hero-cta-group {
-        justify-content: center;
-      }
+  .hero-right {
+    justify-content: center;
+  }
+
+  .hero-cta-group {
+    justify-content: center;
+  }
+
 
       .about-container {
         flex-direction: column;
@@ -2941,3 +2956,4 @@
   </script>
 </body>
 </html>
+

@@ -56,7 +56,6 @@
     >
   </noscript>
 
-  <!-- Minimal JSON-LD Person schema -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -344,7 +343,7 @@
       padding-top: 40px;
       padding-bottom: 40px;
       display: flex;
-      align-items: center;
+      align-items: center; /* Ensures top/bottom are balanced */
       justify-content: space-between;
       gap: 40px;
       min-height: auto;
@@ -363,19 +362,21 @@
     }
 
     .hero-image {
-  width: 100%;
-  max-width: 410px;          /* was 450px – a bit smaller */
-  height: auto;              /* always keep natural image ratio */
-  border-radius: 30px;
-  object-fit: contain;       /* no cropping inside the frame */
-  box-shadow: 20px 20px 0px rgba(255, 87, 34, 0.1);
-  transition: var(--transition);
-}
-
+      width: 100%;
+      /* FIX: Reduced max-width for better balance */
+      max-width: 350px;       
+      height: auto;             
+      /* FIX: Reduced border-radius to prevent shoulder cropping */
+      border-radius: 20px;
+      object-fit: contain;      
+      /* FIX: Slightly smaller shadow to match new size */
+      box-shadow: 15px 15px 0px rgba(255, 87, 34, 0.1);
+      transition: var(--transition);
+    }
 
     .hero-image:hover {
       transform: scale(1.02);
-      box-shadow: 25px 25px 0px rgba(255, 87, 34, 0.2);
+      box-shadow: 20px 20px 0px rgba(255, 87, 34, 0.2);
     }
 
     .hero-section h1 {
@@ -538,16 +539,16 @@
     }
 
     .about-left img {
-  width: 100%;
-  max-width: 360px;       /* slightly smaller to better match text height */
-  max-height: 460px;      /* cap the height so it doesn’t grow too tall */
-  height: auto;           /* keep natural aspect ratio */
-  border-radius: 10px;
-  object-fit: contain;    /* no cropping of the illustration */
-  display: block;
-  margin: 0 auto;         /* nicely centered in its column */
-}
-
+      width: 100%;
+      /* FIX: Reduced max-width and max-height so it lines up with text */
+      max-width: 320px;       
+      max-height: 380px;      
+      height: auto;           
+      border-radius: 10px;
+      object-fit: contain;    
+      display: block;
+      margin: 0 auto;         
+    }
 
     .about-right {
       flex: 3;
@@ -1687,10 +1688,9 @@
        ========================= */
 
 /* Desktop-only fine tuning */
+/* FIX: Removed 'align-items: flex-end' so image stays centered vertically */
 @media (min-width: 1024px) {
-  .hero-section {
-    align-items: flex-end;  /* align both columns by their bottom edge */
-  }
+  /* No specific overrides needed now */
 }
 
 @media (max-width: 1024px) {
@@ -1941,7 +1941,6 @@
   </header>
 
   <main id="main-content" role="main">
-    <!-- HERO -->
     <section class="section-shell hero-section anchor-section" id="home">
       <div class="hero-left reveal">
         <span class="section-tag">Welcome to my portfolio</span>
@@ -2046,7 +2045,6 @@
       </div>
     </section>
 
-    <!-- STATS -->
     <section class="section-shell">
       <div class="stats-section reveal">
         <div class="stats-container">
@@ -2073,7 +2071,6 @@
       </div>
     </section>
 
-    <!-- ABOUT -->
     <section id="about" class="section-shell mb-lg anchor-section">
       <div class="about-container reveal">
         <div class="about-left">
@@ -2121,7 +2118,6 @@
       </div>
     </section>
 
-    <!-- EXPERIENCE -->
     <section id="experience" class="section-shell mt-lg anchor-section">
       <div class="timeline-container reveal">
         <div class="exp-header-row">
@@ -2241,7 +2237,6 @@
       </div>
     </section>
 
-    <!-- EDUCATION & SKILLS -->
     <section id="education" class="section-shell mt-md anchor-section">
       <div class="edu-wrapper reveal">
         <div class="decoration-ring" aria-hidden="true"></div>
@@ -2368,7 +2363,6 @@
       </div>
     </section>
 
-    <!-- HOW I WORK -->
     <section id="process" class="section-shell anchor-section">
       <div class="process-wrapper reveal">
         <header class="process-header">
@@ -2434,7 +2428,6 @@
       </div>
     </section>
 
-    <!-- WHAT I DO / SERVICES -->
     <section id="services" class="section-shell anchor-section">
       <div class="what-wrapper reveal">
         <section class="what-left">
@@ -2510,7 +2503,6 @@
       </div>
     </section>
 
-    <!-- TRUSTED PARTNERS -->
     <section class="section-shell reveal" aria-labelledby="trusted-partners-heading">
       <div class="partners-shell">
         <div class="header-section">
@@ -2583,7 +2575,6 @@
               >
             </div>
 
-            <!-- Duplicated set for smooth marquee, decorative only -->
             <div class="logo-item" aria-hidden="true">
               <img src="images/logo-prominent-tec.webp" alt="" loading="lazy" width="160" height="50">
             </div>
@@ -2620,7 +2611,6 @@
       </div>
     </section>
 
-    <!-- CONTACT -->
     <section id="contact" class="section-shell reveal anchor-section">
       <div class="contact-wrapper">
         <div class="contact-left">
@@ -2751,7 +2741,6 @@
     </section>
   </main>
 
-  <!-- FOOTER -->
   <footer class="ars-footer" role="contentinfo">
     <div class="ars-footer-grid">
       <div class="ars-footer-logo-block">
@@ -2956,4 +2945,3 @@
   </script>
 </body>
 </html>
-

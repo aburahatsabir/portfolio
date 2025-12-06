@@ -1448,4 +1448,257 @@ header[role="banner"] {
   }
   .col-line { display: none; }
   .col-details { padding-left: 0; }
+
+}
+
+
+
+
+
+/*  
+===========================================
+WORK PAGE — Hero, Sidebar, Layout, Cards
+Matches ARS brand, tone, spacing, and colors
+===========================================
+*/
+
+/* ========== VARIABLES (if not already defined) ========= */
+:root {
+  --accent: #FF5722;
+  --accent-light: rgba(255, 87, 34, 0.12);
+  --accent-soft: rgba(255, 87, 34, 0.08);
+
+  --text-strong: #1A1A1A;
+  --text-main: #444;
+  --text-muted: #6F6F6F;
+
+  --border: #E3E3E8;
+  --radius-lg: 22px;
+  --radius-md: 14px;
+
+  --shadow-card: 0 14px 40px rgba(0,0,0,0.08);
+  --shadow-hover: 0 18px 48px rgba(255,87,34,0.22);
+
+  --section-gap: 70px;
+}
+
+/* =========================================================
+WORK HERO
+========================================================= */
+.work-hero {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+
+.work-hero-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  gap: 22px;
+}
+
+.work-hero-title {
+  font-size: 2.4rem;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  margin-bottom: 10px;
+  color: var(--text-strong);
+}
+
+.work-hero-sub {
+  font-size: 1rem;
+  line-height: 1.7;
+  max-width: 600px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.section-tag {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: inline-block;
+}
+
+/* =========================================================
+LAYOUT — Sidebar + Main Content
+========================================================= */
+.work-layout {
+  margin-top: var(--section-gap);
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+/* =========================================================
+SIDEBAR
+========================================================= */
+.work-sidebar {
+  position: sticky;
+  top: 100px;
+  background: #FFF;
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+}
+
+.work-sidebar-title {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.work-sidebar-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.work-sidebar-list a {
+  padding: 8px 12px;
+  border-radius: 999px;
+  text-decoration: none;
+  color: var(--text-main);
+  font-size: 0.9rem;
+  transition: 0.25s ease;
+}
+
+.work-sidebar-list a:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.work-sidebar-list a.is-active {
+  background: var(--accent);
+  color: #FFF;
+}
+
+/* =========================================================
+WORK SECTIONS
+========================================================= */
+.work-section {
+  margin-bottom: 60px;
+}
+
+.work-section-title {
+  font-size: 1.5rem;
+  font-weight: 900;
+  margin-bottom: 10px;
+  color: var(--text-strong);
+}
+
+.work-section-sub {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 22px;
+}
+
+/* =========================================================
+WORK CARD GRID
+========================================================= */
+.work-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 26px;
+}
+
+/* =========================================================
+WORK CARD — MATCHES YOUR CURRENT CARD STYLE
+========================================================= */
+.work-card {
+  background: #FFF;
+  border-radius: var(--radius-lg);
+  padding: 22px 20px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+  transition: 0.28s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.work-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--accent);
+}
+
+/* Tag row */
+.work-card-tag-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.work-card-tag {
+  background: var(--accent-light);
+  padding: 5px 10px;
+  border-radius: 999px;
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.work-card-tag-soft {
+  background: #F3F3F7;
+  color: var(--text-muted);
+}
+
+/* Card text */
+.work-card-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin: 0 0 8px;
+  color: var(--text-strong);
+}
+
+.work-card-text {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+/* Meta list */
+.work-card-meta {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+  font-size: 0.83rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.work-card-meta li + li {
+  margin-top: 4px;
+}
+
+/* Footer link */
+.work-card-link {
+  margin-top: auto;
+  font-size: 0.87rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: 0.2s ease;
+}
+
+.work-card-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }

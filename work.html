@@ -4,35 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" >
 
-  <title>Work Showcase | Abu Rahat Sabir</title>
+  <title>Work | Systems & Tools – Abu Rahat Sabir</title>
 
   <meta
     name="description"
-    content="Selected work from Abu Rahat Sabir – executive operations systems, Excel and Google Sheets automations, digital workspace setups, and admin tools built for clarity and efficiency."
+    content="A curated gallery of executive operations systems, Excel automations, and digital tools built by Abu Rahat Sabir."
   >
 
-  <meta property="og:title" content="Work Showcase | Abu Rahat Sabir">
-  <meta
-    property="og:description"
-    content="Explore the systems, automations, and digital workflows I’ve built to help teams work smarter and operate with clarity."
-  >
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://aburahatsabir.github.io/portfolio/work.html">
-  <meta property="og:image" content="https://aburahatsabir.github.io/portfolio/preview.webp">
-
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Work Showcase | Abu Rahat Sabir">
-  <meta
-    name="twitter:description"
-    content="A closer look at my work across executive support, workflow automation, and digital systems."
-  >
-  <meta name="twitter:image" content="https://aburahatsabir.github.io/portfolio/preview.webp">
-
-  <meta name="theme-color" content="#FF5722">
   <link rel="canonical" href="https://aburahatsabir.github.io/portfolio/work.html" />
   <link rel="icon" type="image/png" href="images/favicon.png">
 
-  <!-- Shared fonts & icons (same as index.html) -->
+  <!-- Fonts & Icons (same as index.html) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -52,46 +34,14 @@
     >
   </noscript>
 
-  <!-- Main shared stylesheet -->
-  <link rel="stylesheet" href="assets/css/main.css">
-
-  <!-- Same Person JSON-LD as index.html is fine here -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Abu Rahat Sabir",
-    "jobTitle": "Executive Admin & Workflow Automation Specialist",
-    "url": "https://aburahatsabir.github.io/portfolio/",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Dhaka",
-      "addressCountry": "BD"
-    },
-    "sameAs": [
-      "https://linkedin.com/in/aburahatsabir78",
-      "https://github.com/aburahatsabir",
-      "https://x.com/AbuRahatsabir",
-      "https://www.instagram.com/aburahat.sabir/",
-      "https://facebook.com/aburahatsabir.178"
-    ]
-  }
-  </script>
-
-  <!-- Optional: same GA as index.html -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XX8R0FKN5X"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-XX8R0FKN5X');
-  </script>
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="assets/css/main.css" />
 </head>
 
 <body>
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <!-- HEADER (same structure, "Work" active) -->
+  <!-- HEADER (same structure as index, but with multi-page nav) -->
   <header role="banner">
     <div class="top-bar">
       <a href="index.html#home" class="logo-circle" aria-label="Back to home">A</a>
@@ -102,10 +52,10 @@
           <a href="index.html#about">About</a>
           <a href="index.html#experience">Experience</a>
           <a href="index.html#education">Education</a>
-          <a href="work.html" class="active">Work</a>
           <a href="index.html#services">Services</a>
           <a href="index.html#process">Process</a>
           <a href="index.html#contact">Contact</a>
+          <a href="work.html" class="active">Work</a>
         </nav>
 
         <a
@@ -130,180 +80,257 @@
 
   <main id="main-content" role="main">
     <!-- BREADCRUMB -->
-    <section class="section-shell anchor-section work-breadcrumb-section" aria-label="Breadcrumb">
-      <nav class="work-breadcrumb" aria-label="Breadcrumb">
-        <ol class="work-breadcrumb-list">
-          <li><a href="index.html#home">Home</a></li>
-          <li aria-current="page">Work</li>
-        </ol>
-      </nav>
-    </section>
+    <nav class="work-breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html#home">Home</a>
+      <span aria-hidden="true">/</span>
+      <span>Work</span>
+    </nav>
 
-    <!-- WORK HERO -->
-    <section class="section-shell anchor-section work-hero" aria-labelledby="work-hero-heading">
+    <!-- HERO -->
+    <section class="section-shell work-hero" aria-labelledby="work-hero-heading">
       <div class="work-hero-inner">
-        <div class="work-hero-copy">
-          <span class="section-tag">Selected systems & automation</span>
+        <div>
+          <span class="section-tag">Work</span>
           <h1 id="work-hero-heading" class="work-hero-title">
-            Work that makes operations feel lighter.
+            Systems, automations, and tools I’ve built.
           </h1>
           <p class="work-hero-sub">
-            Across administration, automation, and digital organisation, I build tools and
-            systems that help teams work with clarity instead of chaos.
+            A curated view of the dashboards, approval flows, trackers, and
+            documentation systems I use to help teams work smarter and operate with clarity.
           </p>
-        </div>
-
-        <!-- Optional: small stat / badge area -->
-        <div class="work-hero-meta">
-          <div class="work-hero-meta-item">
-            <span class="work-hero-meta-label">Focus Areas</span>
-            <span class="work-hero-meta-value">
-              Executive Ops · Excel &amp; Apps Script · Digital Workspace
-            </span>
-          </div>
         </div>
       </div>
     </section>
 
-    <!-- MAIN WORK LAYOUT: SIDEBAR + CONTENT -->
-    <section class="section-shell work-layout" aria-labelledby="work-layout-heading">
-      <h2 id="work-layout-heading" class="sr-only">Work categories and examples</h2>
-
+    <!-- LAYOUT: SIDEBAR + CONTENT -->
+    <section class="section-shell work-layout" aria-label="Work showcase layout">
       <!-- SIDEBAR -->
       <aside class="work-sidebar" aria-label="Work categories">
-        <h3 class="work-sidebar-title">Categories</h3>
-        <nav>
-          <ul class="work-sidebar-list">
-            <li><a href="#work-exec-ops">Executive Operations</a></li>
-            <li><a href="#work-data-automation">Data &amp; Automation</a></li>
-            <li><a href="#work-digital-workspace">Digital Workspace</a></li>
-            <li><a href="#work-content-design">Content &amp; Design</a></li>
-            <li><a href="#work-elearnex">E-LearnEx &amp; Community</a></li>
-          </ul>
-        </nav>
+        <div class="work-sidebar-title">Browse</div>
+        <ul class="work-sidebar-list">
+          <li><a href="#cat-exec" class="is-active">Executive Operations</a></li>
+          <li><a href="#cat-excel">Excel & Data Automation</a></li>
+          <li><a href="#cat-digital">Digital Workspace & Docs</a></li>
+        </ul>
       </aside>
 
       <!-- MAIN CONTENT -->
-      <div class="work-content">
-        <!-- EXECUTIVE OPERATIONS -->
-        <section id="work-exec-ops" class="work-section" aria-labelledby="work-exec-ops-heading">
-          <header class="work-section-header">
-            <h3 id="work-exec-ops-heading" class="work-section-title">
-              Executive Operations
-            </h3>
-            <p class="work-section-sub">
-              C-suite calendars, approvals, and reporting systems built to reduce friction
-              and protect leadership time.
-            </p>
-          </header>
+      <div>
+        <!-- CATEGORY 1: EXECUTIVE OPS -->
+        <section id="cat-exec" class="work-section" aria-labelledby="cat-exec-heading">
+          <h2 id="cat-exec-heading" class="work-section-title">Executive Operations</h2>
+          <p class="work-section-sub">
+            Tools built to protect leadership time, reduce manual admin, and keep
+            information flowing cleanly across a growing organisation.
+          </p>
 
           <div class="work-grid">
-            <!-- CARD 1: example – replace with real content -->
+            <!-- CARD EXAMPLE 1 -->
             <article class="work-card">
-              <div class="work-card-tag-row">
-                <span class="work-card-tag">Executive Ops</span>
-                <span class="work-card-tag work-card-tag-soft">Internal System</span>
+              <div class="work-card-thumb">
+                <img
+                  src="images/work/executive-calendar-dashboard.webp"
+                  alt="Executive calendar and travel dashboard mockup"
+                  loading="lazy"
+                  width="480"
+                  height="260"
+                >
               </div>
-              <h4 class="work-card-title">
-                Board pack &amp; executive meeting pipeline
-              </h4>
-              <p class="work-card-text">
-                A structured tracker and checklist for preparing board materials, meeting
-                agendas, and follow-up actions so nothing falls through the cracks.
-              </p>
-              <ul class="work-card-meta">
-                <li>Tools: Excel, Google Sheets</li>
-                <li>Impact: Fewer last-minute changes, clearer ownership</li>
-              </ul>
-              <!-- Optional: link to a deeper case study page -->
-              <!-- <a href="case-board-pack.html" class="work-card-link">
-                View details <i class="fas fa-arrow-right" aria-hidden="true"></i>
-              </a> -->
+
+              <div class="work-card-body">
+                <div class="work-card-tag-row">
+                  <span class="work-card-tag">Admin System</span>
+                  <span class="work-card-tag work-card-tag-soft">C-suite</span>
+                </div>
+
+                <h3 class="work-card-title">Executive Calendar & Travel Control Panel</h3>
+                <p class="work-card-text">
+                  A unified view for daily schedule, travel, and key follow-ups,
+                  replacing scattered WhatsApp messages and inbox digging.
+                </p>
+
+                <ul class="work-card-meta">
+                  <li>• Built in Google Sheets with Apps Script triggers</li>
+                  <li>• Auto-highlights priority meetings & conflicts</li>
+                  <li>• Generates a daily briefing sheet for executives</li>
+                </ul>
+
+                <a href="#" class="work-card-link">
+                  View mockup / walkthrough
+                  <span aria-hidden="true">→</span>
+                </a>
+              </div>
             </article>
 
-            <!-- Duplicate and adjust for more executive ops examples -->
+            <!-- CARD EXAMPLE 2 -->
+            <article class="work-card">
+              <div class="work-card-thumb">
+                <img
+                  src="images/work/board-pack-tracker.webp"
+                  alt="Board meeting pack preparation tracker mockup"
+                  loading="lazy"
+                  width="480"
+                  height="260"
+                >
+              </div>
+
+              <div class="work-card-body">
+                <div class="work-card-tag-row">
+                  <span class="work-card-tag">Process</span>
+                  <span class="work-card-tag work-card-tag-soft">Board Pack</span>
+                </div>
+
+                <h3 class="work-card-title">Board Pack Preparation Tracker</h3>
+                <p class="work-card-text">
+                  A step-by-step tracker for board materials – from draft slides to
+                  approvals – so nothing is missing on meeting day.
+                </p>
+
+                <ul class="work-card-meta">
+                  <li>• Owner-based status for each section</li>
+                  <li>• Colour-coded risks for late items</li>
+                  <li>• Summary view for the CEO/Chair</li>
+                </ul>
+
+                <a href="#" class="work-card-link">
+                  View flow & sample
+                  <span aria-hidden="true">→</span>
+                </a>
+              </div>
+            </article>
           </div>
         </section>
 
-        <!-- DATA & AUTOMATION -->
-        <section id="work-data-automation" class="work-section" aria-labelledby="work-data-automation-heading">
-          <header class="work-section-header">
-            <h3 id="work-data-automation-heading" class="work-section-title">
-              Data &amp; Automation
-            </h3>
-            <p class="work-section-sub">
-              Excel, VBA, and Apps Script solutions that turn slow manual tasks into repeatable workflows.
-            </p>
-          </header>
+        <!-- CATEGORY 2: EXCEL / DATA -->
+        <section id="cat-excel" class="work-section" aria-labelledby="cat-excel-heading">
+          <h2 id="cat-excel-heading" class="work-section-title">Excel & Data Automation</h2>
+          <p class="work-section-sub">
+            Dashboards, trackers, and VBA / Apps Script automations that reduce
+            repetitive work and make reporting push-button.
+          </p>
 
           <div class="work-grid">
+            <!-- CARD EXAMPLE 3 -->
             <article class="work-card">
-              <div class="work-card-tag-row">
-                <span class="work-card-tag">Automation</span>
-                <span class="work-card-tag work-card-tag-soft">Excel &amp; VBA</span>
+              <div class="work-card-thumb">
+                <img
+                  src="images/work/hr-attendance-dashboard.webp"
+                  alt="HR attendance and overtime Excel dashboard mockup"
+                  loading="lazy"
+                  width="480"
+                  height="260"
+                >
               </div>
-              <h4 class="work-card-title">
-                Sales &amp; inventory dashboard with automated summaries
-              </h4>
-              <p class="work-card-text">
-                A consolidated Excel dashboard pulling from raw sheets, generating automated
-                KPIs, charts, and daily summaries for faster decision-making.
-              </p>
-              <ul class="work-card-meta">
-                <li>Tools: Excel, VBA</li>
-                <li>Impact: Cut report prep time from hours to minutes</li>
-              </ul>
+
+              <div class="work-card-body">
+                <div class="work-card-tag-row">
+                  <span class="work-card-tag">Excel</span>
+                  <span class="work-card-tag work-card-tag-soft">HR</span>
+                </div>
+
+                <h3 class="work-card-title">HR Attendance & Overtime Dashboard</h3>
+                <p class="work-card-text">
+                  An Excel-based dashboard that converts raw attendance logs into a
+                  clean overview of overtime, late entries, and trends.
+                </p>
+
+                <ul class="work-card-meta">
+                  <li>• Uses Power Query + pivot tables</li>
+                  <li>• 1-click refresh from raw logs</li>
+                  <li>• Ready-to-use charts for management</li>
+                </ul>
+
+                <a href="#" class="work-card-link">
+                  View dashboard screens
+                  <span aria-hidden="true">→</span>
+                </a>
+              </div>
             </article>
 
-            <!-- Add more automation tools / demos here -->
+            <!-- CARD EXAMPLE 4 -->
+            <article class="work-card">
+              <div class="work-card-thumb">
+                <img
+                  src="images/work/approval-workflow-tracker.webp"
+                  alt="Approval workflow tracker in Google Sheets mockup"
+                  loading="lazy"
+                  width="480"
+                  height="260"
+                >
+              </div>
+
+              <div class="work-card-body">
+                <div class="work-card-tag-row">
+                  <span class="work-card-tag">Automation</span>
+                  <span class="work-card-tag work-card-tag-soft">Approvals</span>
+                </div>
+
+                <h3 class="work-card-title">Approval Workflow Tracker (Sheets + Email)</h3>
+                <p class="work-card-text">
+                  A Google Sheets tracker that sends automatic emails as requests move
+                  from “raised” to “approved” to “completed”.
+                </p>
+
+                <ul class="work-card-meta">
+                  <li>• Apps Script-based notifications</li>
+                  <li>• Audit trail for each request</li>
+                  <li>• Reduces manual follow-up messaging</li>
+                </ul>
+
+                <a href="#" class="work-card-link">
+                  View sample sheet
+                  <span aria-hidden="true">→</span>
+                </a>
+              </div>
+            </article>
           </div>
         </section>
 
-        <!-- DIGITAL WORKSPACE -->
-        <section id="work-digital-workspace" class="work-section" aria-labelledby="work-digital-workspace-heading">
-          <header class="work-section-header">
-            <h3 id="work-digital-workspace-heading" class="work-section-title">
-              Digital Workspace
-            </h3>
-            <p class="work-section-sub">
-              Clean, organised structures across Google Workspace, Office 365, and collaboration tools.
-            </p>
-          </header>
+        <!-- CATEGORY 3: DIGITAL WORKSPACE -->
+        <section id="cat-digital" class="work-section" aria-labelledby="cat-digital-heading">
+          <h2 id="cat-digital-heading" class="work-section-title">Digital Workspace & Docs</h2>
+          <p class="work-section-sub">
+            Documentation, SOPs, and workspace layouts that keep information
+            findable, shareable, and ready for handover.
+          </p>
 
           <div class="work-grid">
-            <!-- Your mockups for folder structures, Notion pages, etc. -->
-          </div>
-        </section>
+            <!-- CARD EXAMPLE 5 -->
+            <article class="work-card">
+              <div class="work-card-thumb">
+                <img
+                  src="images/work/notion-ops-hub.webp"
+                  alt="Notion-style operations hub mockup"
+                  loading="lazy"
+                  width="480"
+                  height="260"
+                >
+              </div>
 
-        <!-- CONTENT & DESIGN -->
-        <section id="work-content-design" class="work-section" aria-labelledby="work-content-design-heading">
-          <header class="work-section-header">
-            <h3 id="work-content-design-heading" class="work-section-title">
-              Content &amp; Design
-            </h3>
-            <p class="work-section-sub">
-              Visual documents, reports, and templates that communicate clearly and look professional.
-            </p>
-          </header>
+              <div class="work-card-body">
+                <div class="work-card-tag-row">
+                  <span class="work-card-tag">Workspace</span>
+                  <span class="work-card-tag work-card-tag-soft">Operations Hub</span>
+                </div>
 
-          <div class="work-grid">
-            <!-- Add cards linking to PDFs, mockups, policy docs, etc. -->
-          </div>
-        </section>
+                <h3 class="work-card-title">Operations Hub – Single Source of Truth</h3>
+                <p class="work-card-text">
+                  A central hub layout for SOPs, links, and trackers so new team
+                  members can onboard without hunting through folders.
+                </p>
 
-        <!-- E-LEARNEX / COMMUNITY -->
-        <section id="work-elearnex" class="work-section" aria-labelledby="work-elearnex-heading">
-          <header class="work-section-header">
-            <h3 id="work-elearnex-heading" class="work-section-title">
-              E-LearnEx &amp; Community Work
-            </h3>
-            <p class="work-section-sub">
-              Systems, campaigns, and resources built to support thousands of learners online.
-            </p>
-          </header>
+                <ul class="work-card-meta">
+                  <li>• Page templates for SOPs & checklists</li>
+                  <li>• Linked databases for tasks and docs</li>
+                  <li>• Designed for easy handover</li>
+                </ul>
 
-          <div class="work-grid">
-            <!-- Add E-LearnEx-related dashboards, workflows, and assets -->
+                <a href="#" class="work-card-link">
+                  View structure & examples
+                  <span aria-hidden="true">→</span>
+                </a>
+              </div>
+            </article>
           </div>
         </section>
 
@@ -311,12 +338,12 @@
     </section>
   </main>
 
-  <!-- FOOTER (same as index.html, you can add "Work" if you like) -->
+  <!-- FOOTER (same as index) -->
   <footer class="ars-footer" role="contentinfo">
     <div class="ars-footer-grid">
       <div class="ars-footer-logo-block">
         <picture>
-          <source srcset="images/footer-logo.webp" type="image/webp">
+          <source src="images/footer-logo.webp" type="image/webp">
           <img
             src="images/footer-logo.webp"
             class="ars-footer-logo"
@@ -334,9 +361,9 @@
           <ul class="ars-footer-links">
             <li><a href="index.html#home">Home</a></li>
             <li><a href="index.html#experience">Experience</a></li>
-            <li><a href="work.html">Work</a></li>
             <li><a href="index.html#services">Services</a></li>
             <li><a href="index.html#about">About</a></li>
+            <li><a href="work.html">Work</a></li>
           </ul>
         </nav>
       </div>
@@ -345,10 +372,9 @@
         <div class="ars-footer-title">Categories</div>
         <nav aria-label="Footer - categories">
           <ul class="ars-footer-links">
-            <li><a href="work.html#work-exec-ops">Executive Operations</a></li>
-            <li><a href="work.html#work-data-automation">Data &amp; Automation</a></li>
-            <li><a href="work.html#work-digital-workspace">Digital Workspace</a></li>
-            <li><a href="work.html#work-content-design">Content &amp; Design</a></li>
+            <li><a href="#cat-exec">Executive Operations</a></li>
+            <li><a href="#cat-excel">Data &amp; Automation</a></li>
+            <li><a href="#cat-digital">Digital Workspace</a></li>
           </ul>
         </nav>
       </div>
@@ -368,29 +394,7 @@
     </div>
   </footer>
 
-  <!-- Shared JS -->
+  <!-- MAIN JS -->
   <script src="assets/js/main.js"></script>
-
-  <!-- Same resume download helper as index.html -->
-  <script>
-    function downloadResume(event) {
-      event.preventDefault();
-
-      if (window.gtag) {
-        gtag('event', 'resume_download', {
-          event_category: 'engagement',
-          event_label: 'Resume PDF',
-          value: 1
-        });
-      }
-
-      const a = document.createElement('a');
-      a.href = 'AbuRahatSabir-Resume.pdf';
-      a.download = 'AbuRahatSabir-Resume.pdf';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
-  </script>
 </body>
 </html>

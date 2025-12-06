@@ -165,4 +165,63 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sections.forEach(section => sectionObserver.observe(section));
   }
+
+});
+
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  // === WORK PAGE SIDEBAR LOGIC ===
+  const sidebar = document.querySelector('.work-sidebar');
+  const sidebarLinks = document.querySelectorAll('.work-sidebar-list a');
+  const workSections = document.querySelectorAll('.work-section[id]');
+
+  if (sidebar && sidebarLinks.length && workSections.length && 'IntersectionObserver' in window) {
+    // Smooth scrolling on click (respecting header offset using scroll-margin in CSS if you want)
+    sidebarLinks.forEach(link => {
+      link.addEventListener('click', (event) => {
+        const href = link.getAttribute('href');
+        if (!href || !href.startsWith('#')) return;
+
+        event.preventDefault();
+        const targetId = href.slice(1);
+        const target = document.getElementById(targetId);
+        if (!target) return;
+
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // Active state on scroll
+    const linkMap = new Map();
+    sidebarLinks.forEach(link => {
+      const href = link.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        linkMap.set(href.slice(1), link);
+      }
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const id = entry.target.getAttribute('id');
+        if (!id) return;
+
+        // Remove active from all
+        sidebarLinks.forEach(l => l.classList.remove('is-active'));
+
+        // Add to current
+        const activeLink = linkMap.get(id);
+        if (activeLink) {
+          activeLink.classList.add('is-active');
+        }
+      });
+    }, {
+      threshold: 0.35,
+      rootMargin: '0px 0px -40% 0px'
+    });
+
+    workSections.forEach(section => observer.observe(section));
+  }
 });

@@ -187,6 +187,41 @@ body {
   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
+/* Tertiary / ghost-style CTA buttons (used in cards on Work page) */
+.btn-tertiary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--accent);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-tertiary i {
+  font-size: 0.9rem;
+  transition: transform 0.2s;
+}
+
+.btn-tertiary:hover,
+.btn-tertiary:focus-visible {
+  color: var(--accent-strong);
+  background: var(--bg-soft);
+  border-color: var(--accent-soft);
+}
+
+.btn-tertiary:hover i,
+.btn-tertiary:focus-visible i {
+  transform: translateX(4px);
+}
+
+
 /* =========================================
    4. HEADER & NAVIGATION
    ========================================= */
@@ -1518,17 +1553,24 @@ header[role="banner"] {
 /* --- Grid & Cards --- */
 .grid-system { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 28px; }
 
-.project-card {
+.card {
   background: var(--bg-body);
+  border-radius: var(--radius-lg);       /* you already use this token */
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s var(--ease),
+              box-shadow 0.3s var(--ease),
+              border-color 0.3s var(--ease);
+}
+
+.project-card {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), border-color 0.3s var(--ease);
   position: relative;
+  /* background, border, radius, shadow, transition now come from .card */
 }
+
 
 .project-card:hover {
   transform: translateY(-4px);
@@ -1565,6 +1607,25 @@ header[role="banner"] {
 .link-case i { transition: transform 0.2s; }
 .link-case:hover i { transform: translateX(4px); }
 
+/* Improve card footer link interactivity */
+.card-footer .link-case {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.card-footer .link-case:hover,
+.card-footer .link-case:focus-visible {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+
+
 /* --- Filtering States --- */
 .hidden { display: none !important; }
 .fade-in { animation: fadeIn 0.4s ease forwards; }
@@ -1579,10 +1640,42 @@ header[role="banner"] {
   }
 }
 
+/* Work Page - Hero Layout Improvements */
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.filter-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+}
+
+.filter-toolbar span {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+
 /* ----------------------------------------- */
 /* Work Page Only - Responsive Hero Tweaks   */
 /* ----------------------------------------- */
 @media (max-width: 768px) {
+  /* global mobile rules */
+  :root { --header-height: 80px; }
+  body { padding: 16px 10px var(--section-gap-md); }
+  .section-shell { margin-bottom: var(--section-gap-md); }
+  .top-bar { justify-content: space-between; gap: 12px; }
+  .top-bar-right { gap: 10px; }
+  /* ... any other existing global mobile styles ... */
+
+  /* Work Page Only - Responsive Hero Tweaks */
   body.work-page .hero .section-shell {
     padding-top: 32px;
     padding-bottom: 24px;
@@ -1597,3 +1690,4 @@ header[role="banner"] {
     font-size: 0.95rem;
   }
 }
+

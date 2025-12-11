@@ -1,3 +1,7 @@
+---
+layout: none
+---
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,17 +36,17 @@
   <link rel="canonical" href="https://aburahatsabir.github.io/portfolio/" />
   <link rel="icon" type="image/png" href="images/favicon.png">
 
-<link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/main.css">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="dns-prefetch" href="https://www.googletagmanager.com">
-<link rel="dns-prefetch" href="https://kit.fontawesome.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+  <link rel="dns-prefetch" href="https://kit.fontawesome.com">
 
-<link
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap"
-  rel="stylesheet"
-/>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap"
+    rel="stylesheet"
+  />
 
   <script type="application/ld+json">
   {
@@ -78,41 +82,7 @@
 <body>
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <header role="banner">
-    <div class="top-bar">
-      <a href="#home" class="logo-circle" aria-label="Back to top">A</a>
-
-      <div class="top-bar-right">
-        <nav class="top-nav" aria-label="Primary">
-          <a href="#home">Home</a>
-          <a href="#about">About</a>
-          <a href="#experience">Experience</a>
-          <a href="#education">Education</a>
-            <!-- NEW: link to your separate page -->
-          <a href="work.html">Work</a>
-          <a href="#process">Process</a>
-          <a href="#services">Services</a>
-          <a href="#contact">Contact</a>
-        </nav>
-
-        <a
-  href="AbuRahatSabir-Resume.pdf"
-  class="btn btn-outline"
->
-  Download Resume
-</a>
-
-        <button
-          class="nav-toggle"
-          type="button"
-          aria-label="Toggle navigation menu"
-          aria-expanded="false"
-        >
-          <span class="nav-toggle-icon" aria-hidden="true"></span>
-        </button>
-      </div>
-    </div>
-  </header>
+  {% include header.html %}
 
   <main id="main-content" role="main">
     <section
@@ -942,65 +912,9 @@
     </section>
   </main>
 
-  <footer class="ars-footer" role="contentinfo">
-    <div class="ars-footer-grid">
-      <div class="ars-footer-logo-block">
-        <picture>
-          <source srcset="images/footer-logo.webp" type="image/webp">
-          <img
-            src="images/footer-logo.webp"
-            class="ars-footer-logo"
-            width="180"
-            height="48"
-            loading="lazy"
-            alt="ARS monogram logo"
-          >
-        </picture>
-      </div>
+  {% include footer.html %}
 
-      <div>
-        <div class="ars-footer-title">Navigation</div>
-        <nav aria-label="Footer - primary navigation">
-          <ul class="ars-footer-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#experience">Experience</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#about">About</a></li>
-          </ul>
-        </nav>
-      </div>
-
-      <div>
-        <div class="ars-footer-title">Categories</div>
-        <nav aria-label="Footer - categories">
-          <ul class="ars-footer-links">
-            <li><a href="#experience">Executive Operations</a></li>
-            <li><a href="#education">Data &amp; Automation</a></li>
-            <li><a href="#process">Digital Workspace</a></li>
-            <li><a href="#services">Content &amp; Design</a></li>
-          </ul>
-        </nav>
-      </div>
-
-      <div>
-        <div class="ars-footer-title">Elsewhere</div>
-        <nav aria-label="Footer - elsewhere">
-          <ul class="ars-footer-links">
-            <li><a href="#experience">Case Studies</a></li>
-          </ul>
-        </nav>
-      </div>
-    </div>
-
-    <div class="ars-footer-bottom">
-      © 2025 Abu Rahat Sabir. All rights reserved.
-    </div>
-  </footer>
   <script src="https://kit.fontawesome.com/6d23f536e4.js" crossorigin="anonymous"></script>
   <script src="assets/js/main.js"></script>
 </body>
 </html>
-
-
-
-

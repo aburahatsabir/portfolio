@@ -1,8 +1,0 @@
-title: "Abu Rahat Sabir Portfolio"
-description: "Executive Admin & Workflow Automation Specialist"
-url: "https://aburahatsabir.github.io"
-baseurl: "/portfolio"
-
-# We don't need a theme; we're serving our own HTML/CSS
-theme: null
-

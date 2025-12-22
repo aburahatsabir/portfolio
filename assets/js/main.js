@@ -1,4 +1,5 @@
 // =========================================
+<<<<<<< HEAD
 // SERVICE WORKER REGISTRATION
 // =========================================
 
@@ -25,6 +26,8 @@ if ('serviceWorker' in navigator) {
 }
 
 // =========================================
+=======
+>>>>>>> ebd0dc63218b0857cbe186aa05d5af21c17d0a66
 // GLOBAL UTILITIES & EVENT LISTENERS
 // =========================================
 
@@ -147,6 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (hasAnimatedStats) return;
       hasAnimatedStats = true;
 
+<<<<<<< HEAD
       // Check for reduced motion preference
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -185,6 +189,35 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }, { threshold: 0.2 });
 
+=======
+      stats.forEach(counter => {
+        const target = Number(counter.getAttribute('data-target')) || 0;
+        const suffix = counter.getAttribute('data-suffix') || '';
+        const duration = 2000;
+        const startTime = performance.now();
+
+        const updateCount = (now) => {
+          const progress = Math.min((now - startTime) / duration, 1);
+          const easeOutQuad = 1 - (1 - progress) * (1 - progress);
+          counter.innerText = Math.ceil(easeOutQuad * target) + suffix;
+
+          if (progress < 1) requestAnimationFrame(updateCount);
+          else counter.innerText = target + suffix;
+        };
+
+        requestAnimationFrame(updateCount);
+      });
+    };
+
+    if ('IntersectionObserver' in window) {
+      const statsObserver = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          animateStats();
+          statsObserver.unobserve(statsSection);
+        }
+      }, { threshold: 0.2 });
+
+>>>>>>> ebd0dc63218b0857cbe186aa05d5af21c17d0a66
       statsObserver.observe(statsSection);
     } else {
       animateStats();

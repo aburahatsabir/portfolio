@@ -1,0 +1,330 @@
+/* ========================================
+   TESTIMONIALS SECTION - BENTO GRID STYLE
+   ======================================== */
+
+.testimonials-bento-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Header */
+.bento-header {
+    text-align: center;
+    margin-bottom: var(--space-8);
+}
+
+.bento-label {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    margin-bottom: var(--space-4);
+    position: relative;
+    display: inline-block;
+}
+
+.bento-label::before,
+.bento-label::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border: 2px solid var(--accent);
+}
+
+.bento-label::before {
+    bottom: -4px;
+    left: -14px;
+    border-right: none;
+    border-top: none;
+}
+
+.bento-label::after {
+    top: -4px;
+    right: -14px;
+    border-left: none;
+    border-bottom: none;
+}
+
+
+
+.bento-title {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 900;
+    color: var(--text-strong);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-2);
+}
+
+.bento-subtitle {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.bento-description {
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* Bento Grid Layout */
+.bento-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+    grid-template-areas:
+        "large medium"
+        "large bottom-right"
+        "extra bottom-right";
+}
+
+/* Card Sizes and Positioning */
+.bento-card-large {
+    grid-area: large;
+}
+
+.bento-card-medium {
+    grid-area: medium;
+}
+
+/* Bottom right cards container */
+.bento-bottom-cards {
+    grid-area: bottom-right;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+}
+
+.bento-bottom-cards .bento-card {
+    margin: 0;
+}
+
+/* Extra card positioning */
+.bento-card-extra {
+    grid-area: extra;
+}
+
+/* Base Card Styles */
+.bento-card {
+    background: white;
+    border-radius: 12px;
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+    min-height: 160px;
+}
+
+.bento-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Large card specific */
+.bento-card-large {
+    padding: var(--space-5);
+}
+
+/* Medium and small cards */
+.bento-card-medium,
+.bento-bottom-cards .bento-card {
+    min-height: auto;
+}
+
+/* Dark Card */
+.bento-card-dark {
+    background: #1a1a1a;
+    color: white;
+}
+
+.bento-card-dark .bento-quote,
+.bento-card-dark .bento-author-name,
+.bento-card-dark .quote-icon-small {
+    color: white;
+}
+
+.bento-card-dark .bento-author-role {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Metrics */
+.metric-number {
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--text-strong);
+    line-height: 1;
+    margin-bottom: var(--space-1);
+}
+
+.metric-label {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin: 0 0 var(--space-4) 0;
+}
+
+/* Quote Icon */
+.quote-icon-small {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: var(--space-2);
+    font-family: Georgia, serif;
+}
+
+/* Quote */
+.bento-quote {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--text-main);
+    font-style: normal;
+    margin: 0 0 var(--space-2) 0;
+}
+
+/* Author */
+.bento-author {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: auto;
+    padding-top: var(--space-2);
+}
+
+.bento-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.bento-author-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.bento-author-name {
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: var(--text-strong);
+    font-style: normal;
+}
+
+.bento-author-role {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.company-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+/* Stats Footer */
+.bento-stats {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4) var(--space-6);
+    background: #f9fafb;
+    border-radius: 12px;
+    gap: var(--space-6);
+}
+
+.stats-left {
+    font-size: 0.875rem;
+    color: var(--text-main);
+    white-space: nowrap;
+}
+
+.stats-left strong {
+    font-weight: 700;
+    color: var(--text-strong);
+}
+
+.stats-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+.stars {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--text-strong);
+    font-size: 0.875rem;
+}
+
+.rating {
+    margin-left: var(--space-1);
+    font-weight: 700;
+    color: var(--text-strong);
+    font-size: 0.875rem;
+}
+
+.reviews-text {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    margin: 0;
+    white-space: nowrap;
+}
+
+.stats-link {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-strong);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    transition: color 0.3s ease;
+}
+
+.stats-link:hover {
+    color: var(--accent);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .bento-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .bento-card-large,
+    .bento-card-medium,
+    .bento-card-small,
+    .bento-card-dark {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .bento-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .bento-card {
+        padding: var(--space-6);
+    }
+
+    .metric-number {
+        font-size: 3rem;
+    }
+
+    .bento-title {
+        font-size: 2rem;
+    }
+
+    .bento-stats {
+        flex-direction: column;
+        text-align: center;
+    }
+}

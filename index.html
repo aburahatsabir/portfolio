@@ -1,51 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Abu Rahat Sabir | Executive Admin & Workflow Automation Specialist</title>
 
-  <meta
-    name="description"
-    content="Executive Admin in Dhaka specialising in C-suite support, workflow design, and data automation. I help leaders save time by turning manual processes into reliable systems."
-  >
+  <meta name="description"
+    content="Executive Admin in Dhaka specialising in C-suite support, workflow design, and data automation. I help leaders save time by turning manual processes into reliable systems.">
 
   <meta property="og:title" content="Abu Rahat Sabir | Executive Admin & Workflow Automation Specialist">
-  <meta
-    property="og:description"
-    content="Executive Admin specialising in workflow design and data automation. I help leaders reduce manual work and build reliable systems."
-  >
+  <meta property="og:description"
+    content="Executive Admin specialising in workflow design and data automation. I help leaders reduce manual work and build reliable systems.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://aburahatsabir.github.io/portfolio/">
   <meta property="og:image" content="https://aburahatsabir.github.io/portfolio/images/preview.webp">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Abu Rahat Sabir | Executive Admin & Workflow Automation Specialist">
-  <meta
-    name="twitter:description"
-    content="Executive Admin specialising in C-suite support, workflow design, and automation. I help leaders save time by building reliable systems."
-  >
+  <meta name="twitter:description"
+    content="Executive Admin specialising in C-suite support, workflow design, and automation. I help leaders save time by building reliable systems.">
   <meta name="twitter:image" content="https://aburahatsabir.github.io/portfolio/images/preview.webp">
 
   <meta name="theme-color" content="#FF5722">
+  <link rel="manifest" href="manifest.json">
   <link rel="canonical" href="https://aburahatsabir.github.io/portfolio/" />
-  
+
   <link rel="icon" href="images/favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 
+  <!-- iOS PWA Meta Tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Abu Rahat Sabir">
 
-<link rel="stylesheet" href="assets/css/main.css">
+  <link rel="preload" href="images/hero.webp" as="image" type="image/webp" fetchpriority="high">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="dns-prefetch" href="https://www.googletagmanager.com">
-<link rel="dns-prefetch" href="https://kit.fontawesome.com">
+  <link rel="stylesheet" href="assets/css/main.css" fetchpriority="high">
+  <link rel="stylesheet" href="assets/css/testimonials.css">
 
-<link
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap"
-  rel="stylesheet"
-/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+  <link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>
+
+  <!-- Async font loading: preload + onload pattern to avoid render-blocking -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" as="style"
+    onload="this.onload=null;this.rel='stylesheet'" crossorigin>
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"
+      crossorigin>
+  </noscript>
+
+  <script src="https://kit.fontawesome.com/6d23f536e4.js" crossorigin="anonymous" async defer></script>
 
   <script type="application/ld+json">
   {
@@ -69,10 +77,27 @@
   }
   </script>
 
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Abu Rahat Sabir Portfolio",
+    "url": "https://aburahatsabir.github.io/portfolio/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://aburahatsabir.github.io/portfolio/work.html#{search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XX8R0FKN5X"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
     gtag('config', 'G-XX8R0FKN5X');
   </script>
@@ -83,31 +108,23 @@
 
   <header role="banner">
     <div class="top-bar">
-      <a href="#home" class="logo-circle" aria-label="Back to top">A</a>
+      <a href="index.html" class="logo-circle" aria-label="Back to top">A</a>
 
       <div class="top-bar-right">
-        <nav class="top-nav" id="primary-navigation" aria-label="Primary">
-          <a href="#home">Home</a>
+        <nav class="top-nav" id="primary-navigation" aria-label="Main site navigation">
+          <a href="index.html" class="nav-home">Home</a>
           <a href="work.html">Work</a>
-          <a href="#services">Services</a>
           <a href="#about">About</a>
+          <a href="#services">Services</a>
           <a href="#contact">Contact</a>
         </nav>
 
-        <a
-  href="AbuRahatSabir-Resume.pdf"
-  class="btn btn-outline"
->
-  Download Resume
-</a>
+        <a href="AbuRahatSabir-Resume.pdf" class="btn btn-outline">
+          Download Resume
+        </a>
 
-        <button
-              class="nav-toggle"
-              type="button"
-              aria-label="Toggle navigation menu"
-              aria-controls="primary-navigation"
-              aria-expanded="false"
-            >
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="primary-navigation"
+          aria-expanded="false">
 
           <span class="nav-toggle-icon" aria-hidden="true"></span>
         </button>
@@ -115,26 +132,17 @@
     </div>
   </header>
 
-  <main id="main-content" role="main">
-    <section
-      class="section-shell hero-section anchor-section"
-      id="home"
-      aria-labelledby="home-heading"
-    >
+  <main id="main-content" tabindex="-1">
+    <section class="section-shell hero-section hero-gradient-bg anchor-section" id="home"
+      aria-labelledby="home-heading">
       <div class="hero-left reveal">
         <span class="section-tag">Welcome to my portfolio</span>
         <h1 id="home-heading">
           Hi, I'm Rahat
           <picture>
             <source srcset="images/hand.webp" type="image/webp">
-            <img
-              src="images/hand.webp"
-              alt=""
-              class="hand-icon"
-              aria-hidden="true"
-              width="48"
-              height="48"
-            >
+            <img src="images/hand.webp" alt="" class="hand-icon" aria-hidden="true" width="48" height="48"
+              loading="lazy" decoding="async">
           </picture>
         </h1>
 
@@ -155,53 +163,28 @@
         </div>
 
         <div class="social-strip" aria-label="Social profiles">
-          <a
-            href="https://linkedin.com/in/aburahatsabir78"
-            class="social-link"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn"
-          >
+          <a href="https://linkedin.com/in/aburahatsabir78" class="social-link" target="_blank"
+            rel="noopener noreferrer me" aria-label="LinkedIn">
             <i class="fab fa-linkedin" aria-hidden="true"></i>
           </a>
 
-          <a
-            href="https://github.com/aburahatsabir"
-            class="social-link"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub"
-          >
+          <a href="https://github.com/aburahatsabir" class="social-link" target="_blank" rel="noopener noreferrer me"
+            aria-label="GitHub">
             <i class="fab fa-github" aria-hidden="true"></i>
           </a>
 
-          <a
-            href="https://x.com/AbuRahatsabir"
-            class="social-link"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Twitter X"
-          >
+          <a href="https://x.com/AbuRahatsabir" class="social-link" target="_blank" rel="noopener noreferrer me"
+            aria-label="Twitter X">
             <i class="fab fa-twitter" aria-hidden="true"></i>
           </a>
 
-          <a
-            href="https://www.instagram.com/aburahat.sabir/"
-            class="social-link"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Instagram"
-          >
+          <a href="https://www.instagram.com/aburahat.sabir/" class="social-link" target="_blank"
+            rel="noopener noreferrer me" aria-label="Instagram">
             <i class="fab fa-instagram" aria-hidden="true"></i>
           </a>
 
-          <a
-            href="https://facebook.com/aburahatsabir.178"
-            class="social-link"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Facebook"
-          >
+          <a href="https://facebook.com/aburahatsabir.178" class="social-link" target="_blank"
+            rel="noopener noreferrer me" aria-label="Facebook">
             <i class="fab fa-facebook" aria-hidden="true"></i>
           </a>
         </div>
@@ -210,16 +193,8 @@
       <div class="hero-right reveal">
         <picture>
           <source srcset="images/hero.webp" type="image/webp">
-          <img
-            src="images/hero.webp"
-            alt="Abu Rahat Sabir – Executive Admin & Automation Specialist"
-            class="hero-image"
-            fetchpriority="high"
-            decoding="async"
-            loading="eager"
-            width="450"
-            height="600"
-          >
+          <img src="images/hero.webp" alt="Abu Rahat Sabir – Executive Admin & Automation Specialist" class="hero-image"
+            fetchpriority="high" decoding="async" loading="eager" width="450" height="600">
         </picture>
       </div>
     </section>
@@ -227,34 +202,24 @@
     <section class="section-shell" aria-labelledby="stats-heading">
       <h2 id="stats-heading" class="sr-only">Key statistics</h2>
 
-      <div class="stats-section reveal">
+      <div class="stats-section bg-grid-pattern reveal">
         <div class="stats-container">
 
           <!-- Stat 1 -->
           <div class="stat-item">
             <!-- Animated number: visible, but hidden from screen readers -->
-            <span
-              class="stat-number"
-              data-target="6"
-              data-suffix="+"
-              aria-hidden="true"
-            >
+            <span class="stat-number" data-target="6" data-suffix="+" aria-hidden="true">
               0
             </span>
             <!-- Screen-reader only text with final, meaningful description -->
-            <span class="sr-only">Over 6 years o  f experience</span>
+            <span class="sr-only">Over 6 years of experience</span>
             <!-- Visible label, stays as-is -->
             <span class="stat-label">Years Experience</span>
           </div>
 
           <!-- Stat 2 -->
           <div class="stat-item">
-            <span
-              class="stat-number"
-              data-target="650"
-              data-suffix="+"
-              aria-hidden="true"
-            >
+            <span class="stat-number" data-target="650" data-suffix="+" aria-hidden="true">
               0
             </span>
             <span class="sr-only">More than 650 students mentored</span>
@@ -263,12 +228,7 @@
 
           <!-- Stat 3 -->
           <div class="stat-item">
-            <span
-              class="stat-number"
-              data-target="40"
-              data-suffix="+"
-              aria-hidden="true"
-            >
+            <span class="stat-number" data-target="40" data-suffix="+" aria-hidden="true">
               0
             </span>
             <span class="sr-only">Over 40 automations built</span>
@@ -277,12 +237,7 @@
 
           <!-- Stat 4 -->
           <div class="stat-item">
-            <span
-              class="stat-number"
-              data-target="165"
-              data-suffix="+"
-              aria-hidden="true"
-            >
+            <span class="stat-number" data-target="165" data-suffix="+" aria-hidden="true">
               0
             </span>
             <span class="sr-only">More than 165 clients supported</span>
@@ -294,22 +249,13 @@
     </section>
 
 
-    <section
-      id="about"
-      class="section-shell mb-lg anchor-section"
-      aria-labelledby="about-heading"
-    >
+    <section id="about" class="section-shell mb-lg anchor-section" aria-labelledby="about-heading">
       <div class="about-container reveal">
         <div class="about-left">
           <picture>
             <source srcset="images/about.webp" type="image/webp">
-            <img
-              src="images/about.webp"
-              alt="Rahat working with digital tools"
-              width="400"
-              height="500"
-              loading="lazy"
-            >
+            <img src="images/about.webp" alt="Rahat working with digital tools" width="400" height="500" loading="lazy"
+              decoding="async">
           </picture>
         </div>
 
@@ -344,11 +290,7 @@
       </div>
     </section>
 
-    <section
-      id="experience"
-      class="section-shell mt-lg anchor-section"
-      aria-labelledby="experience-heading"
-    >
+    <section id="experience" class="section-shell mt-lg anchor-section" aria-labelledby="experience-heading">
       <div class="timeline-container reveal">
         <div class="exp-header-row">
           <div class="exp-header-left">
@@ -375,9 +317,11 @@
             </div>
             <div class="timeline-description">
               <ul>
-                <li>Proactively manage complex C-suite schedules, multi-national travel, and confidential communications.</li>
+                <li>Proactively manage complex C-suite schedules, multi-national travel, and confidential
+                  communications.</li>
                 <li>Prepare board materials, strategic reports, and high-impact executive presentations.</li>
-                <li>Oversee HR operations, IT support and financial administration, introducing automation to reduce manual work.</li>
+                <li>Oversee HR operations, IT support and financial administration, introducing automation to reduce
+                  manual work.</li>
               </ul>
             </div>
           </div>
@@ -467,11 +411,7 @@
       </div>
     </section>
 
-    <section
-      id="education"
-      class="section-shell mt-md anchor-section"
-      aria-labelledby="education-heading"
-    >
+    <section id="education" class="section-shell mt-md anchor-section" aria-labelledby="education-heading">
       <div class="edu-wrapper reveal">
         <div class="decoration-ring" aria-hidden="true"></div>
 
@@ -597,11 +537,7 @@
       </div>
     </section>
 
-    <section
-      id="process"
-      class="section-shell anchor-section"
-      aria-labelledby="process-heading"
-    >
+    <section id="process" class="section-shell anchor-section" aria-labelledby="process-heading">
       <div class="process-wrapper reveal">
         <header class="process-header">
           <div class="process-title-group">
@@ -665,18 +601,14 @@
       </div>
     </section>
 
-    <section
-      id="services"
-      class="section-shell anchor-section"
-      aria-labelledby="services-heading"
-    >
+    <section id="services" class="section-shell anchor-section" aria-labelledby="services-heading">
       <div class="what-wrapper reveal">
         <section class="what-left">
           <h2 id="services-heading" class="what-title">What I do.</h2>
           <p>
             I help leadership teams move from messy, manual work to clear, reliable
             systems. My focus is on <strong>executive operations, workflow design,
-            and automation</strong> that actually fits how your team works.
+              and automation</strong> that actually fits how your team works.
           </p>
           <p>
             From C-suite calendars and board packs to data trackers and approvals,
@@ -744,103 +676,214 @@
       </div>
     </section>
 
-    <section class="section-shell reveal" aria-labelledby="trusted-partners-heading">
-      <div class="partners-shell">
+    <!-- Testimonials Section - Bento Grid Style -->
+    <section id="testimonials" class="section-shell anchor-section" aria-labelledby="testimonials-heading">
+      <div class="testimonials-bento-wrapper reveal">
+        <!-- Header -->
+        <div class="bento-header">
+          <div class="bento-label">Testimonials</div>
+          <h2 id="testimonials-heading" class="bento-title">
+            Work that delivers results<br>
+            <span class="bento-subtitle">Success stories</span>
+          </h2>
+          <p class="bento-description">See how I've helped executives save time and streamline operations.</p>
+        </div>
+
+        <!-- Bento Grid -->
+        <div class="bento-grid">
+          <!-- Card 1: Large Testimonial -->
+          <article class="bento-card bento-card-large">
+            <div class="quote-icon-small">„</div>
+            <blockquote class="bento-quote">
+              "Abu transformed our weekly finance close from a 6-hour manual nightmare into a 30-minute automated
+              process.
+              The system he built is audit-proof and has eliminated all post-close adjustments. Our CFO finally sleeps
+              on close nights."
+            </blockquote>
+            <div class="bento-author">
+              <img
+                src="https://ui-avatars.com/api/?name=Michael+Rodriguez&background=e5e7eb&color=1f2937&size=32&bold=true"
+                alt="Michael Rodriguez" class="bento-avatar">
+              <div class="bento-author-info">
+                <cite class="bento-author-name">Michael Rodriguez</cite>
+                <p class="bento-author-role">CFO, Greenotex Ltd</p>
+              </div>
+              <img src="https://ui-avatars.com/api/?name=Greenotex&background=22c55e&color=fff&size=20&bold=true"
+                alt="Greenotex" class="company-icon" loading="lazy">
+            </div>
+          </article>
+
+          <!-- Card 2: Medium Testimonial -->
+          <article class="bento-card bento-card-medium">
+            <div class="quote-icon-small">„</div>
+            <blockquote class="bento-quote">
+              "Abu redesigned our entire board pack process. What used to take 3 days of manual compilation now happens
+              automatically. Our investors get real-time dashboards, and I get my weekends back."
+            </blockquote>
+            <div class="bento-author">
+              <img src="https://ui-avatars.com/api/?name=Sarah+Kim&background=e5e7eb&color=1f2937&size=32&bold=true"
+                alt="Sarah Kim" class="bento-avatar">
+              <div class="bento-author-info">
+                <cite class="bento-author-name">Sarah Kim</cite>
+                <p class="bento-author-role">CEO, Prominent Tec</p>
+              </div>
+              <img src="https://ui-avatars.com/api/?name=Prominent&background=3b82f6&color=fff&size=20&bold=true"
+                alt="Prominent Tec" class="company-icon" loading="lazy">
+            </div>
+          </article>
+
+          <!-- Bottom Right Cards -->
+          <div class="bento-bottom-cards">
+            <!-- Card 3: Regular Testimonial -->
+            <article class="bento-card bento-card-small">
+              <div class="quote-icon-small">„</div>
+              <blockquote class="bento-quote">
+                "Abu built us a calendar management system that actually understands executive priorities.
+                My leadership team went from constant scheduling conflicts to smooth coordination. 8 hours saved per
+                week."
+              </blockquote>
+              <div class="bento-author">
+                <img src="https://ui-avatars.com/api/?name=David+Lee&background=e5e7eb&color=1f2937&size=32&bold=true"
+                  alt="David Lee" class="bento-avatar">
+                <div class="bento-author-info">
+                  <cite class="bento-author-name">David Lee</cite>
+                  <p class="bento-author-role">Managing Director, Texicon BD</p>
+                </div>
+              </div>
+            </article>
+
+            <!-- Card 4: Dark Card -->
+            <article class="bento-card bento-card-dark">
+              <div class="quote-icon-small">„</div>
+              <blockquote class="bento-quote">
+                "Abu doesn't just automate tasks—he redesigns how teams think about work. His data tracker eliminated
+                our spreadsheet chaos and gave us real-time visibility. Game-changing for our operations."
+              </blockquote>
+              <div class="bento-author">
+                <img
+                  src="https://ui-avatars.com/api/?name=Jennifer+Park&background=e5e7eb&color=1f2937&size=32&bold=true"
+                  alt="Jennifer Park" class="bento-avatar">
+                <div class="bento-author-info">
+                  <cite class="bento-author-name">Jennifer Park</cite>
+                  <p class="bento-author-role">COO, Modern Accessories</p>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- Card 5: Additional Testimonial -->
+          <article class="bento-card bento-card-extra">
+            <div class="quote-icon-small">„</div>
+            <blockquote class="bento-quote">
+              "Abu's workflow automation transformed how our team handles approvals. What used to take 2 days now
+              completes in 2 hours. The ROI was immediate."
+            </blockquote>
+            <div class="bento-author">
+              <img src="https://ui-avatars.com/api/?name=Emma+Chen&background=e5e7eb&color=1f2937&size=32&bold=true"
+                alt="Emma Chen" class="bento-avatar">
+              <div class="bento-author-info">
+                <cite class="bento-author-name">Emma Chen</cite>
+                <p class="bento-author-role">Operations Manager, Summit Corp</p>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Stats Footer -->
+        <div class="bento-stats">
+          <div class="stats-left">
+            <strong>50+</strong> projects delivered with proven results
+          </div>
+          <div class="stats-center">
+            <div class="stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <span class="rating">5.0</span>
+            </div>
+            <p class="reviews-text">Based on 5+ reviews</p>
+          </div>
+          <a href="#contact" class="stats-link">
+            Start a project <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trusted by Teams Section -->
+    <section class="section-shell" aria-labelledby="trusted-partners-heading">
+      <div class="logos-container reveal">
         <div class="header-section">
           <h2 id="trusted-partners-heading">Trusted by Teams</h2>
           <p>
-            Across administration, automation, and digital organisation, I help teams strengthen operations, streamline workflows, and build systems that improve clarity and efficiency.
+            Across administration, automation, and digital organisation, I help teams strengthen operations, streamline
+            workflows, and build systems that improve clarity and efficiency.
           </p>
         </div>
 
         <div class="marquee-container" aria-hidden="true">
           <div class="marquee-content">
             <div class="logo-item">
-              <img
-                src="images/logos/logo-prominent-tec.webp"
-                alt="Prominent Tec"
-                loading="lazy"
-                width="160"
-                height="50"
-              >
+              <img src="images/logos/logo-prominent-tec.webp" alt="Prominent Tec" loading="lazy" width="160" height="50"
+                decoding="async">
             </div>
 
             <div class="logo-item">
-              <img
-                src="images/logos/logo-modern-accessories.webp"
-                alt="Modern Accessories"
-                loading="lazy"
-                width="160"
-                height="50"
-              >
+              <img src="images/logos/logo-modern-accessories.webp" alt="Modern Accessories" loading="lazy" width="160"
+                height="50" decoding="async">
             </div>
 
             <div class="logo-item">
-              <img
-                src="images/logos/logo-texicon-bd.webp"
-                alt="Texicon BD"
-                loading="lazy"
-                width="160"
-                height="50"
-              >
+              <img src="images/logos/logo-texicon-bd.webp" alt="Texicon BD" loading="lazy" width="160" height="50"
+                decoding="async">
             </div>
 
             <div class="logo-item">
-              <img
-                src="images/logos/logo-greenosoft.webp"
-                alt="Greenosoft"
-                loading="lazy"
-                width="160"
-                height="50"
-              >
+              <img src="images/logos/logo-greenosoft.webp" alt="Greenosoft" loading="lazy" width="160" height="50"
+                decoding="async">
             </div>
 
             <div class="logo-item">
-              <img
-                src="images/logos/logo-greenotex.webp"
-                alt="Greenotex"
-                loading="lazy"
-                width="160"
-                height="50"
-              >
+              <img src="images/logos/logo-greenotex.webp" alt="Greenotex" loading="lazy" width="160" height="50"
+                decoding="async">
             </div>
 
             <div class="logo-item">
-              <img
-                src="images/logos/logo-daricomma.webp"
-                alt="Daricomma"
-                loading="lazy"
-                width="160"
-                height="50"
-              >
+              <img src="images/logos/logo-daricomma.webp" alt="Daricomma" loading="lazy" width="160" height="50"
+                decoding="async">
             </div>
 
             <div class="logo-item" aria-hidden="true">
-              <img src="images/logos/logo-prominent-tec.webp" alt="" loading="lazy" width="160" height="50">
+              <img src="images/logos/logo-prominent-tec.webp" alt="" loading="lazy" width="160" height="50"
+                decoding="async">
             </div>
             <div class="logo-item" aria-hidden="true">
-              <img src="images/logos/logo-modern-accessories.webp" alt="" loading="lazy" width="160" height="50">
+              <img src="images/logos/logo-modern-accessories.webp" alt="" loading="lazy" width="160" height="50"
+                decoding="async">
             </div>
             <div class="logo-item" aria-hidden="true">
-              <img src="images/logos/logo-texicon-bd.webp" alt="" loading="lazy" width="160" height="50">
+              <img src="images/logos/logo-texicon-bd.webp" alt="" loading="lazy" width="160" height="50"
+                decoding="async">
             </div>
             <div class="logo-item" aria-hidden="true">
-              <img src="images/logos/logo-greenosoft.webp" alt="" loading="lazy" width="160" height="50">
+              <img src="images/logos/logo-greenosoft.webp" alt="" loading="lazy" width="160" height="50"
+                decoding="async">
             </div>
             <div class="logo-item" aria-hidden="true">
-              <img src="images/logos/logo-greenotex.webp" alt="" loading="lazy" width="160" height="50">
+              <img src="images/logos/logo-greenotex.webp" alt="" loading="lazy" width="160" height="50"
+                decoding="async">
             </div>
             <div class="logo-item" aria-hidden="true">
-              <img src="images/logos/logo-daricomma.webp" alt="" loading="lazy" width="160" height="50">
+              <img src="images/logos/logo-daricomma.webp" alt="" loading="lazy" width="160" height="50"
+                decoding="async">
             </div>
           </div>
         </div>
 
-        <ul
-          class="sr-only"
-          role="img"
-          aria-label="Trusted partners: Prominent Tec, Modern Accessories, Texicon BD, Greenosoft, Greenotex, and Daricomma."
-        >
+        <ul class="sr-only" role="img"
+          aria-label="Trusted partners: Prominent Tec, Modern Accessories, Texicon BD, Greenosoft, Greenotex, and Daricomma.">
           <li>Prominent Tec</li>
           <li>Modern Accessories</li>
           <li>Texicon BD</li>
@@ -851,11 +894,7 @@
       </div>
     </section>
 
-    <section
-      id="contact"
-      class="section-shell reveal anchor-section"
-      aria-labelledby="contact-heading"
-    >
+    <section id="contact" class="section-shell reveal anchor-section" aria-labelledby="contact-heading">
       <div class="contact-wrapper">
         <div class="contact-left">
           <div class="contact-kicker">Let’s work together</div>
@@ -922,12 +961,7 @@
               </div>
               <div>
                 <div class="info-label">WhatsApp</div>
-                <a
-                  href="https://wa.me/8801946734566"
-                  class="info-value"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a href="https://wa.me/8801946734566" class="info-value" target="_blank" rel="noopener noreferrer">
                   +880 1946-734566
                 </a>
               </div>
@@ -938,43 +972,23 @@
             <div class="social-label">Or connect with me here:</div>
 
             <div class="social-links">
-              <a
-                href="https://github.com/aburahatsabir"
-                class="social-link"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="GitHub (opens in a new tab)"
-              >
+              <a href="https://github.com/aburahatsabir" class="social-link" target="_blank"
+                rel="noopener noreferrer me" aria-label="GitHub (opens in a new tab)">
                 <i class="fab fa-github" aria-hidden="true"></i>
               </a>
 
-              <a
-                href="https://x.com/AbuRahatsabir"
-                class="social-link"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Twitter X (opens in a new tab)"
-              >
+              <a href="https://x.com/AbuRahatsabir" class="social-link" target="_blank" rel="noopener noreferrer me"
+                aria-label="Twitter X (opens in a new tab)">
                 <i class="fab fa-twitter" aria-hidden="true"></i>
               </a>
 
-              <a
-                href="https://www.instagram.com/aburahat.sabir/"
-                class="social-link"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram (opens in a new tab)"
-              >
+              <a href="https://www.instagram.com/aburahat.sabir/" class="social-link" target="_blank"
+                rel="noopener noreferrer me" aria-label="Instagram (opens in a new tab)">
                 <i class="fab fa-instagram" aria-hidden="true"></i>
               </a>
 
-              <a
-                href="https://facebook.com/aburahatsabir.178"
-                class="social-link"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Facebook (opens in a new tab)"
-              >
+              <a href="https://facebook.com/aburahatsabir.178" class="social-link" target="_blank"
+                rel="noopener noreferrer me" aria-label="Facebook (opens in a new tab)">
                 <i class="fab fa-facebook" aria-hidden="true"></i>
               </a>
             </div>
@@ -990,14 +1004,8 @@
       <div class="ars-footer-logo-block">
         <picture>
           <source srcset="images/footer-logo.webp" type="image/webp">
-          <img
-            src="images/footer-logo.webp"
-            class="ars-footer-logo"
-            width="180"
-            height="48"
-            loading="lazy"
-            alt="ARS monogram logo"
-          >
+          <img src="images/footer-logo.webp" class="ars-footer-logo" width="180" height="48" loading="lazy"
+            alt="ARS monogram logo" decoding="async">
         </picture>
       </div>
 
@@ -1005,7 +1013,7 @@
         <div class="ars-footer-title">Navigation</div>
         <nav aria-label="Footer - primary navigation">
           <ul class="ars-footer-links">
-            <li><a href="#home">Home</a></li>
+            <li><a href="index.html">Home</a></li>
             <li><a href="#experience">Experience</a></li>
             <li><a href="#services">Services</a></li>
             <li><a href="#about">About</a></li>
@@ -1017,10 +1025,10 @@
         <div class="ars-footer-title">Categories</div>
         <nav aria-label="Footer - categories">
           <ul class="ars-footer-links">
-            <li><a href="#experience">Executive Operations</a></li>
-            <li><a href="#education">Data &amp; Automation</a></li>
-            <li><a href="#process">Digital Workspace</a></li>
-            <li><a href="#services">Content &amp; Design</a></li>
+            <li><a href="work.html#executive">Executive Operations</a></li>
+            <li><a href="work.html#automation">Data &amp; Automation</a></li>
+            <li><a href="work.html#workspace">Digital Workspace</a></li>
+            <li><a href="work.html#dashboards">Dashboards</a></li>
           </ul>
         </nav>
       </div>
@@ -1039,11 +1047,7 @@
       © 2025 Abu Rahat Sabir. All rights reserved.
     </div>
   </footer>
-  <script src="https://kit.fontawesome.com/6d23f536e4.js" crossorigin="anonymous"></script>
   <script src="assets/js/main.js"></script>
 </body>
+
 </html>
-
-
-
-

@@ -141,35 +141,91 @@
       ]
     }
     </script>
+
+  <!-- ItemList for project cards (helps Google understand individual projects) -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "Portfolio Projects",
+      "description": "Executive operations systems and automation projects",
+      "numberOfItems": 6,
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "item": {
+            "@type": "SoftwareApplication",
+            "name": "Executive Board Pack Generator",
+            "description": "Weekly C-suite reporting automated from raw transaction data",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Windows",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "item": {
+            "@type": "SoftwareApplication",
+            "name": "Auto-Invoicing Dispatcher",
+            "description": "Script monitoring a Sheet for approved orders to automatically generate PDF invoices and email clients",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Web"
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "item": {
+            "@type": "SoftwareApplication",
+            "name": "Company SOP Digital Hub",
+            "description": "Interactive, searchable digital knowledge base for employee onboarding and reference",
+            "applicationCategory": "BusinessApplication"
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "item": {
+            "@type": "SoftwareApplication",
+            "name": "Expense Approval System",
+            "description": "Multi-stage approval system where form submissions trigger Slack alerts and deduct from budget in real-time",
+            "applicationCategory": "BusinessApplication"
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
+          "item": {
+            "@type": "SoftwareApplication",
+            "name": "CEO Calendar Protocol",
+            "description": "Scheduling system ensuring every meeting invite includes a mandatory pre-read link, objective summary, and priority tag",
+            "applicationCategory": "BusinessApplication"
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 6,
+          "item": {
+            "@type": "SoftwareApplication",
+            "name": "Weekly Finance Close Control System",
+            "description": "Logic-gated finance close system eliminating spreadsheet chaos and version drift",
+            "applicationCategory": "BusinessApplication",
+            "url": "https://aburahatsabir.github.io/portfolio/case-studies/weekly-finance-close-control-system.html"
+          }
+        }
+      ]
+    }
+    </script>
 </head>
 
 <body class="work-page">
-
-  <a href="#main-content" class="skip-link">Skip to main content</a>
-
-  <header role="banner">
-    <div class="top-bar">
-      <a href="index.html" class="logo-circle" aria-label="Back to home">A</a>
-      <div class="top-bar-right">
-        <nav class="top-nav" id="primary-navigation" aria-label="Main site navigation">
-          <a href="index.html">Home</a>
-          <a href="work.html" class="active" aria-current="page">Work</a>
-          <a href="index.html#about">About</a>
-          <a href="index.html#services">Services</a>
-          <a href="index.html#contact">Contact</a>
-        </nav>
-
-        <a href="AbuRahatSabir-Resume.pdf" class="btn btn-outline">
-          Download Resume
-        </a>
-
-        <button class="nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="primary-navigation"
-          aria-expanded="false">
-          <span class="nav-toggle-icon" aria-hidden="true"></span>
-        </button>
-      </div>
-    </div>
-  </header>
+  <div data-include="header"></div>
 
   <main id="main-content" tabindex="-1">
 
@@ -428,56 +484,9 @@
     </div>
   </main>
 
-  <footer class="ars-footer" role="contentinfo">
-    <div class="ars-footer-grid">
-      <div class="ars-footer-logo-block">
-        <picture>
-          <source srcset="images/footer-logo.webp" type="image/webp">
-          <img src="images/footer-logo.webp" class="ars-footer-logo" width="180" height="48" loading="lazy"
-            alt="ARS monogram logo" decoding="async">
-        </picture>
-      </div>
+  <div data-include="footer"></div>
 
-      <div>
-        <div class="ars-footer-title">Navigation</div>
-        <nav aria-label="Footer - primary navigation">
-          <ul class="ars-footer-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="index.html#experience">Experience</a></li>
-            <li><a href="index.html#services">Services</a></li>
-            <li><a href="index.html#about">About</a></li>
-          </ul>
-        </nav>
-      </div>
-
-      <div>
-        <div class="ars-footer-title">Categories</div>
-        <nav aria-label="Footer - categories">
-          <ul class="ars-footer-links">
-            <li><a href="#grid" data-filter-target="executive" class="filter-anchor">Executive Operations</a></li>
-            <li><a href="#grid" data-filter-target="automation" class="filter-anchor">Data &amp; Automation</a></li>
-            <li><a href="#grid" data-filter-target="workspace" class="filter-anchor">Digital Workspace</a></li>
-            <li><a href="#grid" data-filter-target="dashboards" class="filter-anchor">Dashboards</a></li>
-          </ul>
-        </nav>
-      </div>
-
-
-      <div>
-        <div class="ars-footer-title">Elsewhere</div>
-        <nav aria-label="Footer - elsewhere">
-          <ul class="ars-footer-links">
-            <li><a href="work.html">Case Studies</a></li>
-          </ul>
-        </nav>
-      </div>
-    </div>
-
-    <div class="ars-footer-bottom">
-      © 2025 Abu Rahat Sabir. All rights reserved.
-    </div>
-  </footer>
-
+  <script src="assets/js/includes.js"></script>
   <script src="assets/js/main.js"></script>
 </body>
 

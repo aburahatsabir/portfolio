@@ -223,18 +223,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const resumeBtns = document.querySelectorAll('a[href$=".pdf"]');
   resumeBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      // Track download with gtag if available (gracefully handle ad blockers)
-      if (typeof window.gtag === 'function') {
-        try {
-          gtag('event', 'resume_download', {
-            event_category: 'engagement',
-            event_label: 'Resume PDF',
-            value: 1
-          });
-        } catch (error) {
-          // Silently fail if gtag is blocked by ad blocker
-          console.debug('[Analytics] gtag blocked or failed:', error.message);
-        }
+      if (window.gtag) {
+        gtag('event', 'resume_download', {
+          event_category: 'engagement',
+          event_label: 'Resume PDF',
+          value: 1
+        });
       }
       // default download behavior is allowed
     });
@@ -427,63 +421,4 @@ document.addEventListener('DOMContentLoaded', () => {
   // =========================================
   // Moved to partials-loaded event listener (see top of file)
 
-  // =========================================
-  // 5. CONTACT FORM HANDLER (EmailJS)
-  // =========================================
-  const contactForm = document.getElementById('contact-form');
-
-  if (contactForm) {
-    // Initialize EmailJS with your public key
-    emailjs.init('OKdOWC7hUfHp8O3Un');
-
-    contactForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      const submitBtn = contactForm.querySelector('button[type="submit"]');
-      const originalText = submitBtn.innerHTML;
-
-      // Show loading state
-      submitBtn.innerHTML = '<span class="relative z-20 flex items-center gap-2"><svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Sending...</span>';
-      submitBtn.disabled = true;
-
-      // Send email using EmailJS
-      emailjs.sendForm('service_u2no92e', 'template_se304sp', contactForm)
-        .then(function (response) {
-          console.log('SUCCESS!', response.status, response.text);
-
-          // Show success message
-          submitBtn.innerHTML = '<span class="relative z-20 flex items-center gap-2">✓ Message Sent Successfully!</span>';
-
-          // Reset form after 3 seconds
-          setTimeout(() => {
-            contactForm.reset();
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-
-            // Reinitialize Lucide icons
-            if (typeof lucide !== 'undefined' && lucide.createIcons) {
-              lucide.createIcons();
-            }
-          }, 3000);
-        }, function (error) {
-          console.error('FAILED...', error);
-
-          // Show error message
-          submitBtn.innerHTML = '<span class="relative z-20 flex items-center gap-2">✗ Failed to send. Please try again.</span>';
-
-          // Reset button after 3 seconds
-          setTimeout(() => {
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-
-            // Reinitialize Lucide icons
-            if (typeof lucide !== 'undefined' && lucide.createIcons) {
-              lucide.createIcons();
-            }
-          }, 3000);
-        });
-    });
-  }
-
 });
-

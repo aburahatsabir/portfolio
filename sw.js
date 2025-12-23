@@ -12,13 +12,17 @@ const STATIC_ASSETS = [
     '/portfolio/index.html',
     '/portfolio/work.html',
     '/portfolio/assets/css/main.css',
+    '/portfolio/assets/css/testimonials.css',
     '/portfolio/assets/js/main.js',
+    '/portfolio/assets/js/includes.js',
     '/portfolio/manifest.json',
     '/portfolio/images/favicon.ico',
     '/portfolio/images/apple-touch-icon.png',
     '/portfolio/images/hero.webp',
     '/portfolio/images/about.webp',
-    '/portfolio/images/footer-logo.webp'
+    '/portfolio/images/footer-logo.webp',
+    '/portfolio/partials/header.html',
+    '/portfolio/partials/footer.html'
 ];
 
 // Install event - cache static assets

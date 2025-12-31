@@ -1,0 +1,26 @@
+<div class="timeline-item">
+    <div class="col-date">
+        <div class="date-text">{{dateRange}}</div>
+        <div class="role-label">{{role}}</div>
+    </div>
+
+    <div class="col-line" aria-hidden="true">
+        <div class="line-graphic"></div>
+        <div class="dot {{#isActive}}active{{/isActive}}"></div>
+    </div>
+
+    <div class="col-details">
+        <h3 class="company-name">{{company}}</h3>
+        <div class="location-row">
+            <span class="location">{{location}}</span>
+            <span class="meta-tag">{{metaTag}}</span>
+        </div>
+        <div class="timeline-description">
+            <ul>
+                {{#responsibilities}}
+                <li>{{.}}</li>
+                {{/responsibilities}}
+            </ul>
+        </div>
+    </div>
+</div>

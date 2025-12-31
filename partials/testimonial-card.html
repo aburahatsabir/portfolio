@@ -1,0 +1,16 @@
+<article class="card bento-card bento-card-{{cardSize}}">
+    <div class="quote-icon-small">
+        <i class="fa-solid fa-quote-left" aria-hidden="true"></i>
+    </div>
+    <blockquote class="bento-quote">{{quote}}</blockquote>
+    <div class="bento-author">
+        <img src="{{avatarUrl}}" alt="{{author}}" class="bento-avatar" width="32" height="32">
+        <div class="bento-author-info">
+            <cite class="bento-author-name">{{author}}</cite>
+            <p class="bento-author-role">{{role}}</p>
+        </div>
+        {{#companyIcon}}
+        <img src="{{companyIcon}}" alt="{{company}} logo" class="company-icon" loading="lazy" width="20" height="20">
+        {{/companyIcon}}
+    </div>
+</article>

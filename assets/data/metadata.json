@@ -1,0 +1,63 @@
+{
+    "site": {
+        "name": "Abu Rahat Sabir Portfolio",
+        "baseUrl": "https://aburahatsabir.github.io/portfolio/",
+        "author": {
+            "name": "Abu Rahat Sabir",
+            "jobTitle": "Executive Admin & Workflow Automation Specialist",
+            "location": "Dhaka, BD",
+            "email": "aburahatsabir@gmail.com",
+            "social": {
+                "linkedin": "https://linkedin.com/in/aburahatsabir78",
+                "github": "https://github.com/aburahatsabir",
+                "twitter": "https://x.com/AbuRahatsabir",
+                "instagram": "https://www.instagram.com/aburahat.sabir/",
+                "facebook": "https://facebook.com/aburahatsabir.178"
+            }
+        },
+        "defaultImage": "/images/preview.webp",
+        "themeColor": "#FF5722"
+    },
+    "pages": {
+        "home": {
+            "title": "Abu Rahat Sabir | Executive Admin & Workflow Automation Specialist",
+            "description": "Executive Admin & Automation Specialist in Dhaka. I build systems that cut manual work by 90%—turning 6-hour finance closes into 30 minutes. Let's automate your busywork.",
+            "canonical": "https://aburahatsabir.github.io/portfolio/",
+            "og": {
+                "type": "website",
+                "url": "https://aburahatsabir.github.io/portfolio/",
+                "title": "Abu Rahat Sabir | Executive Admin & Workflow Automation Specialist",
+                "description": "Executive Admin specialising in workflow design and data automation. I help leaders reduce manual work and build reliable systems.",
+                "image": "https://aburahatsabir.github.io/portfolio/images/preview.webp",
+                "image:width": "1200",
+                "image:height": "630"
+            },
+            "twitter": {
+                "card": "summary_large_image",
+                "title": "Abu Rahat Sabir | Executive Admin & Workflow Automation Specialist",
+                "description": "Executive Admin specialising in C-suite support, workflow design, and automation. I help leaders save time by building reliable systems.",
+                "image": "https://aburahatsabir.github.io/portfolio/images/preview.webp"
+            }
+        },
+        "work": {
+            "title": "Automation Projects & Executive Systems | Abu Rahat Sabir Portfolio",
+            "description": "A curated showcase of executive operations systems, VBA automations, and digital workspaces designed to reduce busywork and scale impact.",
+            "canonical": "https://aburahatsabir.github.io/portfolio/work.html",
+            "og": {
+                "type": "website",
+                "url": "https://aburahatsabir.github.io/portfolio/work.html",
+                "title": "Systems & Automations — Abu Rahat Sabir",
+                "description": "Browse my portfolio of executive dashboards, automation scripts, and digital workspace setups.",
+                "image": "https://aburahatsabir.github.io/portfolio/images/preview.webp",
+                "image:width": "1200",
+                "image:height": "630"
+            },
+            "twitter": {
+                "card": "summary_large_image",
+                "title": "Systems & Automations — Abu Rahat Sabir",
+                "description": "Browse my portfolio of executive dashboards, automation scripts, and digital workspace setups.",
+                "image": "https://aburahatsabir.github.io/portfolio/images/preview.webp"
+            }
+        }
+    }
+}

@@ -1,0 +1,570 @@
+/* =========================================
+   MEDICAL OPERATIONS CONTROL SYSTEM (MOCS)
+   Custom Stylesheet
+   ========================================= */
+
+/* -----------------------------------------
+   1. UNIFIED PIPELINE STYLES (Comparison)
+   ----------------------------------------- */
+.pipeline-wrapper {
+    max-width: 1040px;
+    margin: 64px auto 80px;
+    position: relative;
+}
+
+.pipeline-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.01);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    /* Split layout with divider */
+    position: relative;
+}
+
+/* Elegant Divider */
+.pipeline-divider {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pipeline-divider::after {
+    content: '';
+    position: absolute;
+    top: 10%;
+    bottom: 10%;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, #e2e8f0 20%, #cbd5e1 50%, #e2e8f0 80%, transparent);
+    opacity: 0.8;
+}
+
+/* Section Styles */
+.pipeline-section {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+}
+
+.pipeline-section.before {
+    background: radial-gradient(circle at top left, #fff1f2 0%, #fff 40%);
+    /* Subtle Red Tint */
+}
+
+.pipeline-section.after {
+    background: radial-gradient(circle at top right, #f0fdf4 0%, #fff 40%);
+    /* Subtle Green Tint */
+}
+
+/* Headers */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.section-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-pill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: 700;
+}
+
+.status-risk {
+    background: var(--red-50);
+    color: var(--red-500);
+    border: 1px solid var(--red-200);
+}
+
+.status-secure {
+    background: var(--green-50);
+    color: var(--green-500);
+    border: 1px solid var(--green-200);
+}
+
+/* Visual Containers (Shared height for alignment) */
+.visual-box {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
+    margin-bottom: 32px;
+    height: 180px;
+    /* Fixed height for clean alignment */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Before Grid (Refined) */
+.chaos-grid {
+    display: grid;
+    grid-template-columns: 20px 1fr 1fr 30px;
+    gap: 1px;
+    background: #e2e8f0;
+    border: 1px solid #e2e8f0;
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    border-radius: 6px;
+}
+
+.cg-cell {
+    background: #fff;
+    padding: 6px;
+    overflow: hidden;
+    white-space: nowrap;
+    color: #64748b;
+}
+
+.cg-head {
+    background: #f8fafc;
+    font-weight: 700;
+    color: #94a3b8;
+    text-align: center;
+}
+
+.cg-err {
+    background: #fef2f2;
+    color: #dc2626;
+    font-weight: 700;
+}
+
+.cg-dup {
+    background: #fff7ed;
+    color: #b45309;
+}
+
+/* After Card (Clean) */
+.clean-card-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px dashed #f1f5f9;
+}
+
+.clean-card-row:last-child {
+    border-bottom: none;
+}
+
+.cc-label {
+    font-size: 10px;
+    color: #94a3b8;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.cc-val {
+    font-size: 12px;
+    font-weight: 600;
+    color: #0f172a;
+    font-family: 'JetBrains Mono';
+}
+
+.cc-status {
+    font-size: 10px;
+    font-weight: 700;
+    color: #10b981;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border: 1px solid #bbf7d0;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: #f0fdf4;
+}
+
+/* List Styles */
+.pipeline-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+    /* Pushes content to fill space */
+}
+
+.pl-item {
+    position: relative;
+    padding-left: 24px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+.pl-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.before .pl-item::before {
+    background: #fecaca;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px #ef4444;
+}
+
+.after .pl-item::before {
+    background: #a7f3d0;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px #10b981;
+}
+
+.pl-item strong {
+    color: #334155;
+}
+
+@media (max-width: 768px) {
+    .pipeline-card {
+        grid-template-columns: 1fr;
+    }
+
+    .pipeline-divider {
+        height: 1px;
+        width: 100%;
+        padding: 20px 0;
+        background: none;
+    }
+
+    .pipeline-divider::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 1px;
+        background: #e2e8f0;
+        top: 50%;
+        bottom: auto;
+        /* Reset bottom from desktop styles */
+        z-index: 0;
+    }
+
+    .pipeline-divider::before {
+        display: none;
+    }
+
+    /* Remove vertical line on mobile */
+
+    .pipeline-section {
+        padding: 24px;
+    }
+
+    .pipeline-section.before {
+        border-bottom: 1px solid #e2e8f0;
+    }
+}
+
+/* -----------------------------------------
+   2. SYSTEM ARCHITECTURE TOPOLOGY (Flow Diagram)
+   ----------------------------------------- */
+
+/* Flow Connector Lines */
+.flow-connector {
+    position: absolute;
+    top: 50%;
+    height: 2px;
+    background: linear-gradient(90deg, #bfdbfe, #60a5fa, #bfdbfe);
+    z-index: 0;
+    animation: flowPulse 2s ease-in-out infinite;
+}
+
+.flow-connector.left {
+    left: 18%;
+    width: 12%;
+}
+
+.flow-connector.right {
+    right: 18%;
+    width: 12%;
+}
+
+@keyframes flowPulse {
+
+    0%,
+    100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* Animated Arrow Heads */
+.flow-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #60a5fa;
+    font-size: 14px;
+    z-index: 2;
+    animation: arrowBounce 1.5s ease-in-out infinite;
+}
+
+.flow-arrow.left {
+    left: 29%;
+}
+
+.flow-arrow.right {
+    right: 17%;
+}
+
+@keyframes arrowBounce {
+
+    0%,
+    100% {
+        transform: translateY(-50%) translateX(0);
+    }
+
+    50% {
+        transform: translateY(-50%) translateX(4px);
+    }
+}
+
+/* Node Styles */
+.arch-node {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.06);
+}
+
+.arch-node:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.1);
+}
+
+.arch-node.data {
+    border: 1px solid #bfdbfe;
+    border-top: 3px solid #3b82f6;
+}
+
+.arch-node.logic {
+    border: 1px solid #fed7aa;
+    border-top: 3px solid #f97316;
+}
+
+.arch-node.output {
+    border: 1px solid #bbf7d0;
+    border-top: 3px solid #10b981;
+}
+
+.node-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+    font-size: 18px;
+}
+
+.arch-node.data .node-icon {
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    color: #2563eb;
+}
+
+.arch-node.logic .node-icon {
+    background: linear-gradient(135deg, #fff7ed, #ffedd5);
+    color: #ea580c;
+}
+
+.arch-node.output .node-icon {
+    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+    color: #059669;
+}
+
+.node-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 4px;
+}
+
+.node-subtitle {
+    font-size: 10px;
+    color: #94a3b8;
+    font-family: 'JetBrains Mono';
+}
+
+/* Central Logic Block */
+.logic-block {
+    background: linear-gradient(135deg, #fffbeb 0%, #fff7ed 100%);
+    border: 1px solid #fed7aa;
+    border-radius: 16px;
+    padding: 32px;
+    position: relative;
+}
+
+.logic-block-label {
+    position: absolute;
+    top: -12px;
+    left: 24px;
+    background: #fff;
+    padding: 4px 12px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #c2410c;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 6px;
+    border: 1px solid #fed7aa;
+}
+
+.logic-nodes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+}
+
+.logic-arrow {
+    width: 32px;
+    height: 2px;
+    background: linear-gradient(90deg, #fdba74, #f97316, #fdba74);
+    position: relative;
+}
+
+.logic-arrow::after {
+    content: '';
+    position: absolute;
+    right: -6px;
+    top: -4px;
+    border: solid #f97316;
+    border-width: 0 2px 2px 0;
+    padding: 4px;
+    transform: rotate(-45deg);
+}
+
+.mini-node {
+    background: #fff;
+    border: 1px solid #fdba74;
+    border-radius: 10px;
+    padding: 16px 20px;
+    text-align: center;
+    box-shadow: 0 4px 8px -2px rgba(251, 146, 60, 0.15);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 100px;
+}
+
+.mini-node:hover {
+    transform: scale(1.05);
+}
+
+.mini-node i {
+    font-size: 16px;
+    color: #f97316;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.mini-node span {
+    font-size: 11px;
+    font-weight: 700;
+    color: #9a3412;
+    display: block;
+}
+
+/* --- Architecture Containers (Extracted Part 2) --- */
+.arch-container {
+    background: linear-gradient(135deg, #f8fafc 0%, #fff 50%, #f0fdf4 100%);
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 48px;
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.06);
+    position: relative;
+    overflow: hidden;
+}
+
+.arch-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(#cbd5e1 0.75px, transparent 0.75px);
+    background-size: 20px 20px;
+    opacity: 0.25;
+    pointer-events: none;
+}
+
+.arch-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 48px;
+    position: relative;
+    z-index: 1;
+}
+
+.arch-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.arch-title i {
+    color: #94a3b8;
+}
+
+.arch-legend {
+    display: flex;
+    gap: 20px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(5px);
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #64748b;
+}
+
+.arch-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 32px;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}

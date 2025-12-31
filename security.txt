@@ -1,0 +1,8 @@
+Contact: mailto:aburahatsabir@gmail.com
+Expires: 2026-12-25T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://aburahatsabir.github.io/portfolio/.well-known/security.txt
+
+# Security Policy
+# If you discover a security vulnerability in this website, please report it responsibly.
+# Please include detailed information about the vulnerability and steps to reproduce it.

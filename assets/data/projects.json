@@ -1,0 +1,139 @@
+{
+    "projects": [
+        {
+            "id": "board-pack-generator",
+            "category": "executive",
+            "categoryTag": "Reporting",
+            "icon": "fa-solid fa-chart-pie",
+            "techStack": "Excel • Power Query • VBA",
+            "title": "Executive Board Pack Generator",
+            "description": "Unified master-file that pulls raw data from 3 departmental CSVs to generate print-ready weekly board meeting visuals automatically.",
+            "impact": [
+                "Reduced prep time from 4h to 15m",
+                "100% data accuracy (no copy-paste)"
+            ],
+            "caseStudyUrl": null,
+            "caseStudyLabel": null
+        },
+        {
+            "id": "auto-invoicing-dispatcher",
+            "category": "automation",
+            "categoryTag": "Workflow",
+            "icon": "fa-brands fa-google",
+            "techStack": "GAS • Sheets • Gmail API",
+            "title": "Auto-Invoicing Dispatcher",
+            "description": "Script monitoring a Sheet for approved orders. Automatically generates PDF invoices, saves to Drive, and emails the client with specific attachments.",
+            "impact": [
+                "Eliminated 5hrs/week manual entry",
+                "Instant client notification system"
+            ],
+            "caseStudyUrl": null,
+            "caseStudyLabel": null
+        },
+        {
+            "id": "company-sop-digital-hub",
+            "category": "workspace",
+            "categoryTag": "Knowledge",
+            "icon": "fa-solid fa-book-open",
+            "techStack": "Notion / SharePoint",
+            "title": "Company SOP Digital Hub",
+            "description": "Transitioned client from static PDF manuals to an interactive, searchable digital knowledge base for employee onboarding and reference.",
+            "impact": [
+                "Reduced onboarding ramp time by 30%",
+                "Mobile-accessible for field staff"
+            ],
+            "caseStudyUrl": null,
+            "caseStudyLabel": null
+        },
+        {
+            "id": "expense-approval-system",
+            "category": "automation",
+            "categoryTag": "Finance",
+            "icon": "fa-solid fa-receipt",
+            "techStack": "Forms • Slack API",
+            "title": "Expense Approval System",
+            "description": "Multi-stage approval system where form submissions trigger Slack alerts to managers. Approvals deduct from budget in real-time.",
+            "impact": [
+                "Replaced chaotic email chains",
+                "Live budget utilization view"
+            ],
+            "caseStudyUrl": null,
+            "caseStudyLabel": null
+        },
+        {
+            "id": "ceo-calendar-protocol",
+            "category": "executive",
+            "categoryTag": "Protocol",
+            "icon": "fa-regular fa-calendar-check",
+            "techStack": "Outlook • OneNote",
+            "title": "CEO Calendar Protocol",
+            "description": "A rigid scheduling system ensuring every meeting invite includes a mandatory pre-read link, objective summary, and priority tag.",
+            "impact": [
+                "Zero \"no-agenda\" meetings",
+                "20% more focus time recovered"
+            ],
+            "caseStudyUrl": null,
+            "caseStudyLabel": null
+        },
+        {
+            "id": "executive-kpi-dashboard",
+            "category": "dashboards",
+            "categoryTag": "Dashboard",
+            "icon": "fa-solid fa-chart-line",
+            "techStack": "Power BI • Sheets • Ops reporting",
+            "title": "Executive KPI Dashboard",
+            "description": "Built an executive-facing dashboard to track throughput, backlog, SLA risk, and weekly priorities with automated refresh and stakeholder-ready summaries.",
+            "impact": [
+                "Weekly executive-ready reporting",
+                "Reduced manual rollups and status chasing"
+            ],
+            "caseStudyUrl": null,
+            "caseStudyLabel": null
+        },
+        {
+            "id": "fmcg-erp-system",
+            "category": "executive",
+            "categoryTag": "System Architecture",
+            "icon": "fa-solid fa-database",
+            "techStack": "Google Sheets • Query Language • Data Validation",
+            "title": "Integrated FMCG Distribution ERP",
+            "description": "Zero-code relational ERP system for high-volume wholesale distribution. Unified ecosystem where single order entry updates inventory, dealer ledgers, and dispatch documentation simultaneously.",
+            "impact": [
+                "80% faster invoicing (20min → 4min)",
+                "100% pricing accuracy, real-time stock"
+            ],
+            "caseStudyUrl": "case-studies/fmcg-erp-case-study.html",
+            "caseStudyLabel": "View Case Study"
+        },
+        {
+            "id": "medical-ops-control-system",
+            "category": "executive",
+            "categoryTag": "System Architecture",
+            "icon": "fa-solid fa-notes-medical",
+            "techStack": "Google Sheets • Relational Schema • Data Validation",
+            "title": "Medical Operations Control System",
+            "description": "Zero-cost ERP architecture for medical tourism, stabilizing patient workflows, visa gating, and commission reconciliation. Unified 3,000+ active cases into a single governed ledger.",
+            "impact": [
+                "Zero visa-related pipeline failures",
+                "100% commission reconciliation visibility"
+            ],
+            "caseStudyUrl": "case-studies/medical-operations-control-system.html",
+            "caseStudyLabel": "View Case Study"
+        },
+        {
+            "id": "weekly-finance-close-control-system",
+            "category": "executive",
+            "categoryTag": "Finance Controls",
+            "icon": "fa-solid fa-shield-halved",
+            "techStack": "Excel • Power Query • VBA",
+            "title": "Weekly Finance Close Control System",
+            "description": "Logic-gated finance close system eliminating version drift and reducing reporting risk through forced reconciliation checkpoints. No data proceeds without validation.",
+            "impact": [
+                "100% audit confidence achieved",
+                "Zero post-close adjustments"
+            ],
+            "caseStudyUrl": "case-studies/weekly-finance-close-control-system.html",
+            "caseStudyLabel": "View Case Study"
+        }
+    ]
+}

@@ -1,0 +1,28 @@
+﻿<article class="card project-card" data-category="{{category}}">
+    <div class="card-header">
+        <span class="category-tag">{{categoryTag}}</span>
+        <i class="card-icon {{icon}}" aria-hidden="true"></i>
+    </div>
+    <div class="card-body">
+        <div class="tech-stack">{{techStack}}</div>
+        <h3>{{title}}</h3>
+        <p>{{description}}</p>
+
+        <ul class="impact-box">
+            {{#impact}}
+            <li class="impact-item">
+                <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+                <span>{{.}}</span>
+            </li>
+            {{/impact}}
+        </ul>
+
+        {{#caseStudyUrl}}
+        <div class="card-footer">
+            <a href="{{caseStudyUrl}}" class="link-case">
+                {{caseStudyLabel}} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+            </a>
+        </div>
+        {{/caseStudyUrl}}
+    </div>
+</article>

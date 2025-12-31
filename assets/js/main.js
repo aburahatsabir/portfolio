@@ -29,8 +29,8 @@ if ('serviceWorker' in navigator) {
 // GLOBAL UTILITIES & EVENT LISTENERS
 // =========================================
 
-// Wait for partials to load before initializing navigation
-document.addEventListener('partials-loaded', () => {
+// Mobile navigation initialization function
+function initializeMobileNavigation() {
   // --- MOBILE NAVIGATION (A11Y-IMPROVED) ---
   const navToggle = document.querySelector('.nav-toggle');
   const topNav = document.querySelector('.top-nav');
@@ -54,9 +54,20 @@ document.addEventListener('partials-loaded', () => {
       return navToggle.getAttribute('aria-expanded') === 'true';
     }
 
-    navToggle.addEventListener('click', () => {
+    // Handle both click and keyboard events
+    function toggleMenu() {
       if (isMenuOpen()) closeMenu();
       else openMenu();
+    }
+
+    navToggle.addEventListener('click', toggleMenu);
+
+    // Add explicit keyboard handler for Enter and Space
+    navToggle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleMenu();
+      }
     });
 
     navLinks.forEach(link => {
@@ -65,6 +76,28 @@ document.addEventListener('partials-loaded', () => {
           closeMenu({ returnFocus: false });
         }
       });
+    });
+
+    // Focus trap: cycle Tab key within mobile nav when open
+    topNav.addEventListener('keydown', (e) => {
+      if (!isMenuOpen()) return;
+
+      if (e.key === 'Tab') {
+        const focusableElements = Array.from(topNav.querySelectorAll('a, button'));
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        // Shift+Tab on first element: go to last
+        if (e.shiftKey && document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        }
+        // Tab on last element: go to first
+        else if (!e.shiftKey && document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
+      }
     });
 
     document.addEventListener('keydown', (e) => {
@@ -80,11 +113,35 @@ document.addEventListener('partials-loaded', () => {
       }
     });
   }
+}
 
-  // =========================================
-  // ACTIVE LINK HANDLER (HOME DEFAULT + SCROLL SPY + PAGE DETECTION)
-  // =========================================
+// Wait for partials to load before initializing navigation
+document.addEventListener('partials-loaded', initializeMobileNavigation);
 
+// Fallback: Initialize immediately if navigation elements already exist (for hardcoded headers)
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    // Check if elements exist and haven't been initialized yet
+    const navToggle = document.querySelector('.nav-toggle');
+    if (navToggle && !navToggle.hasAttribute('data-initialized')) {
+      navToggle.setAttribute('data-initialized', 'true');
+      initializeMobileNavigation();
+    }
+  });
+} else {
+  // DOM already loaded, check immediately
+  const navToggle = document.querySelector('.nav-toggle');
+  if (navToggle && !navToggle.hasAttribute('data-initialized')) {
+    navToggle.setAttribute('data-initialized', 'true');
+    initializeMobileNavigation();
+  }
+}
+
+// =========================================
+// ACTIVE LINK HANDLER (HOME DEFAULT + SCROLL SPY + PAGE DETECTION)
+// =========================================
+
+document.addEventListener('partials-loaded', () => {
   const navLinks = document.querySelectorAll('.top-nav a');
   const sections = document.querySelectorAll('section[id]');
 
@@ -341,95 +398,108 @@ document.addEventListener('DOMContentLoaded', () => {
   // 3. WORK PAGE FILTERING LOGIC
   // =========================================
 
-  const cards = document.querySelectorAll('.project-card');
-  const emptyState = document.getElementById('empty-state');
-  const heroFilters = document.querySelectorAll('.hero-filter');
-  const filterAnchors = document.querySelectorAll('.filter-anchor');
-  const grid = document.getElementById('grid');
-  const statusEl = document.getElementById('filter-status');
+  // Wait for components to load before attaching filter listeners
+  document.addEventListener('components-loaded', () => {
+    const cards = document.querySelectorAll('.project-card');
+    const emptyState = document.getElementById('empty-state');
+    const heroFilters = document.querySelectorAll('.hero-filter');
+    const filterAnchors = document.querySelectorAll('.filter-anchor');
+    const grid = document.getElementById('grid');
+    const statusEl = document.getElementById('filter-status');
 
-  if (cards.length && (heroFilters.length || filterAnchors.length)) {
+    if (cards.length && (heroFilters.length || filterAnchors.length)) {
 
-    function applyFilter(category = 'all', updateUrl = true) {
-      if (grid) grid.setAttribute('aria-busy', 'true');
+      function applyFilter(category = 'all', updateUrl = true) {
+        if (grid) grid.setAttribute('aria-busy', 'true');
 
-      let visibleCount = 0;
+        let visibleCount = 0;
+
+        heroFilters.forEach(btn => {
+          const btnCategory = btn.dataset.filter || 'all';
+          const isSelected = btnCategory === category;
+          btn.classList.toggle('active', isSelected);
+          btn.setAttribute('aria-pressed', isSelected);
+        });
+
+        cards.forEach(card => {
+          card.classList.remove('fade-in');
+          void card.offsetWidth;
+
+          if (category === 'all' || card.dataset.category === category) {
+            card.classList.remove('hidden');
+            card.classList.add('fade-in');
+            visibleCount++;
+          } else {
+            card.classList.add('hidden');
+          }
+        });
+
+        if (emptyState) {
+          emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+
+        if (statusEl) {
+          statusEl.textContent =
+            visibleCount === 0
+              ? 'No projects found for this category.'
+              : `${visibleCount} project${visibleCount > 1 ? 's' : ''} shown.`;
+        }
+
+        if (updateUrl) {
+          const hash = category === 'all' ? '' : `#${encodeURIComponent(category)}`;
+          history.replaceState(null, '', `${window.location.pathname}${hash}`);
+        }
+
+        if (grid) grid.setAttribute('aria-busy', 'false');
+      }
 
       heroFilters.forEach(btn => {
-        const btnCategory = btn.dataset.filter || 'all';
-        const isSelected = btnCategory === category;
-        btn.classList.toggle('active', isSelected);
-        btn.setAttribute('aria-pressed', isSelected);
-      });
-
-      cards.forEach(card => {
-        card.classList.remove('fade-in');
-        void card.offsetWidth;
-
-        if (category === 'all' || card.dataset.category === category) {
-          card.classList.remove('hidden');
-          card.classList.add('fade-in');
-          visibleCount++;
-        } else {
-          card.classList.add('hidden');
+        function activateFilter() {
+          const category = btn.dataset.filter || 'all';
+          applyFilter(category, true);
+          if (grid) grid.scrollIntoView({ behavior: 'smooth' });
         }
+
+        btn.addEventListener('click', activateFilter);
+
+        // Add explicit keyboard handler for Enter and Space
+        btn.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            activateFilter();
+          }
+        });
       });
 
-      if (emptyState) {
-        emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
-      }
+      filterAnchors.forEach(anchor => {
+        anchor.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetFilter = anchor.getAttribute('data-filter-target') || 'all';
+          applyFilter(targetFilter, true);
+          if (grid) grid.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
 
-      if (statusEl) {
-        statusEl.textContent =
-          visibleCount === 0
-            ? 'No projects found for this category.'
-            : `${visibleCount} project${visibleCount > 1 ? 's' : ''} shown.`;
-      }
+      const rawHash = (window.location.hash || '').slice(1);
+      const initialHash = decodeURIComponent(rawHash).trim();
 
-      if (updateUrl) {
-        const hash = category === 'all' ? '' : `#${encodeURIComponent(category)}`;
-        history.replaceState(null, '', `${window.location.pathname}${hash}`);
-      }
+      const validCategories = new Set(['all']);
+      heroFilters.forEach(btn => validCategories.add((btn.dataset.filter || '').trim()));
+      cards.forEach(card => validCategories.add((card.dataset.category || '').trim()));
 
-      if (grid) grid.setAttribute('aria-busy', 'false');
+      const initialCategory = validCategories.has(initialHash) ? initialHash : 'all';
+      applyFilter(initialCategory, false);
+
+      // Listen for hash changes to support same-page navigation (e.g., footer category links)
+      window.addEventListener('hashchange', () => {
+        const newHash = (window.location.hash || '').slice(1);
+        const newCategory = decodeURIComponent(newHash).trim();
+        const categoryToApply = validCategories.has(newCategory) ? newCategory : 'all';
+        applyFilter(categoryToApply, false);
+        if (grid) grid.scrollIntoView({ behavior: 'smooth' });
+      });
     }
-
-    heroFilters.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const category = btn.dataset.filter || 'all';
-        applyFilter(category, true);
-        if (grid) grid.scrollIntoView({ behavior: 'smooth' });
-      });
-    });
-
-    filterAnchors.forEach(anchor => {
-      anchor.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetFilter = anchor.getAttribute('data-filter-target') || 'all';
-        applyFilter(targetFilter, true);
-        if (grid) grid.scrollIntoView({ behavior: 'smooth' });
-      });
-    });
-
-    const rawHash = (window.location.hash || '').slice(1);
-    const initialHash = decodeURIComponent(rawHash).trim();
-
-    const validCategories = new Set(['all']);
-    heroFilters.forEach(btn => validCategories.add((btn.dataset.filter || '').trim()));
-    cards.forEach(card => validCategories.add((card.dataset.category || '').trim()));
-
-    const initialCategory = validCategories.has(initialHash) ? initialHash : 'all';
-    applyFilter(initialCategory, false);
-
-    // Listen for hash changes to support same-page navigation (e.g., footer category links)
-    window.addEventListener('hashchange', () => {
-      const newHash = (window.location.hash || '').slice(1);
-      const newCategory = decodeURIComponent(newHash).trim();
-      const categoryToApply = validCategories.has(newCategory) ? newCategory : 'all';
-      applyFilter(categoryToApply, false);
-      if (grid) grid.scrollIntoView({ behavior: 'smooth' });
-    });
-  }
+  });
 
   // =========================================
   // 4. ACTIVE LINK HANDLER (HOME DEFAULT + SCROLL SPY + PAGE DETECTION)

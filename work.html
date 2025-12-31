@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -13,7 +13,7 @@
   <title>Automation Projects & Executive Systems | Abu Rahat Sabir Portfolio</title>
 
   <meta name="description"
-    content="A curated showcase of executive operations systems, VBA automations, and digital workspaces designed to reduce busywork and scale impact.">
+    content="Executive operations systems &amp; VBA automations by Abu Rahat Sabir in Dhaka. Case studies showing 90% time savings in finance, reporting &amp; workflow automation.">
   <link rel="canonical" href="https://aburahatsabir.github.io/portfolio/work.html" />
 
   <meta property="og:type" content="website">
@@ -38,7 +38,6 @@
   <link rel="manifest" href="manifest.json">
 
   <!-- iOS PWA Meta Tags -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Abu Rahat Sabir">
 
@@ -47,17 +46,19 @@
   <link rel="dns-prefetch" href="https://www.googletagmanager.com">
   <link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>
   <!-- Async font loading: preload + onload pattern to avoid render-blocking -->
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-    as="style" onload="this.onload=null;this.rel='stylesheet'" crossorigin>
+  <link rel="preload"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&subset=latin&display=swap" as="style"
+    onload="this.onload=null;this.rel='stylesheet'" crossorigin>
   <noscript>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&subset=latin&display=swap"
       rel="stylesheet" crossorigin>
   </noscript>
 
   <!-- Note: SRI hashes cannot be used with Font Awesome kits as they are dynamically generated and frequently updated -->
   <script src="https://kit.fontawesome.com/6d23f536e4.js" crossorigin="anonymous" async defer></script>
 
-  <link rel="stylesheet" href="assets/css/main.css" fetchpriority="high">
+  <link rel="stylesheet" href="assets/css/main.min.css" fetchpriority="high">
+  <link rel="stylesheet" href="assets/css/touch-targets.css?v=23">
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XX8R0FKN5X"></script>
   <script>
@@ -116,6 +117,15 @@
         },
         {
           "@type": "CreativeWork",
+          "name": "Integrated FMCG Distribution ERP",
+          "description": "Zero-code relational ERP system for high-volume wholesale distribution achieving 80% faster invoicing and real-time inventory control.",
+          "keywords": "Google Sheets, ERP Design, Inventory Management, No-Code Solutions",
+          "about": "System architecture and operational efficiency",
+          "applicationCategory": "ERP system",
+          "dateCreated": "2024"
+        },
+        {
+          "@type": "CreativeWork",
           "name": "Weekly Finance Close Control System",
           "description": "Logic-gated finance close system eliminating spreadsheet chaos and version drift.",
           "keywords": "Excel, VBA, Power Query, Finance Controls",
@@ -156,7 +166,7 @@
       "@type": "ItemList",
       "name": "Portfolio Projects",
       "description": "Executive operations systems and automation projects",
-      "numberOfItems": 6,
+      "numberOfItems": 7,
       "itemListElement": [
         {
           "@type": "ListItem",
@@ -220,6 +230,17 @@
           "position": 6,
           "item": {
             "@type": "SoftwareApplication",
+            "name": "Integrated FMCG Distribution ERP",
+            "description": "Zero-code relational ERP system for high-volume wholesale distribution achieving 80% faster invoicing and real-time inventory control",
+            "applicationCategory": "BusinessApplication",
+            "url": "https://aburahatsabir.github.io/portfolio/case-studies/fmcg-erp-case-study.html"
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 7,
+          "item": {
+            "@type": "SoftwareApplication",
             "name": "Weekly Finance Close Control System",
             "description": "Logic-gated finance close system eliminating spreadsheet chaos and version drift",
             "applicationCategory": "BusinessApplication",
@@ -232,17 +253,16 @@
 </head>
 
 <body class="work-page">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
   <div data-include="header"></div>
 
   <main id="main-content" tabindex="-1">
 
     <section class="hero hero-gradient-bg" aria-labelledby="hero-heading">
       <div class="section-shell">
-        <h1 id="hero-heading">Systems, automations & tools I’ve built.</h1>
-        <p>
-          A curated showcase of systems I’ve built as an Executive Admin &amp; Workflow Automation Specialist —
-          from reporting dashboards to digital workspaces that remove busywork and scale impact.
-        </p>
+        <h1 id="hero-heading">Systems, Automations & Tools I've Built</h1>
+        <p>From executive dashboards to finance automation, I design and build systems that eliminate repetitive work
+          and improve decision-making.</p>
 
         <div class="hero-filters">
           <button class="hero-filter badge" type="button" data-filter="all" aria-pressed="true">All</button>
@@ -255,12 +275,12 @@
           <button class="hero-filter badge" type="button" data-filter="dashboards"
             aria-pressed="false">Dashboards</button>
         </div>
-      </div> <!-- ✅ CLOSE section-shell -->
+      </div> <!-- âœ… CLOSE section-shell -->
     </section>
 
     <div class="section-shell layout-wrapper">
       <header class="section-header section-header--work-intro">
-        <h2 class="hero-subheading">Automation projects & executive systems I’ve deployed</h2>
+        <h2 class="hero-subheading">Automation projects & executive systems I've deployed</h2>
         <p class="section-header-description">
           Real implementations across reporting, billing, SOPs, and workflow automation.
         </p>
@@ -270,221 +290,14 @@
       <p id="filter-status" class="sr-only" aria-live="polite"></p>
 
       <!-- Grid no longer has aria-live -->
-      <section id="grid" class="grid-system">
+      <section id="grid" class="grid-system" aria-labelledby="work-heading" aria-busy="false">
 
-        <article class="card project-card" data-category="executive">
-          <div class="card-header">
-            <span class="category-tag">Reporting</span>
-            <i class="card-icon fa-solid fa-chart-pie" aria-hidden="true"></i>
-          </div>
-          <div class="card-body">
-            <div class="tech-stack">Excel • Power Query • VBA</div>
-            <h3>Executive Board Pack Generator</h3>
-            <p>Unified master-file that pulls raw data from 3 departmental CSVs to generate print-ready weekly board
-              meeting visuals automatically.</p>
-
-            <ul class="impact-box">
-              <li class="impact-item">
-                <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
-                <span>Reduced prep time from 4h to 15m</span>
-              </li>
-              <li class="impact-item">
-                <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
-                <span>100% data accuracy (no copy-paste)</span>
-              </li>
-            </ul>
-
-            <div class="card-footer">
-              <a href="#" class="link-case">View Case Study <i class="fa-solid fa-arrow-right"></i></a>
-            </div>
-          </div>
-        </article>
-
-        <article class="card project-card" data-category="automation">
-          <div class="card-header">
-            <span class="category-tag">Workflow</span>
-            <i class="card-icon fa-brands fa-google" aria-hidden="true"></i>
-          </div>
-          <div class="card-body">
-            <div class="tech-stack">GAS • Sheets • Gmail API</div>
-            <h3>Auto-Invoicing Dispatcher</h3>
-            <p>Script monitoring a Sheet for approved orders. Automatically generates PDF invoices, saves to Drive, and
-              emails the client with specific attachments.</p>
-
-            <ul class="impact-box">
-              <li class="impact-item">
-                <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
-                <span>Eliminated 5hrs/week manual entry</span>
-              </li>
-              <li class="impact-item">
-                <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
-                <span>Instant client notification system</span>
-              </li>
-            </ul>
-
-            <div class="card-footer">
-              <a href="#" class="link-case">View Logic Flow <i class="fa-solid fa-arrow-right"></i></a>
-            </div>
-          </div>
-        </article>
-
-        <article class="card project-card" data-category="workspace">
-          <div class="card-header">
-            <span class="category-tag">Knowledge</span>
-            <i class="card-icon fa-solid fa-book-open" aria-hidden="true"></i>
-          </div>
-          <div class="card-body">
-            <div class="tech-stack">Notion / SharePoint</div>
-            <h3>Company SOP Digital Hub</h3>
-            <p>Transitioned client from static PDF manuals to an interactive, searchable digital knowledge base for
-              employee onboarding and reference.</p>
-
-            <ul class="impact-box">
-              <li class="impact-item">
-                <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
-                <span>Reduced onboarding ramp time by 30%</span>
-              </li>
-              <li class="impact-item">
-                <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
-                <span>Mobile-accessible for field staff</span>
-              </li>
-            </ul>
-
-            <div class="card-footer">
-              <a href="#" class="link-case">View Structure <i class="fa-solid fa-arrow-right"></i></a>
-            </div>
-          </div>
-        </article>
-
-        <article class="card project-card" data-category="automation">
-          <div class="card-header">
-            <span class="category-tag">Finance</span>
-            <i class="card-icon fa-solid fa-receipt" aria-hidden="true"></i>
-          </div>
-          <div class="card-body">
-            <div class="tech-stack">Forms • Slack API</div>
-            <h3>Expense Approval System</h3>
-            <p>Multi-stage approval system where form submissions trigger Slack alerts to managers. Approvals deduct
-              from budget in real-time.</p>
-
-            <ul class="impact-box">
-              <li class="impact-item">
-                <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
-                <span>Replaced chaotic email chains</span>
-              </li>
-              <li class="impact-item">
-                <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
-                <span>Live budget utilization view</span>
-              </li>
-            </ul>
-
-            <div class="card-footer">
-              <a href="#" class="link-case">View Dashboard <i class="fa-solid fa-arrow-right"></i></a>
-            </div>
-          </div>
-        </article>
-
-        <article class="card project-card" data-category="executive">
-          <div class="card-header">
-            <span class="category-tag">Protocol</span>
-            <i class="card-icon fa-regular fa-calendar-check" aria-hidden="true"></i>
-          </div>
-          <div class="card-body">
-            <div class="tech-stack">Outlook • OneNote</div>
-            <h3>CEO Calendar Protocol</h3>
-            <p>A rigid scheduling system ensuring every meeting invite includes a mandatory pre-read link, objective
-              summary, and priority tag.</p>
-
-            <ul class="impact-box">
-              <li class="impact-item">
-                <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
-                <span>Zero "no-agenda" meetings</span>
-              </li>
-              <li class="impact-item">
-                <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
-                <span>20% more focus time recovered</span>
-              </li>
-            </ul>
-
-            <div class="card-footer">
-              <a href="#" class="link-case">Read Protocol <i class="fa-solid fa-arrow-right"></i></a>
-            </div>
-          </div>
-        </article>
-
-        <article class="card project-card" data-category="dashboards">
-          <div class="card-header">
-            <span class="category-tag">Dashboard</span>
-            <i class="card-icon fa-solid fa-chart-line" aria-hidden="true"></i>
-          </div>
-
-          <div class="card-body">
-            <div class="tech-stack">Power BI • Sheets • Ops reporting</div>
-            <h3>Executive KPI Dashboard</h3>
-
-            <p>
-              Built an executive-facing dashboard to track throughput, backlog, SLA risk, and weekly priorities with
-              automated refresh and stakeholder-ready summaries.
-            </p>
-
-            <ul class="impact-box">
-              <li class="impact-item">
-                <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
-                <span>Weekly executive-ready reporting</span>
-              </li>
-              <li class="impact-item">
-                <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
-                <span>Reduced manual rollups and status chasing</span>
-              </li>
-            </ul>
-
-            <div class="card-footer">
-              <a href="case-studies/kpi-dashboard.html" class="link-case">
-                View Case Study <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-              </a>
-            </div>
-          </div>
-        </article>
-
-        <article class="card project-card" data-category="executive">
-          <div class="card-header">
-            <span class="category-tag">Finance Controls</span>
-            <i class="card-icon fa-solid fa-shield-halved" aria-hidden="true"></i>
-          </div>
-
-          <div class="card-body">
-            <div class="tech-stack">Excel • Power Query • VBA</div>
-            <h3>Weekly Finance Close Control System</h3>
-
-            <p>
-              Logic-gated finance close system eliminating version drift and reducing reporting risk through forced
-              reconciliation checkpoints. No data proceeds without validation.
-            </p>
-
-            <ul class="impact-box">
-              <li class="impact-item">
-                <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
-                <span>100% audit confidence achieved</span>
-              </li>
-              <li class="impact-item">
-                <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
-                <span>Zero post-close adjustments</span>
-              </li>
-            </ul>
-
-            <div class="card-footer">
-              <a href="case-studies/weekly-finance-close-control-system.html" class="link-case">
-                View Case Study <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-              </a>
-            </div>
-          </div>
-        </article>
-
-
+        <!-- Project cards rendered by components.js -->
 
         <div class="empty-state" id="empty-state" role="status" aria-live="polite">
           <h3>No projects found in this category.</h3>
           <p>Try selecting a different filter.</p>
+          \n
         </div>
 
       </section>
@@ -493,6 +306,11 @@
 
   <div data-include="footer"></div>
 
+  <!-- GDPR Cookie Consent -->
+  <script src="assets/js/gdpr-consent.js"></script>
+
+  <script src="assets/js/metadata.js"></script>
+  <script src="assets/js/components.js"></script>
   <script src="assets/js/includes.js"></script>
   <script src="assets/js/main.js"></script>
 </body>

@@ -1,0 +1,60 @@
+{
+    "timeline": [
+        {
+            "id": "prominent-tec",
+            "dateRange": "2025–Present",
+            "role": "Executive Admin",
+            "company": "Prominent Tec",
+            "location": "Gulshan, Dhaka",
+            "metaTag": "Full-time · C-suite Support & Automation",
+            "isActive": true,
+            "responsibilities": [
+                "Proactively manage complex C-suite schedules, multi-national travel, and confidential communications.",
+                "Prepare board materials, strategic reports, and high-impact executive presentations.",
+                "Oversee HR operations, IT support and financial administration, introducing automation to reduce manual work."
+            ]
+        },
+        {
+            "id": "dreams-it-park",
+            "dateRange": "2022–2024",
+            "role": "Chief Instructor",
+            "company": "Dreams IT Park",
+            "location": "Shibgonj, Sylhet",
+            "metaTag": "Full-time · Training & Academic Operations",
+            "isActive": false,
+            "responsibilities": [
+                "Directed end-to-end curriculum cycles for multiple technical programs.",
+                "Managed logistics, resource allocation and academic compliance.",
+                "Mentored 650+ learners with strong completion and placement outcomes."
+            ]
+        },
+        {
+            "id": "icon-computer-institute",
+            "dateRange": "2020–2021",
+            "role": "Chief Instructor",
+            "company": "I-Con Computer Institute",
+            "location": "Tilagor, Sylhet",
+            "metaTag": "Full-time · Lab & Instruction Lead",
+            "isActive": false,
+            "responsibilities": [
+                "Redesigned core curriculum, improving learning outcomes by ~30%.",
+                "Oversaw lab operations and IT assets, ensuring safe, efficient workflows.",
+                "Conducted continuous assessments and mentoring to build career readiness."
+            ]
+        },
+        {
+            "id": "e-learnex",
+            "dateRange": "2020–Present",
+            "role": "Founder",
+            "company": "E-LearnEx",
+            "location": "Remote Community",
+            "metaTag": "Online · Education Access",
+            "isActive": false,
+            "responsibilities": [
+                "Founded a digital learning community reaching 30,000+ members.",
+                "Enabled access to Coursera, Udemy, edX and global learning resources.",
+                "Formed partnerships and ran campaigns supporting diverse learners."
+            ]
+        }
+    ]
+}

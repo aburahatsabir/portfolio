@@ -28,7 +28,7 @@ const Navbar: React.FC = () => {
     { name: 'Contact', path: '#/contact' },
   ];
 
-  const resumeUrl = "/AbuRahatSabir-Resume.pdf";
+  const resumeUrl = "./AbuRahatSabir-Resume.pdf";
 
   return (
     <>
@@ -61,8 +61,7 @@ const Navbar: React.FC = () => {
           <div className="flex items-center gap-4 lg:gap-6">
             <a
               href={resumeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+              download="AbuRahatSabir-Resume.pdf"
               onClick={() => trackResumeDownload('navbar_top')}
               className="hidden sm:flex items-center gap-3 bg-slate-900 text-white text-[10px] font-black uppercase tracking-[0.2em] px-8 py-4 rounded-xl hover:bg-blue-600 transition-all shadow-xl shadow-slate-900/10 active:scale-95"
             >
@@ -142,8 +141,7 @@ const Navbar: React.FC = () => {
                   <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">Credentials</p>
                   <a
                     href={resumeUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    download="AbuRahatSabir-Resume.pdf"
                     onClick={() => {
                       handleLinkClick();
                       trackResumeDownload('mobile_menu');

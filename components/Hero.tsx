@@ -9,7 +9,7 @@ const Hero: React.FC = () => {
 
   const content = {
     sovereignty: {
-      image: "/images/hero/Abu Rahat Hero 01.webp",
+      image: "./images/hero/Abu Rahat Hero 01.webp",
       title: <>Engineering <br /><span className="text-blue-700">Institutional</span> <br />Sovereignty.</>,
       description: "I design self-healing administrative systems for leaders who demand precision. My work at Prominent Tec eliminates the 'Human-Bridge' debt between silos.",
       statLabel: "Tenure in Operations",
@@ -17,7 +17,7 @@ const Hero: React.FC = () => {
       statUnit: "Years"
     },
     efficiency: {
-      image: "/images/hero/Abu Rahat Hero 02.webp",
+      image: "./images/hero/Abu Rahat Hero 02.webp",
       title: <>Reclaiming <br /><span className="text-blue-700">Operational</span> <br />Capital.</>,
       description: "Optimizing executive operations through VBA and Apps Script. I turn 6-hour closing cycles into 30-minute automated validations.",
       statLabel: "Average Efficiency",

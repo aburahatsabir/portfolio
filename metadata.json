@@ -1,0 +1,8 @@
+{
+  "name": "Abu Rahat Sabir | Executive Admin & Workflow Automation",
+  "description": "Strategic professional portfolio of Abu Rahat Sabir, an Executive Admin and Automation Specialist based in Dhaka, specializing in institutional governance and VBA/Apps Script systems.",
+  "version": "1.1.0-STABLE",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}

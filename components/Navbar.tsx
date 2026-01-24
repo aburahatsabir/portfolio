@@ -28,7 +28,7 @@ const Navbar: React.FC = () => {
     { name: 'Contact', path: '#/contact' },
   ];
 
-  const resumeUrl = "/AbuRahatSabir-Resume.pdf";
+  const resumeUrl = "./AbuRahatSabir-Resume.pdf";
 
   const handleResumeClick = (source: string) => {
     trackResumeDownload(source);

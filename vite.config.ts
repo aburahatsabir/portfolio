@@ -6,7 +6,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   // Set base path for GitHub Pages deployment
   // Replace 'your-repo-name' with your actual GitHub repository name
-  base: '/',
+  base: './',
 
   server: {
     port: 3000,

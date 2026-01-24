@@ -28,7 +28,37 @@ const Navbar: React.FC = () => {
     { name: 'Contact', path: '#/contact' },
   ];
 
-  const resumeUrl = "./AbuRahatSabir-Resume.pdf";
+  const resumeUrl = "/AbuRahatSabir-Resume.pdf";
+
+  const handleResumeClick = (source: string) => {
+    trackResumeDownload(source);
+
+    // Detect if mobile device
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      // Mobile: Just download
+      const link = document.createElement('a');
+      link.href = resumeUrl;
+      link.download = 'AbuRahatSabir-Resume.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      // Desktop: Open in new tab AND download
+      window.open(resumeUrl, '_blank');
+
+      // Also trigger download
+      setTimeout(() => {
+        const link = document.createElement('a');
+        link.href = resumeUrl;
+        link.download = 'AbuRahatSabir-Resume.pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }, 100);
+    }
+  };
 
   return (
     <>
@@ -59,10 +89,11 @@ const Navbar: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-4 lg:gap-6">
-            <a
-              href={resumeUrl}
-              download="AbuRahatSabir-Resume.pdf"
-              onClick={() => trackResumeDownload('navbar_top')}
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                handleResumeClick('navbar_top');
+              }}
               className="hidden sm:flex items-center gap-3 bg-slate-900 text-white text-[10px] font-black uppercase tracking-[0.2em] px-8 py-4 rounded-xl hover:bg-blue-600 transition-all shadow-xl shadow-slate-900/10 active:scale-95"
             >
 
@@ -70,7 +101,7 @@ const Navbar: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
               </svg>
               Resume (PDF)
-            </a>
+            </button>
 
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -139,12 +170,11 @@ const Navbar: React.FC = () => {
               <div className="mt-12 space-y-8">
                 <div className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100">
                   <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">Credentials</p>
-                  <a
-                    href={resumeUrl}
-                    download="AbuRahatSabir-Resume.pdf"
-                    onClick={() => {
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
                       handleLinkClick();
-                      trackResumeDownload('mobile_menu');
+                      handleResumeClick('mobile_menu');
                     }}
                     className="w-full py-6 bg-slate-900 text-white rounded-2xl flex items-center justify-center gap-4 text-xs font-black uppercase tracking-widest shadow-xl shadow-slate-900/10 active:scale-95 transition-all"
                   >
@@ -153,7 +183,7 @@ const Navbar: React.FC = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                     </svg>
                     Download CV
-                  </a>
+                  </button>
                 </div>
 
                 <div className="flex justify-between items-center text-[9px] font-black text-slate-400 uppercase tracking-widest">

@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { trackCustomEvent } from '../utils/analytics';
 
 const PersonaDirectory: React.FC = () => {
     const personas = [
@@ -90,6 +91,11 @@ const PersonaDirectory: React.FC = () => {
                         <motion.a
                             key={persona.id}
                             href={`#/persona/${persona.id}`}
+                            onClick={() => trackCustomEvent('persona_select', {
+                                event_category: 'User Segmentation',
+                                persona_id: persona.id,
+                                persona_title: persona.title
+                            })}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: idx * 0.1 }}

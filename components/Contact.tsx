@@ -15,6 +15,7 @@ const Contact: React.FC = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSent, setIsSent] = useState(false);
+  const [formStarted, setFormStarted] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,6 +59,17 @@ const Contact: React.FC = () => {
       alert('Failed to send message. Please try again or email directly at aburahatsabir178@gmail.com');
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleFormStart = () => {
+    if (!formStarted) {
+      setFormStarted(true);
+      trackCustomEvent('form_start', {
+        event_category: 'Conversion Funnel',
+        form_type: 'contact',
+        page: window.location.hash
+      });
     }
   };
 
@@ -266,6 +278,7 @@ const Contact: React.FC = () => {
                         type="text"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        onFocus={handleFormStart}
                         className="w-full px-6 py-5 rounded-2xl bg-slate-800 border border-slate-700 focus:border-blue-500 outline-none transition-all placeholder:text-slate-600"
                         placeholder="e.g. David Richardson"
                       />

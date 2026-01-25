@@ -8,7 +8,14 @@
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
-        gtag('config', 'G-GNCS8NZW8L');
+
+        // Check for debug mode parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const debugMode = urlParams.get('debug_mode') === 'true';
+
+        gtag('config', 'G-GNCS8NZW8L', {
+            'debug_mode': debugMode
+        });
 
         // Track resume download event
         window.addEventListener('DOMContentLoaded', function () {

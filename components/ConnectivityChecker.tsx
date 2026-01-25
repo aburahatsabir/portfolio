@@ -6,14 +6,14 @@ const ConnectivityChecker: React.FC = () => {
     useEffect(() => {
         const checkConnection = async () => {
             // Test 1: Check if object exists
-            if (typeof window !== 'undefined' && (window as any).google_tag_manager && (window as any).google_tag_manager['G-GNCS8NZW8L']) {
+            if (typeof window !== 'undefined' && (window as any).google_tag_manager && (window as any).google_tag_manager['G-BGM02GLZ84']) {
                 setStatus('connected');
                 return;
             }
 
             // Test 2: Active Network Check
             try {
-                const response = await fetch('https://www.googletagmanager.com/gtag/js?id=G-GNCS8NZW8L', {
+                const response = await fetch('https://www.googletagmanager.com/gtag/js?id=G-BGM02GLZ84', {
                     method: 'HEAD',
                     mode: 'no-cors' // We can't read status in no-cors, but we can catch network errors
                 });
@@ -55,7 +55,7 @@ const ConnectivityChecker: React.FC = () => {
             {status === 'checking' && <p>Checking connection...</p>}
 
             <div className="mt-3 text-[10px] bg-black/30 p-2 rounded font-mono">
-                ID: G-GNCS8NZW8L<br />
+                ID: G-BGM02GLZ84<br />
                 Status: {status}
             </div>
         </div>

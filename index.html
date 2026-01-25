@@ -3,18 +3,18 @@
 
 <head>
     <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MHPJC2QFWM"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GNCS8NZW8L"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
-        gtag('config', 'G-MHPJC2QFWM');
+        gtag('config', 'G-GNCS8NZW8L');
 
         // Track resume download event
-        window.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('DOMContentLoaded', function () {
             const resumeBtn = document.getElementById('resume-btn');
             if (resumeBtn) {
-                resumeBtn.addEventListener('click', function() {
+                resumeBtn.addEventListener('click', function () {
                     gtag('event', 'resume_download', {
                         'event_category': 'engagement',
                         'event_label': 'Resume PDF Download'

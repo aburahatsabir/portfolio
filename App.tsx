@@ -44,10 +44,22 @@ function App() {
 
 
   useEffect(() => {
-    // Update metadata on initial load
+    // Update metadata on initial load and hash change
     updatePageMetadata(currentHash);
 
-    // Inject FAQ schema for About page
+    // Track page view for current route (runs on mount + change)
+    trackPageView({
+      route: currentHash,
+      title: document.title
+    });
+
+    // Track navigation pattern if hash changed
+    if (previousHash !== currentHash) {
+      trackNavigation(previousHash, currentHash);
+      setPreviousHash(currentHash);
+    }
+
+    // Inject/remove FAQ schema based on route
     if (currentHash === '#/about') {
       const faqSchema = generateFAQSchema();
       injectSchema(faqSchema, 'faq-schema');
@@ -58,31 +70,9 @@ function App() {
     const handleHashChange = () => {
       const newHash = window.location.hash || '#/';
       setCurrentHash(newHash);
-      updatePageMetadata(newHash);
-
-      // Inject/remove FAQ schema based on route
-      if (newHash === '#/about') {
-        const faqSchema = generateFAQSchema();
-        injectSchema(faqSchema, 'faq-schema');
-      } else {
-        removeSchema('faq-schema');
-      }
-
-      // Track page view with analytics
-      trackPageView({
-        route: newHash,
-        title: document.title
-      });
-
-      // Track navigation pattern
-      if (previousHash !== newHash) {
-        trackNavigation(previousHash, newHash);
-        setPreviousHash(newHash);
-      }
-
-
       window.scrollTo(0, 0);
     };
+
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, [currentHash]);

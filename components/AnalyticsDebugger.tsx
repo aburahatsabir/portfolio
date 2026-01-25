@@ -30,6 +30,20 @@ const AnalyticsDebugger: React.FC = () => {
             }
         }, 1000);
 
+        // Capture existing dataLayer events (history)
+        if (typeof window !== 'undefined' && (window as any).dataLayer) {
+            const existingEvents = (window as any).dataLayer.map((entry: any) => {
+                // Handle arguments object vs plain object
+                const data = Array.from(entry);
+                return {
+                    timestamp: 'History',
+                    type: data[0] || 'unknown',
+                    data: data.slice(1),
+                } as LogEntry;
+            }).reverse();
+            setLogs(prev => [...prev, ...existingEvents]);
+        }
+
         // Monkey patch gtag to intercept events
         const originalGtag = (window as any).gtag;
         (window as any).gtag = function (...args: any[]) {
@@ -61,7 +75,7 @@ const AnalyticsDebugger: React.FC = () => {
             <div className="p-3 border-b border-slate-700 flex justify-between items-center bg-slate-800 rounded-t-lg">
                 <h3 className="font-bold text-white">Analytics Debugger</h3>
                 <span className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold ${gaStatus === 'loaded' ? 'bg-green-500/20 text-green-400' :
-                        gaStatus === 'missing' ? 'bg-red-500/20 text-red-400' : 'bg-yellow-500/20 text-yellow-400'
+                    gaStatus === 'missing' ? 'bg-red-500/20 text-red-400' : 'bg-yellow-500/20 text-yellow-400'
                     }`}>
                     {gaStatus}
                 </span>

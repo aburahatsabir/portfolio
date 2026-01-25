@@ -63,6 +63,7 @@ const Contact: React.FC = () => {
   };
 
   const handleFormStart = () => {
+    console.log('🔍 handleFormStart called, formStarted:', formStarted);
     if (!formStarted) {
       setFormStarted(true);
       trackCustomEvent('form_start', {
@@ -291,6 +292,7 @@ const Contact: React.FC = () => {
                         type="email"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        onFocus={handleFormStart}
                         className="w-full px-6 py-5 rounded-2xl bg-slate-800 border border-slate-700 focus:border-blue-500 outline-none transition-all placeholder:text-slate-600"
                         placeholder="david@enterprise.com"
                       />
@@ -318,6 +320,7 @@ const Contact: React.FC = () => {
                       rows={6}
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      onFocus={handleFormStart}
                       className="w-full flex-1 px-6 py-5 rounded-2xl bg-slate-800 border border-slate-700 focus:border-blue-500 outline-none transition-all placeholder:text-slate-600 resize-none"
                       placeholder="Detail your organizational friction points..."
                     />

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 import Button from './shared/Button';
 import SocialLinks from './shared/SocialLinks';
-import { trackEmailClick, trackContactCTA, trackFormSubmission } from '../utils/analytics';
+import { trackEmailClick, trackContactCTA, trackFormSubmission, trackCustomEvent } from '../utils/analytics';
 
 
 const Contact: React.FC = () => {

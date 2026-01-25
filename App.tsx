@@ -29,6 +29,7 @@ import { updatePageMetadata, generateFAQSchema, injectSchema, removeSchema } fro
 import { trackPageView, trackNavigation, trackError } from './utils/analytics';
 import { useScrollDepth } from './hooks/useScrollDepth';
 import { useEngagementTime } from './hooks/useEngagementTime';
+import AnalyticsDebugger from './components/AnalyticsDebugger';
 
 
 function App() {
@@ -187,6 +188,7 @@ function App() {
       </ErrorBoundary>
       <ScrollToTop />
       <Footer />
+      <AnalyticsDebugger />
     </div>
   );
 }

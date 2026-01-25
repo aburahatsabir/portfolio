@@ -29,7 +29,7 @@ import { updatePageMetadata, generateFAQSchema, injectSchema, removeSchema } fro
 import { trackPageView, trackNavigation, trackError } from './utils/analytics';
 import { useScrollDepth } from './hooks/useScrollDepth';
 import { useEngagementTime } from './hooks/useEngagementTime';
-import ConnectivityChecker from './components/ConnectivityChecker';
+import CookieConsent from './components/CookieConsent';
 
 
 function App() {
@@ -178,7 +178,7 @@ function App() {
       </ErrorBoundary>
       <ScrollToTop />
       <Footer />
-      <ConnectivityChecker />
+      <CookieConsent />
     </div>
   );
 }

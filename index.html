@@ -19,18 +19,7 @@
         gtag('js', new Date());
         gtag('config', 'G-BGM02GLZ84');
 
-        // Track resume download event
-        window.addEventListener('DOMContentLoaded', function () {
-            const resumeBtn = document.getElementById('resume-btn');
-            if (resumeBtn) {
-                resumeBtn.addEventListener('click', function () {
-                    gtag('event', 'resume_download', {
-                        'event_category': 'engagement',
-                        'event_label': 'Resume PDF Download'
-                    });
-                });
-            }
-        });
+
     </script>
 
     <meta charset="UTF-8">

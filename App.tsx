@@ -29,6 +29,7 @@ import { updatePageMetadata, generateFAQSchema, injectSchema, removeSchema } fro
 import { trackPageView, trackNavigation, trackError } from './utils/analytics';
 import { useScrollDepth } from './hooks/useScrollDepth';
 import { useEngagementTime } from './hooks/useEngagementTime';
+import { useExitIntent } from './hooks/useExitIntent';
 import CookieConsent from './components/CookieConsent';
 
 
@@ -41,6 +42,9 @@ function App() {
 
   // Track engagement time for the current page
   useEngagementTime(currentHash);
+
+  // Track exit intent
+  useExitIntent(true);
 
 
   useEffect(() => {

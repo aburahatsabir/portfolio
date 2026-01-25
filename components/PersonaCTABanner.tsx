@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { trackCustomEvent } from '../utils/analytics';
 
 const PersonaCTABanner: React.FC = () => {
     return (
@@ -12,6 +13,11 @@ const PersonaCTABanner: React.FC = () => {
             <div className="max-w-4xl mx-auto">
                 <a
                     href="#/for"
+                    onClick={() => trackCustomEvent('cta_click', {
+                        event_category: 'CTA Engagement',
+                        cta_text: 'Explore Role-Specific Solutions',
+                        cta_location: 'persona_cta_banner'
+                    })}
                     className="group block p-8 bg-gradient-to-r from-blue-50 to-slate-50 border-2 border-blue-100 hover:border-blue-700 rounded-2xl transition-all hover:shadow-lg"
                 >
                     <div className="flex flex-col md:flex-row items-center justify-between gap-6">

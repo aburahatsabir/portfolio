@@ -158,12 +158,22 @@ const PersonaDirectory: React.FC = () => {
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <a
                             href="#/work"
+                            onClick={() => trackCustomEvent('cta_click', {
+                                event_category: 'CTA Engagement',
+                                cta_text: 'View All Case Studies',
+                                cta_location: 'persona_directory_bottom'
+                            })}
                             className="px-8 py-4 bg-slate-900 text-white rounded-xl font-bold text-sm uppercase tracking-wider hover:bg-blue-700 transition-all"
                         >
                             View All Case Studies
                         </a>
                         <a
                             href="#/contact"
+                            onClick={() => trackCustomEvent('cta_click', {
+                                event_category: 'CTA Engagement',
+                                cta_text: 'Get in Touch',
+                                cta_location: 'persona_directory_bottom'
+                            })}
                             className="px-8 py-4 bg-white border-2 border-slate-200 text-slate-900 rounded-xl font-bold text-sm uppercase tracking-wider hover:border-blue-700 hover:text-blue-700 transition-all"
                         >
                             Get in Touch

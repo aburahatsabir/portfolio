@@ -23,7 +23,6 @@ const Footer: React.FC = () => {
     ],
     governance: [
       { name: 'Reliability Standards', path: '#/governance' },
-      { name: 'Documentation Wiki', path: '#/governance' },
     ],
     proof: [
       { name: 'Success Stories', path: '#/success-stories' },

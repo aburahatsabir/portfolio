@@ -145,7 +145,7 @@ const SocialLinks: React.FC<SocialLinksProps> = ({
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-slate-600 hover:text-blue-600 transition-all hover:scale-110"
-                        title={link.name}
+                        aria-label={`Visit ${link.name} profile`}
                         onClick={() => trackSocialClick({ platform: link.name, location: 'inline' })}
                     >
                         <div className={iconSizes[size]}>
@@ -167,7 +167,7 @@ const SocialLinks: React.FC<SocialLinksProps> = ({
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-14 h-14 rounded-[1.25rem] bg-[#f8fafc] border border-[#f1f5f9] flex items-center justify-center text-slate-600 hover:bg-white hover:border-blue-200 hover:text-blue-600 transition-all shadow-sm group"
-                    title={link.name}
+                    aria-label={`Visit ${link.name} profile`}
                     onClick={() => trackSocialClick({ platform: link.name, location: 'grid' })}
                 >
                     <div className={`transition-transform group-hover:scale-110 ${iconSizes[size]}`}>

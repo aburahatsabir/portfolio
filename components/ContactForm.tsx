@@ -78,13 +78,21 @@ const ContactForm: React.FC = () => {
 
         if (!validateForm()) return;
 
+
         setIsSubmitting(true);
 
         try {
-            // EmailJS configuration
-            const serviceId = 'service_u2no92e';
-            const templateId = 'template_e1t0cjg';
-            const publicKey = 'OKdOWC7hUfHp8O3Un';
+            // EmailJS configuration from environment variables
+            const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+            const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+            const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+            // Validate environment variables are configured
+            if (!serviceId || !templateId || !publicKey) {
+                console.error('EmailJS configuration missing. Please check environment variables.');
+                alert('Email service is not properly configured. Please contact the administrator.');
+                return;
+            }
 
             // Prepare template parameters
             const templateParams = {
@@ -106,6 +114,7 @@ const ContactForm: React.FC = () => {
                 templateParams,
                 publicKey
             );
+
 
             // Track successful form submission
             trackFormSubmission({

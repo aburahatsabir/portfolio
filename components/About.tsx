@@ -79,6 +79,7 @@ const About: React.FC<AboutProps> = ({ showStrategicPillars = true }) => {
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-end gap-12 mb-20">
           <div className="max-w-3xl space-y-6">
+            <h1 className="sr-only">About Abu Rahat Sabir - Executive Architect</h1>
             <h2 className="text-[11px] font-black uppercase tracking-[0.4em] text-blue-600">Executive Identity</h2>
             <h3 className="text-5xl md:text-8xl font-black tracking-tighter leading-[0.92] text-slate-900">
               Abu Rahat <br />

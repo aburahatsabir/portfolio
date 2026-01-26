@@ -94,6 +94,7 @@ const Navbar: React.FC = () => {
                 e.preventDefault();
                 handleResumeClick('navbar_top');
               }}
+              aria-label="Download resume in PDF format"
               className="hidden sm:flex items-center gap-3 bg-slate-900 text-white text-[10px] font-black uppercase tracking-[0.2em] px-8 py-4 rounded-xl hover:bg-blue-600 transition-all shadow-xl shadow-slate-900/10 active:scale-95"
             >
 
@@ -176,6 +177,7 @@ const Navbar: React.FC = () => {
                       handleLinkClick();
                       handleResumeClick('mobile_menu');
                     }}
+                    aria-label="Download resume in PDF format"
                     className="w-full py-6 bg-slate-900 text-white rounded-2xl flex items-center justify-center gap-4 text-xs font-black uppercase tracking-widest shadow-xl shadow-slate-900/10 active:scale-95 transition-all"
                   >
 

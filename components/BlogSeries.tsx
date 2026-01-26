@@ -29,7 +29,6 @@ const RatingSystem: React.FC<{ postId: string }> = ({ postId }) => {
   const handleRate = (value: number) => {
     setRating(value);
     setHasRated(true);
-    console.log(`User rated post ${postId} with ${value} stars.`);
   };
 
   return (

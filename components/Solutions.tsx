@@ -46,15 +46,16 @@ const Solutions: React.FC = () => {
     <section id="solutions" className="py-32 bg-slate-50 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center max-w-3xl mx-auto mb-20 space-y-6">
+          <h1 className="sr-only">Solutions & Services - Abu Rahat Sabir</h1>
           <h2 className="text-xs font-black uppercase tracking-[0.4em] text-blue-600">Administrative Product Catalog</h2>
           <h3 className="text-4xl md:text-6xl font-black tracking-tight text-slate-900 leading-tight">Expertise built for the <span className="text-blue-600">modern enterprise.</span></h3>
-          <p className="text-xl text-slate-500 font-medium">I don’t just fix systems; I re-architect them for peak efficiency. Here is how I transform organizations.</p>
+          <p className="text-xl text-slate-500 font-medium">I don't just fix systems; I re-architect them for peak efficiency. Here is how I transform organizations.</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
           {categories.map((cat, idx) => (
-            <motion.div 
-              key={idx} 
+            <motion.div
+              key={idx}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.1 }}
@@ -75,7 +76,7 @@ const Solutions: React.FC = () => {
 
         <div className="mt-32 bg-slate-900 text-white rounded-[4rem] p-12 md:p-24 relative overflow-hidden group shadow-3xl shadow-slate-950/20">
           <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 blur-[150px] pointer-events-none group-hover:bg-blue-600/20 transition-all duration-1000"></div>
-          
+
           <div className="relative z-10 grid lg:grid-cols-[1.2fr_0.8fr] gap-20 items-start">
             <div className="space-y-12">
               <div className="space-y-6">
@@ -101,23 +102,23 @@ const Solutions: React.FC = () => {
 
             <div className="hidden lg:flex justify-center sticky top-40">
               <div className="w-full max-w-sm aspect-square bg-gradient-to-tr from-blue-600 to-indigo-900 rounded-[3.5rem] flex items-center justify-center p-12 shadow-[0_50px_100px_-20px_rgba(37,99,235,0.4)] border border-blue-400/20 relative overflow-hidden">
-                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.2),transparent)]"></div>
-                 <div className="text-center space-y-6 relative z-10">
-                    <div className="flex justify-center">
-                      <svg className="w-20 h-20 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.040L3 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622l-.382-3.016z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <div className="text-5xl font-black tracking-tighter text-white">99.9%</div>
-                      <div className="text-blue-200 font-black uppercase tracking-[0.2em] text-[10px] mt-2">Uptime Strategy Guaranteed</div>
-                    </div>
-                    <div className="pt-8 flex flex-wrap justify-center gap-2">
-                      {['Audit', 'SOP', 'VBA', 'Apps Script'].map(t => (
-                        <span key={t} className="px-3 py-1 bg-white/10 rounded-lg text-[8px] font-black uppercase tracking-widest text-white border border-white/10">{t}</span>
-                      ))}
-                    </div>
-                 </div>
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.2),transparent)]"></div>
+                <div className="text-center space-y-6 relative z-10">
+                  <div className="flex justify-center">
+                    <svg className="w-20 h-20 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.040L3 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622l-.382-3.016z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div className="text-5xl font-black tracking-tighter text-white">99.9%</div>
+                    <div className="text-blue-200 font-black uppercase tracking-[0.2em] text-[10px] mt-2">Uptime Strategy Guaranteed</div>
+                  </div>
+                  <div className="pt-8 flex flex-wrap justify-center gap-2">
+                    {['Audit', 'SOP', 'VBA', 'Apps Script'].map(t => (
+                      <span key={t} className="px-3 py-1 bg-white/10 rounded-lg text-[8px] font-black uppercase tracking-widest text-white border border-white/10">{t}</span>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>

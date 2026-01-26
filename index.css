@@ -141,22 +141,26 @@ select:focus-visible {
         scroll-behavior: auto !important;
     }
 }
+
 /* Accessibility: WCAG AA/AAA Color Contrast Fixes */
 /* Override low-contrast Tailwind colors to meet 4.5:1 minimum ratio */
 
 /* text-slate-300 (1.48:1) ? text-slate-600 (5.4:1) ? WCAG AA */
 .text-slate-300 {
-    color: #475569 !important; /* slate-600 */
+    color: #475569 !important;
+    /* slate-600 */
 }
 
 /* text-slate-400 (2.56:1) ? text-slate-600 (5.4:1) ? WCAG AA */
 .text-slate-400 {
-    color: #475569 !important; /* slate-600 */
+    color: #475569 !important;
+    /* slate-600 */
 }
 
 /* text-slate-500 (4.1:1) ? text-slate-700 (7.5:1) ? WCAG AAA */
 .text-slate-500 {
-    color: #334155 !important; /* slate-700 */
+    color: #334155 !important;
+    /* slate-700 */
 }
 
 /* Preserve hover states */
@@ -173,5 +177,6 @@ select:focus-visible {
 .bg-slate-900 .text-slate-400,
 .bg-blue-600 .text-slate-300,
 .bg-blue-600 .text-slate-400 {
-    color: #cbd5e1 !important; /* slate-300 - acceptable on dark */
+    color: #cbd5e1 !important;
+    /* slate-300 - acceptable on dark */
 }

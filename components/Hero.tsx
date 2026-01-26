@@ -177,6 +177,10 @@ const Hero: React.FC = () => {
                     transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                     src={content[activeMandate].image}
                     alt={`Abu Rahat Sabir - ${activeMandate === 'sovereignty' ? 'Engineering Institutional Sovereignty' : 'Reclaiming Operational Capital'}`}
+                    width={800}
+                    height={1000}
+                    fetchPriority="high"
+                    loading="eager"
                     className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] brightness-[1.02] group-hover:scale-[1.02]"
                   />
                 </AnimatePresence>

@@ -26,7 +26,6 @@ const CookieConsent: React.FC = () => {
                 'ad_personalization': status,
                 'analytics_storage': status
             });
-            console.log(`🍪 Cookie Consent: ${status}`);
         }
     };
 

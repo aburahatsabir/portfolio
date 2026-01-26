@@ -3,15 +3,27 @@
 
 <head>
     <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GNCS8NZW8L"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BGM02GLZ84"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
+
+        // Default Consent Mode (Denied)
+        gtag('consent', 'default', {
+            'ad_storage': 'denied',
+            'ad_user_data': 'denied',
+            'ad_personalization': 'denied',
+            'analytics_storage': 'denied'
+        });
+
         gtag('js', new Date());
-        gtag('config', 'G-GNCS8NZW8L', {
+        gtag('config', 'G-BGM02GLZ84', {
             'send_page_view': false
         });
+
+
     </script>
+
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -63,8 +75,16 @@
     }
     </script>
 
+
     <!-- PWA Manifest -->
     <link rel="manifest" href="./site.webmanifest">
+
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' https://www.googletagmanager.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.googletagmanager.com https://api.emailjs.com https://www.google-analytics.com https://generativelanguage.googleapis.com; frame-ancestors 'none';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 
     <!-- Theme Colors -->
     <meta name="theme-color" content="#2563eb">
@@ -74,6 +94,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://api.emailjs.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
         rel="stylesheet" media="print" onload="this.media='all'">
@@ -201,10 +222,10 @@
             z-index: 1;
         }
     </style>
-  <script type="module" crossorigin src="./assets/index-Bj_H8X5Q.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/motion-vendor-B1_Zydz6.js">
-  <link rel="modulepreload" crossorigin href="./assets/react-vendor-DAwUIw_s.js">
-  <link rel="stylesheet" crossorigin href="./assets/index-DkBj0Mj4.css">
+  <script type="module" crossorigin src="/assets/index-D6oad-0B.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/motion-vendor-B1_Zydz6.js">
+  <link rel="modulepreload" crossorigin href="/assets/react-vendor-DAwUIw_s.js">
+  <link rel="stylesheet" crossorigin href="/assets/index-C5nxUbnM.css">
 </head>
 
 <body class="selection-blue">

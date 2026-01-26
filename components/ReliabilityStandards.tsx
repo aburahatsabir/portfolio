@@ -55,7 +55,7 @@ const ReliabilityCard: React.FC<{ principle: Principle; index: number }> = ({ pr
             <p className="text-sm font-black text-slate-900 tracking-tight">{principle.benefit}</p>
           </div>
           <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-300 group-hover:text-blue-600 group-hover:bg-blue-50 transition-all">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
           </div>
         </div>
       </div>
@@ -104,7 +104,7 @@ const ReliabilityStandards: React.FC = () => {
       {/* Sophisticated Background Element */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
       <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-100 to-transparent"></div>
-      
+
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* Standardized Section Header */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-16 mb-24">
@@ -113,7 +113,7 @@ const ReliabilityStandards: React.FC = () => {
               <span className="text-[10px] font-black uppercase tracking-[0.4em] text-blue-600">Reliability Protocol</span>
               <div className="h-px bg-slate-100 flex-1"></div>
             </div>
-            
+
             <h2 className="text-5xl md:text-8xl font-[900] tracking-tighter leading-[0.92] text-slate-950">
               The Reliability <br />
               <span className="text-slate-400">Manifesto.</span>
@@ -125,23 +125,23 @@ const ReliabilityStandards: React.FC = () => {
           </div>
 
           <div className="hidden lg:flex flex-col items-end gap-4 shrink-0 pb-2">
-             <div className="flex flex-col items-end gap-1">
-                <span className="mono text-[9px] font-black text-slate-400 uppercase tracking-widest">Protocol Uptime</span>
-                <span className="text-5xl font-black text-slate-950 tracking-tighter leading-none">99.99%</span>
-             </div>
-             <div className="flex gap-2">
-               {[...Array(5)].map((_, i) => (
-                 <div key={i} className="w-1.5 h-8 bg-slate-50 rounded-full overflow-hidden border border-slate-100">
-                    <motion.div 
-                      initial={{ height: 0 }}
-                      whileInView={{ height: i < 4 ? '100%' : '90%' }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1.5, delay: i * 0.1 }}
-                      className="w-full bg-emerald-500"
-                    />
-                 </div>
-               ))}
-             </div>
+            <div className="flex flex-col items-end gap-1">
+              <span className="mono text-[9px] font-black text-slate-400 uppercase tracking-widest">Protocol Uptime</span>
+              <span className="text-5xl font-black text-slate-950 tracking-tighter leading-none">99.99%</span>
+            </div>
+            <div className="flex gap-2">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="w-1.5 h-8 bg-slate-50 rounded-full overflow-hidden border border-slate-100">
+                  <motion.div
+                    initial={{ height: 0 }}
+                    whileInView={{ height: i < 4 ? '100%' : '90%' }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1.5, delay: i * 0.1 }}
+                    className="w-full bg-emerald-500"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 

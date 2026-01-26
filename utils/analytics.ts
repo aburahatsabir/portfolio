@@ -63,8 +63,6 @@ export const trackContactCTA = (event: ContactCTAEvent): void => {
         location: event.location,
         conversion_type: event.conversionType,
     });
-
-    console.log('📊 Analytics: Contact CTA Click', event);
 };
 
 /**
@@ -84,8 +82,6 @@ export const trackFormSubmission = (event: FormSubmissionEvent): void => {
         challenge: event.challenge,
         timeline: event.timeline,
     });
-
-    console.log('📊 Analytics: Form Submission', event);
 };
 
 /**
@@ -104,8 +100,6 @@ export const trackEmailClick = (event: EmailClickEvent): void => {
         source: event.source,
         email_type: event.emailType,
     });
-
-    console.log('📊 Analytics: Email Click', event);
 };
 
 /**
@@ -122,8 +116,6 @@ export const trackPageView = (event: PageViewEvent): void => {
         page_path: event.route,
         page_title: event.title,
     });
-
-    console.log('📊 Analytics: Page View', event);
 };
 
 /**
@@ -141,8 +133,6 @@ export const trackResumeDownload = (source: string): void => {
         event_label: source,
         source: source,
     });
-
-    console.log('📊 Analytics: Resume Download', source);
 };
 
 /**
@@ -161,8 +151,6 @@ export const trackOutboundLink = (url: string, label?: string): void => {
         event_label: label || url,
         url: url,
     });
-
-    console.log('📊 Analytics: Outbound Link', url);
 };
 
 /**
@@ -177,8 +165,6 @@ export const trackCustomEvent = (eventName: string, params?: Record<string, any>
     }
 
     (window as any).gtag('event', eventName, params);
-
-    console.log('📊 Analytics: Custom Event', eventName, params);
 };
 
 /**
@@ -196,8 +182,6 @@ export const trackSocialClick = (event: SocialClickEvent): void => {
         platform: event.platform,
         location: event.location,
     });
-
-    console.log('📊 Analytics: Social Click', event);
 };
 
 /**
@@ -215,8 +199,6 @@ export const trackScrollDepth = (event: ScrollDepthEvent): void => {
         depth: event.depth,
         page: event.page,
     });
-
-    console.log('📊 Analytics: Scroll Depth', event);
 };
 /**
  * Track project card clicks
@@ -233,8 +215,6 @@ export const trackProjectClick = (event: ProjectClickEvent): void => {
         project_name: event.projectName,
         project_category: event.projectCategory,
     });
-
-    console.log('📊 Analytics: Project Click', event);
 };
 
 /**
@@ -253,8 +233,6 @@ export const trackEngagementTime = (page: string, timeInSeconds: number): void =
         engagement_time_msec: timeInSeconds * 1000,
         page_path: page,
     });
-
-    console.log('📊 Analytics: Engagement Time', { page, timeInSeconds });
 };
 
 /**
@@ -273,8 +251,6 @@ export const trackNavigation = (from: string, to: string): void => {
         from_page: from,
         to_page: to,
     });
-
-    console.log('📊 Analytics: Navigation', { from, to });
 };
 
 /**
@@ -294,8 +270,6 @@ export const trackError = (error: string | Error, fatal: boolean = false): void 
         description: errorMessage,
         fatal: fatal,
     });
-
-    console.log('📊 Analytics: Error', { errorMessage, fatal });
 };
 
 /**
@@ -320,6 +294,4 @@ export const trackMediaInteraction = (
         action: action,
         media_name: mediaName,
     });
-
-    console.log('📊 Analytics: Media Interaction', { mediaType, action, mediaName });
 };

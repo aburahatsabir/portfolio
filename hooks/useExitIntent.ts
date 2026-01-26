@@ -25,8 +25,6 @@ export const useExitIntent = (enabled: boolean = true) => {
                     page: window.location.hash || '#/',
                     time_on_page: Math.round((Date.now() - performance.timing.navigationStart) / 1000)
                 });
-
-                console.log('📊 Analytics: Exit Intent Detected');
             }
         };
 

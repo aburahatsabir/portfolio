@@ -22,10 +22,18 @@ const Contact: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      // EmailJS configuration
-      const serviceId = 'service_u2no92e';
-      const templateId = 'template_e1t0cjg';
-      const publicKey = 'OKdOWC7hUfHp8O3Un';
+      // EmailJS configuration from environment variables
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+      // Validate environment variables are configured
+      if (!serviceId || !templateId || !publicKey) {
+        console.error('EmailJS configuration missing. Please check environment variables.');
+        alert('Email service is not properly configured. Please contact the administrator.');
+        setIsSubmitting(false);
+        return;
+      }
 
       // Send email using EmailJS
       const result = await emailjs.send(
@@ -39,8 +47,6 @@ const Contact: React.FC = () => {
         },
         publicKey
       );
-
-      console.log('✅ EmailJS Success:', result);
 
       // Track form submission
       trackFormSubmission({
@@ -63,7 +69,6 @@ const Contact: React.FC = () => {
   };
 
   const handleFormStart = () => {
-    console.log('🔍 handleFormStart called, formStarted:', formStarted);
     if (!formStarted) {
       setFormStarted(true);
       trackCustomEvent('form_start', {
@@ -129,6 +134,7 @@ const Contact: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-20 items-start">
         <div className="space-y-12">
           <div>
+            <h1 className="sr-only">Contact Abu Rahat Sabir</h1>
             <h2 className="text-xs font-black uppercase tracking-[0.4em] text-blue-600 mb-6">Engagement Protocol</h2>
             <h3 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-8 leading-tight">Let's discuss <br />your <span className="text-blue-600">next move.</span></h3>
             <p className="text-xl text-slate-600 mb-12 leading-relaxed">

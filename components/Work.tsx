@@ -67,6 +67,7 @@ const Work: React.FC = () => {
               <SectionLabel>Enterprise Proof</SectionLabel>
               <div className="h-px bg-slate-100 flex-1"></div>
             </div>
+            <h1 className="sr-only">Portfolio Case Studies - Abu Rahat Sabir</h1>
             <h2 className="text-5xl md:text-8xl font-[900] tracking-tighter leading-[0.92] text-slate-900">
               Case <span className="text-slate-400">Studies.</span>
             </h2>
@@ -116,7 +117,7 @@ const Work: React.FC = () => {
                   </div>
                   <div className="p-8 flex-1 flex flex-col">
                     <p className="text-[9px] font-black uppercase tracking-widest text-blue-600 mb-1.5">{project.category} • {project.client}</p>
-                    <h4 className="text-2xl font-black text-slate-900 group-hover:text-blue-600 transition-colors leading-tight mb-6">{project.title}</h4>
+                    <h3 className="text-2xl font-black text-slate-900 group-hover:text-blue-600 transition-colors leading-tight mb-6">{project.title}</h3>
 
                     <div className="grid grid-cols-2 gap-4 bg-slate-50/50 p-6 rounded-3xl mt-auto">
                       <div>

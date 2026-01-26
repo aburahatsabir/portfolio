@@ -49,7 +49,7 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h5 className="font-black text-[10px] uppercase tracking-[0.3em] text-slate-400 mb-8">Core Navigation</h5>
+            <p className="font-black text-[10px] uppercase tracking-[0.3em] text-slate-600 mb-8">Core Navigation</p>
             <ul className="space-y-4">
               {footerLinks.core.map(link => (
                 <li key={link.name}>
@@ -71,7 +71,7 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h5 className="font-black text-[10px] uppercase tracking-[0.3em] text-slate-400 mb-8">Solutions</h5>
+            <p className="font-black text-[10px] uppercase tracking-[0.3em] text-slate-600 mb-8">Solutions</p>
             <ul className="space-y-4">
               {footerLinks.solutions.map(link => (
                 <li key={link.name}>
@@ -82,7 +82,7 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h5 className="font-black text-[10px] uppercase tracking-[0.3em] text-slate-400 mb-8">Governance</h5>
+            <p className="font-black text-[10px] uppercase tracking-[0.3em] text-slate-600 mb-8">Governance</p>
             <ul className="space-y-4">
               {footerLinks.governance.map(link => (
                 <li key={link.name}>
@@ -93,7 +93,7 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h5 className="font-black text-[10px] uppercase tracking-[0.3em] text-slate-400 mb-8">Proof</h5>
+            <p className="font-black text-[10px] uppercase tracking-[0.3em] text-slate-600 mb-8">Proof</p>
             <ul className="space-y-4">
               {footerLinks.proof.map(link => (
                 <li key={link.name}>

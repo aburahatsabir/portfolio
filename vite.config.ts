@@ -5,9 +5,8 @@ import react from '@vitejs/plugin-react';
 // https://vitejs.dev/config/
 export default defineConfig({
   // Set base path for GitHub Pages deployment
-  // Using '/' because the site is deployed to https://abu-rahat-sabir.github.io/ (root domain)
-  // NOT to https://abu-rahat-sabir.github.io/portfolio/ (subdirectory)
-  base: '/',
+  // Site is deployed to https://aburahatsabir.github.io/portfolio/ (subdirectory)
+  base: '/portfolio/',
 
   server: {
     port: 3000,

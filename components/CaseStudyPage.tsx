@@ -143,7 +143,7 @@ const CaseStudyPage: React.FC<{ projectId: string }> = ({ projectId }) => {
                            ))}
                         </div>
                      </div>
-                     <button onClick={() => window.location.hash = '#/contact'} className="w-full py-5 bg-blue-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-700 transition-all shadow-xl shadow-blue-900/20">
+                     <button type="button" onClick={() => window.location.hash = '#/contact'} className="w-full py-5 bg-blue-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-700 transition-all shadow-xl shadow-blue-900/20">
                         Request Full Audit
                      </button>
                   </div>
@@ -293,8 +293,8 @@ const CaseStudyPage: React.FC<{ projectId: string }> = ({ projectId }) => {
                   <p className="text-xl text-slate-500 font-medium leading-relaxed">My audits are clinical, ROI-focused, and designed for organizations scaling beyond manual capabilities.</p>
                </div>
                <div className="flex flex-wrap justify-center gap-6">
-                  <button onClick={() => window.location.hash = '#/contact'} className="px-12 py-6 bg-blue-600 text-white rounded-2xl font-black text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-100 active:scale-95">Schedule Briefing</button>
-                  <button onClick={() => window.location.hash = '#/work'} className="px-12 py-6 bg-slate-100 text-slate-900 rounded-2xl font-black text-lg hover:bg-slate-200 transition-all active:scale-95">Return to Archives</button>
+                  <button type="button" onClick={() => window.location.hash = '#/contact'} className="px-12 py-6 bg-blue-600 text-white rounded-2xl font-black text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-100 active:scale-95">Schedule Briefing</button>
+                  <button type="button" onClick={() => window.location.hash = '#/work'} className="px-12 py-6 bg-slate-100 text-slate-900 rounded-2xl font-black text-lg hover:bg-slate-200 transition-all active:scale-95">Return to Archives</button>
                </div>
             </div>
          </div>

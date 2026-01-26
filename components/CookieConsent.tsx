@@ -64,12 +64,14 @@ const CookieConsent: React.FC = () => {
                         </div>
                         <div className="flex flex-col sm:flex-row gap-3 min-w-[280px]">
                             <button
+                                type="button"
                                 onClick={handleDecline}
                                 className="px-6 py-2.5 rounded-xl border border-slate-300 text-slate-600 font-medium hover:bg-slate-50 hover:text-slate-900 transition-colors flex-1"
                             >
                                 Decline
                             </button>
                             <button
+                                type="button"
                                 onClick={handleAccept}
                                 className="px-6 py-2.5 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 shadow-lg shadow-blue-600/20 transition-all transform hover:-translate-y-0.5 flex-1"
                             >

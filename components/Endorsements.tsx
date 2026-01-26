@@ -126,6 +126,7 @@ const Endorsements: React.FC = () => {
 
           <div className="flex items-center gap-3 pb-2">
             <button
+              type="button"
               onClick={() => { scroll('left'); setIsPaused(true); }}
               className={`w-14 h-14 rounded-2xl border flex items-center justify-center transition-all active:scale-90 ${canScrollLeft ? 'border-slate-200 text-slate-900 hover:bg-slate-50' : 'border-slate-100 text-slate-200 cursor-not-allowed'
                 }`}
@@ -134,6 +135,7 @@ const Endorsements: React.FC = () => {
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" /></svg>
             </button>
             <button
+              type="button"
               onClick={() => { scroll('right'); setIsPaused(true); }}
               className={`w-14 h-14 rounded-2xl border flex items-center justify-center transition-all active:scale-90 ${canScrollRight ? 'border-slate-200 text-slate-900 hover:bg-slate-50' : 'border-slate-100 text-slate-200 cursor-not-allowed'
                 }`}

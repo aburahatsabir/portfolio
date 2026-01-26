@@ -261,6 +261,7 @@ const Contact: React.FC = () => {
                     </p>
                   </div>
                   <button
+                    type="button"
                     onClick={() => setIsSent(false)}
                     className="px-8 py-4 bg-slate-800 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-700 transition-all"
                   >

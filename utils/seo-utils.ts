@@ -21,7 +21,7 @@ interface PageMetadata {
 const DEFAULT_METADATA: PageMetadata = {
     title: 'Executive Architect | Systems Governance & Operations',
     description: 'Strategic portfolio of a Corporate Operations Executive specializing in enterprise architecture, automation, and institutional governance.',
-    ogImage: './images/og-default.webp',
+    ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-default.webp',
     ogType: 'website'
 };
 
@@ -32,63 +32,63 @@ const ROUTE_METADATA: Record<string, PageMetadata> = {
     '#/work': {
         title: 'Work Portfolio | Abu Rahat Sabir',
         description: 'Case studies and project archives showcasing enterprise systems architecture, automation, and operational governance solutions.',
-        ogImage: './images/og-work.webp',
+        ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-work.webp',
         ogType: 'website'
     },
 
     '#/about': {
         title: 'About | Abu Rahat Sabir - Executive Architect',
         description: 'Executive Admin and Automation Specialist with expertise in institutional governance, VBA/Apps Script systems, and enterprise operations.',
-        ogImage: './images/og-about.webp',
+        ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-about.webp',
         ogType: 'profile'
     },
 
     '#/contact': {
         title: 'Contact | Abu Rahat Sabir',
         description: 'Get in touch for strategic consultation on enterprise architecture, automation systems, and operational governance.',
-        ogImage: './images/og-contact.webp',
+        ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-contact.webp',
         ogType: 'website'
     },
 
     '#/solutions': {
         title: 'Solutions & Capabilities | Abu Rahat Sabir',
         description: 'Enterprise automation solutions, administrative ROI frameworks, and operational governance capabilities.',
-        ogImage: './images/og-solutions.webp',
+        ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-solutions.webp',
         ogType: 'website'
     },
 
     '#/diagnostic': {
         title: 'Systems Audit & Diagnostic | Abu Rahat Sabir',
         description: 'Comprehensive systems auditing and diagnostic services for enterprise operations and governance.',
-        ogImage: './images/og-diagnostic.webp',
+        ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-diagnostic.webp',
         ogType: 'website'
     },
 
     '#/governance': {
         title: 'Reliability Standards & Governance | Abu Rahat Sabir',
         description: 'Enterprise governance frameworks and reliability standards for institutional operations.',
-        ogImage: './images/og-governance.webp',
+        ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-governance.webp',
         ogType: 'website'
     },
 
     '#/post-mortems': {
         title: 'Post-Mortems & Incident Analysis | Abu Rahat Sabir',
         description: 'Forensic analysis of operational incidents and system failures with preventative architecture solutions.',
-        ogImage: './images/og-postmortems.webp',
+        ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-postmortems.webp',
         ogType: 'website'
     },
 
     '#/success-stories': {
         title: 'Success Stories & Endorsements | Abu Rahat Sabir',
         description: 'Client success stories, testimonials, and endorsements from enterprise operations and automation projects.',
-        ogImage: './images/og-success.webp',
+        ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-success.webp',
         ogType: 'website'
     },
 
     '#/blog': {
         title: 'Blog Series | Abu Rahat Sabir',
         description: 'Insights on enterprise architecture, operational governance, and administrative automation.',
-        ogImage: './images/og-blog.webp',
+        ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-blog.webp',
         ogType: 'website'
     },
 
@@ -107,28 +107,28 @@ const ROUTE_METADATA: Record<string, PageMetadata> = {
     '#/persona/executive-assistants': {
         title: 'Reclaim 10+ Hours Every Week | Abu Rahat Sabir',
         description: 'Automated executive support systems that eliminate repetitive admin work and coordination chaos.',
-        ogImage: './images/og-persona-ea.webp',
+        ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-persona-ea.webp',
         ogType: 'website'
     },
 
     '#/persona/operations-leaders': {
         title: 'Build Systems That Scale Without Hiring | Abu Rahat Sabir',
         description: 'Enterprise-grade operational architecture that eliminates bottlenecks and multiplies team capacity.',
-        ogImage: './images/og-persona-ops.webp',
+        ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-persona-ops.webp',
         ogType: 'website'
     },
 
     '#/persona/founders': {
         title: 'Save $50K/Year in Unnecessary Overhead | Abu Rahat Sabir',
         description: 'Institutional sovereignty through owned logic kernels that eliminate SaaS sprawl and vendor lock-in.',
-        ogImage: './images/og-persona-founders.webp',
+        ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-persona-founders.webp',
         ogType: 'website'
     },
 
     '#/persona/hiring-managers': {
         title: 'Expert Executive Operations Professional | Abu Rahat Sabir',
         description: 'Proven track record in C-suite support, enterprise automation, and operational governance.',
-        ogImage: './images/og-persona-hiring.webp',
+        ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-persona-hiring.webp',
         ogType: 'website'
     }
 };
@@ -157,7 +157,7 @@ function getMetadataForRoute(hash: string): PageMetadata {
         return {
             title: 'Blog Post | Abu Rahat Sabir',
             description: 'Insights on enterprise architecture, operational governance, and administrative automation.',
-            ogImage: './images/og-blog.webp',
+            ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-blog.webp',
             ogType: 'article'
         };
     }

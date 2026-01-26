@@ -113,7 +113,7 @@ const Work: React.FC = () => {
               >
                 <div className="relative overflow-hidden rounded-[2.5rem] bg-white border border-slate-100 p-3 shadow-sm hover:shadow-2xl transition-all duration-500 h-full flex flex-col">
                   <div className="aspect-[16/10] overflow-hidden rounded-[1.8rem] relative bg-slate-50">
-                    <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" />
+                    <img src={project.image} alt={project.title} width={1600} height={1000} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" />
                   </div>
                   <div className="p-8 flex-1 flex flex-col">
                     <p className="text-[9px] font-black uppercase tracking-widest text-blue-600 mb-1.5">{project.category} • {project.client}</p>

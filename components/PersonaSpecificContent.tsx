@@ -471,7 +471,7 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
                                 >
                                     <p className="text-lg text-slate-700 mb-6 italic">"{testimonial.content}"</p>
                                     <div className="flex items-center gap-4">
-                                        <img src={testimonial.avatar} alt={testimonial.name} className="w-12 h-12 rounded-full" />
+                                        <img src={testimonial.avatar} alt={testimonial.name} width={48} height={48} className="w-12 h-12 rounded-full" />
                                         <div>
                                             <div className="font-bold text-slate-900">{testimonial.name}</div>
                                             <div className="text-sm text-slate-600">{testimonial.position}</div>

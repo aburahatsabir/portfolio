@@ -25,7 +25,7 @@ const EndorsementCard: React.FC<{ testimonial: any, index: number }> = ({ testim
 
       <footer className="flex items-center gap-5 pt-10 border-t border-slate-50">
         <div className="w-16 h-16 rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 grayscale group-hover:grayscale-0 transition-all duration-700 shadow-sm shrink-0">
-          <img src={testimonial.avatar} alt={testimonial.name} className="w-full h-full object-cover" />
+          <img src={testimonial.avatar} alt={testimonial.name} width={64} height={64} className="w-full h-full object-cover" />
         </div>
         <div>
           <h4 className="text-lg font-black text-slate-900 tracking-tight leading-none mb-1.5">{testimonial.name}</h4>

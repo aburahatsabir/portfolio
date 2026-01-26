@@ -89,11 +89,6 @@ body {
     animation: subtle-float 6s ease-in-out infinite;
 }
 
-.selection-blue::-moz-selection {
-    background-color: var(--brand-blue);
-    color: white;
-}
-
 .selection-blue::selection {
     background-color: var(--brand-blue);
     color: white;

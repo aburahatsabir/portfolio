@@ -77,11 +77,10 @@ const Work: React.FC = () => {
             <nav role="tablist" className="inline-flex items-center bg-slate-100/50 p-1 rounded-[1.25rem] border border-slate-200/40">
               {filterOptions.map((filter) => (
                 <button
-                  type="button"
                   key={filter}
                   onClick={() => setActiveFilter(filter)}
-                  className={`group relative flex items-center gap-2 px-6 py-2.5 rounded-[1rem] transition-all duration-300 whitespace-nowrap outline-none ${activeFilter === filter ? 'text-white' : 'text-slate-500 hover:text-slate-900'
-                    }`}
+                  className={`group relative flex items - center gap - 2 px - 6 py - 2.5 rounded - [1rem] transition - all duration - 300 whitespace - nowrap outline - none ${activeFilter === filter ? 'text-white' : 'text-slate-500 hover:text-slate-900'
+                    } `}
                 >
                   <span className="relative z-10 text-[10px] font-black uppercase tracking-[0.1em]">{filter}</span>
                   {activeFilter === filter && (

@@ -213,6 +213,8 @@ const About: React.FC<AboutProps> = ({ showStrategicPillars = true }) => {
                         <img
                           src={generateAvatar({ name: i === 1 ? 'MR' : i === 2 ? 'SK' : 'DL', background: '0f172a', color: 'fff' })}
                           alt={`Endorsement from ${i === 1 ? 'Executive Partner' : i === 2 ? 'Operations Director' : 'C-Suite Member'}`}
+                          width={256}
+                          height={256}
                         />
                       </div>
                     ))}

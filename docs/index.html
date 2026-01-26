@@ -2,27 +2,6 @@
 <html lang="en">
 
 <head>
-    <!-- Resource Hints for Performance -->
-    <link rel="preconnect" href="https://www.googletagmanager.com">
-    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
-    <link rel="preconnect" href="https://www.google-analytics.com">
-    <link rel="dns-prefetch" href="https://www.google-analytics.com">
-
-    <!-- Content Security Policy -->
-    <meta http-equiv="Content-Security-Policy" content="
-        default-src 'self';
-        script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://api.emailjs.com;
-        style-src 'self' 'unsafe-inline';
-        img-src 'self' data: https:;
-        font-src 'self' data:;
-        connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://api.emailjs.com;
-        frame-src 'none';
-        object-src 'none';
-        base-uri 'self';
-        form-action 'self';
-        upgrade-insecure-requests;
-    ">
-
     <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-BGM02GLZ84"></script>
     <script>
@@ -128,11 +107,125 @@
     <!-- Preload Critical Assets -->
     <link rel="preload" href="./images/og-default.webp" as="image">
 
-    <!-- All styles moved to index.css to avoid duplication -->
-  <script type="module" crossorigin src="/portfolio/assets/index-ot79Oeut.js"></script>
+    <style>
+        :root {
+            --brand-blue: #2563eb;
+            --bg-main: #FFFFFF;
+            --text-main: #0F172A;
+            --slate-50: #F8FAFC;
+            --slate-100: #F1F5F9;
+            --slate-900: #0F172A;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-display: swap;
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            letter-spacing: -0.01em;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .text-tight {
+            letter-spacing: -0.03em;
+        }
+
+        .text-tighter {
+            letter-spacing: -0.05em;
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .executive-shadow {
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.05), 0 5px 20px -5px rgba(0, 0, 0, 0.02);
+        }
+
+        .btn-hover-effect {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-hover-effect:hover {
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 30px 60px -12px rgba(37, 99, 235, 0.25);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--slate-50);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 20px;
+            border: 2px solid var(--slate-50);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        @keyframes subtle-float {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .animate-float {
+            animation: subtle-float 6s ease-in-out infinite;
+        }
+
+        .selection-blue::-moz-selection {
+            background-color: var(--brand-blue);
+            color: white;
+        }
+
+        .selection-blue::selection {
+            background-color: var(--brand-blue);
+            color: white;
+        }
+
+        .noise-bg {
+            position: relative;
+        }
+
+        .noise-bg::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            pointer-events: none;
+            background-image: url("./images/effects/noise.svg");
+            z-index: 1;
+        }
+    </style>
+  <script type="module" crossorigin src="/portfolio/assets/index-CreqBrx0.js"></script>
   <link rel="modulepreload" crossorigin href="/portfolio/assets/motion-vendor-B1_Zydz6.js">
   <link rel="modulepreload" crossorigin href="/portfolio/assets/react-vendor-DAwUIw_s.js">
-  <link rel="stylesheet" crossorigin href="/portfolio/assets/index-C0upuXBz.css">
+  <link rel="stylesheet" crossorigin href="/portfolio/assets/index-C2JJISUT.css">
 </head>
 
 <body class="selection-blue">

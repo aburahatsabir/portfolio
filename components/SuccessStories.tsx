@@ -20,6 +20,8 @@ const OutcomeCard: React.FC<{ story: any; index: number }> = ({ story, index }) 
           <img
             src={story.logo}
             alt={`${story.clientName} logo`}
+            width={128}
+            height={128}
             className="w-full h-auto grayscale group-hover:grayscale-0 group-hover:brightness-0 group-hover:invert transition-all duration-500"
           />
         </div>

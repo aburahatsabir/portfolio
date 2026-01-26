@@ -29,12 +29,12 @@
     
     <image:image>
       <image:loc>https://aburahatsabir.github.io/portfolio/images/projects/payroll-control.webp</image:loc>
-      <image:title>Multi-Entity Payroll & Compensation Control System - Case Study</image:title>
+      <image:title>Multi-Entity Payroll &amp; Compensation Control System - Case Study</image:title>
     </image:image>
     
     <image:image>
       <image:loc>https://aburahatsabir.github.io/portfolio/images/projects/trade-finance.webp</image:loc>
-      <image:title>Trade Finance & Commission Control Ledger - Case Study</image:title>
+      <image:title>Trade Finance &amp; Commission Control Ledger - Case Study</image:title>
     </image:image>
     
     <!-- Open Graph Images -->

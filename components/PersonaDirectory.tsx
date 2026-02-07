@@ -90,7 +90,7 @@ const PersonaDirectory: React.FC = () => {
                     {personas.map((persona, idx) => (
                         <motion.a
                             key={persona.id}
-                            href={`#/persona/${persona.id}`}
+                            href={`/persona/${persona.id}`}
                             onClick={() => trackCustomEvent('persona_select', {
                                 event_category: 'User Segmentation',
                                 persona_id: persona.id,
@@ -157,7 +157,7 @@ const PersonaDirectory: React.FC = () => {
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <a
-                            href="#/work"
+                            href="/work"
                             onClick={() => trackCustomEvent('cta_click', {
                                 event_category: 'CTA Engagement',
                                 cta_text: 'View All Case Studies',
@@ -168,7 +168,7 @@ const PersonaDirectory: React.FC = () => {
                             View All Case Studies
                         </a>
                         <a
-                            href="#/contact"
+                            href="/contact"
                             onClick={() => trackCustomEvent('cta_click', {
                                 event_category: 'CTA Engagement',
                                 cta_text: 'Get in Touch',

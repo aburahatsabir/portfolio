@@ -15,13 +15,13 @@ const Solutions: React.FC = () => {
     },
     {
       title: 'Workflow & Data Automation',
-      description: 'I design and build automations using Excel, Google Sheets, and Apps Script to handle reporting, approvals, and status tracking — reducing manual work and error-prone copy-paste.',
+      description: 'I design and build automations using Excel and Google Sheets to handle reporting, approvals, and status tracking—reducing manual work and eliminating error-prone copy-paste.',
       icon: (
         <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>
       ),
-      tools: ['Excel VBA', 'Apps Script', 'Dashboards', 'API Integrations']
+      tools: ['Excel Automation', 'Google Sheets', 'Dashboards', 'API Integrations']
     },
     {
       title: 'Training, Documentation & Handover',
@@ -38,7 +38,7 @@ const Solutions: React.FC = () => {
   const methodology = [
     { step: '01', title: 'Audit & Analyze', desc: 'I start by auditing current workflows to find bottlenecks. I identify exactly where time is lost and where processes break down.' },
     { step: '02', title: 'Strategy & Plan', desc: 'I design a tailored solution—whether it’s a new C-Suite filing protocol, a travel logistics system, or a data tracking method.' },
-    { step: '03', title: 'Build & Automate', desc: 'I implement the solution using tools like Excel, Apps Script, and automation platforms to eliminate manual work and ensure accuracy.' },
+    { step: '03', title: 'Build & Automate', desc: 'I implement the solution using automation tools to eliminate manual work and ensure accuracy—no coding knowledge required on your end.' },
     { step: '04', title: 'Execute & Train', desc: 'I deploy the system and train your team (leveraging my teaching background) to ensure seamless adoption and long-term success.' }
   ];
 
@@ -46,9 +46,8 @@ const Solutions: React.FC = () => {
     <section id="solutions" className="py-32 bg-slate-50 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center max-w-3xl mx-auto mb-20 space-y-6">
-          <h1 className="sr-only">Solutions & Services - Abu Rahat Sabir</h1>
           <h2 className="text-xs font-black uppercase tracking-[0.4em] text-blue-600">Administrative Product Catalog</h2>
-          <h3 className="text-4xl md:text-6xl font-black tracking-tight text-slate-900 leading-tight">Expertise built for the <span className="text-blue-600">modern enterprise.</span></h3>
+          <h1 className="text-4xl md:text-6xl font-black tracking-tight text-slate-900 leading-tight">Expertise built for the <span className="text-blue-600">modern enterprise.</span></h1>
           <p className="text-xl text-slate-500 font-medium">I don't just fix systems; I re-architect them for peak efficiency. Here is how I transform organizations.</p>
         </div>
 

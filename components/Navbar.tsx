@@ -21,11 +21,11 @@ const Navbar: React.FC = () => {
   };
 
   const navLinks = [
-    { name: 'Home', path: '#/' },
-    { name: 'About', path: '#/about' },
-    { name: 'Work', path: '#/work' },
-    { name: 'Solutions', path: '#/solutions' },
-    { name: 'Contact', path: '#/contact' },
+    { name: 'Home', path: '/' },
+    { name: 'About', path: '/about' },
+    { name: 'Work', path: '/work' },
+    { name: 'Solutions', path: '/solutions' },
+    { name: 'Contact', path: '/contact' },
   ];
 
   const resumeUrl = "./AbuRahatSabir-Resume.pdf";
@@ -62,9 +62,9 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-[300] transition-all duration-500 ${isScrolled || isOpen ? 'glass-nav border-b border-slate-100 py-4 shadow-sm' : 'bg-transparent py-8'}`}>
+      <nav className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-500 ${isScrolled || isOpen ? 'glass-nav border-b border-slate-100 py-4 shadow-sm' : 'bg-transparent py-8'}`}>
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          <a href="#/" className="flex items-center gap-4 group z-[310]" onClick={handleLinkClick}>
+          <a href="/" className="flex items-center gap-4 group" onClick={handleLinkClick}>
             <div className="w-11 h-11 bg-slate-900 text-white rounded-[1.25rem] flex items-center justify-center font-black group-hover:rotate-[10deg] transition-all shadow-xl group-hover:bg-blue-600">AR</div>
             <div className="flex flex-col">
               <span className="text-xl font-black tracking-tighter text-slate-900 leading-none">ABU RAHAT SABIR</span>
@@ -80,7 +80,7 @@ const Navbar: React.FC = () => {
               <a
                 key={link.name}
                 href={link.path}
-                className="group relative text-[11px] font-black text-slate-500 hover:text-blue-600 transition-colors uppercase tracking-[0.25em] py-1"
+                className="group relative text-[11px] font-black text-slate-700 hover:text-blue-600 focus-visible:text-blue-600 transition-colors uppercase tracking-[0.25em] py-1"
               >
                 {link.name}
                 <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 ease-out group-hover:w-full"></span>
@@ -90,6 +90,7 @@ const Navbar: React.FC = () => {
 
           <div className="flex items-center gap-4 lg:gap-6">
             <button
+              type="button"
               onClick={(e) => {
                 e.preventDefault();
                 handleResumeClick('navbar_top');
@@ -105,8 +106,9 @@ const Navbar: React.FC = () => {
             </button>
 
             <button
+              type="button"
               onClick={() => setIsOpen(!isOpen)}
-              className="lg:hidden w-12 h-12 flex flex-col items-center justify-center gap-1.5 z-[310] relative focus:outline-none"
+              className="lg:hidden w-12 h-12 flex flex-col items-center justify-center gap-1.5 relative focus:outline-none"
               aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
               aria-expanded={isOpen}
               aria-controls="mobile-menu"
@@ -137,7 +139,7 @@ const Navbar: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-[250] bg-white lg:hidden overflow-y-auto"
+            className="fixed inset-0 z-[70] bg-white lg:hidden overflow-y-auto"
           >
             <div className="pt-32 pb-12 px-8 flex flex-col min-h-screen">
               <div className="flex-1 space-y-8">
@@ -152,7 +154,7 @@ const Navbar: React.FC = () => {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.1 + idx * 0.05 }}
                       onClick={handleLinkClick}
-                      className="group flex items-center justify-between py-2 border-b border-slate-50"
+                      className="group flex items-center justify-between py-2 border-b border-slate-50 focus-visible:outline-2 focus-visible:outline-blue-600 focus-visible:outline-offset-4 rounded"
                     >
                       <div className="flex items-center gap-6">
                         <span className="text-[10px] font-black text-slate-300 group-hover:text-blue-600 transition-colors">0{idx + 1}</span>
@@ -172,6 +174,7 @@ const Navbar: React.FC = () => {
                 <div className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100">
                   <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">Credentials</p>
                   <button
+                    type="button"
                     onClick={(e) => {
                       e.preventDefault();
                       handleLinkClick();

@@ -59,6 +59,7 @@ const SprawlDetector: React.FC = () => {
                   <div className="grid grid-cols-5 gap-4">
                     {[1, 3, 5, 10, 20].map(val => (
                       <button
+                        type="button"
                         key={val}
                         onClick={() => setData({ ...data, departments: val })}
                         className={`py-4 rounded-2xl font-black text-sm border transition-all ${data.departments === val ? 'bg-blue-600 border-blue-600 text-white shadow-lg' : 'bg-white border-slate-100 text-slate-400 hover:border-blue-200'
@@ -70,6 +71,7 @@ const SprawlDetector: React.FC = () => {
                   </div>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setStep(1)}
                   className="w-full py-6 bg-slate-900 text-white rounded-3xl font-black text-lg hover:bg-black transition-all shadow-xl"
                 >
@@ -113,10 +115,10 @@ const SprawlDetector: React.FC = () => {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <button className="flex-1 py-6 bg-blue-600 text-white rounded-3xl font-black text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-100">
+                  <button type="button" className="flex-1 py-6 bg-blue-600 text-white rounded-3xl font-black text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-100">
                     Get a Governance Audit
                   </button>
-                  <button onClick={() => setStep(0)} className="flex-1 py-6 bg-slate-200 text-slate-600 rounded-3xl font-black text-lg hover:bg-slate-300 transition-all">
+                  <button type="button" onClick={() => setStep(0)} className="flex-1 py-6 bg-slate-200 text-slate-600 rounded-3xl font-black text-lg hover:bg-slate-300 transition-all">
                     Recalculate
                   </button>
                 </div>

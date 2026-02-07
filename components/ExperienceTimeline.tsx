@@ -1,11 +1,13 @@
 
+
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { EXPERIENCES } from '../constants';
 import SectionLabel from './shared/SectionLabel';
+import { Experience } from '../types';
 
 const ExperienceNode: React.FC<{
-  exp: any;
+  exp: Experience;
   index: number;
   isActive: boolean;
   onClick: () => void
@@ -35,7 +37,9 @@ const ExperienceNode: React.FC<{
         Mathematically Centered Stepper Indicator 
       */}
       <button
+        type="button"
         onClick={onClick}
+        aria-label={`View details for ${exp.role} at ${exp.company}, ${exp.period}`}
         className={`absolute top-1 w-8 h-8 rounded-full border flex items-center justify-center z-10 transition-all duration-500 bg-white group focus:outline-none -translate-x-1/2 ${isActive ? 'border-blue-600 shadow-lg shadow-blue-500/10' : 'border-slate-300 hover:border-blue-500'
           }`}
         style={{ left: 'var(--timeline-center)' }}
@@ -112,13 +116,6 @@ const ExperienceNode: React.FC<{
                             <p className="text-xs font-black uppercase text-slate-900 tracking-wider">Operational</p>
                           </div>
                         </div>
-
-                        <button
-                          onClick={() => window.location.hash = '#/contact'}
-                          className="mt-2 md:mt-0 text-[10px] font-black text-blue-600 uppercase tracking-widest hover:underline decoration-2 underline-offset-4"
-                        >
-                          Request Unredacted Logs →
-                        </button>
                       </div>
                     </div>
                   </div>
@@ -138,7 +135,7 @@ const ExperienceTimeline: React.FC = () => {
   return (
     <section
       id="experience"
-      className="py-32 bg-white relative [--timeline-center:40px] md:[--timeline-center:80px]"
+      className="py-16 md:py-32 bg-white relative [--timeline-center:40px] md:[--timeline-center:80px]"
     >
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="max-w-3xl mb-24 space-y-6">

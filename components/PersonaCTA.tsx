@@ -71,12 +71,17 @@ const PersonaCTA: React.FC = () => {
                     {personas.map((persona, idx) => (
                         <motion.a
                             key={persona.id}
-                            href={`#/persona/${persona.id}`}
+                            href={`/persona/${persona.id}`}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                window.history.pushState({}, '', `/persona/${persona.id}`);
+                                window.dispatchEvent(new PopStateEvent('popstate'));
+                            }}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: idx * 0.1 }}
-                            className="group p-6 bg-white rounded-2xl border-2 border-slate-200 hover:border-blue-700 hover:shadow-lg transition-all"
+                            className="group p-6 bg-white rounded-2xl border-2 border-slate-200 hover:border-blue-700 hover:shadow-lg transition-all cursor-pointer"
                         >
                             <div className="mb-3">{persona.icon}</div>
                             <div className="text-sm font-bold text-slate-900 group-hover:text-blue-700 transition-colors">

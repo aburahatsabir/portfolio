@@ -37,6 +37,12 @@ const PrivacyPolicy: React.FC = () => {
       title: "Institutional Rights",
       subtitle: "Compliance & GDPR",
       content: "Entities retain the absolute right to request an immediate 'System Purge' of all submitted diagnostic data. Under GDPR and CCPA mandates, you may request a copy of all stored telemetry by initiating a Formal Data Audit request via the contact protocol."
+    },
+    {
+      id: "06",
+      title: "Data Retention",
+      subtitle: "Storage Duration & Deletion",
+      content: "Contact form submissions are stored in EmailJS for 30 days, then automatically purged. Google Analytics data is retained for 14 months (Google's default retention period). You may request immediate deletion of all stored data at any time by contacting us. Upon request, we will permanently delete your data within 30 business days and provide written confirmation of the purge operation."
     }
   ];
 
@@ -45,8 +51,8 @@ const PrivacyPolicy: React.FC = () => {
       <div className="max-w-4xl mx-auto px-6">
         {/* Navigation Breadcrumb */}
         <div className="mb-16">
-          <a 
-            href="#/" 
+          <a
+            href="/"
             className="inline-flex items-center gap-3 text-slate-400 hover:text-blue-600 font-black text-[10px] uppercase tracking-[0.2em] transition-all group"
           >
             <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -75,7 +81,7 @@ const PrivacyPolicy: React.FC = () => {
         {/* Policy Content */}
         <div className="space-y-24">
           {sections.map((section) => (
-            <motion.section 
+            <motion.section
               key={section.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -135,7 +141,7 @@ const PrivacyPolicy: React.FC = () => {
         {/* Final Contact Link */}
         <div className="mt-20 text-center">
           <p className="text-slate-400 font-bold text-sm mb-6 uppercase tracking-widest">Questions regarding this protocol?</p>
-          <a href="#/contact" className="px-10 py-5 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-600 transition-all shadow-xl shadow-slate-900/10">
+          <a href="/contact" className="px-10 py-5 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-600 transition-all shadow-xl shadow-slate-900/10">
             Secure Legal Inquiry
           </a>
         </div>

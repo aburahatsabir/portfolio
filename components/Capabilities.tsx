@@ -32,9 +32,9 @@ const CapabilityModule: React.FC<{
         </div>
 
         <div className="space-y-4 flex-1">
-          <h4 className="text-2xl font-[900] text-slate-900 tracking-tighter leading-[1.1] group-hover:text-blue-700 transition-colors">
+          <h3 className="text-2xl font-[900] text-slate-900 tracking-tighter leading-[1.1] group-hover:text-blue-700 transition-colors">
             {title}
-          </h4>
+          </h3>
           <p className="text-lg text-slate-500 font-medium leading-relaxed group-hover:text-slate-600 transition-colors">
             {desc}
           </p>
@@ -110,10 +110,10 @@ const Capabilities: React.FC = () => {
               <div className="h-px bg-slate-100 flex-1"></div>
             </div>
 
-            <h2 className="text-5xl md:text-8xl font-[900] tracking-tighter leading-[0.92] text-slate-950">
+            <h1 className="text-5xl md:text-8xl font-[900] tracking-tighter leading-[0.92] text-slate-950">
               Operational <br />
               <span className="text-slate-400">Modalities.</span>
-            </h2>
+            </h1>
 
             <p className="text-xl md:text-2xl text-slate-500 font-medium leading-relaxed max-w-2xl pt-2">
               I merge administrative precision with clinical technical automation to build the logic layers that scale without operational debt.

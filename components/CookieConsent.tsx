@@ -49,7 +49,7 @@ const CookieConsent: React.FC = () => {
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: 100, opacity: 0 }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
-                    className="fixed bottom-0 left-0 right-0 z-[60] p-4 md:p-6"
+                    className="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6"
                 >
                     <div className="max-w-4xl mx-auto bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl border border-slate-200 p-6 md:flex md:items-center md:justify-between gap-6">
                         <div className="flex-1 mb-4 md:mb-0">
@@ -59,7 +59,8 @@ const CookieConsent: React.FC = () => {
                             </div>
                             <p className="text-sm text-slate-600 leading-relaxed">
                                 We use cookies to analyze site traffic and enhance your experience.
-                                We don't sell your data. By clicking "Accept", you agree to our use of cookies.
+                                View our <a href="/cookies" className="underline text-blue-600 hover:text-blue-700 font-medium">Cookie Policy</a> for details.
+                                We don't sell your data.
                             </p>
                         </div>
                         <div className="flex flex-col sm:flex-row gap-3 min-w-[280px]">

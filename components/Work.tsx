@@ -4,6 +4,7 @@ import { PROJECTS } from '../constants';
 import { motion, AnimatePresence } from 'framer-motion';
 import SectionLabel from './shared/SectionLabel';
 import { trackProjectClick } from '../utils/analytics';
+import OptimizedImage from './OptimizedImage';
 
 
 const Sparkline: React.FC<{ data: number[]; color?: string }> = ({ data, color = "text-blue-600" }) => {
@@ -59,7 +60,7 @@ const Work: React.FC = () => {
   const filterOptions: ('All' | 'Automation' | 'Systems' | 'Governance' | 'Finance')[] = ['All', 'Automation', 'Systems', 'Governance', 'Finance'];
 
   return (
-    <section id="work" className="py-32 bg-[#F9FAFB]">
+    <section id="work" className="py-16 md:py-32 bg-[#F9FAFB]">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-16 mb-24">
           <div className="max-w-3xl space-y-6">
@@ -67,19 +68,19 @@ const Work: React.FC = () => {
               <SectionLabel>Enterprise Proof</SectionLabel>
               <div className="h-px bg-slate-100 flex-1"></div>
             </div>
-            <h1 className="sr-only">Portfolio Case Studies - Abu Rahat Sabir</h1>
-            <h2 className="text-5xl md:text-8xl font-[900] tracking-tighter leading-[0.92] text-slate-900">
+            <h1 className="text-5xl md:text-8xl font-[900] tracking-tighter leading-[0.92] text-slate-900">
               Case <span className="text-slate-400">Studies.</span>
-            </h2>
+            </h1>
           </div>
 
           <div className="w-full lg:w-auto overflow-x-auto no-scrollbar pb-2">
             <nav role="tablist" className="inline-flex items-center bg-slate-100/50 p-1 rounded-[1.25rem] border border-slate-200/40">
               {filterOptions.map((filter) => (
                 <button
+                  type="button"
                   key={filter}
                   onClick={() => setActiveFilter(filter)}
-                  className={`group relative flex items - center gap - 2 px - 6 py - 2.5 rounded - [1rem] transition - all duration - 300 whitespace - nowrap outline - none ${activeFilter === filter ? 'text-white' : 'text-slate-500 hover:text-slate-900'
+                  className={`group relative flex items-center gap-2 px-6 py-2.5 rounded-[1rem] transition-all duration-300 whitespace-nowrap outline-none ${activeFilter === filter ? 'text-white' : 'text-slate-500 hover:text-slate-900'
                     } `}
                 >
                   <span className="relative z-10 text-[10px] font-black uppercase tracking-[0.1em]">{filter}</span>
@@ -102,21 +103,57 @@ const Work: React.FC = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.98 }}
                 className="group cursor-pointer"
+                role="link"
+                tabIndex={0}
+                aria-label={`View full case study and audit record for ${project.title}`}
                 onClick={() => {
                   trackProjectClick({
                     projectName: project.title,
                     projectCategory: project.category
                   });
-                  window.location.hash = "#/work/" + project.id;
+                  window.history.pushState({}, '', `/work/${project.id}`);
+                  window.dispatchEvent(new PopStateEvent('popstate'));
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    trackProjectClick({
+                      projectName: project.title,
+                      projectCategory: project.category
+                    });
+                    window.history.pushState({}, '', `/work/${project.id}`);
+                    window.dispatchEvent(new PopStateEvent('popstate'));
+                  }
                 }}
 
               >
                 <div className="relative overflow-hidden rounded-[2.5rem] bg-white border border-slate-100 p-3 shadow-sm hover:shadow-2xl transition-all duration-500 h-full flex flex-col">
                   <div className="aspect-[16/10] overflow-hidden rounded-[1.8rem] relative bg-slate-50">
-                    <img src={project.image} alt={project.title} width={1600} height={1000} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" />
+                    <OptimizedImage
+                      src={project.image}
+                      srcSet={`${project.image.replace('.webp', '-600w.webp')} 600w, ${project.image.replace('.webp', '-900w.webp')} 900w, ${project.image.replace('.webp', '-1140w.webp')} 1140w`}
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 570px"
+                      alt={project.title}
+                      width={1140}
+                      height={714}
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
+                    />
                   </div>
                   <div className="p-8 flex-1 flex flex-col">
                     <p className="text-[9px] font-black uppercase tracking-widest text-blue-600 mb-1.5">{project.category} • {project.client}</p>
+
+                    {project.relevantFor && project.relevantFor.length > 0 && (
+                      <div className="flex flex-wrap items-center gap-2 mb-3">
+                        <span className="text-[8px] font-bold text-slate-500 uppercase tracking-wider">Relevant for:</span>
+                        {project.relevantFor.map(persona => (
+                          <span key={persona} className="text-[8px] px-2 py-1 bg-blue-50 text-blue-700 rounded-md font-bold uppercase tracking-wide">
+                            {persona}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
                     <h3 className="text-2xl font-black text-slate-900 group-hover:text-blue-600 transition-colors leading-tight mb-6">{project.title}</h3>
 
                     <div className="grid grid-cols-2 gap-4 bg-slate-50/50 p-6 rounded-3xl mt-auto">

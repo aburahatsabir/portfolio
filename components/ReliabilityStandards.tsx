@@ -40,9 +40,9 @@ const ReliabilityCard: React.FC<{ principle: Principle; index: number }> = ({ pr
         {/* Content Body */}
         <div className="space-y-4 flex-1">
           <p className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">{principle.concept}</p>
-          <h4 className="text-2xl md:text-3xl font-[900] text-slate-900 tracking-tighter leading-tight group-hover:text-blue-700 transition-colors">
+          <h3 className="text-2xl md:text-3xl font-[900] text-slate-900 tracking-tighter leading-tight group-hover:text-blue-700 transition-colors">
             {principle.title}
-          </h4>
+          </h3>
           <p className="text-base md:text-lg text-slate-500 font-medium leading-relaxed">
             {principle.description}
           </p>

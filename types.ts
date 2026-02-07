@@ -77,6 +77,7 @@ export interface Project {
   client: string;
   impact: string;
   technologies: string[];
+  relevantFor?: string[]; // Persona tags for discovery
   confidential?: boolean;
   performanceData?: number[];
   systemSpecs?: { label: string; value: string }[];
@@ -119,4 +120,6 @@ export interface Testimonial {
   position: string;
   content: string;
   avatar: string;
+  linkedInProfile?: string; // LinkedIn profile URL for the person
+  companyLinkedIn?: string; // LinkedIn company page URL
 }

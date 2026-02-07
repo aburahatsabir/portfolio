@@ -10,25 +10,7 @@
 
     <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-BGM02GLZ84"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-
-        // Default Consent Mode (Denied)
-        gtag('consent', 'default', {
-            'ad_storage': 'denied',
-            'ad_user_data': 'denied',
-            'ad_personalization': 'denied',
-            'analytics_storage': 'denied'
-        });
-
-        gtag('js', new Date());
-        gtag('config', 'G-BGM02GLZ84', {
-            'send_page_view': false
-        });
-
-
-    </script>
+    <script src="./scripts/ga4-init.js"></script>
 
 
     <meta charset="UTF-8">
@@ -39,19 +21,19 @@
 
     <!-- Open Graph / Social Media Meta Tags -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://aburahatsabir.github.io/portfolio/">
+    <meta property="og:url" content="https://aburahatsabir.vercel.app/">
     <meta property="og:title" content="Executive Architect | Systems Governance & Operations">
     <meta property="og:description"
         content="Strategic portfolio of a Corporate Operations Executive specializing in enterprise architecture, automation, and institutional governance.">
-    <meta property="og:image" content="https://aburahatsabir.github.io/portfolio/images/og-default.webp">
+    <meta property="og:image" content="https://aburahatsabir.vercel.app/images/og-default.webp">
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://aburahatsabir.github.io/portfolio/">
+    <meta name="twitter:url" content="https://aburahatsabir.vercel.app/">
     <meta name="twitter:title" content="Executive Architect | Systems Governance & Operations">
     <meta name="twitter:description"
         content="Strategic portfolio of a Corporate Operations Executive specializing in enterprise architecture, automation, and institutional governance.">
-    <meta name="twitter:image" content="https://aburahatsabir.github.io/portfolio/images/og-default.webp">
+    <meta name="twitter:image" content="https://aburahatsabir.vercel.app/images/og-default.webp">
 
     <!-- JSON-LD Schema Markup for Rich Search Results -->
     <script type="application/ld+json">
@@ -61,10 +43,11 @@
         "name": "Abu Rahat Sabir",
         "jobTitle": "Executive Architect | Systems Governance & Operations",
         "description": "Strategic portfolio of a Corporate Operations Executive specializing in enterprise architecture, automation, and institutional governance.",
-        "url": "https://abu-rahat-sabir.github.io",
+        "url": "https://aburahatsabir.vercel.app",
         "sameAs": [
-            "https://linkedin.com/in/abu-rahat-sabir",
-            "https://github.com/abu-rahat-sabir"
+            "https://linkedin.com/in/aburahatsabir78",
+            "https://github.com/aburahatsabir",
+            "https://x.com/AbuRahatsabir"
         ],
         "knowsAbout": [
             "Enterprise Architecture",
@@ -81,161 +64,122 @@
     }
     </script>
 
+    <!-- Organization Schema for Brand Credibility -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Abu Rahat Sabir Consulting",
+        "url": "https://aburahatsabir.vercel.app",
+        "logo": "https://aburahatsabir.vercel.app/images/icon-512.webp",
+        "sameAs": [
+            "https://linkedin.com/in/aburahatsabir78",
+            "https://github.com/aburahatsabir"
+        ],
+        "founder": {
+            "@type": "Person",
+            "name": "Abu Rahat Sabir"
+        },
+        "description": "Professional consulting services specializing in operations automation, Google Sheets development, and enterprise process optimization."
+    }
+    </script>
+
+    <!-- Service Schema for SEO Targeting -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Google Sheets & Operations Automation",
+        "provider": {
+            "@type": "Person",
+            "name": "Abu Rahat Sabir"
+        },
+        "areaServed": "Global",
+        "serviceType": "Business Process Automation",
+        "description": "Custom automation for Google Sheets, Apps Script, month-end close processes, and operational workflows. Proven results: 80%+ time savings for finance and operations teams.",
+        "offers": {
+            "@type": "Offer",
+            "priceCurrency": "USD",
+            "price": "5000-20000",
+            "description": "Custom automation solutions including Google Sheets development, Apps Script systems, and operational workflow optimization"
+        }
+    }
+    </script>
+
 
     <!-- PWA Manifest -->
     <link rel="manifest" href="./site.webmanifest">
 
-    <!-- Security Headers -->
+    <!-- 
+        Security Headers:
+        Security headers (X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy)
+        are configured as HTTP headers in vercel.json for proper server-side enforcement.
+        CSP (Content-Security-Policy) remains as meta tag for client-side policies.
+    -->
     <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; script-src 'self' https://www.googletagmanager.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.googletagmanager.com https://api.emailjs.com https://www.google-analytics.com https://generativelanguage.googleapis.com; frame-ancestors 'none';">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+        content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.googletagmanager.com https://api.emailjs.com https://www.google-analytics.com https://generativelanguage.googleapis.com https://*.sentry.io https://*.ingest.us.sentry.io https://*.ingest.sentry.io ws://localhost:* ws://192.168.*:*; frame-ancestors 'none';">
 
     <!-- Theme Colors -->
     <meta name="theme-color" content="#2563eb">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <!-- Fonts -->
+    <!-- Fonts: Optimized Loading Strategy -->
+    <!-- Preconnect to Google Fonts for faster DNS resolution -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- EmailJS API Preconnect for faster form submissions -->
     <link rel="preconnect" href="https://api.emailjs.com" crossorigin>
+    <link rel="dns-prefetch" href="https://api.emailjs.com">
+
+    <!-- Preload hero image for faster LCP -->
+    <link rel="preload" as="image" href="./images/hero/Abu Rahat Hero 01.webp" type="image/webp" fetchpriority="high">
+
+    <!-- 
+        Font Loading Strategy:
+        - All weights loaded with font-display: swap for consistent rendering
+        - Latin subset for smaller file sizes
+        - Matches production configuration for reliable performance
+    -->
     <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
-        rel="stylesheet" media="print" onload="this.media='all'">
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap&subset=latin"
+        rel="stylesheet">
+
+    <!-- Fallback for browsers without JavaScript -->
     <noscript>
         <link
-            href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap&subset=latin"
             rel="stylesheet">
     </noscript>
 
-    <!-- Preload Critical Assets -->
-    <link rel="preload" href="./images/og-default.webp" as="image">
-
+    <!-- Font Fallback: Use system fonts if Google Fonts fails to load -->
     <style>
-        :root {
-            --brand-blue: #2563eb;
-            --bg-main: #FFFFFF;
-            --text-main: #0F172A;
-            --slate-50: #F8FAFC;
-            --slate-100: #F1F5F9;
-            --slate-900: #0F172A;
-        }
-
+        /* Ensure graceful degradation to system fonts */
         body {
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-            font-display: swap;
-            scroll-behavior: smooth;
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            letter-spacing: -0.01em;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         }
 
-        .mono {
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .text-tight {
-            letter-spacing: -0.03em;
-        }
-
-        .text-tighter {
-            letter-spacing: -0.05em;
-        }
-
-        .glass-nav {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-
-        .executive-shadow {
-            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.05), 0 5px 20px -5px rgba(0, 0, 0, 0.02);
-        }
-
-        .btn-hover-effect {
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .btn-hover-effect:hover {
-            transform: translateY(-3px) scale(1.01);
-            box-shadow: 0 30px 60px -12px rgba(37, 99, 235, 0.25);
-        }
-
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--slate-50);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 20px;
-            border: 2px solid var(--slate-50);
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-
-        @keyframes subtle-float {
-            0% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-10px);
-            }
-
-            100% {
-                transform: translateY(0);
-            }
-        }
-
-        .animate-float {
-            animation: subtle-float 6s ease-in-out infinite;
-        }
-
-        .selection-blue::-moz-selection {
-            background-color: var(--brand-blue);
-            color: white;
-        }
-
-        .selection-blue::selection {
-            background-color: var(--brand-blue);
-            color: white;
-        }
-
-        .noise-bg {
-            position: relative;
-        }
-
-        .noise-bg::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.03;
-            pointer-events: none;
-            background-image: url("./images/effects/noise.svg");
-            z-index: 1;
+        code,
+        pre,
+        .font-mono {
+            font-family: 'JetBrains Mono', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
         }
     </style>
-  <script type="module" crossorigin src="/portfolio/assets/index-DGoQ9oq_.js"></script>
-  <link rel="modulepreload" crossorigin href="/portfolio/assets/motion-vendor-B1_Zydz6.js">
-  <link rel="modulepreload" crossorigin href="/portfolio/assets/react-vendor-DAwUIw_s.js">
-  <link rel="stylesheet" crossorigin href="/portfolio/assets/index-C2JJISUT.css">
+
+  <script type="module" crossorigin src="/assets/index-BMBlGQEZ.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/motion-vendor-xSJUr_-h.js">
+  <link rel="modulepreload" crossorigin href="/assets/react-vendor-UcashT4d.js">
+  <link rel="stylesheet" crossorigin href="/assets/index-DI-VgvBF.css">
 </head>
 
 <body class="selection-blue">
     <div id="root"></div>
+
+    <!-- Redirect legacy hash routes to clean paths for SEO continuity -->
+    <!-- Hash Route Redirect Handler -->
+    <script src="./scripts/hash-redirect.js"></script>
+
 </body>
 
 </html>

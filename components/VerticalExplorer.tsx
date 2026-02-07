@@ -1,9 +1,11 @@
 
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { INDUSTRY_BLUEPRINTS } from '../constants';
+import { IndustryBlueprint } from '../types';
 
-const BlueprintCard: React.FC<{ blueprint: any; index: number }> = ({ blueprint, index }) => {
+const BlueprintCard: React.FC<{ blueprint: IndustryBlueprint; index: number }> = ({ blueprint, index }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -76,7 +78,8 @@ const BlueprintCard: React.FC<{ blueprint: any; index: number }> = ({ blueprint,
             </div>
           </div>
           <button
-            onClick={() => window.location.hash = '#/contact'}
+            type="button"
+            onClick={() => { window.history.pushState({}, '', '/contact'); window.dispatchEvent(new PopStateEvent('popstate')); }}
             className="w-12 h-12 bg-slate-900 text-white rounded-2xl flex items-center justify-center group-hover:bg-blue-600 transition-all duration-500 shadow-xl"
             aria-label={`Inquire about ${blueprint.industry} solutions`}
           >
@@ -146,7 +149,8 @@ const VerticalExplorer: React.FC = () => {
             </div>
           </div>
           <button
-            onClick={() => window.location.hash = '#/contact'}
+            type="button"
+            onClick={() => { window.history.pushState({}, '', '/contact'); window.dispatchEvent(new PopStateEvent('popstate')); }}
             className="px-10 py-5 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-600 transition-all shadow-xl shadow-slate-900/10 whitespace-nowrap"
           >
             Request Sector Audit

@@ -25,18 +25,18 @@ const RoiCalculator: React.FC = () => {
               <span className="text-blue-500 underline decoration-slate-800">Manual Debt.</span>
             </h3>
             <p className="text-xl text-slate-400 leading-relaxed font-medium">
-              Most enterprises lose hundreds of thousands annually to inefficient "human-bridge" tasks. 
+              Most enterprises lose hundreds of thousands annually to inefficient "human-bridge" tasks.
               My systems typically reclaim 82% of this wasted capital.
             </p>
-            
+
             <div className="space-y-12 pt-8">
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <label className="text-sm font-bold uppercase tracking-widest text-slate-500">Team Size</label>
                   <span className="text-xl font-black">{employees} Employees</span>
                 </div>
-                <input 
-                  type="range" min="5" max="500" step="5" value={employees} 
+                <input
+                  type="range" min="5" max="500" step="5" value={employees}
                   onChange={(e) => setEmployees(parseInt(e.target.value))}
                   className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-600"
                 />
@@ -47,8 +47,8 @@ const RoiCalculator: React.FC = () => {
                   <label className="text-sm font-bold uppercase tracking-widest text-slate-500">Weekly Manual Hours / Person</label>
                   <span className="text-xl font-black">{hoursPerWeek} Hours</span>
                 </div>
-                <input 
-                  type="range" min="1" max="20" step="1" value={hoursPerWeek} 
+                <input
+                  type="range" min="1" max="20" step="1" value={hoursPerWeek}
                   onChange={(e) => setHoursPerWeek(parseInt(e.target.value))}
                   className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-600"
                 />
@@ -59,8 +59,8 @@ const RoiCalculator: React.FC = () => {
                   <label className="text-sm font-bold uppercase tracking-widest text-slate-500">Avg. Internal Hourly Rate</label>
                   <span className="text-xl font-black">${hourlyRate}/hr</span>
                 </div>
-                <input 
-                  type="range" min="30" max="250" step="5" value={hourlyRate} 
+                <input
+                  type="range" min="30" max="250" step="5" value={hourlyRate}
                   onChange={(e) => setHourlyRate(parseInt(e.target.value))}
                   className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-600"
                 />
@@ -68,7 +68,7 @@ const RoiCalculator: React.FC = () => {
             </div>
           </div>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             className="bg-white text-slate-900 rounded-[4rem] p-12 md:p-16 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] border border-slate-100"
@@ -96,9 +96,9 @@ const RoiCalculator: React.FC = () => {
                 <p className="text-slate-500 font-medium leading-relaxed">
                   Calculated based on average automation efficiency gains for teams in the {employees > 100 ? 'Enterprise' : 'Mid-Market'} sector.
                 </p>
-                <button className="w-full py-6 bg-black text-white rounded-2xl font-black text-lg hover:bg-slate-800 transition-all shadow-xl flex items-center justify-center gap-3">
+                <button type="button" className="w-full py-6 bg-black text-white rounded-2xl font-black text-lg hover:bg-slate-800 transition-all shadow-xl flex items-center justify-center gap-3">
                   Get Detailed Efficiency Audit
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                 </button>
               </div>
             </div>

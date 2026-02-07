@@ -35,7 +35,7 @@ const RatingSystem: React.FC<{ postId: string }> = ({ postId }) => {
     <div className="py-12 border-y border-slate-100 my-20">
       <div className="flex flex-col md:flex-row items-center justify-between gap-8">
         <div className="space-y-2 text-center md:text-left">
-          <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600">Content Efficacy Audit</h4>
+          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600">Content Efficacy Audit</p>
           <p className="text-xl font-black text-slate-900 tracking-tight">Was this strategic insight useful?</p>
         </div>
 
@@ -43,6 +43,7 @@ const RatingSystem: React.FC<{ postId: string }> = ({ postId }) => {
           <div className="flex items-center gap-2">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
+                type="button"
                 key={star}
                 onMouseEnter={() => setHoveredRating(star)}
                 onMouseLeave={() => setHoveredRating(null)}
@@ -150,6 +151,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
       <div className="hidden xl:flex fixed left-12 top-1/2 -translate-y-1/2 flex-col gap-4 z-[100]">
         <div className="flex flex-col gap-3 p-3 glass-nav border border-slate-100 rounded-[2rem] shadow-xl shadow-slate-200/50">
           <button
+            type="button"
             onClick={() => handleShare('linkedin')}
             className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white border border-slate-100 hover:bg-blue-600 hover:border-blue-600 group transition-all duration-300"
           >
@@ -158,6 +160,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
             </svg>
           </button>
           <button
+            type="button"
             onClick={() => handleShare('twitter')}
             className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white border border-slate-100 hover:bg-slate-900 hover:border-slate-900 group transition-all duration-300"
           >
@@ -167,6 +170,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
           </button>
           <div className="h-px bg-slate-100 mx-2"></div>
           <button
+            type="button"
             onClick={() => handleShare('copy')}
             className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white border border-slate-100 hover:bg-slate-50 group transition-all duration-300 relative"
           >
@@ -179,7 +183,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
 
       <div className="max-w-7xl mx-auto px-6">
         <a
-          href="#/blog"
+          href="/blog"
           className="inline-flex items-center gap-2 text-slate-400 hover:text-blue-600 font-black text-[10px] uppercase tracking-[0.2em] mb-12 transition-colors group"
         >
           <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -235,7 +239,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
                 {relatedPosts.map(related => (
                   <motion.a
                     key={related.id}
-                    href={`#/blog/${related.id}`}
+                    href={`/blog/${related.id}`}
                     whileHover={{ y: -10, scale: 1.02 }}
                     className="block p-10 bg-slate-50 border border-slate-100 rounded-[3rem] group hover:border-blue-600/30 hover:bg-white transition-all duration-300"
                   >
@@ -292,16 +296,16 @@ const BlogSeries: React.FC = () => {
 
   useEffect(() => {
     const handleHash = () => {
-      const hash = window.location.hash;
-      if (hash.startsWith('#/blog/')) {
-        setSelectedPostId(hash.replace('#/blog/', ''));
+      const path = window.location.pathname;
+      if (path.startsWith('/blog/')) {
+        setSelectedPostId(path.replace('/blog/', ''));
       } else {
         setSelectedPostId(null);
       }
     };
     handleHash();
-    window.addEventListener('hashchange', handleHash);
-    return () => window.removeEventListener('hashchange', handleHash);
+    window.addEventListener('popstate', handleHash);
+    return () => window.removeEventListener('popstate', handleHash);
   }, []);
 
   const filteredPosts = useMemo(() => {
@@ -360,7 +364,7 @@ const BlogSeries: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 className="bg-white rounded-[3rem] p-10 md:p-14 border border-slate-100 hover:border-blue-600/30 shadow-sm hover:shadow-2xl transition-all duration-300 group flex flex-col cursor-pointer h-full"
-                onClick={() => window.location.hash = `#/blog/${post.id}`}
+                onClick={() => { window.history.pushState({}, '', `/blog/${post.id}`); window.dispatchEvent(new PopStateEvent('popstate')); }}
               >
                 <div className="flex justify-between items-center mb-10">
                   <span className="px-4 py-1.5 bg-slate-900 text-white rounded-full text-[10px] font-black uppercase tracking-widest">

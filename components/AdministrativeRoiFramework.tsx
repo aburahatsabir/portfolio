@@ -40,9 +40,9 @@ const RoiCard: React.FC<{ pillar: Pillar; index: number }> = ({ pillar, index })
 
         {/* Content Body */}
         <div className="space-y-6 flex-1">
-          <h4 className="text-3xl font-[900] text-slate-900 tracking-tighter leading-none group-hover:text-blue-700 transition-colors">
+          <h3 className="text-3xl font-[900] text-slate-900 tracking-tighter leading-none group-hover:text-blue-700 transition-colors">
             {pillar.title}
-          </h4>
+          </h3>
           <p className="text-base md:text-lg text-slate-500 font-medium leading-relaxed">
             {pillar.description}
           </p>
@@ -122,7 +122,7 @@ const AdministrativeRoiFramework: React.FC = () => {
               <span className="text-[10px] font-black uppercase tracking-[0.4em] text-blue-600">Performance Metrics</span>
               <div className="h-px bg-slate-100 flex-1"></div>
             </div>
-            
+
             <h2 className="text-5xl md:text-8xl font-[900] tracking-tighter leading-[0.92] text-slate-950">
               Strategic <br />
               <span className="text-slate-400">ROI.</span>
@@ -134,33 +134,33 @@ const AdministrativeRoiFramework: React.FC = () => {
           </div>
 
           <div className="hidden lg:flex flex-col items-end gap-6 shrink-0 pb-2">
-             <div className="flex flex-col items-end gap-1">
-                <span className="mono text-[9px] font-black text-slate-400 uppercase tracking-widest">Global Asset Yield</span>
-                <span className="text-5xl font-black text-slate-950 tracking-tighter leading-none">$2.4M+</span>
-             </div>
-             <div className="px-6 py-3 bg-blue-600 rounded-xl shadow-xl shadow-blue-200">
-                <p className="text-[9px] font-black text-blue-100 uppercase tracking-widest mb-1 text-center">Efficiency Delta</p>
-                <p className="text-2xl font-black text-white leading-none">400%</p>
-             </div>
+            <div className="flex flex-col items-end gap-1">
+              <span className="mono text-[9px] font-black text-slate-400 uppercase tracking-widest">Global Asset Yield</span>
+              <span className="text-5xl font-black text-slate-950 tracking-tighter leading-none">$2.4M+</span>
+            </div>
+            <div className="px-6 py-3 bg-blue-600 rounded-xl shadow-xl shadow-blue-200">
+              <p className="text-[9px] font-black text-blue-100 uppercase tracking-widest mb-1 text-center">Efficiency Delta</p>
+              <p className="text-2xl font-black text-white leading-none">400%</p>
+            </div>
           </div>
         </div>
 
         {/* Global ROI Dashboard Summary Bar */}
         <div className="mb-12 p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 grid md:grid-cols-4 gap-8">
-           {[
-             { label: 'Reclaimed Hours', val: '12,400+', unit: 'Hrs/Yr', color: 'text-blue-600' },
-             { label: 'Error Incidence', val: '0.00', unit: '% Rate', color: 'text-emerald-500' },
-             { label: 'Compliance Index', val: '100', unit: '/ 100', color: 'text-slate-900' },
-             { label: 'Process Velocity', val: '12.4x', unit: 'Increase', color: 'text-blue-600' },
-           ].map(stat => (
-             <div key={stat.label} className="space-y-1 text-center md:text-left">
-                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{stat.label}</p>
-                <div className="flex items-baseline justify-center md:justify-start gap-2">
-                   <span className={`text-3xl font-black tracking-tighter ${stat.color}`}>{stat.val}</span>
-                   <span className="text-[10px] font-black text-slate-400 uppercase">{stat.unit}</span>
-                </div>
-             </div>
-           ))}
+          {[
+            { label: 'Reclaimed Hours', val: '12,400+', unit: 'Hrs/Yr', color: 'text-blue-600' },
+            { label: 'Error Incidence', val: '0.00', unit: '% Rate', color: 'text-emerald-500' },
+            { label: 'Compliance Index', val: '100', unit: '/ 100', color: 'text-slate-900' },
+            { label: 'Process Velocity', val: '12.4x', unit: 'Increase', color: 'text-blue-600' },
+          ].map(stat => (
+            <div key={stat.label} className="space-y-1 text-center md:text-left">
+              <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{stat.label}</p>
+              <div className="flex items-baseline justify-center md:justify-start gap-2">
+                <span className={`text-3xl font-black tracking-tighter ${stat.color}`}>{stat.val}</span>
+                <span className="text-[10px] font-black text-slate-400 uppercase">{stat.unit}</span>
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Pillars Grid */}

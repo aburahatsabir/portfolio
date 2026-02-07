@@ -126,6 +126,7 @@ const SocialLinks: React.FC<SocialLinksProps> = ({
                         target="_blank"
                         rel="noopener noreferrer"
                         className="hover:text-blue-600 transition-colors text-[9px] font-black uppercase tracking-widest"
+                        aria-label={`Visit ${link.name} profile`}
                         onClick={() => trackSocialClick({ platform: link.name, location: 'text' })}
                     >
                         {link.name}

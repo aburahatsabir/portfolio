@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { TESTIMONIALS, PROJECTS } from '../constants';
+import OptimizedImage from './OptimizedImage';
 
 interface PersonaConfig {
     id: string;
@@ -82,9 +83,9 @@ const PERSONAS: Record<string, PersonaConfig> = {
         ],
         cta: {
             primary: 'See How I Automated Executive Operations',
-            primaryLink: '#/work',
+            primaryLink: '/work',
             secondary: 'Schedule a Consultation',
-            secondaryLink: '#/contact'
+            secondaryLink: '/contact'
         },
         relevantCaseStudies: ['fmcg-erp', 'med-ops'],
         relevantTestimonials: [1, 2]
@@ -140,12 +141,12 @@ const PERSONAS: Record<string, PersonaConfig> = {
         ],
         cta: {
             primary: 'Explore Operational Systems Architecture',
-            primaryLink: '#/solutions',
+            primaryLink: '/solutions',
             secondary: 'Request Systems Audit',
-            secondaryLink: '#/diagnostic'
+            secondaryLink: '/contact'
         },
         relevantCaseStudies: ['med-ops', 'fmcg-erp', 'payroll-control'],
-        relevantTestimonials: [3, 4]
+        relevantTestimonials: [0, 2]
     },
     'founders': {
         id: 'founders',
@@ -198,9 +199,9 @@ const PERSONAS: Record<string, PersonaConfig> = {
         ],
         cta: {
             primary: 'Calculate Your Savings Potential',
-            primaryLink: '#/diagnostic',
+            primaryLink: '/work',
             secondary: 'See Case Studies',
-            secondaryLink: '#/work'
+            secondaryLink: '/work'
         },
         relevantCaseStudies: ['trade-finance', 'fmcg-erp', 'hr-docs'],
         relevantTestimonials: [0, 1]
@@ -256,12 +257,12 @@ const PERSONAS: Record<string, PersonaConfig> = {
         ],
         cta: {
             primary: 'Review My Professional Background',
-            primaryLink: '#/about',
+            primaryLink: '/about',
             secondary: 'Download Resume',
-            secondaryLink: '#/contact'
+            secondaryLink: '/contact'
         },
         relevantCaseStudies: ['payroll-control', 'hr-docs', 'med-ops'],
-        relevantTestimonials: [1, 2, 3]
+        relevantTestimonials: [0, 1, 2]
     }
 };
 
@@ -277,7 +278,7 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-center">
                     <h1 className="text-4xl font-bold text-slate-900 mb-4">Persona Not Found</h1>
-                    <a href="#/" className="text-blue-700 hover:underline">Return to Home</a>
+                    <a href="/" className="text-blue-700 hover:underline">Return to Home</a>
                 </div>
             </div>
         );
@@ -417,10 +418,11 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
                             {relevantCaseStudies.slice(0, 3).map((project, idx) => (
                                 <motion.a
                                     key={project.id}
-                                    href="#/work/{project.id}"
+                                    href={`/work/${project.id}`}
                                     onClick={(e) => {
                                         e.preventDefault();
-                                        window.location.hash = "#/work/" + project.id;
+                                        window.history.pushState({}, '', `/work/${project.id}`);
+                                        window.dispatchEvent(new PopStateEvent('popstate'));
                                         window.scrollTo(0, 0);
                                     }}
                                     initial={{ opacity: 0, y: 20 }}
@@ -471,10 +473,39 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
                                 >
                                     <p className="text-lg text-slate-700 mb-6 italic">"{testimonial.content}"</p>
                                     <div className="flex items-center gap-4">
-                                        <img src={testimonial.avatar} alt={testimonial.name} width={256} height={256} className="w-12 h-12 rounded-full" />
+                                        <OptimizedImage
+                                            src={testimonial.avatar}
+                                            alt={testimonial.name}
+                                            width={256}
+                                            height={256}
+                                            loading="lazy"
+                                            className="w-12 h-12 rounded-full"
+                                        />
                                         <div>
-                                            <div className="font-bold text-slate-900">{testimonial.name}</div>
-                                            <div className="text-sm text-slate-600">{testimonial.position}</div>
+                                            {testimonial.linkedInProfile ? (
+                                                <a
+                                                    href={testimonial.linkedInProfile}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="font-bold text-slate-900 hover:text-blue-600 transition-colors"
+                                                >
+                                                    {testimonial.name}
+                                                </a>
+                                            ) : (
+                                                <div className="font-bold text-slate-900">{testimonial.name}</div>
+                                            )}
+                                            {testimonial.companyLinkedIn ? (
+                                                <a
+                                                    href={testimonial.companyLinkedIn}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-sm text-slate-600 hover:text-blue-600 transition-colors"
+                                                >
+                                                    {testimonial.position}
+                                                </a>
+                                            ) : (
+                                                <div className="text-sm text-slate-600">{testimonial.position}</div>
+                                            )}
                                         </div>
                                     </div>
                                 </motion.div>
@@ -497,13 +528,23 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <a
                             href={persona.cta.primaryLink}
-                            className="px-10 py-5 bg-blue-700 hover:bg-blue-600 text-white rounded-xl font-bold text-sm uppercase tracking-wider transition-all shadow-lg hover:shadow-xl"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                window.history.pushState({}, '', persona.cta.primaryLink);
+                                window.dispatchEvent(new PopStateEvent('popstate'));
+                            }}
+                            className="px-10 py-5 bg-blue-700 hover:bg-blue-600 text-white rounded-xl font-bold text-sm uppercase tracking-wider transition-all shadow-lg hover:shadow-xl cursor-pointer"
                         >
                             {persona.cta.primary}
                         </a>
                         <a
                             href={persona.cta.secondaryLink}
-                            className="px-10 py-5 bg-white hover:bg-slate-100 text-slate-900 rounded-xl font-bold text-sm uppercase tracking-wider transition-all"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                window.history.pushState({}, '', persona.cta.secondaryLink);
+                                window.dispatchEvent(new PopStateEvent('popstate'));
+                            }}
+                            className="px-10 py-5 bg-white hover:bg-slate-100 text-slate-900 rounded-xl font-bold text-sm uppercase tracking-wider transition-all cursor-pointer"
                         >
                             {persona.cta.secondary}
                         </a>

@@ -3,6 +3,10 @@
  * Event tracking for Google Analytics 4
  */
 
+// Import Sentry for error logging
+import { captureError } from './sentry';
+import { analyticsFallback } from './analytics-fallback';
+
 // Type definitions for analytics events
 export interface ContactCTAEvent {
     location: string;
@@ -48,16 +52,45 @@ const isGALoaded = (): boolean => {
 };
 
 /**
+ * Send event to GA4 or queue if unavailable
+ */
+const sendEvent = (eventName: string, params: Record<string, any> = {}): void => {
+    if (isGALoaded()) {
+        try {
+            (window as any).gtag('event', eventName, params);
+        } catch (error) {
+            console.error(`[Analytics] Failed to track ${eventName}:`, error);
+
+            // Log to Sentry for production visibility
+            captureError(error as Error, {
+                component: 'Analytics',
+                eventName,
+                params,
+            });
+        }
+    } else {
+        // GA4 blocked - queue event for later
+        console.warn(`[Analytics] GA4 not loaded, queuing event: ${eventName}`);
+        analyticsFallback.queueEvent(eventName, params);
+
+        // Log to Sentry (only once per session)
+        if (!sessionStorage.getItem('analytics_blocked_logged')) {
+            sessionStorage.setItem('analytics_blocked_logged', 'true');
+            captureError(new Error('Google Analytics Blocked'), {
+                component: 'Analytics',
+                queuedEvent: eventName,
+                userAgent: navigator.userAgent,
+            });
+        }
+    }
+};
+
+/**
  * Track contact CTA clicks
  * @param event - Contact CTA event data
  */
 export const trackContactCTA = (event: ContactCTAEvent): void => {
-    if (!isGALoaded()) {
-        console.warn('Google Analytics not loaded');
-        return;
-    }
-
-    (window as any).gtag('event', 'contact_cta_click', {
+    sendEvent('contact_cta_click', {
         event_category: 'Conversion',
         event_label: event.label || event.location,
         location: event.location,
@@ -70,12 +103,7 @@ export const trackContactCTA = (event: ContactCTAEvent): void => {
  * @param event - Form submission event data
  */
 export const trackFormSubmission = (event: FormSubmissionEvent): void => {
-    if (!isGALoaded()) {
-        console.warn('Google Analytics not loaded');
-        return;
-    }
-
-    (window as any).gtag('event', 'form_submission', {
+    sendEvent('form_submission', {
         event_category: 'Conversion',
         form_type: event.formType,
         role: event.role,
@@ -89,12 +117,7 @@ export const trackFormSubmission = (event: FormSubmissionEvent): void => {
  * @param event - Email click event data
  */
 export const trackEmailClick = (event: EmailClickEvent): void => {
-    if (!isGALoaded()) {
-        console.warn('Google Analytics not loaded');
-        return;
-    }
-
-    (window as any).gtag('event', 'email_click', {
+    sendEvent('email_click', {
         event_category: 'Engagement',
         event_label: event.source,
         source: event.source,
@@ -107,12 +130,7 @@ export const trackEmailClick = (event: EmailClickEvent): void => {
  * @param event - Page view event data
  */
 export const trackPageView = (event: PageViewEvent): void => {
-    if (!isGALoaded()) {
-        console.warn('Google Analytics not loaded');
-        return;
-    }
-
-    (window as any).gtag('event', 'page_view', {
+    sendEvent('page_view', {
         page_path: event.route,
         page_title: event.title,
     });
@@ -123,12 +141,7 @@ export const trackPageView = (event: PageViewEvent): void => {
  * @param source - Where the download was initiated from
  */
 export const trackResumeDownload = (source: string): void => {
-    if (!isGALoaded()) {
-        console.warn('Google Analytics not loaded');
-        return;
-    }
-
-    (window as any).gtag('event', 'resume_download', {
+    sendEvent('resume_download', {
         event_category: 'Conversion',
         event_label: source,
         source: source,
@@ -141,12 +154,7 @@ export const trackResumeDownload = (source: string): void => {
  * @param label - Optional label for the link
  */
 export const trackOutboundLink = (url: string, label?: string): void => {
-    if (!isGALoaded()) {
-        console.warn('Google Analytics not loaded');
-        return;
-    }
-
-    (window as any).gtag('event', 'click', {
+    sendEvent('click', {
         event_category: 'Outbound Link',
         event_label: label || url,
         url: url,
@@ -159,12 +167,7 @@ export const trackOutboundLink = (url: string, label?: string): void => {
  * @param params - Event parameters
  */
 export const trackCustomEvent = (eventName: string, params?: Record<string, any>): void => {
-    if (!isGALoaded()) {
-        console.warn('Google Analytics not loaded');
-        return;
-    }
-
-    (window as any).gtag('event', eventName, params);
+    sendEvent(eventName, params || {});
 };
 
 /**
@@ -173,15 +176,19 @@ export const trackCustomEvent = (eventName: string, params?: Record<string, any>
  */
 export const trackSocialClick = (event: SocialClickEvent): void => {
     if (!isGALoaded()) {
-        console.warn('Google Analytics not loaded');
+        console.warn('[Analytics] Google Analytics not loaded');
         return;
     }
 
-    (window as any).gtag('event', 'social_click', {
-        event_category: 'Engagement',
-        platform: event.platform,
-        location: event.location,
-    });
+    try {
+        (window as any).gtag('event', 'social_click', {
+            event_category: 'Engagement',
+            platform: event.platform,
+            location: event.location,
+        });
+    } catch (error) {
+        console.error('[Analytics] Failed to track social click:', error);
+    }
 };
 
 /**
@@ -190,15 +197,19 @@ export const trackSocialClick = (event: SocialClickEvent): void => {
  */
 export const trackScrollDepth = (event: ScrollDepthEvent): void => {
     if (!isGALoaded()) {
-        console.warn('Google Analytics not loaded');
+        console.warn('[Analytics] Google Analytics not loaded');
         return;
     }
 
-    (window as any).gtag('event', 'scroll_depth', {
-        event_category: 'Engagement',
-        depth: event.depth,
-        page: event.page,
-    });
+    try {
+        (window as any).gtag('event', 'scroll_depth', {
+            event_category: 'Engagement',
+            depth: event.depth,
+            page: event.page,
+        });
+    } catch (error) {
+        console.error('[Analytics] Failed to track scroll depth:', error);
+    }
 };
 /**
  * Track project card clicks
@@ -206,15 +217,19 @@ export const trackScrollDepth = (event: ScrollDepthEvent): void => {
  */
 export const trackProjectClick = (event: ProjectClickEvent): void => {
     if (!isGALoaded()) {
-        console.warn('Google Analytics not loaded');
+        console.warn('[Analytics] Google Analytics not loaded');
         return;
     }
 
-    (window as any).gtag('event', 'project_click', {
-        event_category: 'Engagement',
-        project_name: event.projectName,
-        project_category: event.projectCategory,
-    });
+    try {
+        (window as any).gtag('event', 'project_click', {
+            event_category: 'Engagement',
+            project_name: event.projectName,
+            project_category: event.projectCategory,
+        });
+    } catch (error) {
+        console.error('[Analytics] Failed to track project click:', error);
+    }
 };
 
 /**
@@ -224,15 +239,19 @@ export const trackProjectClick = (event: ProjectClickEvent): void => {
  */
 export const trackEngagementTime = (page: string, timeInSeconds: number): void => {
     if (!isGALoaded()) {
-        console.warn('Google Analytics not loaded');
+        console.warn('[Analytics] Google Analytics not loaded');
         return;
     }
 
-    (window as any).gtag('event', 'user_engagement', {
-        event_category: 'Engagement',
-        engagement_time_msec: timeInSeconds * 1000,
-        page_path: page,
-    });
+    try {
+        (window as any).gtag('event', 'user_engagement', {
+            event_category: 'Engagement',
+            engagement_time_msec: timeInSeconds * 1000,
+            page_path: page,
+        });
+    } catch (error) {
+        console.error('[Analytics] Failed to track engagement time:', error);
+    }
 };
 
 /**
@@ -242,15 +261,19 @@ export const trackEngagementTime = (page: string, timeInSeconds: number): void =
  */
 export const trackNavigation = (from: string, to: string): void => {
     if (!isGALoaded()) {
-        console.warn('Google Analytics not loaded');
+        console.warn('[Analytics] Google Analytics not loaded');
         return;
     }
 
-    (window as any).gtag('event', 'navigation', {
-        event_category: 'User Journey',
-        from_page: from,
-        to_page: to,
-    });
+    try {
+        (window as any).gtag('event', 'navigation', {
+            event_category: 'User Journey',
+            from_page: from,
+            to_page: to,
+        });
+    } catch (error) {
+        console.error('[Analytics] Failed to track navigation:', error);
+    }
 };
 
 /**
@@ -260,16 +283,21 @@ export const trackNavigation = (from: string, to: string): void => {
  */
 export const trackError = (error: string | Error, fatal: boolean = false): void => {
     if (!isGALoaded()) {
-        console.warn('Google Analytics not loaded');
+        console.warn('[Analytics] Google Analytics not loaded');
         return;
     }
 
-    const errorMessage = error instanceof Error ? error.message : error;
+    try {
+        const errorMessage = error instanceof Error ? error.message : error;
 
-    (window as any).gtag('event', 'exception', {
-        description: errorMessage,
-        fatal: fatal,
-    });
+        (window as any).gtag('event', 'exception', {
+            description: errorMessage,
+            fatal: fatal,
+        });
+    } catch (err) {
+        console.error('[Analytics] Failed to track error:', err);
+        // Don't send to Sentry (would create infinite loop)
+    }
 };
 
 /**
@@ -284,14 +312,18 @@ export const trackMediaInteraction = (
     mediaName: string
 ): void => {
     if (!isGALoaded()) {
-        console.warn('Google Analytics not loaded');
+        console.warn('[Analytics] Google Analytics not loaded');
         return;
     }
 
-    (window as any).gtag('event', 'media_interaction', {
-        event_category: 'Engagement',
-        media_type: mediaType,
-        action: action,
-        media_name: mediaName,
-    });
+    try {
+        (window as any).gtag('event', 'media_interaction', {
+            event_category: 'Engagement',
+            media_type: mediaType,
+            action: action,
+            media_name: mediaName,
+        });
+    } catch (error) {
+        console.error('[Analytics] Failed to track media interaction:', error);
+    }
 };

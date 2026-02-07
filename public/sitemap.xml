@@ -1,57 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-  
-  <!-- Homepage (Single Page Application with Hash Routing) -->
-  <!-- Note: Search engines ignore hash fragments (#/about, #/work, etc.) -->
-  <!-- All routes are accessible from this single URL via client-side routing -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://aburahatsabir.github.io/portfolio/</loc>
-    <lastmod>2026-01-26</lastmod>
+    <lastmod>2026-02-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    
-    <!-- Project Images for Google Image Search -->
-    <image:image>
-      <image:loc>https://aburahatsabir.github.io/portfolio/images/projects/fmcg-erp.webp</image:loc>
-      <image:title>Integrated FMCG Distribution ERP - Case Study</image:title>
-    </image:image>
-    
-    <image:image>
-      <image:loc>https://aburahatsabir.github.io/portfolio/images/projects/med-ops.webp</image:loc>
-      <image:title>Medical Operations Control System - Case Study</image:title>
-    </image:image>
-    
-    <image:image>
-      <image:loc>https://aburahatsabir.github.io/portfolio/images/projects/hr-docs.webp</image:loc>
-      <image:title>HR Documentation System - Case Study</image:title>
-    </image:image>
-    
-    <image:image>
-      <image:loc>https://aburahatsabir.github.io/portfolio/images/projects/payroll-control.webp</image:loc>
-      <image:title>Multi-Entity Payroll &amp; Compensation Control System - Case Study</image:title>
-    </image:image>
-    
-    <image:image>
-      <image:loc>https://aburahatsabir.github.io/portfolio/images/projects/trade-finance.webp</image:loc>
-      <image:title>Trade Finance &amp; Commission Control Ledger - Case Study</image:title>
-    </image:image>
-    
-    <!-- Open Graph Images -->
-    <image:image>
-      <image:loc>https://aburahatsabir.github.io/portfolio/images/og-default.webp</image:loc>
-      <image:title>Abu Rahat Sabir - Executive Architect Portfolio</image:title>
-    </image:image>
-    
-    <image:image>
-      <image:loc>https://aburahatsabir.github.io/portfolio/images/og-work.webp</image:loc>
-      <image:title>Work Portfolio - Abu Rahat Sabir</image:title>
-    </image:image>
-    
-    <image:image>
-      <image:loc>https://aburahatsabir.github.io/portfolio/images/og-about.webp</image:loc>
-      <image:title>About Abu Rahat Sabir</image:title>
-    </image:image>
   </url>
-
+  <url>
+    <loc>https://aburahatsabir.github.io/portfolio/about</loc>
+    <lastmod>2026-02-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.github.io/portfolio/work</loc>
+    <lastmod>2026-02-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.github.io/portfolio/solutions</loc>
+    <lastmod>2026-02-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.github.io/portfolio/governance</loc>
+    <lastmod>2026-02-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.github.io/portfolio/blog</loc>
+    <lastmod>2026-02-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.github.io/portfolio/for</loc>
+    <lastmod>2026-02-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.github.io/portfolio/contact</loc>
+    <lastmod>2026-02-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.github.io/portfolio/post-mortems</loc>
+    <lastmod>2026-02-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.github.io/portfolio/success-stories</loc>
+    <lastmod>2026-02-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.github.io/portfolio/privacy</loc>
+    <lastmod>2026-02-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.github.io/portfolio/cookies</loc>
+    <lastmod>2026-02-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.github.io/portfolio/persona/executive-assistants</loc>
+    <lastmod>2026-02-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.github.io/portfolio/persona/operations-leaders</loc>
+    <lastmod>2026-02-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.github.io/portfolio/persona/founders</loc>
+    <lastmod>2026-02-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.github.io/portfolio/persona/hiring-managers</loc>
+    <lastmod>2026-02-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.github.io/portfolio/work/fmcg-distribution-erp</loc>
+    <lastmod>2026-02-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.github.io/portfolio/work/medical-ops-control</loc>
+    <lastmod>2026-02-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.github.io/portfolio/work/payroll-engine</loc>
+    <lastmod>2026-02-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.github.io/portfolio/work/trade-finance-ledger</loc>
+    <lastmod>2026-02-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>

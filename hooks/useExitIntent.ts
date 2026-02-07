@@ -22,7 +22,7 @@ export const useExitIntent = (enabled: boolean = true) => {
 
                 trackCustomEvent('exit_intent', {
                     event_category: 'User Behavior',
-                    page: window.location.hash || '#/',
+                    page: window.location.pathname || '/',
                     time_on_page: Math.round((Date.now() - performance.timing.navigationStart) / 1000)
                 });
             }

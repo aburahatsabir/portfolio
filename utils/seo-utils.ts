@@ -3,12 +3,17 @@ import { PROJECTS } from '../constants';
 // Re-export schema utilities for centralized SEO management
 export {
     generatePersonSchema,
+    generateWebSiteSchema,
+    generateOrganizationSchema,
+    generateServiceSchema,
     generateFAQSchema,
     generateBreadcrumbSchema,
     generateBlogPostingSchema,
+    generateArticleSchema,
     injectSchema,
     removeSchema
 } from './seo-schema';
+
 
 interface PageMetadata {
     title: string;
@@ -21,114 +26,109 @@ interface PageMetadata {
 const DEFAULT_METADATA: PageMetadata = {
     title: 'Executive Architect | Systems Governance & Operations',
     description: 'Strategic portfolio of a Corporate Operations Executive specializing in enterprise architecture, automation, and institutional governance.',
-    ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-default.webp',
+    ogImage: '/images/og-default.webp',
     ogType: 'website'
 };
 
 // Route-specific metadata
 const ROUTE_METADATA: Record<string, PageMetadata> = {
-    '#/': DEFAULT_METADATA,
+    '/': DEFAULT_METADATA,
 
-    '#/work': {
+    '/work': {
         title: 'Work Portfolio | Abu Rahat Sabir',
         description: 'Case studies and project archives showcasing enterprise systems architecture, automation, and operational governance solutions.',
-        ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-work.webp',
+        ogImage: '/images/og-work.webp',
         ogType: 'website'
     },
 
-    '#/about': {
+    '/about': {
         title: 'About | Abu Rahat Sabir - Executive Architect',
         description: 'Executive Admin and Automation Specialist with expertise in institutional governance, VBA/Apps Script systems, and enterprise operations.',
-        ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-about.webp',
+        ogImage: '/images/og-about.webp',
         ogType: 'profile'
     },
 
-    '#/contact': {
+    '/contact': {
         title: 'Contact | Abu Rahat Sabir',
         description: 'Get in touch for strategic consultation on enterprise architecture, automation systems, and operational governance.',
-        ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-contact.webp',
+        ogImage: '/images/og-contact.webp',
         ogType: 'website'
     },
 
-    '#/solutions': {
+    '/solutions': {
         title: 'Solutions & Capabilities | Abu Rahat Sabir',
         description: 'Enterprise automation solutions, administrative ROI frameworks, and operational governance capabilities.',
-        ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-solutions.webp',
+        ogImage: '/images/og-solutions.webp',
         ogType: 'website'
     },
 
-    '#/diagnostic': {
-        title: 'Systems Audit & Diagnostic | Abu Rahat Sabir',
-        description: 'Comprehensive systems auditing and diagnostic services for enterprise operations and governance.',
-        ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-diagnostic.webp',
-        ogType: 'website'
-    },
 
-    '#/governance': {
+
+    '/governance': {
         title: 'Reliability Standards & Governance | Abu Rahat Sabir',
         description: 'Enterprise governance frameworks and reliability standards for institutional operations.',
-        ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-governance.webp',
+        ogImage: '/images/og-governance.webp',
         ogType: 'website'
     },
 
-    '#/post-mortems': {
+    '/post-mortems': {
         title: 'Post-Mortems & Incident Analysis | Abu Rahat Sabir',
         description: 'Forensic analysis of operational incidents and system failures with preventative architecture solutions.',
-        ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-postmortems.webp',
+        ogImage: '/images/og-postmortems.webp',
         ogType: 'website'
     },
 
-    '#/success-stories': {
+    '/success-stories': {
         title: 'Success Stories & Endorsements | Abu Rahat Sabir',
         description: 'Client success stories, testimonials, and endorsements from enterprise operations and automation projects.',
-        ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-success.webp',
+        ogImage: '/images/og-success.webp',
         ogType: 'website'
     },
 
-    '#/blog': {
+    '/blog': {
         title: 'Blog Series | Abu Rahat Sabir',
         description: 'Insights on enterprise architecture, operational governance, and administrative automation.',
-        ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-blog.webp',
+        ogImage: '/images/og-blog.webp',
         ogType: 'website'
     },
 
-    '#/privacy': {
+    '/privacy': {
         title: 'Privacy Policy | Abu Rahat Sabir',
         description: 'Privacy policy and data protection information.',
         ogType: 'website'
     },
 
-    '#/cookies': {
+    '/cookies': {
         title: 'Cookie Policy | Abu Rahat Sabir',
         description: 'Cookie policy and usage information.',
         ogType: 'website'
     },
 
-    '#/persona/executive-assistants': {
+    '/persona/executive-assistants': {
         title: 'Reclaim 10+ Hours Every Week | Abu Rahat Sabir',
         description: 'Automated executive support systems that eliminate repetitive admin work and coordination chaos.',
-        ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-persona-ea.webp',
+        ogImage: '/images/og-persona-ea.webp',
         ogType: 'website'
     },
 
-    '#/persona/operations-leaders': {
+    '/persona/operations-leaders': {
         title: 'Build Systems That Scale Without Hiring | Abu Rahat Sabir',
         description: 'Enterprise-grade operational architecture that eliminates bottlenecks and multiplies team capacity.',
-        ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-persona-ops.webp',
+        ogImage: '/images/og-persona-ops.webp',
         ogType: 'website'
     },
 
-    '#/persona/founders': {
+    '/persona/founders': {
         title: 'Save $50K/Year in Unnecessary Overhead | Abu Rahat Sabir',
         description: 'Institutional sovereignty through owned logic kernels that eliminate SaaS sprawl and vendor lock-in.',
-        ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-persona-founders.webp',
+        ogImage: '/images/og-persona-founders.webp',
         ogType: 'website'
     },
 
-    '#/persona/hiring-managers': {
+    '/persona/hiring-managers': {
         title: 'Expert Executive Operations Professional | Abu Rahat Sabir',
         description: 'Proven track record in C-suite support, enterprise automation, and operational governance.',
-        ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-persona-hiring.webp',
+        ogImage: '/images/og-persona-hiring.webp',
         ogType: 'website'
     }
 };
@@ -136,10 +136,10 @@ const ROUTE_METADATA: Record<string, PageMetadata> = {
 /**
  * Get metadata for a specific route, including dynamic case study metadata
  */
-function getMetadataForRoute(hash: string): PageMetadata {
-    // Handle case study routes: #/work/project-id
-    if (hash.startsWith('#/work/')) {
-        const projectId = hash.replace('#/work/', '');
+function getMetadataForRoute(path: string): PageMetadata {
+    // Handle case study routes: /work/project-id
+    if (path.startsWith('/work/')) {
+        const projectId = path.replace('/work/', '');
         const project = PROJECTS.find(p => p.id === projectId);
 
         if (project) {
@@ -152,18 +152,18 @@ function getMetadataForRoute(hash: string): PageMetadata {
         }
     }
 
-    // Handle blog post routes: #/blog/post-id
-    if (hash.startsWith('#/blog/')) {
+    // Handle blog post routes: /blog/post-id
+    if (path.startsWith('/blog/')) {
         return {
             title: 'Blog Post | Abu Rahat Sabir',
             description: 'Insights on enterprise architecture, operational governance, and administrative automation.',
-            ogImage: 'https://aburahatsabir.github.io/portfolio/images/og-blog.webp',
+            ogImage: '/images/og-blog.webp',
             ogType: 'article'
         };
     }
 
     // Return route-specific metadata or default
-    return ROUTE_METADATA[hash] || DEFAULT_METADATA;
+    return ROUTE_METADATA[path] || DEFAULT_METADATA;
 }
 
 /**
@@ -198,8 +198,8 @@ function updateMetaTag(selector: string, content: string): void {
 /**
  * Update all page metadata based on current route
  */
-export function updatePageMetadata(hash: string): void {
-    const metadata = getMetadataForRoute(hash);
+export function updatePageMetadata(path: string): void {
+    const metadata = getMetadataForRoute(path);
     const currentUrl = window.location.href;
 
     // Update document title

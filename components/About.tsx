@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { EDUCATION } from '../constants';
 import { generateAvatar } from '../utils/avatar-generator';
 import BentoCard from './shared/BentoCard';
+import OptimizedImage from './OptimizedImage';
 
 const TelemetryData: React.FC<{ label: string; value: string; trend?: string }> = ({ label, value, trend }) => (
   <div className="space-y-1">
@@ -18,6 +19,7 @@ const FAQItem: React.FC<{ question: string; answer: string; isOpen: boolean; onC
   return (
     <div className={`transition-all duration-500 ${isOpen ? 'bg-slate-50 border-y border-slate-100' : 'border-b border-slate-100 hover:bg-slate-50/50'}`}>
       <button
+        type="button"
         onClick={onClick}
         className="w-full py-7 px-4 flex items-center justify-between text-left group"
       >
@@ -61,30 +63,37 @@ const About: React.FC<AboutProps> = ({ showStrategicPillars = true }) => {
 
   const faqs = [
     {
-      question: "Role at Prominent Tec?",
-      answer: "I serve as an Executive Admin, handling C-suite operations, financial file organization, and sensitive communications. My primary value-add is the automation of slow, manual administrative processes using Excel VBA and Google Apps Script."
+      question: "What if we don't have a big budget?",
+      answer: "Start small. Most clients begin with a single high-impact automation (payroll, invoicing, or reporting) for $2K-5K, then expand as ROI proves out. No long-term contracts required—you only pay for what delivers value."
     },
     {
-      question: "Academic background in Economics?",
-      answer: "I hold a B.S.S (Honors) in Economics from National University (2023). This quantitative foundation allows me to approach organizational efficiency through a lens of statistical analysis and macroscopic logic."
+      question: "How quickly will we see results?",
+      answer: "First automation delivered in Week 1-2. Full system deployed in 30-90 days depending on complexity. You'll see time savings immediately—most clients reclaim 10+ hours per week within the first month."
     },
     {
-      question: "The E-LearnEx initiative?",
-      answer: "Previously, I taught ICT in Sylhet and mentored 650+ students. This led to founding E-LearnEx, a community focused on providing accessible global education resources to thousands of learners."
+      question: "Will this disrupt our current operations?",
+      answer: "Zero downtime. My systems run alongside your existing workflows until you're ready to switch. Every deployment includes a rollback plan and testing phase—no surprises, no broken processes."
+    },
+    {
+      question: "Do we need IT approval or infrastructure changes?",
+      answer: "No. I work entirely in tools you already use (Google Sheets, Excel, Apps Script). No server access, no infrastructure changes, no security reviews. Your IT team won't even know I'm there."
+    },
+    {
+      question: "Who owns the code after you're done?",
+      answer: "You do. 100%. I provide full documentation, training videos, and knowledge transfer so your team can maintain and extend the system without being dependent on me. No vendor lock-in, ever."
     }
   ];
 
   return (
-    <section id="about" className="py-32 bg-white relative">
+    <section id="about" className="py-16 md:py-32 bg-white relative">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-end gap-12 mb-20">
           <div className="max-w-3xl space-y-6">
-            <h1 className="sr-only">About Abu Rahat Sabir - Executive Architect</h1>
             <h2 className="text-[11px] font-black uppercase tracking-[0.4em] text-blue-600">Executive Identity</h2>
-            <h3 className="text-5xl md:text-8xl font-black tracking-tighter leading-[0.92] text-slate-900">
+            <h1 className="text-5xl md:text-8xl font-black tracking-tighter leading-[0.92] text-slate-900">
               Abu Rahat <br />
               <span className="text-slate-400">Sabir.</span>
-            </h3>
+            </h1>
           </div>
         </div>
 
@@ -184,18 +193,18 @@ const About: React.FC<AboutProps> = ({ showStrategicPillars = true }) => {
                   </div>
 
                   <div className="space-y-2">
-                    <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400">Technical Inquiries</p>
-                    <h4 className="text-4xl lg:text-5xl font-black text-slate-900 tracking-tighter leading-tight">Professional <br />Briefing</h4>
+                    <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400">Common Questions</p>
+                    <h4 className="text-4xl lg:text-5xl font-black text-slate-900 tracking-tighter leading-tight">Before You <br />Reach Out</h4>
                   </div>
 
                   <p className="text-[15px] text-slate-500 font-medium leading-relaxed max-w-xs">
-                    Direct clarifications from Abu Rahat Sabir on administrative engagement, data governance, and system integrity standards.
+                    Quick answers to the questions most executives ask before scheduling a call—budget, timeline, disruption, and ownership.
                   </p>
                 </div>
 
                 <div className="pt-4">
                   <a
-                    href="#/contact"
+                    href="/contact"
                     className="group relative w-full lg:w-fit px-12 py-6 bg-slate-900 text-white rounded-2xl flex items-center justify-center gap-6 text-[11px] font-black uppercase tracking-[0.3em] shadow-2xl hover:bg-blue-600 transition-all active:scale-95 overflow-hidden"
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite]"></div>
@@ -210,11 +219,12 @@ const About: React.FC<AboutProps> = ({ showStrategicPillars = true }) => {
                   <div className="flex -space-x-3">
                     {[1, 2, 3].map(i => (
                       <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-slate-100 flex items-center justify-center overflow-hidden">
-                        <img
+                        <OptimizedImage
                           src={generateAvatar({ name: i === 1 ? 'MR' : i === 2 ? 'SK' : 'DL', background: '0f172a', color: 'fff' })}
                           alt={`Endorsement from ${i === 1 ? 'Executive Partner' : i === 2 ? 'Operations Director' : 'C-Suite Member'}`}
                           width={256}
                           height={256}
+                          loading="lazy"
                         />
                       </div>
                     ))}

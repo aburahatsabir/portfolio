@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 import Button from './shared/Button';
-import SocialLinks from './shared/SocialLinks';
 import { trackEmailClick, trackContactCTA, trackFormSubmission, trackCustomEvent } from '../utils/analytics';
-
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -30,23 +28,38 @@ const Contact: React.FC = () => {
       // Validate environment variables are configured
       if (!serviceId || !templateId || !publicKey) {
         console.error('EmailJS configuration missing. Please check environment variables.');
-        alert('Email service is not properly configured. Please contact the administrator.');
+        alert('Email service is not properly configured. Please contact us directly at aburahatsabir178@gmail.com');
         setIsSubmitting(false);
         return;
       }
 
-      // Send email using EmailJS
-      const result = await emailjs.send(
-        serviceId,
-        templateId,
-        {
-          name: formData.name,
-          email: formData.email,
-          subject: formData.subject,
-          message: formData.message
-        },
-        publicKey
-      );
+      // Import resilience utilities
+      const { resilientApiCall, emailJsCircuitBreaker } = await import('../utils/api-resilience');
+
+      // Send email using EmailJS with resilience layer
+      await emailJsCircuitBreaker.execute(async () => {
+        return await resilientApiCall(
+          () => emailjs.send(
+            serviceId,
+            templateId,
+            {
+              name: formData.name,
+              email: formData.email,
+              subject: formData.subject,
+              message: formData.message
+            },
+            publicKey
+          ),
+          {
+            timeout: 8000, // 8 second timeout for email service
+            retries: 3,
+            backoff: 'exponential',
+            onRetry: (attempt, error) => {
+              console.log(`Retrying email submission (attempt ${attempt})...`, error);
+            }
+          }
+        );
+      });
 
       // Track form submission
       trackFormSubmission({
@@ -60,9 +73,15 @@ const Contact: React.FC = () => {
 
       setFormData({ name: '', email: '', subject: '', message: '' });
       setTimeout(() => setIsSent(false), 5000);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('❌ EmailJS Error:', error);
-      alert('Failed to send message. Please try again or email directly at aburahatsabir178@gmail.com');
+
+      // Type guard for error handling
+      const errorMessage = (error && typeof error === 'object' && 'userMessage' in error)
+        ? (error as { userMessage?: string }).userMessage || 'Failed to send message. Please try again.'
+        : 'Failed to send message. Please try again.';
+
+      alert(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -74,7 +93,7 @@ const Contact: React.FC = () => {
       trackCustomEvent('form_start', {
         event_category: 'Conversion Funnel',
         form_type: 'contact',
-        page: window.location.hash
+        page: window.location.pathname
       });
     }
   };
@@ -134,10 +153,9 @@ const Contact: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-20 items-start">
         <div className="space-y-12">
           <div>
-            <h1 className="sr-only">Contact Abu Rahat Sabir</h1>
             <h2 className="text-xs font-black uppercase tracking-[0.4em] text-blue-600 mb-6">Engagement Protocol</h2>
-            <h3 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-8 leading-tight">Let's discuss <br />your <span className="text-blue-600">next move.</span></h3>
-            <p className="text-xl text-slate-600 mb-12 leading-relaxed">
+            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-8 leading-tight">Let's discuss <br />your <span className="text-blue-600">next move.</span></h1>
+            <p className="text-xl text-slate-600 mb-8 leading-relaxed">
               Whether you need to streamline operations or build reliable systems, I'm here to help you work smarter.
               Direct consultation for organizations scaling beyond manual capabilities.
             </p>
@@ -217,7 +235,7 @@ const Contact: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-14 h-14 rounded-[1.25rem] bg-[#f8fafc] border border-[#f1f5f9] flex items-center justify-center text-slate-600 hover:bg-white hover:border-blue-200 hover:text-blue-600 transition-all shadow-sm group"
-                  title={link.name}
+                  aria-label={`Visit ${link.name} profile`}
                 >
                   <div className="transition-transform group-hover:scale-110">
                     {link.icon}
@@ -237,7 +255,7 @@ const Contact: React.FC = () => {
                 <div className="px-3 py-1 bg-blue-600 text-white rounded-lg text-[9px] font-black uppercase tracking-widest">Secure Channel</div>
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
               </div>
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">ENGAGEMENT_FORM // INFRA_V1</span>
+              <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Secure Contact Form</span>
             </div>
 
             <AnimatePresence mode="wait">
@@ -255,9 +273,9 @@ const Contact: React.FC = () => {
                     </svg>
                   </div>
                   <div className="space-y-4">
-                    <h4 className="text-3xl font-black">Transmission Received.</h4>
+                    <h4 className="text-3xl font-black">Message Sent Successfully!</h4>
                     <p className="text-slate-400 font-medium leading-relaxed max-w-sm">
-                      Your inquiry has been successfully logged into our governance queue. A tactical response will be initiated within 24 hours.
+                      Thanks for reaching out! I'll respond within 24 hours.
                     </p>
                   </div>
                   <button
@@ -265,7 +283,7 @@ const Contact: React.FC = () => {
                     onClick={() => setIsSent(false)}
                     className="px-8 py-4 bg-slate-800 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-700 transition-all"
                   >
-                    Send Another Transmission
+                    Send Another Message
                   </button>
                 </motion.div>
               ) : (
@@ -279,10 +297,14 @@ const Contact: React.FC = () => {
                 >
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label htmlFor="contact-name" className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">Full Identity</label>
+                      <label htmlFor="contact-name" className="text-xs font-black uppercase tracking-widest text-slate-500 ml-2">
+                        Full Name <span className="text-red-500" aria-label="required">*</span>
+                      </label>
                       <input
                         id="contact-name"
                         required
+                        aria-required="true"
+                        autoComplete="name"
                         type="text"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -292,10 +314,14 @@ const Contact: React.FC = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label htmlFor="contact-email" className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">Strategic Email</label>
+                      <label htmlFor="contact-email" className="text-xs font-black uppercase tracking-widest text-slate-500 ml-2">
+                        Email Address <span className="text-red-500" aria-label="required">*</span>
+                      </label>
                       <input
                         id="contact-email"
                         required
+                        aria-required="true"
+                        autoComplete="email"
                         type="email"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -307,10 +333,14 @@ const Contact: React.FC = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="contact-subject" className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">Subject / Audit Scope</label>
+                    <label htmlFor="contact-subject" className="text-xs font-black uppercase tracking-widest text-slate-500 ml-2">
+                      Subject <span className="text-red-500" aria-label="required">*</span>
+                    </label>
                     <input
                       id="contact-subject"
                       required
+                      aria-required="true"
+                      autoComplete="off"
                       type="text"
                       value={formData.subject}
                       onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
@@ -320,10 +350,14 @@ const Contact: React.FC = () => {
                   </div>
 
                   <div className="space-y-2 flex-1 flex flex-col">
-                    <label htmlFor="contact-message" className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">Inquiry Telemetry / Message</label>
+                    <label htmlFor="contact-message" className="text-xs font-black uppercase tracking-widest text-slate-500 ml-2">
+                      Message <span className="text-red-500" aria-label="required">*</span>
+                    </label>
                     <textarea
                       id="contact-message"
                       required
+                      aria-required="true"
+                      autoComplete="off"
                       rows={6}
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
@@ -342,7 +376,7 @@ const Contact: React.FC = () => {
                       loading={isSubmitting}
                       className="flex-1"
                     >
-                      Initialize Discovery Session
+                      Send Message
                       <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                       </svg>

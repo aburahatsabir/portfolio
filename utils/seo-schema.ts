@@ -67,11 +67,45 @@ interface BlogPostingSchema {
     };
 }
 
+interface ArticleSchema {
+    '@context': string;
+    '@type': string;
+    headline: string;
+    description: string;
+    author: {
+        '@type': string;
+        name: string;
+    };
+    datePublished?: string;
+    image?: string;
+    publisher: {
+        '@type': string;
+        name: string;
+    };
+}
+
+interface WebSiteSchema {
+    '@context': string;
+    '@type': string;
+    name: string;
+    description: string;
+    url: string;
+    potentialAction: {
+        '@type': string;
+        target: {
+            '@type': string;
+            urlTemplate: string;
+        };
+        'query-input': string;
+    };
+}
+
+
 /**
  * Generate Person schema for professional profile
  */
 export function generatePersonSchema(): PersonSchema {
-    const baseUrl = 'https://abu-rahat-sabir.github.io';
+    const baseUrl = 'https://aburahatsabir.vercel.app';
 
     return {
         '@context': 'https://schema.org',
@@ -81,23 +115,73 @@ export function generatePersonSchema(): PersonSchema {
         description: 'Strategic portfolio of a Corporate Operations Executive specializing in enterprise architecture, automation, and institutional governance.',
         url: baseUrl,
         sameAs: [
-            'https://linkedin.com/in/abu-rahat-sabir',
-            'https://github.com/abu-rahat-sabir'
+            'https://linkedin.com/in/aburahatsabir78',
+            'https://github.com/aburahatsabir',
+            'https://x.com/AbuRahatsabir'
         ],
         knowsAbout: [
+            // Core Competencies (Executive Search Terms)
             'Enterprise Architecture',
             'Systems Governance',
             'Operational Automation',
+            'Executive Administration',
+            'C-Suite Support',
+
+            // Technical Skills
             'VBA Development',
             'Google Apps Script',
+            'Excel Automation',
+            'Process Automation',
+            'Workflow Optimization',
+
+            // Domain Expertise
             'Administrative Operations',
             'Process Optimization',
             'Data Architecture',
             'Financial Systems',
-            'HR Systems'
-        ]
+            'HR Systems',
+            'ERP Systems',
+            'Operational Excellence',
+
+            // Governance & Compliance
+            'Audit Compliance',
+            'Data Integrity',
+            'Institutional Governance',
+            'Risk Management',
+
+            // Industry Applications
+            'FMCG Operations',
+            'Healthcare Logistics',
+            'Trade Finance',
+            'Multi-Entity Payroll'
+        ],
+        email: 'aburahatsabir178@gmail.com'
     };
 }
+
+/**
+ * Generate WebSite schema for homepage and site-wide SEO
+ */
+export function generateWebSiteSchema(): WebSiteSchema {
+    const baseUrl = 'https://aburahatsabir.vercel.app';
+
+    return {
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'Abu Rahat Sabir - Executive Architect',
+        description: 'Strategic portfolio of a Corporate Operations Executive specializing in enterprise architecture, automation, and institutional governance.',
+        url: baseUrl,
+        potentialAction: {
+            '@type': 'SearchAction',
+            target: {
+                '@type': 'EntryPoint',
+                urlTemplate: `${baseUrl}/work?q={search_term_string}`
+            },
+            'query-input': 'required name=search_term_string'
+        }
+    };
+}
+
 
 /**
  * Generate FAQPage schema for About page
@@ -144,7 +228,7 @@ export function generateFAQSchema(): FAQPageSchema {
  * Generate BreadcrumbList schema for navigation
  */
 export function generateBreadcrumbSchema(items: BreadcrumbItem[]): BreadcrumbListSchema {
-    const baseUrl = 'https://abu-rahat-sabir.github.io';
+    const baseUrl = 'https://aburahatsabir.vercel.app';
 
     return {
         '@context': 'https://schema.org',
@@ -167,7 +251,7 @@ export function generateBlogPostingSchema(
     datePublished: string,
     imageUrl?: string
 ): BlogPostingSchema {
-    const baseUrl = 'https://abu-rahat-sabir.github.io';
+    const baseUrl = 'https://aburahatsabir.vercel.app';
 
     return {
         '@context': 'https://schema.org',
@@ -180,6 +264,35 @@ export function generateBlogPostingSchema(
         },
         datePublished: datePublished,
         dateModified: datePublished,
+        image: imageUrl ? (imageUrl.startsWith('http') ? imageUrl : `${baseUrl}${imageUrl}`) : undefined,
+        publisher: {
+            '@type': 'Person',
+            name: 'Abu Rahat Sabir'
+        }
+    };
+}
+
+/**
+ * Generate Article schema for case studies and projects
+ */
+export function generateArticleSchema(
+    title: string,
+    description: string,
+    imageUrl?: string,
+    datePublished?: string
+): ArticleSchema {
+    const baseUrl = 'https://aburahatsabir.vercel.app';
+
+    return {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: title,
+        description: description,
+        author: {
+            '@type': 'Person',
+            name: 'Abu Rahat Sabir'
+        },
+        datePublished: datePublished || new Date().toISOString().split('T')[0],
         image: imageUrl ? (imageUrl.startsWith('http') ? imageUrl : `${baseUrl}${imageUrl}`) : undefined,
         publisher: {
             '@type': 'Person',
@@ -214,4 +327,52 @@ export function removeSchema(id: string): void {
     if (existing) {
         existing.remove();
     }
+}
+
+/**
+ * Generate Organization schema for brand credibility
+ */
+export function generateOrganizationSchema() {
+    const baseUrl = 'https://aburahatsabir.vercel.app';
+
+    return {
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: 'Abu Rahat Sabir Consulting',
+        url: baseUrl,
+        logo: `${baseUrl}/images/icon-512.webp`,
+        sameAs: [
+            'https://linkedin.com/in/aburahatsabir78',
+            'https://github.com/aburahatsabir'
+        ],
+        founder: {
+            '@type': 'Person',
+            name: 'Abu Rahat Sabir'
+        },
+        description: 'Professional consulting services specializing in operations automation, Google Sheets development, and enterprise process optimization.'
+    };
+}
+
+/**
+ * Generate Service schema for SEO targeting
+ */
+export function generateServiceSchema() {
+    return {
+        '@context': 'https://schema.org',
+        '@type': 'Service',
+        name: 'Google Sheets & Operations Automation',
+        provider: {
+            '@type': 'Person',
+            name: 'Abu Rahat Sabir'
+        },
+        areaServed: 'Global',
+        serviceType: 'Business Process Automation',
+        description: 'Custom automation for Google Sheets, Apps Script, month-end close processes, and operational workflows. Proven results: 80%+ time savings for finance and operations teams.',
+        offers: {
+            '@type': 'Offer',
+            priceCurrency: 'USD',
+            price: '5000-20000',
+            description: 'Custom automation solutions including Google Sheets development, Apps Script systems, and operational workflow optimization'
+        }
+    };
 }

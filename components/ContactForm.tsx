@@ -27,6 +27,9 @@ const ContactForm: React.FC = () => {
     const [isSent, setIsSent] = useState(false);
     const [errors, setErrors] = useState<Partial<ContactFormData>>({});
 
+    // ✅ REFACTORED: Explicit state machine for better debugging and state tracking
+    const [formState, setFormState] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+
     const roles = [
         { value: '', label: 'Select your role...' },
         { value: 'executive-assistant', label: 'Executive Assistant' },
@@ -78,7 +81,8 @@ const ContactForm: React.FC = () => {
 
         if (!validateForm()) return;
 
-
+        // ✅ STATE MACHINE: idle → submitting
+        setFormState('submitting');
         setIsSubmitting(true);
 
         try {
@@ -124,18 +128,31 @@ const ContactForm: React.FC = () => {
                 timeline: formData.timeline
             });
 
-            // Show success message
+            // ✅ STATE MACHINE: submitting → success
+            setFormState('success');
             setIsSent(true);
             setFormData({ name: '', email: '', role: '', challenge: '', timeline: '', message: '' });
             setErrors({});
-            setTimeout(() => setIsSent(false), 5000);
+
+            // Reset to idle after 5 seconds
+            setTimeout(() => {
+                setIsSent(false);
+                setFormState('idle');
+            }, 5000);
 
         } catch (error) {
             console.error('EmailJS Error:', error);
+
+            // ✅ STATE MACHINE: submitting → error
+            setFormState('error');
+
             alert('Failed to send message. Please try again or email directly at aburahatsabir178@gmail.com');
         } finally {
             setIsSubmitting(false);
         }
+
+        // ✅ DEBUG: Log state transitions (remove in production if needed)
+        console.log(`[ContactForm] State transition: ${formState} → ${formState}`);
     };
 
     const handleChange = (field: keyof ContactFormData, value: string) => {

@@ -12,7 +12,7 @@ const PersonaCTABanner: React.FC = () => {
         >
             <div className="max-w-4xl mx-auto">
                 <a
-                    href="#/for"
+                    href="/solutions"
                     onClick={() => trackCustomEvent('cta_click', {
                         event_category: 'CTA Engagement',
                         cta_text: 'Explore Role-Specific Solutions',

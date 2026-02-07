@@ -1,17 +1,27 @@
 
+
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { trackContactCTA } from '../utils/analytics';
 
+interface HeroContent {
+  image: string;
+  title: React.JSX.Element;
+  subhead?: string;
+  description: string;
+  statLabel: string;
+  statValue: string;
+  statUnit: string;
+}
 
 const Hero: React.FC = () => {
   const [activeMandate, setActiveMandate] = useState<'sovereignty' | 'efficiency'>('sovereignty');
 
-  const content = {
+  const content: Record<'sovereignty' | 'efficiency', HeroContent> = {
     sovereignty: {
       image: "./images/hero/Abu Rahat Hero 01.webp",
       title: <>Engineering <br /><span className="text-blue-700">Institutional</span> <br />Sovereignty.</>,
-      description: "I design self-healing administrative systems for leaders who demand precision. My work at Prominent Tec eliminates the 'Human-Bridge' debt between silos.",
+      description: "I design self-governing operations infrastructure for organizations that refuse to hire their way out of inefficiency—eliminating the 'Human-Bridge' debt between silos.",
       statLabel: "Tenure in Operations",
       statValue: "6+",
       statUnit: "Years"
@@ -117,29 +127,35 @@ const Hero: React.FC = () => {
                   <h1 className="text-6xl md:text-8xl font-[900] tracking-tighter leading-[0.92] text-slate-900 mb-8">
                     {content[activeMandate].title}
                   </h1>
+                  {content[activeMandate].subhead && (
+                    <p className="text-lg md:text-xl text-blue-700 font-bold leading-snug mb-8 max-w-lg">
+                      {content[activeMandate].subhead}
+                    </p>
+                  )}
                   <p className="text-xl md:text-2xl text-slate-600 font-medium leading-relaxed max-w-xl">
                     {content[activeMandate].description}
                   </p>
+
                 </motion.div>
               </AnimatePresence>
             </div>
 
             <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center gap-5">
               <a
-                href="#/contact"
+                href="/contact"
                 onClick={() => trackContactCTA({
                   location: 'hero_section',
                   conversionType: 'contact_form',
-                  label: 'lets_talk_cta'
+                  label: 'free_audit_cta'
                 })}
                 className="w-full sm:w-auto px-12 py-6 bg-slate-900 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest hover:bg-blue-700 transition-all shadow-2xl shadow-slate-900/10 flex items-center justify-center gap-3 active:scale-95"
               >
-                Let's Talk
+                Get Free 15-Min Process Audit
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
               </a>
 
               <a
-                href="#/work"
+                href="/work"
                 className="w-full sm:w-auto px-12 py-6 bg-white border border-slate-200 text-slate-600 rounded-2xl font-black text-[11px] uppercase tracking-widest hover:text-slate-900 hover:bg-slate-50 transition-all flex items-center justify-center active:scale-95"
               >
                 Case Studies
@@ -149,7 +165,7 @@ const Hero: React.FC = () => {
             <motion.div variants={itemVariants} className="pt-12 border-t border-slate-200 flex items-center gap-10 opacity-60">
               <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">Core Expertise</p>
               <div className="flex gap-10">
-                {['Excel VBA', 'Apps Script', 'Workflow Design'].map(name => (
+                {['Excel Automation', 'Google Sheets', 'Process Design'].map(name => (
                   <span key={name} className="text-sm font-black text-slate-900">{name}</span>
                 ))}
               </div>

@@ -2,154 +2,242 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import Capabilities from './components/Capabilities';
-import AdministrativeRoiFramework from './components/AdministrativeRoiFramework';
-import ReliabilityStandards from './components/ReliabilityStandards';
-import Work from './components/Work';
-import CaseStudyPage from './components/CaseStudyPage';
-
-import PostMortems from './components/PostMortems';
-import SuccessStories from './components/SuccessStories';
-import BlogSeries from './components/BlogSeries';
-import Contact from './components/Contact';
 import Footer from './components/Footer';
 import About from './components/About';
-import ExperienceTimeline from './components/ExperienceTimeline';
-import PrivacyPolicy from './components/PrivacyPolicy';
-import CookiePolicy from './components/CookiePolicy';
-import Endorsements from './components/Endorsements';
 import ScrollToTop from './components/ScrollToTop';
 import ErrorBoundary from './components/ErrorBoundary';
-import PersonaSpecificContent from './components/PersonaSpecificContent';
-import PersonaDirectory from './components/PersonaDirectory';
 import PersonaCTA from './components/PersonaCTA';
 import PersonaCTABanner from './components/PersonaCTABanner';
+import BottomCTA from './components/BottomCTA';
+import { lazyLoadPage, lazyLoad, PageLoadingFallback, LoadingFallback } from './utils/lazy-loading';
+
+// Route-based code splitting - lazy load page components
+const CaseStudyPage = lazyLoadPage(() => import('./components/CaseStudyPage'));
+const BlogSeries = lazyLoadPage(() => import('./components/BlogSeries'));
+const PersonaSpecificContent = lazyLoadPage(() => import('./components/PersonaSpecificContent'));
+const PersonaDirectory = lazyLoadPage(() => import('./components/PersonaDirectory'));
+const PrivacyPolicy = lazyLoadPage(() => import('./components/PrivacyPolicy'));
+const CookiePolicy = lazyLoadPage(() => import('./components/CookiePolicy'));
+const AccessibilityStatement = lazyLoadPage(() => import('./components/AccessibilityStatement'));
+const PostMortems = lazyLoadPage(() => import('./components/PostMortems'));
+
+// Below-the-fold components - lazy load for better initial load
+const ExperienceTimeline = lazyLoad(() => import('./components/ExperienceTimeline'));
+const Capabilities = lazyLoad(() => import('./components/Capabilities'));
+const ReliabilityStandards = lazyLoad(() => import('./components/ReliabilityStandards'));
+const AdministrativeRoiFramework = lazyLoad(() => import('./components/AdministrativeRoiFramework'));
+const Contact = lazyLoad(() => import('./components/Contact'));
+const Endorsements = lazyLoad(() => import('./components/Endorsements'));
+const SuccessStories = lazyLoad(() => import('./components/SuccessStories'));
+const Work = lazyLoad(() => import('./components/Work'));
 import { motion, AnimatePresence } from 'framer-motion';
-import { updatePageMetadata, generateFAQSchema, injectSchema, removeSchema } from './utils/seo-utils';
+import { updatePageMetadata, generateWebSiteSchema, generateFAQSchema, generateBreadcrumbSchema, injectSchema, removeSchema } from './utils/seo-utils';
+
 import { trackPageView, trackNavigation, trackError } from './utils/analytics';
 import { useScrollDepth } from './hooks/useScrollDepth';
 import { useEngagementTime } from './hooks/useEngagementTime';
 import { useExitIntent } from './hooks/useExitIntent';
 import CookieConsent from './components/CookieConsent';
+import OfflineIndicator from './components/OfflineIndicator';
 
+
+
+/**
+ * Generate breadcrumb items for current route
+ */
+function getBreadcrumbsForRoute(currentPath: string): Array<{ name: string; url: string }> {
+  const baseUrl = window.location.origin;
+  const breadcrumbs = [{ name: 'Home', url: `${baseUrl}/` }];
+
+  if (currentPath === '/' || !currentPath) {
+    return breadcrumbs;
+  }
+
+  // Handle case study routes
+  if (currentPath.startsWith('/work/')) {
+    breadcrumbs.push({ name: 'Work', url: `${baseUrl}/work` });
+    const projectId = currentPath.replace('/work/', '');
+    const project = { id: projectId, title: projectId.replace(/-/g, ' ') };
+    breadcrumbs.push({ name: project.title, url: `${baseUrl}${currentPath}` });
+    return breadcrumbs;
+  }
+
+  // Handle blog routes
+  if (currentPath.startsWith('/blog/')) {
+    breadcrumbs.push({ name: 'Blog', url: `${baseUrl}/blog` });
+    const postId = currentPath.replace('/blog/', '');
+    breadcrumbs.push({ name: postId.replace(/-/g, ' '), url: `${baseUrl}${currentPath}` });
+    return breadcrumbs;
+  }
+
+  // Handle persona routes
+  if (currentPath.startsWith('/persona/')) {
+    breadcrumbs.push({ name: 'For', url: `${baseUrl}/for` });
+    const personaId = currentPath.replace('/persona/', '');
+    const personaName = personaId.replace(/-/g, ' ');
+    breadcrumbs.push({ name: personaName, url: `${baseUrl}${currentPath}` });
+    return breadcrumbs;
+  }
+
+  // Simple routes
+  const routeNames: Record<string, string> = {
+    '/work': 'Work',
+    '/about': 'About',
+    '/contact': 'Contact',
+    '/solutions': 'Solutions',
+    '/governance': 'Governance',
+    '/blog': 'Blog',
+    '/for': 'For',
+    '/post-mortems': 'Post-Mortems',
+    '/success-stories': 'Success Stories',
+    '/privacy': 'Privacy Policy',
+    '/cookies': 'Cookie Policy'
+  };
+
+  if (routeNames[currentPath]) {
+    breadcrumbs.push({ name: routeNames[currentPath], url: `${baseUrl}${currentPath}` });
+  }
+
+  return breadcrumbs;
+}
 
 function App() {
-  const [currentHash, setCurrentHash] = useState(window.location.hash || '#/');
-  const [previousHash, setPreviousHash] = useState(window.location.hash || '#/');
+  const [currentPath, setCurrentPath] = useState(window.location.pathname || '/');
+  const [previousPath, setPreviousPath] = useState(window.location.pathname || '/');
 
   // Track scroll depth for the current page
-  useScrollDepth(currentHash);
+  useScrollDepth(currentPath);
 
   // Track engagement time for the current page
-  useEngagementTime(currentHash);
+  useEngagementTime(currentPath);
 
   // Track exit intent
   useExitIntent(true);
 
 
   useEffect(() => {
-    // Update metadata on initial load and hash change
-    updatePageMetadata(currentHash);
+    // Update metadata on initial load and path change
+    updatePageMetadata(currentPath);
 
     // Track page view for current route (runs on mount + change)
     trackPageView({
-      route: currentHash,
+      route: currentPath,
       title: document.title
     });
 
-    // Track navigation pattern if hash changed
-    if (previousHash !== currentHash) {
-      trackNavigation(previousHash, currentHash);
-      setPreviousHash(currentHash);
+    // Track navigation pattern if path changed
+    if (previousPath !== currentPath) {
+      trackNavigation(previousPath, currentPath);
+      setPreviousPath(currentPath);
     }
 
     // Inject/remove FAQ schema based on route
-    if (currentHash === '#/about') {
+    if (currentPath === '/about') {
       const faqSchema = generateFAQSchema();
       injectSchema(faqSchema, 'faq-schema');
     } else {
       removeSchema('faq-schema');
     }
 
-    const handleHashChange = () => {
-      const newHash = window.location.hash || '#/';
-      setCurrentHash(newHash);
+    // Inject WebSite schema on homepage
+    if (currentPath === '/') {
+      const websiteSchema = generateWebSiteSchema();
+      injectSchema(websiteSchema, 'website-schema');
+    } else {
+      removeSchema('website-schema');
+    }
+
+    // Inject breadcrumb schema for all routes
+    const breadcrumbs = getBreadcrumbsForRoute(currentPath);
+    if (breadcrumbs.length > 0) {
+      const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs);
+      injectSchema(breadcrumbSchema, 'breadcrumb-schema');
+    } else {
+      removeSchema('breadcrumb-schema');
+    }
+
+    const handlePopState = () => {
+      const newPath = window.location.pathname || '/';
+      setCurrentPath(newPath);
       window.scrollTo(0, 0);
     };
 
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  }, [currentHash]);
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [currentPath, previousPath]);
 
   const renderContent = () => {
-    if (currentHash.startsWith('#/blog/')) {
-      return <BlogSeries />;
+    if (currentPath.startsWith('/blog/')) {
+      return <ErrorBoundary><BlogSeries /></ErrorBoundary>;
     }
 
-    if (currentHash.startsWith('#/work/')) {
-      const projectId = currentHash.replace('#/work/', '');
-      return <CaseStudyPage projectId={projectId} />;
+    if (currentPath.startsWith('/work/')) {
+      const projectId = currentPath.replace('/work/', '');
+      return <ErrorBoundary><CaseStudyPage projectId={projectId} /></ErrorBoundary>;
     }
 
-    if (currentHash.startsWith('#/persona/')) {
-      const personaId = currentHash.replace('#/persona/', '');
-      return <PersonaSpecificContent personaId={personaId} />;
+    if (currentPath.startsWith('/persona/')) {
+      const personaId = currentPath.replace('/persona/', '');
+      return <ErrorBoundary><PersonaSpecificContent personaId={personaId} /></ErrorBoundary>;
     }
 
-    switch (currentHash) {
-      case '#/for':
-        return <div className="pt-20"><PersonaDirectory /></div>;
-      case '#/work':
-        return <div className="pt-20"><Work /></div>;
+    switch (currentPath) {
+      case '/for':
+        return <div className="pt-20"><ErrorBoundary><PersonaDirectory /></ErrorBoundary></div>;
+      case '/work':
+        return <div className="pt-20"><ErrorBoundary><Work /></ErrorBoundary></div>;
 
-      case '#/governance':
+      case '/governance':
         return (
           <div className="pt-20">
-            <ReliabilityStandards />
+            <ErrorBoundary><ReliabilityStandards /></ErrorBoundary>
           </div>
         );
-      case '#/blog':
-        return <div className="pt-20"><BlogSeries /></div>;
-      case '#/solutions':
+      case '/blog':
+        return <div className="pt-20"><ErrorBoundary><BlogSeries /></ErrorBoundary></div>;
+      case '/solutions':
         return (
           <div className="pt-20">
-            <Capabilities />
-            <AdministrativeRoiFramework />
-            <PersonaCTABanner />
+            <ErrorBoundary><Capabilities /></ErrorBoundary>
+            <ErrorBoundary><AdministrativeRoiFramework /></ErrorBoundary>
+            <ErrorBoundary><PersonaCTABanner /></ErrorBoundary>
           </div>
         );
-      case '#/post-mortems':
-        return <div className="pt-20"><PostMortems /></div>;
-      case '#/success-stories':
-        return <div className="pt-20"><SuccessStories /><Endorsements /></div>;
-      case '#/about':
+      case '/post-mortems':
+        return <div className="pt-20"><ErrorBoundary><PostMortems /></ErrorBoundary></div>;
+      case '/success-stories':
+        return <div className="pt-20"><ErrorBoundary><SuccessStories /></ErrorBoundary><ErrorBoundary><Endorsements /></ErrorBoundary></div>;
+      case '/about':
         return (
           <div className="pt-20">
-            <About showStrategicPillars={true} />
-            <ExperienceTimeline />
-            <PersonaCTABanner />
+            <ErrorBoundary><About showStrategicPillars={true} /></ErrorBoundary>
+            <ErrorBoundary><ExperienceTimeline /></ErrorBoundary>
+            <ErrorBoundary><PersonaCTABanner /></ErrorBoundary>
           </div>
         );
-      case '#/contact':
-        return <div className="pt-20"><Contact /></div>;
-      case '#/privacy':
-        return <PrivacyPolicy />;
-      case '#/cookies':
-        return <CookiePolicy />;
+      case '/contact':
+        return <div className="pt-20"><ErrorBoundary><Contact /></ErrorBoundary></div>;
+      case '/privacy':
+        return <ErrorBoundary><PrivacyPolicy /></ErrorBoundary>;
+      case '/cookies':
+        return <ErrorBoundary><CookiePolicy /></ErrorBoundary>;
+      case '/accessibility':
+        return <ErrorBoundary><AccessibilityStatement /></ErrorBoundary>;
       default:
         return (
           <>
-            <Hero />
-            <About showStrategicPillars={false} />
-            <ExperienceTimeline />
-            <SuccessStories />
-            <Endorsements />
-            <Work />
-            <Capabilities />
-            <ReliabilityStandards />
-            <AdministrativeRoiFramework />
-            <PersonaCTA />
-            <Contact />
+            <ErrorBoundary><Hero /></ErrorBoundary>
+            <ErrorBoundary><About showStrategicPillars={false} /></ErrorBoundary>
+            <ErrorBoundary><ExperienceTimeline /></ErrorBoundary>
+            <ErrorBoundary><SuccessStories /></ErrorBoundary>
+            <ErrorBoundary><Endorsements /></ErrorBoundary>
+            <ErrorBoundary><Work /></ErrorBoundary>
+            <ErrorBoundary><Capabilities /></ErrorBoundary>
+            <ErrorBoundary><ReliabilityStandards /></ErrorBoundary>
+            <ErrorBoundary><AdministrativeRoiFramework /></ErrorBoundary>
+            <ErrorBoundary><PersonaCTA /></ErrorBoundary>
+            <ErrorBoundary><BottomCTA variant="default" /></ErrorBoundary>
+            <ErrorBoundary><Contact /></ErrorBoundary>
           </>
         );
     }
@@ -160,16 +248,24 @@ function App() {
       {/* Skip to content link for screen readers */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-700 focus:text-white focus:rounded-lg focus:shadow-lg"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-blue-600 focus:text-white focus:px-6 focus:py-3 focus:rounded-lg focus:outline-2 focus:outline-white focus:outline-offset-2 focus:shadow-xl focus:font-semibold"
       >
         Skip to main content
       </a>
-      <Navbar />
+
+      {/* Network offline indicator - shows banner when user is offline */}
+      <OfflineIndicator />
+
+      {/* Granular error boundary for Navbar - prevents nav crashes from taking down entire page */}
+      <ErrorBoundary>
+        <Navbar />
+      </ErrorBoundary>
+
       <ErrorBoundary>
         <main id="main-content">
           <AnimatePresence mode="wait">
             <motion.div
-              key={currentHash}
+              key={currentPath}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
@@ -180,9 +276,18 @@ function App() {
           </AnimatePresence>
         </main>
       </ErrorBoundary>
+
       <ScrollToTop />
-      <Footer />
-      <CookieConsent />
+
+      {/* Granular error boundary for Footer */}
+      <ErrorBoundary>
+        <Footer />
+      </ErrorBoundary>
+
+      {/* Granular error boundary for Cookie Consent */}
+      <ErrorBoundary>
+        <CookieConsent />
+      </ErrorBoundary>
     </div>
   );
 }

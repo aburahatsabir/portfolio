@@ -1,11 +1,14 @@
 
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { SUCCESS_STORIES } from '../constants';
 import BentoCard from './shared/BentoCard';
 import SectionLabel from './shared/SectionLabel';
+import OptimizedImage from './OptimizedImage';
+import { SuccessStory } from '../types';
 
-const OutcomeCard: React.FC<{ story: any; index: number }> = ({ story, index }) => {
+const OutcomeCard: React.FC<{ story: SuccessStory; index: number }> = ({ story, index }) => {
   return (
     <BentoCard
       variant="compact"
@@ -17,11 +20,12 @@ const OutcomeCard: React.FC<{ story: any; index: number }> = ({ story, index }) 
       {/* Client Identity */}
       <header className="flex items-center gap-5 mb-10 pb-8 border-b border-slate-50">
         <div className="w-12 h-12 rounded-xl bg-slate-50 p-2 border border-slate-100 group-hover:bg-blue-600 transition-colors duration-500 flex items-center justify-center shrink-0">
-          <img
+          <OptimizedImage
             src={story.logo}
             alt={`${story.clientName} logo`}
             width={128}
             height={128}
+            loading="lazy"
             className="w-full h-auto grayscale group-hover:grayscale-0 group-hover:brightness-0 group-hover:invert transition-all duration-500"
           />
         </div>
@@ -48,7 +52,7 @@ const OutcomeCard: React.FC<{ story: any; index: number }> = ({ story, index }) 
         </div>
 
         <div className="grid grid-cols-2 gap-4 pt-6">
-          {story.metrics.map((metric: any, mIdx: number) => (
+          {story.metrics.map((metric, mIdx: number) => (
             <div key={mIdx} className="bg-slate-50 border border-slate-100 rounded-2xl p-4 group-hover:bg-blue-50/50 transition-colors">
               <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">{metric.label}</p>
               <p className="text-xl font-black text-slate-900 group-hover:text-blue-600 transition-colors">{metric.value}</p>
@@ -64,7 +68,7 @@ const OutcomeCard: React.FC<{ story: any; index: number }> = ({ story, index }) 
           <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Audit Verified</span>
         </div>
         <button
-          onClick={() => window.location.hash = '#/work'}
+          onClick={() => { window.history.pushState({}, '', '/work'); window.dispatchEvent(new PopStateEvent('popstate')); }}
           className="text-[10px] font-black text-blue-600 uppercase tracking-widest hover:text-slate-900 transition-colors"
         >
           View Record →
@@ -76,7 +80,7 @@ const OutcomeCard: React.FC<{ story: any; index: number }> = ({ story, index }) 
 
 const SuccessStories: React.FC = () => {
   return (
-    <section id="success-stories" className="py-32 bg-white relative overflow-hidden">
+    <section id="success-stories" className="py-16 md:py-32 bg-white relative overflow-hidden">
       {/* Minimal Background Asset */}
       <div className="absolute inset-0 opacity-[0.01] pointer-events-none" style={{ backgroundImage: 'linear-gradient(to right, #0f172a 1px, transparent 1px)', backgroundSize: '33.33% 100%' }}></div>
 

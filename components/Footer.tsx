@@ -7,28 +7,27 @@ const Footer: React.FC = () => {
 
   const footerLinks = {
     core: [
-      { name: 'About Sabir', path: '#/about' },
-      { name: 'Portfolio / Work', path: '#/work' },
-      { name: 'Contact & Briefing', path: '#/contact' },
+      { name: 'About Sabir', path: '/about' },
+      { name: 'Portfolio / Work', path: '/work' },
+      { name: 'Contact & Briefing', path: '/contact' },
     ],
     personas: [
-      { name: 'Executive Assistants', path: '#/persona/executive-assistants' },
-      { name: 'Operations Leaders', path: '#/persona/operations-leaders' },
-      { name: 'Founders & CEOs', path: '#/persona/founders' },
-      { name: 'Hiring Managers', path: '#/persona/hiring-managers' },
+      { name: 'Executive Assistants', path: '/persona/executive-assistants' },
+      { name: 'Operations Leaders', path: '/persona/operations-leaders' },
+      { name: 'Founders & CEOs', path: '/persona/founders' },
+      { name: 'Hiring Managers', path: '/persona/hiring-managers' },
     ],
     solutions: [
-      { name: 'Operational Solutions', path: '#/solutions' },
-      { name: 'Systems Audit', path: '#/diagnostic' },
+      { name: 'Operational Solutions', path: '/solutions' },
+      { name: 'Systems Audit', path: '/diagnostic' },
     ],
     governance: [
-      { name: 'Reliability Standards', path: '#/governance' },
-      { name: 'Documentation Wiki', path: '#/governance' },
+      { name: 'Reliability Standards', path: '/governance' },
     ],
     proof: [
-      { name: 'Success Stories', path: '#/success-stories' },
-      { name: 'System Post-Mortems', path: '#/post-mortems' },
-      { name: 'Insights / Blog', path: '#/blog' },
+      { name: 'Success Stories', path: '/success-stories' },
+      { name: 'System Post-Mortems', path: '/post-mortems' },
+      { name: 'Insights / Blog', path: '/blog' },
     ]
   };
 
@@ -38,7 +37,7 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-16 mb-24">
           <div className="lg:col-span-1 space-y-8">
             <div className="flex flex-col gap-4">
-              <a href="#/" className="flex items-center gap-3 group">
+              <a href="/" className="flex items-center gap-3 group">
                 <div className="w-10 h-10 bg-slate-900 text-white rounded-xl flex items-center justify-center font-black group-hover:bg-blue-600 transition-colors shadow-lg">AR</div>
                 <span className="text-xl font-black tracking-tighter text-slate-900 leading-none">ABU RAHAT SABIR</span>
               </a>
@@ -60,7 +59,7 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h5 className="font-black text-[10px] uppercase tracking-[0.3em] text-blue-600 mb-8">Solutions For</h5>
+            <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-blue-600 mb-8">Solutions For</h4>
             <ul className="space-y-4">
               {footerLinks.personas.map(link => (
                 <li key={link.name}>
@@ -111,8 +110,9 @@ const Footer: React.FC = () => {
           </div>
 
           <div className="flex gap-8 items-center">
-            <a href="#/privacy" className="hover:text-blue-600 transition-colors">Privacy Protocol</a>
-            <a href="#/cookies" className="hover:text-blue-600 transition-colors">Cookie Audit</a>
+            <a href="/accessibility" className="hover:text-blue-600 transition-colors">Accessibility</a>
+            <a href="/privacy" className="hover:text-blue-600 transition-colors">Privacy Protocol</a>
+            <a href="/cookies" className="hover:text-blue-600 transition-colors">Cookie Audit</a>
           </div>
         </div>
       </div>

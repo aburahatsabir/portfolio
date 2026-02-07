@@ -7,8 +7,8 @@ import { sentryVitePlugin } from '@sentry/vite-plugin';
 // https://vitejs.dev/config/
 export default defineConfig({
   // Set base path for GitHub Pages deployment
-  // Site is deployed to https://aburahatsabir.github.io/portfolio/ (subdirectory)
-  base: '/',
+  // GitHub Pages: /portfolio/ (subdirectory), Vercel: / (root)
+  base: process.env.GITHUB_ACTIONS ? '/portfolio/' : '/',
 
   server: {
     port: 3000,
@@ -41,7 +41,7 @@ export default defineConfig({
   },
 
   build: {
-    outDir: 'docs',
+    outDir: 'dist',
     emptyOutDir: true,
     sourcemap: true, // Enable source maps for Sentry debugging
     minify: 'terser',

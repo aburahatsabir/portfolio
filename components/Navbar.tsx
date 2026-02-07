@@ -63,7 +63,7 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-500 ${isScrolled || isOpen ? 'glass-nav border-b border-slate-100 py-4 shadow-sm' : 'bg-white py-8'}`}>
+      <nav className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-500 ${isScrolled || isOpen ? 'bg-white/75 backdrop-blur-xl border-b border-slate-100 py-4 shadow-sm' : 'bg-white py-8'}`}>
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           <a href="/" className="flex items-center gap-4 group" onClick={handleLinkClick}>
             <div className="w-11 h-11 bg-slate-900 text-white rounded-[1.25rem] flex items-center justify-center font-black group-hover:rotate-[10deg] transition-all shadow-xl group-hover:bg-blue-600">AR</div>

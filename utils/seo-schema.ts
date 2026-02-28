@@ -189,24 +189,24 @@ export function generateWebSiteSchema(): WebSiteSchema {
 export function generateFAQSchema(): FAQPageSchema {
     const faqs: FAQItem[] = [
         {
-            question: 'What is your core expertise?',
-            answer: 'I specialize in enterprise architecture, administrative automation, and operational governance. My work focuses on building zero-cost ERP systems, automating complex workflows, and creating audit-ready governance frameworks using tools like VBA, Apps Script, and advanced Excel.'
+            question: 'Who are you?',
+            answer: 'Abu Rahat Sabir — I build zero-cost automation systems for operations teams. Based in Dhaka, work globally. B.S.S Economics (CGPA 3.21), 7+ years managing operations at Prominent Tec, Dreams IT Park, and I-Con Computer. Certified in AWS Cloud, Google Cloud, Cybersecurity, and Advanced Excel. I turn manual chaos into automated systems using Google Sheets, Apps Script, and Excel—no expensive software needed.'
         },
         {
-            question: 'What types of systems do you build?',
-            answer: 'I architect production-grade operational systems including: FMCG distribution ERPs, medical operations control systems, multi-entity payroll engines, trade finance ledgers, and HR documentation frameworks. All systems prioritize data integrity, audit compliance, and zero-error execution.'
+            question: 'What can you build?',
+            answer: 'Systems delivered: FMCG Distribution ERP (300+ items/day, 80% faster invoicing), Healthcare Patient Management (3,100+ patients, 49 hospitals, zero failures), Multi-Entity Payroll (80+ employees, 9 entities, 5 days to 2 hours), Trade Finance (15% revenue recovery), HR Compliance (Bangladesh Labour Act 2006). Tools: Google Sheets, Apps Script, Excel VBA, LaTeX. Why spreadsheets? You already own them—no vendor lock-in, no licenses, deploy in weeks.'
         },
         {
-            question: 'What industries have you worked in?',
-            answer: 'I have delivered systems across multiple sectors including FMCG wholesale distribution, international healthcare logistics, corporate finance, trade finance, and HR operations. My solutions are industry-agnostic, focusing on relational data architecture and governance principles.'
+            question: 'How do you work?',
+            answer: 'Process: Shadow your team 3-5 days, build prototype in 2 weeks, deploy in phases, train your team, provide 90-day support. Style: Weekly deliverables, detailed documentation, async updates. Values: You own the code 100%. I train your team to maintain it. Best fit: Data-driven leaders, scaling operations, governance rigor.'
         },
         {
-            question: 'How do you approach automation projects?',
-            answer: 'I follow an "Architecture Over Apps" philosophy, building logic kernels that organizations own completely. This ensures institutional sovereignty and prevents vendor lock-in. Every system includes idempotency guarantees, audit trails, and deterministic execution logic.'
+            question: 'What results do you deliver?',
+            answer: 'Time saved: 450+ hrs/year, 80% faster invoicing, 5 days to 2 hours payroll cycle. Errors eliminated: 0% failures (3,100 patients), 100% payroll accuracy, 98% order precision. Money recovered: 15% revenue gain, Taka 3L monthly leakage stopped, 100% commission visibility. Compliance: Zero audit findings, systems running 2+ years post-deployment.'
         },
         {
-            question: 'What is your availability for new projects?',
-            answer: 'I am currently serving as Executive – Administration at Prominent Tec while selectively taking on strategic consulting engagements. I prioritize projects that involve complex operational governance, multi-entity systems, or mission-critical automation requirements.'
+            question: 'How do I hire you?',
+            answer: 'Contact: aburahatsabir.com/contact or aburahatsabir178@gmail.com (24-48 hour response). Pricing: Sprint projects $5K-$20K (4-12 weeks), Retainer $2K-$5K/month. Process: Submit inquiry, 30-min call, I show 2-3 high-impact opportunities, you decide. Availability: 10-20 hrs/week, selective (10x ROI minimum).'
         }
     ];
 

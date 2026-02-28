@@ -52,11 +52,15 @@ export interface SuccessStory {
   id: string;
   clientName: string;
   industry: string;
-  challenge: string;
-  solution: string;
+  operationalRisk: string;
+  systemBuilt: string;
+  measuredOutcome: string;
   metrics: { label: string; value: string }[];
   logo: string;
-  outcomeDescription: string;
+  // Legacy fields for backward compatibility
+  challenge?: string;
+  solution?: string;
+  outcomeDescription?: string;
 }
 
 export interface GovernanceMetric {
@@ -107,6 +111,7 @@ export interface Experience {
   systemBuilt: string;
   complexityScale: 'Small Team' | 'Scaling Startup' | 'Enterprise Operations' | 'Global Architecture';
   narrativeStage: 'Chaos Remediation' | 'Standardized Architecture' | 'Autonomous Sovereignty';
+  metrics?: { label: string; value: string }[];
 }
 
 export interface Skill {

@@ -93,11 +93,11 @@ const CaseStudyPage: React.FC<{ projectId: string }> = ({ projectId }) => {
                   <div className="aspect-[4/3] rounded-[3.5rem] overflow-hidden bg-slate-50 border border-slate-100 shadow-2xl relative group">
                      <OptimizedImage
                         src={project.image}
-                        srcSet={`${project.image.replace('.webp', '-600w.webp')} 600w, ${project.image.replace('.webp', '-900w.webp')} 900w, ${project.image.replace('.webp', '-1140w.webp')} 1140w`}
-                        sizes="(max-width: 768px) 100vw, 50vw"
+                        srcSet={`${project.image.replace('.webp', '-600w.webp')} 600w, ${project.image.replace('.webp', '-900w.webp')} 900w, ${project.image.replace('.webp', '-1140w.webp')} 1140w, ${project.image.replace('.webp', '-1920w.webp')} 1920w`}
+                        sizes="(max-width: 768px) calc(100vw - 48px), calc(40vw - 24px)"
                         alt={project.title}
-                        width={1140}
-                        height={855}
+                        width={1920}
+                        height={1048}
                         loading="lazy"
                         className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000"
                      />

@@ -1,0 +1,577 @@
+# AUSTRALIA VISA APPLICATION - VISUAL SUMMARY & QUICK REFERENCE
+**Analysis Date:** January 24, 2026  
+**Application Status:** INCOMPLETE & NOT READY
+
+---
+
+## APPLICATION STATUS DASHBOARD
+
+```
+╔════════════════════════════════════════════════════════════════╗
+║               AUSTRALIA VISA APPLICATION STATUS                 ║
+╠════════════════════════════════════════════════════════════════╣
+║                                                                 ║
+║  Applicant 1 (Father):    ████████████░░░░░░░ 65% Complete   ║
+║  Applicant 2 (Son):       ██░░░░░░░░░░░░░░░░░  10% Complete  ║
+║  Financial Docs:         ███████░░░░░░░░░░░░░ 35% Complete   ║
+║  Travel Docs:            ██░░░░░░░░░░░░░░░░░░  15% Complete  ║
+║  Supporting Docs:        ░░░░░░░░░░░░░░░░░░░░   0% Complete  ║
+║                                                                 ║
+║  OVERALL READINESS:      ██░░░░░░░░░░░░░░░░░░  20% Ready      ║
+║                                                                 ║
+║  STATUS: ❌ NOT READY FOR SUBMISSION                           ║
+║  ACTION: FIX CRITICAL ISSUES (See below)                       ║
+║                                                                 ║
+╚════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## CRITICAL ISSUES - AT A GLANCE
+
+### BLOCKER #1: SON'S MISSING DOCUMENTS
+```
+┌─────────────────────────────────────────┐
+│  ⚠️  MISSING: TAHMIDUR RAHMAN'S DOCS     │
+├─────────────────────────────────────────┤
+│  ❌ Passport                             │
+│  ❌ National ID                          │
+│  ❌ Date of Birth                        │
+│  ❌ Employment/Education Status          │
+│  ❌ Address                              │
+│  ❌ Bank Account                         │
+│  ❌ Affidavit                            │
+│  ❌ Character Certificate                │
+│  ❌ Police Clearance                     │
+│  ❌ Photograph                           │
+│  ❌ Birth Certificate (proof of rel.)    │
+│                                         │
+│  Impact: APPLICATION CANNOT PROCEED      │
+│  Fix Time: 1-2 days                     │
+│  Priority: 🔴 CRITICAL                  │
+└─────────────────────────────────────────┘
+```
+
+### BLOCKER #2: WRONG TRIP DATES
+```
+┌──────────────────────────────────────────┐
+│  ⚠️  ITINERARY DATE MISMATCH              │
+├──────────────────────────────────────────┤
+│  Current Plan:   Feb 15-28, 2026         │
+│  Eid 2026:       March 30-31, 2026       │
+│  Stated Purpose: Eid Vacation            │
+│  Duration Gap:   5-6 WEEKS MISMATCH      │
+│                                          │
+│  Required:  Mar 30 - Apr 12, 2026        │
+│  Duration:  13 days                      │
+│  Purpose:   Eid vacation tourism         │
+│                                          │
+│  Impact: APPLICATION REJECTED             │
+│  Fix Time: 2 days (rewrite)              │
+│  Priority: 🔴 CRITICAL                  │
+└──────────────────────────────────────────┘
+```
+
+### BLOCKER #3: INCOME TAX DISCREPANCY
+```
+┌───────────────────────────────────────┐
+│  ⚠️  INCOME MISMATCH                    │
+├───────────────────────────────────────┤
+│  Claimed Income:                       │
+│  ├─ Business (M.R. Traders)            │
+│  │  20,00,000 BDT (AUD $24,211)        │
+│  ├─ Building Rental (Mohibur Plaza)    │
+│  │  14,40,000 BDT (AUD $17,432)        │
+│  └─ TOTAL: 34,40,000 BDT               │
+│                                        │
+│  Tax Return Shows:                     │
+│  └─ Total Income: 4,10,000 BDT         │
+│                                        │
+│  GAP: 29,90,000 BDT (89% discrepancy)  │
+│  = AUD $36,160 UNACCOUNTED FOR         │
+│                                        │
+│  Impact: FRAUDULENT APPEARANCE         │
+│  Fix Time: 3-5 days                    │
+│  Priority: 🔴 CRITICAL                 │
+└───────────────────────────────────────┘
+```
+
+### BLOCKER #4: BANK STATEMENTS WITHOUT DATES
+```
+┌──────────────────────────────────┐
+│  ⚠️  UNDATED BANK STATEMENTS      │
+├──────────────────────────────────┤
+│  Account 1 (Pubali - Savings)    │
+│  Balance: 10,45,254.61 BDT       │
+│  Dated: ??? (UNKNOWN)            │
+│                                  │
+│  Account 2 (Pubali - FDR)        │
+│  Balance: 19,20,000 BDT          │
+│  Dated: ??? (UNKNOWN)            │
+│                                  │
+│  Account 3 (Uttara - Current)    │
+│  Balance: 13,97,285.17 BDT       │
+│  Dated: ??? (UNKNOWN)            │
+│                                  │
+│  TOTAL: 43,62,539.78 BDT         │
+│  But: NO DATES = UNVERIFIABLE    │
+│                                  │
+│  Impact: REJECTED                 │
+│  Fix Time: 1-2 days              │
+│  Priority: 🔴 CRITICAL           │
+└──────────────────────────────────┘
+```
+
+---
+
+## ISSUE SEVERITY PYRAMID
+
+```
+                    ▲
+                   ╱ ╲
+                  ╱   ╲
+                 ╱ 🔴  ╲        CRITICAL (Application fails)
+                ╱CRITICAL╲      • Son's documents missing
+               ╱──────────╲     • Wrong trip dates
+              ╱  39 DAYS  ╲    • Income discrepancy
+             ╱─────────────╲   • No bank statement dates
+            ╱───────────────╲
+           ╱ 🟠 HIGH (5-7D) ╲  HIGH IMPACT (Likely reject)
+          ╱────────────────╲ • Police clearances missing
+         ╱                 ╲ • Character certs missing
+        ╱ 🟡 MEDIUM (3-5D)  ╲ MEDIUM IMPACT (May reject)
+       ╱──────────────────╲  • Business docs missing
+      ╱ 🟢 LOW (1-2 days)  ╲  • Property docs outdated
+     ╱────────────────────╲   LOW IMPACT
+    ╱___________________╱
+   Based on: Severity × Likelihood × Impact
+```
+
+---
+
+## FATHER'S INFORMATION COMPLETENESS
+
+```
+╔════════════════════════════════════════════════════════════════╗
+║          MD. MOHIBUR RAHMAN - DOCUMENT STATUS                  ║
+╠════════════════════════════════════════════════════════════════╣
+║                                                                ║
+║  Basic Information:                                            ║
+║  ✓ Name:         Md. Mohibur Rahman                           ║
+║  ✓ DOB:          31 Dec 1968 (Age 57)                         ║
+║  ✓ NID:          6427025512                                   ║
+║  ✓ Passport:     A11377254                                    ║
+║  ✓ Father:       Rokib Ali                                    ║
+║  ✓ Mother:       Joytera Bibi                                 ║
+║  ✓ Address:      Shoforpur, Ward No-02, Barlekha...           ║
+║  ? Marital:      Present (file "marrage.pdf" exists)          ║
+║                                                                ║
+║  Financial Information:                                        ║
+║  ✓ Property 1:   BDT 8,855,000 (documented)                   ║
+║  ✓ Property 2:   BDT 4,095,000 (documented)                   ║
+║  ✓ Bank Acc 1:   BDT 1,045,255 (balance shown)                ║
+║  ✓ Bank Acc 2:   BDT 1,920,000 (balance shown)                ║
+║  ✓ Bank Acc 3:   BDT 1,397,285 (balance shown)                ║
+║  ❌ Business Inc: BDT 2,000,000 (no proof!)                   ║
+║  ❌ Rental Inc:   BDT 1,440,000 (no proof!)                   ║
+║  ❌ Bank Dates:   NOT PROVIDED (CRITICAL!)                    ║
+║                                                                ║
+║  Legal Documents:                                              ║
+║  ✓ Affidavit:    Provided (but has typo)                      ║
+║  ❌ Police Cert:  MISSING                                      ║
+║  ❌ Char. Cert:   MISSING                                      ║
+║  ❌ Tax Details:  Problematic (see income issue)              ║
+║                                                                ║
+║  Travel Documents:                                             ║
+║  ❌ Flight Book:  NOT CONFIRMED                               ║
+║  ❌ Hotel Book:   NOT CONFIRMED                               ║
+║  ❌ Insurance:    NOT PROVIDED                                ║
+║  ❌ Itinerary:    WRONG DATES (Feb not Mar)                   ║
+║                                                                ║
+║  Overall Father's Docs: ~65% Complete                         ║
+║  Status: Partial (needs critical fixes)                       ║
+║                                                                ║
+╚════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## SON'S INFORMATION COMPLETENESS
+
+```
+╔════════════════════════════════════════════════════════════════╗
+║          TAHMIDUR RAHMAN - DOCUMENT STATUS                     ║
+╠════════════════════════════════════════════════════════════════╣
+║                                                                ║
+║  Basic Information:                                            ║
+║  ❌ Name:         Known (Tahmidur Rahman) - from itinerary    ║
+║  ❌ DOB:          NOT PROVIDED                                ║
+║  ❌ Age:          UNKNOWN                                     ║
+║  ❌ NID:          NOT PROVIDED                                ║
+║  ❌ Passport:     NOT PROVIDED (file exists but not extracted)║
+║  ❌ Address:      NOT PROVIDED                                ║
+║  ❌ Employment:   NOT PROVIDED                                ║
+║  ❌ Education:    NOT PROVIDED                                ║
+║  ❌ Marital:      NOT PROVIDED                                ║
+║                                                                ║
+║  Financial Information:                                        ║
+║  ❌ Bank Acc:     NOT PROVIDED (if any)                       ║
+║  ❌ Income:       NOT PROVIDED                                ║
+║  ❌ Assets:       NOT PROVIDED                                ║
+║  ❌ Funds Proof:  NOT PROVIDED                                ║
+║                                                                ║
+║  Legal Documents:                                              ║
+║  ❌ Passport:     MISSING (CRITICAL!)                         ║
+║  ❌ NID/ID:       MISSING (CRITICAL!)                         ║
+║  ❌ Affidavit:    MISSING                                     ║
+║  ❌ Police Cert:  MISSING                                     ║
+║  ❌ Char. Cert:   MISSING                                     ║
+║  ❌ Birth Cert:   MISSING (proof of relation)                 ║
+║  ❌ Photo ID:     MISSING                                     ║
+║                                                                ║
+║  Travel Documents:                                             ║
+║  ❌ Flight Book:  NOT CONFIRMED (name unknown!)              ║
+║  ❌ Hotel Book:   NOT CONFIRMED (name unknown!)              ║
+║  ❌ Insurance:    NOT PROVIDED                                ║
+║  ❌ Itinerary:    Mentioned but not detailed                  ║
+║                                                                ║
+║  Overall Son's Docs: ~10% Complete                           ║
+║  Status: CRITICALLY INCOMPLETE (almost nothing provided)     ║
+║  Note: File "Tahmidur Passport-03.pdf" exists but needs    ║
+║        extraction - may contain some information              ║
+║                                                                ║
+╚════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## FINANCIAL STRENGTH ANALYSIS
+
+```
+FINANCIAL CAPACITY: ✓ EXCELLENT (But documentation issues!)
+
+                    0 AUD      100K AUD      200K AUD
+Total Assets:       |=========  ▓▓▓▓▓▓▓▓▓▓|→ AUD $209,574 ✓
+Trip Cost:          |→ AUD $7,700 (only 4% of assets) ✓
+Coverage Ratio:     |=========  ▓▓▓▓▓▓▓▓▓▓  6.86x ✓✓✓
+                    
+Annual Income:      |         ▓▓▓▓▓| AUD $41,643 ✓
+
+Monthly Expense:    |→ Approx AUD $3,470 (if 12 months/income)
+
+
+VERDICT: FINANCES ARE STRONG ✓
+ISSUE: But documentation is WEAK ✗
+ACTION: Provide verified documents
+
+
+ASSET BREAKDOWN:
+═══════════════════════════════════════
+Property                    AUD $156,764  (75% of assets)
+├─ Khatian #52              $107,193
+└─ Khatian #47               $49,571
+
+Liquid Cash                  AUD $52,810   (25% of assets)
+├─ Pubali Savings           $12,653
+├─ Pubali FDR               $23,242
+└─ Uttara Current           $16,915
+
+═══════════════════════════════════════
+TOTAL:                       AUD $209,574
+
+ANNUAL INCOME:
+═══════════════════════════════════════
+Business (M.R. Traders)      AUD $24,211   (58% of income)
+Building Rental              AUD $17,432   (42% of income)
+═══════════════════════════════════════
+TOTAL:                       AUD $41,643
+
+TAX PAYMENT:
+═══════════════════════════════════════
+Reported Income:             BDT 410,000   (~AUD $4,965)
+Tax Paid:                    BDT 3,000     (~AUD $36)
+Effective Tax Rate:          0.73% (TOO LOW!)
+═══════════════════════════════════════
+
+❌ PROBLEM: Large discrepancy between claimed and reported income
+```
+
+---
+
+## DOCUMENT TIMELINE CHART
+
+```
+Document Age Analysis (as of Jan 24, 2026):
+
+2022 2023 2024 2025 2026
+|    |    |    |    |
+    [============●] Khatian Records (Oct 2022) - 3+ YEARS OLD ❌
+         [=======●] Tax Return (Sep 2025) - 4+ MONTHS OLD ⚠️
+         [=======●] Valuation Report (Dec 2025) - 40 DAYS OLD ✓
+         [=======●] Bank Statements - ???UNDATED??? ❌❌❌
+         [=======●] Affidavit - ???UNDATED??? ❌
+                  [●] Travel Itinerary - WRONG DATES ❌
+                  [●] Today (Jan 24, 2026) ◆
+
+
+FRESHNESS RATING:
+═══════════════════════════════════════
+Fresh (< 30 days):      Valuation Report        ✓
+                        
+Acceptable (< 6 mo):    Tax Return              ⚠️
+                        
+Outdated (> 6 mo):      Khatian Records (3 yrs) ❌
+                        
+Unknown (no dates):     Bank Statements         ❌❌❌
+                        Affidavit               ❌
+                        Passport (age unknown)  ❌
+                        NID (age unknown)       ❌
+
+Need: Updated documents for visa submission!
+```
+
+---
+
+## MISSING DOCUMENTS CHECKLIST
+
+```
+CRITICAL (Must have - Application FAILS without):
+
+  ❌ Son's Passport (BLOCKING ALL)
+  ❌ Son's Personal Info (BLOCKING ALL)
+  ❌ Travel Itinerary (Correct dates: Mar 30-Apr 12)
+  ❌ Bank Statements (With current dates)
+  ❌ Proof of Income (For tax discrepancy)
+  ❌ Flight Confirmation
+  ❌ Hotel Confirmation
+  ❌ Son's Affidavit
+
+HIGH PRIORITY (Likely rejection without):
+
+  ❌ Police Clearance (Father)
+  ❌ Police Clearance (Son)
+  ❌ Character Certificate (Father)
+  ❌ Character Certificate (Son)
+  ❌ Updated Property Records
+  ❌ Business Registration
+  ❌ Building Rental Docs
+
+IMPORTANT (Should have):
+
+  ❌ Birth Certificate (Son) - Proof of relation
+  ❌ Proof of Residence
+  ❌ Travel Insurance
+  ❌ Medical Examination (if required)
+
+SUPPORTING (Helpful):
+
+  ❌ Previous Travel History
+  ❌ Character References
+  ❌ Reason for Visit Letter
+  ❌ Family Photos
+
+
+Total Documents: ~40 items
+Currently provided: ~8 items  
+Missing: ~32 items (80%)
+```
+
+---
+
+## FIX PRIORITY HEAT MAP
+
+```
+        TIME →
+        1  2  3  4  5 weeks
+      ╔═╗
+    P │█│ CRITICAL - DO NOW
+    R │█│ ├─ Son's passport  
+    I │█│ ├─ Trip dates
+    O │█│ ├─ Income fix
+    R │█│ └─ Bank statements
+    I │█│
+    T ├─┤
+    Y │█│ HIGH - THIS WEEK
+      │█│ ├─ Police clearance
+      │█│ ├─ Character certs
+      │█│ ├─ Flight/Hotel
+      │█│ └─ Property records
+      │█│
+      ├─┤
+      │░│ MEDIUM - NEXT WEEK
+      │░│ ├─ Business docs
+      │░│ ├─ Family docs
+      │░│ └─ Supporting items
+      │░│
+      └─┘
+
+█ = Must do ASAP
+░ = Can do parallel with above
+```
+
+---
+
+## VISA OFFICER DECISION FLOWCHART
+
+```
+                    ┌─ Application Received
+                    ▼
+            ┌─────────────────┐
+            │ Check Identity  │
+            └────────┬────────┘
+                     │
+              ┌──────▼──────┐
+              │ Son's Docs? │
+              └──┬────────┬─┘
+                 │        │
+              YES│        │NO
+                 │        └──────────────┐
+                 │                       │
+                 ▼                       ▼
+          ┌────────────┐        ┌───────────────┐
+          │  Continue  │        │ REQUEST INFO  │
+          └──────┬─────┘        │    OR REJECT  │
+                 │              └───────────────┘
+                 │
+            ┌────▼──────┐
+            │ Check Trip │
+            │   Dates    │
+            └────┬───────┘
+                 │
+         ┌──────▼───────┐
+         │ Correct Date?│
+         └───┬────────┬─┘
+            YES│      │NO
+              │       └────────────────┐
+              │                        │
+              ▼                        ▼
+       ┌──────────────┐      ┌──────────────┐
+       │  Continue    │      │ REJECT APP   │
+       └──────┬───────┘      │ Wrong Dates  │
+              │              └──────────────┘
+              │
+        ┌─────▼─────────┐
+        │ Check Finances│
+        └─────┬─────────┘
+              │
+      ┌───────▼──────┐
+      │ Income Check?│
+      └───┬────────┬─┘
+         YES│      │NO/UNCLEAR
+          │       │
+          ▼       └───────────────┐
+    ┌──────────┐                  │
+    │Continue  │      ┌───────────▼────┐
+    └────┬─────┘      │REQUEST MORE INFO│
+         │            │or REFUSE        │
+         │            └──────────────────┘
+         │
+    ┌────▼──────────┐
+    │ Check Bank    │
+    │  Statements   │
+    └────┬──────────┘
+         │
+     ┌───▼─────┐
+     │ Dated?  │
+     └───┬───┬─┘
+        YES│ │NO
+          │ └───────────────┐
+          │                 │
+          ▼                 ▼
+    ┌─────────┐      ┌─────────────┐
+    │Continue │      │REJECT: Can't│
+    └────┬────┘      │verify funds │
+         │           └─────────────┘
+         │
+    ┌────▼──────────┐
+    │Final Decision │
+    └─────┬─────────┘
+          │
+    ┌─────▼──────────┐
+    │ If all OK:     │
+    │ APPROVE ✓      │
+    │                │
+    │ If any issues: │
+    │ DENY/REQUEST ✗ │
+    └────────────────┘
+```
+
+---
+
+## QUICK FIX GUIDE (What To Do First)
+
+```
+STARTING TODAY (JAN 24):
+
+  FIRST:   Call banks - get dated statements for all 3 accounts
+  SECOND:  Search for "Tahmidur Passport-03.pdf" - extract son's info
+  THIRD:   Contact accountant - fix income/tax discrepancy
+  FOURTH:  Book flights & hotels for Mar 30 - Apr 12
+  FIFTH:   Get son's basic documents (passport, NID)
+
+BY JAN 27:
+
+  ✓ Son's complete passport info
+  ✓ Recent bank statements (with dates)
+  ✓ Rewritten travel itinerary (Mar dates, Eid purpose)
+  ✓ Decision on income tax issue
+  ✓ Son's affidavit drafted
+
+BY FEB 3:
+
+  ✓ Police clearances (both)
+  ✓ Character certificates (both)
+  ✓ Business registration docs
+  ✓ Building rental documentation
+  ✓ Updated property records
+
+BY FEB 13:
+
+  ✓ Flight booking confirmed
+  ✓ Hotel booking confirmed
+  ✓ All documents organized
+  ✓ Quality check completed
+  ✓ Ready to submit
+
+BY FEB 15+:
+
+  ✓ SUBMIT APPLICATION!
+```
+
+---
+
+## SUCCESS SCORECARD
+
+```
+Application Readiness Scoring:
+
+                              Current    Target    Score
+                              ────────   ────────  ──────
+Applicant 1 Documentation      65%        100%      🔴
+Applicant 2 Documentation      10%        100%      🔴
+Financial Documentation        35%        100%      🔴
+Travel Documentation           15%        100%      🔴
+Supporting Documentation        0%        100%      🔴
+Quality/Accuracy              50%        100%      🟡
+Consistency/No Errors         60%        100%      🟡
+
+─────────────────────────────────────────────────────
+OVERALL READINESS:            ~33%       100%      ❌
+
+APPLICATION STATUS: NOT READY FOR SUBMISSION
+
+ESTIMATED DAYS TO READY:      21-30 days
+CURRENT DATE:                 Jan 24, 2026
+ESTIMATED READY DATE:         Feb 13-24, 2026
+
+EXPECTED APPROVAL RATE:
+  • Without fixes:           ~5% (automatic reject)
+  • After all fixes:         ~75-85% (likely approve)
+```
+
+---
+
+**Created:** January 24, 2026  
+**For:** Australia Visa Application Review  
+**Status:** Use as reference guide while fixing documents
+

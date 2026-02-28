@@ -1,0 +1,44 @@
+ID,Severity,Category,Component,Issue,Impact,Fix,Effort_Hours,PR_Number,Status
+B-001,BLOCKER,SEO,App.tsx,SPA hash routing breaks metadata updates,Social preview fails; no SEO indexing,"Add useEffect to update document.title & meta[description] per route; see ARTIFACT H",2,#2,Pending
+B-002,BLOCKER,Security,vite.config.ts,Gemini API key exposed in client bundle,API quota theft; PII leak risk,"Move geminiService.ts to backend serverless (Netlify/Vercel); call via fetch /api/audit",6,#2,Pending
+B-003,BLOCKER,Performance,index.html,Tailwind CDN blocks LCP (render-blocking),LCP 3.5s → 4.2s; 48% slower,"npm install tailwindcss; create tailwind.config.js; npm run build; replace CDN with dist/index.css",3,#3,Pending
+B-004,BLOCKER,A11y,App.tsx,No <h1> or <main> landmarks,Screen readers cannot navigate; fails WCAG A,"Add <main role='main'> wrapper; add <h1 class='sr-only'> per route; see ARTIFACT G",2,#1,Pending
+B-005,BLOCKER,UX,Contact.tsx,Form validation missing; errors not shown,Silent failures; users don't know why submit failed,"Add validateForm(); show error messages with aria-describedby; email regex required",2,#4,Pending
+H-001,HIGH,Performance,Work.tsx + Hero.tsx + SuccessStories.tsx,Images not lazy-loaded or responsive,LCP impact; bandwidth waste on mobile,"Add loading='lazy' decoding='async' width height srcset to all <img> tags",2,#3,Pending
+H-002,HIGH,A11y,Navbar.tsx + Work.tsx + Endorsements.tsx,No focus-visible on interactive elements,Tab navigation invisible; fails WCAG AA,"Add focus-visible:ring-2 focus-visible:outline-blue-600 focus-visible:outline-offset-2 to buttons/links",3,#1,Pending
+H-003,HIGH,A11y,index.html,Color contrast fails WCAG AA (3.7:1),"Blue #2563eb on white fails AA 4.5:1; slate-500 marginal","Change --brand-blue to #1e40af (5.2:1); use slate-600 for secondary text",1,#1,Pending
+H-004,HIGH,A11y,Work.tsx + VerticalExplorer.tsx + multiple,Missing aria-label on icon buttons,Icon buttons meaningless to screen readers,"Add aria-label='Filter by Automation' to all icon-only buttons",2,#5,Pending
+H-005,HIGH,SEO,/public/,Missing robots.txt,"Search engines don't know crawl rules; no sitemap reference","Create /public/robots.txt with Allow / and Disallow /api/; add Sitemap: line",1,#2,Pending
+H-006,HIGH,SEO,/public/,Missing sitemap.xml,Search engines cannot discover hash routes,"Create /public/sitemap.xml with all routes + images; add priority/lastmod",2, #2,Pending
+H-007,HIGH,SEO,index.html,No OG/Twitter meta tags,LinkedIn/Twitter share shows generic preview; no social proof,"Add og:title og:description og:image og:url twitter:card twitter:site meta tags",2,#2,Pending
+H-008,HIGH,SEO,index.html,No JSON-LD schema,Search engines can't infer Person/Article type,"Add Person schema + Article schema (per case study); see ARTIFACT H",2,#2,Pending
+H-009,HIGH,A11y,Navbar.tsx,No skip-to-content link,Keyboard users must tab through nav before content,"Add <a href='#main-content' className='sr-only focus:not-sr-only'>Skip to content</a>",1,#5,Pending
+H-010,HIGH,A11y,Navbar.tsx,Mobile menu cannot close on Escape,Keyboard users stuck; violates WCAG AA,"Add useEffect: if (e.key === 'Escape' && isOpen) setIsOpen(false)",1,#5,Pending
+H-011,HIGH,QA,tsconfig.json,TypeScript not in strict mode,Implicit any types; unchecked nulls allow bugs,"Add 'strict': true to compilerOptions; run npm run build; fix any errors",2,#6,Pending
+H-012,HIGH,Security,package.json,Unused dependency: recharts,200+ KB bundle bloat; no component uses it,"npm uninstall recharts; verify no imports reference it",1,#6,Pending
+M-001,MEDIUM,Performance,Work.tsx + Hero.tsx + SuccessStories.tsx,Images missing width/height attributes (CLS),Layout shift on image load causes jank,"Add width={1000} height={625} to all <img> tags; use aspect-[16/10]",2,#3,Pending
+M-002,MEDIUM,UX,Contact.tsx,No loading state in form submission,User doesn't know if form is processing,"Show spinner: {isSubmitting && <Spinner />} during submission",1,#4,Pending
+M-003,MEDIUM,UX,Hero.tsx + Work.tsx,Mobile viewport overflow on some resolutions,Text cut-off or horizontal scroll on small screens,"Test 375px; check overflow-x: hidden on body; use max-w-full on children",2,#1,Pending
+M-004,MEDIUM,QA,App.tsx,No Error Boundary component,Runtime crash crashes entire app; no graceful fallback,"Add <ErrorBoundary> wrapper around App; catch errors and show fallback UI",2,#6,Pending
+M-005,MEDIUM,Code,Navbar.tsx,Hardcoded PDF path "/AbuRahatSabir-Resume.pdf",URL maintenance scattered; breaks if renamed,"Move to constants.tsx: export const RESUME_URL = '...'",1,#6,Pending
+M-006,MEDIUM,Performance,ScrollToTop.tsx,Scroll event not throttled (fires 60+x/sec),Scroll handler may cause INP delays >100ms,"Add useCallback + debounce 150ms; use { passive: true } listener",2,#3,Pending
+M-007,MEDIUM,Performance,index.html,No preload for Google Fonts,Fonts slow to load; FOUT (flash of unstyled text),"Verify font-display=swap in URL; add <link rel='preload' ...> (already present)",1,#3,Pending
+M-008,MEDIUM,Code,Navbar.tsx + ScrollToTop.tsx,Multiple z-index layers (300, 310, etc),Z-index stacking confusion; no clear priority,"Create z-index token: export const Z_INDEX = { nav: 300, navOpen: 310, ... }",1,#6,Pending
+M-009,MEDIUM,UX,/public/,No PWA manifest (site.webmanifest),Site not installable on mobile; no app icon,"Create /public/site.webmanifest with name/description/icons/theme_color",2,#6,Pending
+M-010,MEDIUM,UX,App.tsx,No 404 error page for invalid routes,User sees blank page for typo routes like #/invalid,"Add NotFound component; catch invalid routes in renderContent()",2,#6,Pending
+M-011,MEDIUM,Performance,Work.tsx + CaseStudyPage.tsx,Case study images not optimized (WEBP),Bandwidth waste; images 2–3x larger than needed,"Convert .jpg to .webp with fallback; use <picture> tag; reduce quality to 85",3,#3,Pending
+M-012,MEDIUM,UX,README.md,No env variable documentation,Setup friction; new contributors confused,"Document .env.local requirements; create .env.local.example with GEMINI_API_KEY=your_key",1,#6,Pending
+M-013,MEDIUM,Code,Multiple components,Font sizes not using design tokens,No single source of truth; drift risk,"Extract to @layer components: .text-label { @apply text-[10px] font-black; }",2,#6,Pending
+M-014,MEDIUM,Code,Multiple components,Color hardcoded in multiple places,Color brand change requires regex across codebase,"Move to tailwind.config.js: colors: { 'brand-blue': '#1e40af', ... }",2,#6,Pending
+M-015,MEDIUM,UX,App.tsx,No page transition animations (prefers-reduced-motion),Users with vestibular disorders see jarring motion,"Wrap animations in: if (!window.matchMedia('(prefers-reduced-motion)').matches) animate",2,#3,Pending
+M-016,MEDIUM,UX,Contact.tsx,Form inputs missing placeholder text,UX clarity; no hints for field purpose,"Add placeholder='Your name' placeholder='Email address' etc.",1,#4,Pending
+M-017,MEDIUM,Code,Multiple SVG icons,SVG icons not using proper viewBox (scaling issues),"Verify all SVGs have viewBox='0 0 24 24'; no missing or incorrect viewBox",1,#5,Pending
+M-018,MEDIUM,Analytics,App.tsx,No analytics or error tracking,Blind spot; cannot track user behavior or bugs,"Add Google Analytics tag; add Sentry error tracking",2,#6,Pending
+L-001,LOW,UX,Hero.tsx,Mandate toggle (sovereignty/efficiency) subtle,Users may miss the toggle; low discoverability,"Add visual indicator (pulse animation or tooltip) to toggle buttons",1,Backlog,Pending
+L-002,LOW,Code,Contact.tsx,Form submission uses setTimeout (not real backend),"Security: form data not actually sent; user assumes submission works","Implement real backend endpoint for form storage (email + notification)",4,Future,Pending
+L-003,LOW,UX,Work.tsx,No "Related case studies" CTA after case study,"Cross-sell opportunity missed; users leave instead of browsing more","Add 'You might also like' section with 3 random projects",2,Backlog,Pending
+L-004,LOW,UX,Footer.tsx,Social links grid appears in both Contact + Footer,"Duplication; inconsistent positioning","Keep in Contact only; remove from Footer; link to #/contact instead",1,#5,Pending
+L-005,LOW,Code,About.tsx,FAQ accordion state lost on page reload,(Low impact; users don't typically reload FAQ),"Add localStorage to persist openFaqIndex; or leave as-is (low priority)",1,Backlog,Pending
+L-006,LOW,UX,Hero.tsx,No "Back to portfolio" link on case study detail,"Users forced to browser back button; breaks immersion","Add <Link to='#/work'>← Back to portfolio</Link> at top of CaseStudyPage",1,Backlog,Pending
+L-007,LOW,UX,Contact.tsx,No CAPTCHA or spam protection,Form could receive spam submissions,"Integrate reCAPTCHA v3 or similar; verify on backend",2,Future,Pending
+L-008,LOW,Code,Endorsements.tsx,Avatar images from ui-avatars.com (external dependency),"External service dependency; privacy concern if service logs IP","Download + store locally; update CDN link if needed",1,Backlog,Pending

@@ -7,7 +7,7 @@ import About from './components/About';
 import ScrollToTop from './components/ScrollToTop';
 import ErrorBoundary from './components/ErrorBoundary';
 import PersonaCTA from './components/PersonaCTA';
-import PersonaCTABanner from './components/PersonaCTABanner';
+import PersonaBanner from './components/PersonaBanner';
 import BottomCTA from './components/BottomCTA';
 import { lazyLoadPage, lazyLoad, PageLoadingFallback, LoadingFallback } from './utils/lazy-loading';
 
@@ -20,10 +20,11 @@ const PrivacyPolicy = lazyLoadPage(() => import('./components/PrivacyPolicy'));
 const CookiePolicy = lazyLoadPage(() => import('./components/CookiePolicy'));
 const AccessibilityStatement = lazyLoadPage(() => import('./components/AccessibilityStatement'));
 const PostMortems = lazyLoadPage(() => import('./components/PostMortems'));
+const Certifications = lazyLoadPage(() => import('./components/Certifications'));
 
 // Below-the-fold components - lazy load for better initial load
 const ExperienceTimeline = lazyLoad(() => import('./components/ExperienceTimeline'));
-const Capabilities = lazyLoad(() => import('./components/Capabilities'));
+const Capabilities = lazyLoad(() => import('./components/CapabilitiesPremium'));
 const ReliabilityStandards = lazyLoad(() => import('./components/ReliabilityStandards'));
 const AdministrativeRoiFramework = lazyLoad(() => import('./components/AdministrativeRoiFramework'));
 const Contact = lazyLoad(() => import('./components/Contact'));
@@ -46,250 +47,253 @@ import OfflineIndicator from './components/OfflineIndicator';
  * Generate breadcrumb items for current route
  */
 function getBreadcrumbsForRoute(currentPath: string): Array<{ name: string; url: string }> {
-  const baseUrl = window.location.origin;
-  const breadcrumbs = [{ name: 'Home', url: `${baseUrl}/` }];
+    const baseUrl = window.location.origin;
+    const breadcrumbs = [{ name: 'Home', url: `${baseUrl}/` }];
 
-  if (currentPath === '/' || !currentPath) {
-    return breadcrumbs;
-  }
-
-  // Handle case study routes
-  if (currentPath.startsWith('/work/')) {
-    breadcrumbs.push({ name: 'Work', url: `${baseUrl}/work` });
-    const projectId = currentPath.replace('/work/', '');
-    const project = { id: projectId, title: projectId.replace(/-/g, ' ') };
-    breadcrumbs.push({ name: project.title, url: `${baseUrl}${currentPath}` });
-    return breadcrumbs;
-  }
-
-  // Handle blog routes
-  if (currentPath.startsWith('/blog/')) {
-    breadcrumbs.push({ name: 'Blog', url: `${baseUrl}/blog` });
-    const postId = currentPath.replace('/blog/', '');
-    breadcrumbs.push({ name: postId.replace(/-/g, ' '), url: `${baseUrl}${currentPath}` });
-    return breadcrumbs;
-  }
-
-  // Handle persona routes
-  if (currentPath.startsWith('/persona/')) {
-    breadcrumbs.push({ name: 'For', url: `${baseUrl}/for` });
-    const personaId = currentPath.replace('/persona/', '');
-    const personaName = personaId.replace(/-/g, ' ');
-    breadcrumbs.push({ name: personaName, url: `${baseUrl}${currentPath}` });
-    return breadcrumbs;
-  }
-
-  // Simple routes
-  const routeNames: Record<string, string> = {
-    '/work': 'Work',
-    '/about': 'About',
-    '/contact': 'Contact',
-    '/solutions': 'Solutions',
-    '/governance': 'Governance',
-    '/blog': 'Blog',
-    '/for': 'For',
-    '/post-mortems': 'Post-Mortems',
-    '/success-stories': 'Success Stories',
-    '/privacy': 'Privacy Policy',
-    '/cookies': 'Cookie Policy'
-  };
-
-  if (routeNames[currentPath]) {
-    breadcrumbs.push({ name: routeNames[currentPath], url: `${baseUrl}${currentPath}` });
-  }
-
-  return breadcrumbs;
-}
-
-function App() {
-  const [currentPath, setCurrentPath] = useState(window.location.pathname || '/');
-  const [previousPath, setPreviousPath] = useState(window.location.pathname || '/');
-
-  // Track scroll depth for the current page
-  useScrollDepth(currentPath);
-
-  // Track engagement time for the current page
-  useEngagementTime(currentPath);
-
-  // Track exit intent
-  useExitIntent(true);
-
-
-  useEffect(() => {
-    // Update metadata on initial load and path change
-    updatePageMetadata(currentPath);
-
-    // Track page view for current route (runs on mount + change)
-    trackPageView({
-      route: currentPath,
-      title: document.title
-    });
-
-    // Track navigation pattern if path changed
-    if (previousPath !== currentPath) {
-      trackNavigation(previousPath, currentPath);
-      setPreviousPath(currentPath);
+    if (currentPath === '/' || !currentPath) {
+        return breadcrumbs;
     }
 
-    // Inject/remove FAQ schema based on route
-    if (currentPath === '/about') {
-      const faqSchema = generateFAQSchema();
-      injectSchema(faqSchema, 'faq-schema');
-    } else {
-      removeSchema('faq-schema');
+    // Handle case study routes
+    if (currentPath.startsWith('/work/')) {
+        breadcrumbs.push({ name: 'Work', url: `${baseUrl}/work` });
+        const projectId = currentPath.replace('/work/', '');
+        const project = { id: projectId, title: projectId.replace(/-/g, ' ') };
+        breadcrumbs.push({ name: project.title, url: `${baseUrl}${currentPath}` });
+        return breadcrumbs;
     }
 
-    // Inject WebSite schema on homepage
-    if (currentPath === '/') {
-      const websiteSchema = generateWebSiteSchema();
-      injectSchema(websiteSchema, 'website-schema');
-    } else {
-      removeSchema('website-schema');
+    // Handle blog routes
+    if (currentPath.startsWith('/blog/')) {
+        breadcrumbs.push({ name: 'Blog', url: `${baseUrl}/blog` });
+        const postId = currentPath.replace('/blog/', '');
+        breadcrumbs.push({ name: postId.replace(/-/g, ' '), url: `${baseUrl}${currentPath}` });
+        return breadcrumbs;
     }
 
-    // Inject breadcrumb schema for all routes
-    const breadcrumbs = getBreadcrumbsForRoute(currentPath);
-    if (breadcrumbs.length > 0) {
-      const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs);
-      injectSchema(breadcrumbSchema, 'breadcrumb-schema');
-    } else {
-      removeSchema('breadcrumb-schema');
+    // Handle persona routes
+    if (currentPath.startsWith('/persona/')) {
+        breadcrumbs.push({ name: 'For', url: `${baseUrl}/for` });
+        const personaId = currentPath.replace('/persona/', '');
+        const personaName = personaId.replace(/-/g, ' ');
+        breadcrumbs.push({ name: personaName, url: `${baseUrl}${currentPath}` });
+        return breadcrumbs;
     }
 
-    const handlePopState = () => {
-      const newPath = window.location.pathname || '/';
-      setCurrentPath(newPath);
-      window.scrollTo(0, 0);
+    // Simple routes
+    const routeNames: Record<string, string> = {
+        '/work': 'Work',
+        '/about': 'About',
+        '/contact': 'Contact',
+        '/solutions': 'Solutions',
+        '/governance': 'Governance',
+        '/blog': 'Blog',
+        '/for': 'For',
+        '/post-mortems': 'Post-Mortems',
+        '/success-stories': 'Success Stories',
+        // '/certifications': 'Certifications',
+        '/privacy': 'Privacy Policy',
+        '/cookies': 'Cookie Policy'
     };
 
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, [currentPath, previousPath]);
-
-  const renderContent = () => {
-    if (currentPath.startsWith('/blog/')) {
-      return <ErrorBoundary><BlogSeries /></ErrorBoundary>;
+    if (routeNames[currentPath]) {
+        breadcrumbs.push({ name: routeNames[currentPath], url: `${baseUrl}${currentPath}` });
     }
 
-    if (currentPath.startsWith('/work/')) {
-      const projectId = currentPath.replace('/work/', '');
-      return <ErrorBoundary><CaseStudyPage projectId={projectId} /></ErrorBoundary>;
-    }
+    return breadcrumbs;
+}
 
-    if (currentPath.startsWith('/persona/')) {
-      const personaId = currentPath.replace('/persona/', '');
-      return <ErrorBoundary><PersonaSpecificContent personaId={personaId} /></ErrorBoundary>;
-    }
+import SmoothScroll from './components/shared/SmoothScroll';
 
-    switch (currentPath) {
-      case '/for':
-        return <div className="pt-20"><ErrorBoundary><PersonaDirectory /></ErrorBoundary></div>;
-      case '/work':
-        return <div className="pt-20"><ErrorBoundary><Work /></ErrorBoundary></div>;
+function App() {
+    const [currentPath, setCurrentPath] = useState(window.location.pathname || '/');
+    const [previousPath, setPreviousPath] = useState(window.location.pathname || '/');
 
-      case '/governance':
-        return (
-          <div className="pt-20">
-            <ErrorBoundary><ReliabilityStandards /></ErrorBoundary>
-          </div>
-        );
-      case '/blog':
-        return <div className="pt-20"><ErrorBoundary><BlogSeries /></ErrorBoundary></div>;
-      case '/solutions':
-        return (
-          <div className="pt-20">
-            <ErrorBoundary><Capabilities /></ErrorBoundary>
-            <ErrorBoundary><AdministrativeRoiFramework /></ErrorBoundary>
-            <ErrorBoundary><PersonaCTABanner /></ErrorBoundary>
-          </div>
-        );
-      case '/post-mortems':
-        return <div className="pt-20"><ErrorBoundary><PostMortems /></ErrorBoundary></div>;
-      case '/success-stories':
-        return <div className="pt-20"><ErrorBoundary><SuccessStories /></ErrorBoundary><ErrorBoundary><Endorsements /></ErrorBoundary></div>;
-      case '/about':
-        return (
-          <div className="pt-20">
-            <ErrorBoundary><About showStrategicPillars={true} /></ErrorBoundary>
-            <ErrorBoundary><ExperienceTimeline /></ErrorBoundary>
-            <ErrorBoundary><PersonaCTABanner /></ErrorBoundary>
-          </div>
-        );
-      case '/contact':
-        return <div className="pt-20"><ErrorBoundary><Contact /></ErrorBoundary></div>;
-      case '/privacy':
-        return <ErrorBoundary><PrivacyPolicy /></ErrorBoundary>;
-      case '/cookies':
-        return <ErrorBoundary><CookiePolicy /></ErrorBoundary>;
-      case '/accessibility':
-        return <ErrorBoundary><AccessibilityStatement /></ErrorBoundary>;
-      default:
-        return (
-          <>
-            <ErrorBoundary><Hero /></ErrorBoundary>
-            <ErrorBoundary><About showStrategicPillars={false} /></ErrorBoundary>
-            <ErrorBoundary><ExperienceTimeline /></ErrorBoundary>
-            <ErrorBoundary><SuccessStories /></ErrorBoundary>
-            <ErrorBoundary><Endorsements /></ErrorBoundary>
-            <ErrorBoundary><Work /></ErrorBoundary>
-            <ErrorBoundary><Capabilities /></ErrorBoundary>
-            <ErrorBoundary><ReliabilityStandards /></ErrorBoundary>
-            <ErrorBoundary><AdministrativeRoiFramework /></ErrorBoundary>
-            <ErrorBoundary><PersonaCTA /></ErrorBoundary>
-            <ErrorBoundary><BottomCTA variant="default" /></ErrorBoundary>
-            <ErrorBoundary><Contact /></ErrorBoundary>
-          </>
-        );
-    }
-  };
+    // Track scroll depth for the current page
+    useScrollDepth(currentPath);
 
-  return (
-    <div className="min-h-screen bg-white">
-      {/* Skip to content link for screen readers */}
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-blue-600 focus:text-white focus:px-6 focus:py-3 focus:rounded-lg focus:outline-2 focus:outline-white focus:outline-offset-2 focus:shadow-xl focus:font-semibold"
-      >
-        Skip to main content
-      </a>
+    // Track engagement time for the current page
+    useEngagementTime(currentPath);
 
-      {/* Network offline indicator - shows banner when user is offline */}
-      <OfflineIndicator />
+    // Track exit intent
+    useExitIntent(true);
 
-      {/* Granular error boundary for Navbar - prevents nav crashes from taking down entire page */}
-      <ErrorBoundary>
-        <Navbar />
-      </ErrorBoundary>
 
-      <ErrorBoundary>
-        <main id="main-content">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentPath}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
-            >
-              {renderContent()}
-            </motion.div>
-          </AnimatePresence>
-        </main>
-      </ErrorBoundary>
+    useEffect(() => {
+        // Update metadata on initial load and path change
+        updatePageMetadata(currentPath);
 
-      <ScrollToTop />
+        // Track page view for current route (runs on mount + change)
+        trackPageView({
+            route: currentPath,
+            title: document.title
+        });
 
-      {/* Granular error boundary for Footer */}
-      <ErrorBoundary>
-        <Footer />
-      </ErrorBoundary>
+        // Track navigation pattern if path changed
+        if (previousPath !== currentPath) {
+            trackNavigation(previousPath, currentPath);
+            setPreviousPath(currentPath);
+        }
 
-      {/* Granular error boundary for Cookie Consent */}
-      <ErrorBoundary>
-        <CookieConsent />
-      </ErrorBoundary>
-    </div>
-  );
+        // Inject/remove FAQ schema based on route
+        if (currentPath === '/about') {
+            const faqSchema = generateFAQSchema();
+            injectSchema(faqSchema, 'faq-schema');
+        } else {
+            removeSchema('faq-schema');
+        }
+
+        // Inject WebSite schema on homepage
+        if (currentPath === '/') {
+            const websiteSchema = generateWebSiteSchema();
+            injectSchema(websiteSchema, 'website-schema');
+        } else {
+            removeSchema('website-schema');
+        }
+
+        // Inject breadcrumb schema for all routes
+        const breadcrumbs = getBreadcrumbsForRoute(currentPath);
+        if (breadcrumbs.length > 0) {
+            const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs);
+            injectSchema(breadcrumbSchema, 'breadcrumb-schema');
+        } else {
+            removeSchema('breadcrumb-schema');
+        }
+
+        const handlePopState = () => {
+            const newPath = window.location.pathname || '/';
+            setCurrentPath(newPath);
+            window.scrollTo(0, 0);
+        };
+
+        window.addEventListener('popstate', handlePopState);
+        return () => window.removeEventListener('popstate', handlePopState);
+    }, [currentPath, previousPath]);
+
+    const renderContent = () => {
+        if (currentPath.startsWith('/blog/')) {
+            return <ErrorBoundary><BlogSeries /></ErrorBoundary>;
+        }
+
+        if (currentPath.startsWith('/work/')) {
+            const projectId = currentPath.replace('/work/', '');
+            return <ErrorBoundary><CaseStudyPage projectId={projectId} /></ErrorBoundary>;
+        }
+
+        if (currentPath.startsWith('/persona/')) {
+            const personaId = currentPath.replace('/persona/', '');
+            return <ErrorBoundary><PersonaSpecificContent personaId={personaId} /></ErrorBoundary>;
+        }
+
+        switch (currentPath) {
+            case '/for':
+                return <div className="pt-20"><ErrorBoundary><PersonaDirectory /></ErrorBoundary></div>;
+            case '/work':
+                return <div className="pt-20"><ErrorBoundary><Work /></ErrorBoundary></div>;
+
+            case '/governance':
+                return (
+                    <div className="pt-20">
+                        <ErrorBoundary><ReliabilityStandards /></ErrorBoundary>
+                    </div>
+                );
+            case '/blog':
+                return <div className="pt-20"><ErrorBoundary><BlogSeries /></ErrorBoundary></div>;
+            case '/solutions':
+                return (
+                    <div className="pt-20">
+                        <ErrorBoundary><PersonaDirectory /></ErrorBoundary>
+                    </div>
+                );
+            case '/post-mortems':
+                return <div className="pt-20"><ErrorBoundary><PostMortems /></ErrorBoundary></div>;
+            case '/success-stories':
+                return <div className="pt-20"><ErrorBoundary><SuccessStories /></ErrorBoundary><ErrorBoundary><Endorsements /></ErrorBoundary></div>;
+            case '/about':
+                return (
+                    <div className="pt-20">
+                        <ErrorBoundary><About showStrategicPillars={true} /></ErrorBoundary>
+                        <ErrorBoundary><ExperienceTimeline /></ErrorBoundary>
+                        <PersonaBanner />
+                    </div>
+                );
+            case '/contact':
+                return <div className="pt-20"><ErrorBoundary><Contact /></ErrorBoundary></div>;
+            case '/certifications':
+                return <div className="pt-20"><ErrorBoundary><Certifications /></ErrorBoundary></div>;
+            case '/privacy':
+                return <ErrorBoundary><PrivacyPolicy /></ErrorBoundary>;
+            case '/cookies':
+                return <ErrorBoundary><CookiePolicy /></ErrorBoundary>;
+            case '/accessibility':
+                return <ErrorBoundary><AccessibilityStatement /></ErrorBoundary>;
+            default:
+                return (
+                    <>
+                        <ErrorBoundary><Hero /></ErrorBoundary>
+                        <ErrorBoundary><About showStrategicPillars={false} /></ErrorBoundary>
+                        <ErrorBoundary><ExperienceTimeline /></ErrorBoundary>
+                        <ErrorBoundary><SuccessStories /></ErrorBoundary>
+                        <ErrorBoundary><Endorsements /></ErrorBoundary>
+                        <ErrorBoundary><Work /></ErrorBoundary>
+                        <ErrorBoundary><Capabilities /></ErrorBoundary>
+                        <ErrorBoundary><ReliabilityStandards /></ErrorBoundary>
+                        <ErrorBoundary><AdministrativeRoiFramework /></ErrorBoundary>
+                        <ErrorBoundary><Contact /></ErrorBoundary>
+                    </>
+                );
+        }
+    };
+
+    return (
+        <SmoothScroll>
+            <div className="min-h-screen bg-white">
+                {/* Skip to content link for screen readers */}
+                <a
+                    href="#main-content"
+                    className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-blue-600 focus:text-white focus:px-6 focus:py-3 focus:rounded-lg focus:outline-2 focus:outline-white focus:outline-offset-2 focus:shadow-xl focus:font-semibold"
+                >
+                    Skip to main content
+                </a>
+
+                {/* Network offline indicator - shows banner when user is offline */}
+                <OfflineIndicator />
+
+                {/* Granular error boundary for Navbar - prevents nav crashes from taking down entire page */}
+                <ErrorBoundary>
+                    <Navbar />
+                </ErrorBoundary>
+
+                <ErrorBoundary>
+                    <main id="main-content">
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={currentPath}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                {renderContent()}
+                            </motion.div>
+                        </AnimatePresence>
+                    </main>
+                </ErrorBoundary>
+
+                <ScrollToTop />
+
+                {/* Granular error boundary for Footer */}
+                <ErrorBoundary>
+                    <Footer />
+                </ErrorBoundary>
+
+                {/* Granular error boundary for Cookie Consent */}
+                <ErrorBoundary>
+                    <CookieConsent />
+                </ErrorBoundary>
+            </div>
+        </SmoothScroll>
+    );
 }
 
 export default App;

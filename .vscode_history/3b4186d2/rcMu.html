@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Architect | Systems Governance & Operations</title>
+    <meta name="description" content="Strategic portfolio of a Corporate Operations Executive specializing in enterprise architecture, automation, and institutional governance.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-blue: #2563eb;
+            --bg-main: #FFFFFF;
+            --text-main: #0F172A;
+            --slate-50: #F8FAFC;
+            --slate-100: #F1F5F9;
+            --slate-900: #0F172A;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            letter-spacing: -0.01em;
+        }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .text-tight { letter-spacing: -0.03em; }
+        .text-tighter { letter-spacing: -0.05em; }
+        
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        
+        .executive-shadow {
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.05), 0 5px 20px -5px rgba(0,0,0,0.02);
+        }
+
+        .btn-hover-effect {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-hover-effect:hover {
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 30px 60px -12px rgba(37, 99, 235, 0.25);
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--slate-50); }
+        ::-webkit-scrollbar-thumb { 
+            background: #cbd5e1; 
+            border-radius: 20px; 
+            border: 2px solid var(--slate-50);
+        }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        @keyframes subtle-float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+        .animate-float {
+            animation: subtle-float 6s ease-in-out infinite;
+        }
+
+        .selection-blue::selection {
+            background-color: var(--brand-blue);
+            color: white;
+        }
+
+        .noise-bg {
+            position: relative;
+        }
+        .noise-bg::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0.03;
+            pointer-events: none;
+            background-image: 
+              repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.03) 2px,
+                rgba(0, 0, 0, 0.03) 4px
+              ),
+              repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.03) 2px,
+                rgba(0, 0, 0, 0.03) 4px
+              );
+            z-index: 1;
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://esm.sh/@google/genai@^1.35.0",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom": "https://esm.sh/react-dom@^19.2.3",
+    "framer-motion": "https://esm.sh/framer-motion@^11.0.0",
+    "recharts": "https://esm.sh/recharts@^2.12.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="selection-blue">
+    <div id="root"></div>
+    <script>
+      // Fallback message if React fails to load
+      window.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+          if (!document.querySelector('[data-reactroot]') && document.getElementById('root').children.length === 0) {
+            document.getElementById('root').innerHTML = '<div style="color: red; font-size: 18px; padding: 20px;">Loading... If this message persists, please refresh the page.</div>';
+          }
+        }, 3000);
+      });
+    </script>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>

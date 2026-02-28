@@ -9,6 +9,7 @@ const Footer: React.FC = () => {
     core: [
       { name: 'About Sabir', path: '/about' },
       { name: 'Portfolio / Work', path: '/work' },
+      { name: 'Certifications', path: '/certifications' },
       { name: 'Contact & Briefing', path: '/contact' },
     ],
     personas: [

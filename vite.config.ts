@@ -11,7 +11,7 @@ export default defineConfig({
   base: process.env.GITHUB_ACTIONS ? '/portfolio/' : '/',
 
   server: {
-    port: 3000,
+    port: 3001,
     host: '0.0.0.0',
   },
 

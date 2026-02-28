@@ -3,8 +3,10 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { trackContactCTA } from '../utils/analytics';
+import SectionLabel from './shared/SectionLabel';
 
 interface HeroContent {
+  index: string;
   image: string;
   title: React.JSX.Element;
   subhead?: string;
@@ -19,6 +21,7 @@ const Hero: React.FC = () => {
 
   const content: Record<'sovereignty' | 'efficiency', HeroContent> = {
     sovereignty: {
+      index: "01",
       image: "./images/hero/Abu Rahat Hero 01.webp",
       title: <>Engineering <br /><span className="text-blue-700">Institutional</span> <br />Sovereignty.</>,
       description: "I design self-governing operations infrastructure for organizations that refuse to hire their way out of inefficiency—eliminating the 'Human-Bridge' debt between silos.",
@@ -27,9 +30,10 @@ const Hero: React.FC = () => {
       statUnit: "Years"
     },
     efficiency: {
+      index: "02",
       image: "./images/hero/Abu Rahat Hero 02.webp",
       title: <>Reclaiming <br /><span className="text-blue-700">Operational</span> <br />Capital.</>,
-      description: "Optimizing executive operations through VBA and Apps Script. I turn 6-hour closing cycles into 30-minute automated validations.",
+      description: "I architect operational systems that eliminate administrative overhead—reclaiming executive time while your processes run flawlessly without constant supervision.",
       statLabel: "Average Efficiency",
       statValue: "90%",
       statUnit: "Gain"
@@ -41,18 +45,21 @@ const Hero: React.FC = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
+        staggerChildren: 0.2,
+        delayChildren: 0.3,
       }
     }
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 15 },
+    hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
+      transition: {
+        duration: 1.2,
+        ease: [0.16, 1, 0.3, 1]
+      }
     }
   };
 
@@ -66,9 +73,13 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center pt-24 pb-20 overflow-hidden bg-white selection:bg-blue-700 selection:text-white">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:32px_32px] opacity-[0.4]"></div>
-      <div className="absolute top-0 right-0 w-[45%] h-full bg-slate-50/70 -z-10 border-l border-slate-200/50 hidden lg:block"></div>
+    <section className="relative min-h-[90vh] lg:min-h-screen flex items-center pt-40 pb-20 overflow-hidden bg-white selection:bg-blue-700 selection:text-white">
+      {/* Sophisticated Background Architecture */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:32px_32px] opacity-[0.3]"></div>
+        <div className="absolute top-0 right-0 w-[45%] h-full bg-slate-50/50 border-l border-slate-100 hidden lg:block"></div>
+        <div className="absolute top-1/4 -right-20 w-96 h-96 bg-blue-50/50 blur-[120px] rounded-full pointer-events-none"></div>
+      </div>
 
       <motion.div
         variants={containerVariants}
@@ -76,71 +87,68 @@ const Hero: React.FC = () => {
         animate="visible"
         className="max-w-7xl mx-auto px-6 w-full"
       >
-        <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-20 items-center">
-          <div className="relative z-10 space-y-12">
-            <motion.div variants={itemVariants} className="inline-flex items-center gap-3">
-              <span className="flex h-2 w-2 rounded-full bg-blue-700 shadow-[0_0_10px_rgba(29,78,216,0.4)]"></span>
-              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-500">
-                Systems Strategy
-              </p>
-            </motion.div>
+        <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 lg:gap-20 items-start">
+          <div className="relative z-10 space-y-8 lg:space-y-10">
+            <div className="space-y-6">
+              <motion.div
+                variants={itemVariants}
+                className="flex flex-col gap-4"
+              >
+                <div className="inline-flex p-1 bg-white/50 backdrop-blur-xl border border-slate-100 rounded-xl relative overflow-hidden group/toggle max-w-fit">
+                  {/* High-Precision Indicator */}
+                  <div className="absolute inset-1 w-[calc(50%-4px)] h-[calc(100%-8px)] pointer-events-none">
+                    <motion.div
+                      layoutId="mandate-active"
+                      initial={false}
+                      animate={{
+                        x: activeMandate === 'sovereignty' ? 0 : '100%',
+                        marginLeft: activeMandate === 'sovereignty' ? 0 : '8px'
+                      }}
+                      transition={{ type: "spring", stiffness: 400, damping: 40, mass: 0.8 }}
+                      className="absolute inset-0 bg-slate-900 rounded-lg shadow-2xl shadow-slate-900/20"
+                    />
+                  </div>
 
-            <div className="space-y-8">
-              <motion.div variants={itemVariants} className="flex gap-3">
-                <motion.button
-                  variants={buttonVariants}
-                  initial="initial"
-                  whileHover="hover"
-                  whileTap="tap"
-                  onClick={() => setActiveMandate('sovereignty')}
-                  className={`relative overflow-hidden text-[10px] font-black uppercase tracking-[0.2em] px-7 py-3.5 rounded-xl transition-all border ${activeMandate === 'sovereignty'
-                    ? 'bg-slate-900 text-white border-slate-900 shadow-2xl shadow-slate-900/20'
-                    : 'bg-white text-slate-600 border-slate-200 hover:text-slate-900 hover:border-slate-300'
-                    }`}
-                >
-                  Sovereignty
-                </motion.button>
+                  <button
+                    onClick={() => setActiveMandate('sovereignty')}
+                    className="relative px-6 py-2 transition-all duration-300 z-10"
+                  >
+                    <span className={`text-[10px] font-black uppercase tracking-[0.3em] font-mono transition-colors duration-500 ${activeMandate === 'sovereignty' ? 'text-white' : 'text-slate-400 hover:text-slate-600'}`}>
+                      Sovereignty
+                    </span>
+                  </button>
 
-                <motion.button
-                  variants={buttonVariants}
-                  initial="initial"
-                  whileHover="hover"
-                  whileTap="tap"
-                  onClick={() => setActiveMandate('efficiency')}
-                  className={`relative overflow-hidden text-[10px] font-black uppercase tracking-[0.2em] px-7 py-3.5 rounded-xl transition-all border ${activeMandate === 'efficiency'
-                    ? 'bg-slate-900 text-white border-slate-900 shadow-2xl shadow-slate-900/20'
-                    : 'bg-white text-slate-600 border-slate-200 hover:text-slate-900 hover:border-slate-300'
-                    }`}
-                >
-                  Efficiency
-                </motion.button>
+                  <button
+                    onClick={() => setActiveMandate('efficiency')}
+                    className="relative px-6 py-2 transition-all duration-300 z-10"
+                  >
+                    <span className={`text-[10px] font-black uppercase tracking-[0.3em] font-mono transition-colors duration-500 ${activeMandate === 'efficiency' ? 'text-white' : 'text-slate-400 hover:text-slate-600'}`}>
+                      Efficiency
+                    </span>
+                  </button>
+                </div>
               </motion.div>
 
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeMandate}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 10 }}
-                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  initial={{ opacity: 0, x: -15, filter: 'blur(8px)' }}
+                  animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+                  exit={{ opacity: 0, x: 15, filter: 'blur(8px)' }}
+                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                  className="space-y-4"
                 >
-                  <h1 className="text-6xl md:text-8xl font-[900] tracking-tighter leading-[0.92] text-slate-900 mb-8">
+                  <h1 className="text-6xl md:text-8xl lg:text-[105px] font-[900] tracking-[-0.04em] leading-[0.88] text-slate-900">
                     {content[activeMandate].title}
                   </h1>
-                  {content[activeMandate].subhead && (
-                    <p className="text-lg md:text-xl text-blue-700 font-bold leading-snug mb-8 max-w-lg">
-                      {content[activeMandate].subhead}
-                    </p>
-                  )}
-                  <p className="text-xl md:text-2xl text-slate-600 font-medium leading-relaxed max-w-xl">
+                  <p className="text-lg md:text-xl lg:text-2xl text-slate-500 font-medium leading-relaxed max-w-xl">
                     {content[activeMandate].description}
                   </p>
-
                 </motion.div>
               </AnimatePresence>
             </div>
 
-            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center gap-5">
+            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center gap-8">
               <a
                 href="/contact"
                 onClick={() => trackContactCTA({
@@ -148,25 +156,46 @@ const Hero: React.FC = () => {
                   conversionType: 'contact_form',
                   label: 'free_audit_cta'
                 })}
-                className="w-full sm:w-auto px-12 py-6 bg-slate-900 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest hover:bg-blue-700 transition-all shadow-2xl shadow-slate-900/10 flex items-center justify-center gap-3 active:scale-95"
+                className="w-full sm:w-auto relative group active:scale-[0.97] transition-transform duration-200"
               >
-                Get Free 15-Min Process Audit
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                {/* Sophisticated Glow Layer */}
+                <div className="absolute -inset-[1px] bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                <div className="relative px-14 py-6 bg-slate-950 text-white rounded-xl font-black text-[11px] uppercase tracking-[0.4em] flex items-center justify-center gap-4 transition-all duration-300 border border-white/5 overflow-hidden">
+                  {/* Shine Effect */}
+                  <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
+
+                  <span className="relative z-10">Start Discussion</span>
+                  <motion.div
+                    animate={{ x: [0, 4, 0] }}
+                    transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+                    className="relative z-10"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </motion.div>
+                </div>
               </a>
 
               <a
                 href="/work"
-                className="w-full sm:w-auto px-12 py-6 bg-white border border-slate-200 text-slate-600 rounded-2xl font-black text-[11px] uppercase tracking-widest hover:text-slate-900 hover:bg-slate-50 transition-all flex items-center justify-center active:scale-95"
+                className="w-full sm:w-auto group relative flex items-center justify-center active:scale-[0.98] transition-transform"
               >
-                Case Studies
+                <div className="relative px-12 py-6 bg-white border border-slate-100 rounded-xl font-black text-[11px] uppercase tracking-[0.4em] text-slate-400 hover:text-slate-900 flex items-center justify-center transition-all duration-500 hover:shadow-xl hover:shadow-slate-200/50 hover:border-slate-200">
+                  <span className="relative z-10">Case Studies</span>
+                </div>
               </a>
             </motion.div>
 
-            <motion.div variants={itemVariants} className="pt-12 border-t border-slate-200 flex items-center gap-10 opacity-60">
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">Core Expertise</p>
-              <div className="flex gap-10">
-                {['Excel Automation', 'Google Sheets', 'Process Design'].map(name => (
-                  <span key={name} className="text-sm font-black text-slate-900">{name}</span>
+            <motion.div variants={itemVariants} className="pt-12 border-t border-slate-100 flex flex-wrap items-center gap-x-10 gap-y-6">
+              <SectionLabel variant="muted">Core Expertise</SectionLabel>
+              <div className="flex gap-8">
+                {['Automation', 'Optimization', 'Integration'].map(name => (
+                  <div key={name} className="flex items-center gap-2">
+                    <span className="w-1 h-1 rounded-full bg-slate-200"></span>
+                    <span className="text-[11px] font-black text-slate-900 tracking-tight">{name}</span>
+                  </div>
                 ))}
               </div>
             </motion.div>
@@ -178,12 +207,13 @@ const Hero: React.FC = () => {
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
             className="relative hidden lg:block"
           >
-            <div className="absolute -inset-10 bg-blue-700/5 blur-[100px] rounded-full pointer-events-none"></div>
+            {/* Architectural Frame */}
+            <div className="absolute -inset-10 bg-blue-500/5 blur-[100px] rounded-full pointer-events-none"></div>
 
             <motion.div
-              className="relative z-10 p-5 bg-white rounded-[4.5rem] shadow-[0_60px_100px_-20px_rgba(15,23,42,0.1)] border border-slate-200/60 group"
+              className="relative z-10 p-2 bg-white rounded-[3rem] shadow-[0_40px_80px_-20px_rgba(15,23,42,0.08)] border border-slate-100 group"
             >
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[3.8rem] bg-slate-100">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-[2.5rem] bg-slate-50">
                 <AnimatePresence mode="wait">
                   <motion.img
                     key={content[activeMandate].image}
@@ -192,32 +222,36 @@ const Hero: React.FC = () => {
                     exit={{ opacity: 0, scale: 1.02 }}
                     transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                     src={content[activeMandate].image}
-                    alt={`Abu Rahat Sabir - ${activeMandate === 'sovereignty' ? 'Engineering Institutional Sovereignty' : 'Reclaiming Operational Capital'}`}
+                    alt={`Abu Rahat Sabir - ${activeMandate}`}
                     width={800}
                     height={1000}
                     fetchPriority="high"
                     loading="eager"
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] brightness-[1.02] group-hover:scale-[1.02]"
+                    className="w-full h-full object-cover grayscale brightness-[1.05] group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.02]"
                   />
                 </AnimatePresence>
+
+                {/* Overlay Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent pointer-events-none"></div>
               </div>
 
+              {/* Telemetry Node - Premium Card */}
               <motion.div
                 initial={{ opacity: 0, x: -15 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.8 }}
-                className="absolute -bottom-6 -left-10 p-0.5 bg-slate-900 border border-slate-800 rounded-[2rem] shadow-2xl z-20 overflow-hidden"
+                className="absolute -bottom-4 -left-4 z-20"
               >
-                <div className="px-8 py-6 rounded-[1.9rem] flex flex-col gap-1">
+                <div className="px-4 py-3 rounded-xl bg-slate-900 border border-slate-800 shadow-xl">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
                     <AnimatePresence mode="wait">
                       <motion.p
                         key={content[activeMandate].statLabel}
                         initial={{ opacity: 0, y: 5 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -5 }}
-                        className="text-[7px] font-black uppercase tracking-[0.3em] text-slate-500"
+                        className="text-[8px] font-semibold uppercase tracking-[0.12em] text-slate-400"
                       >
                         {content[activeMandate].statLabel}
                       </motion.p>
@@ -229,7 +263,7 @@ const Hero: React.FC = () => {
                         key={content[activeMandate].statValue}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="text-4xl font-black text-white tracking-tighter"
+                        className="text-2xl font-black text-white tracking-tight"
                       >
                         {content[activeMandate].statValue}
                       </motion.p>
@@ -239,7 +273,7 @@ const Hero: React.FC = () => {
                         key={content[activeMandate].statUnit}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="text-[8px] font-black uppercase text-blue-500 tracking-[0.2em]"
+                        className="text-[9px] font-semibold uppercase text-blue-400 tracking-[0.108em]"
                       >
                         {content[activeMandate].statUnit}
                       </motion.p>

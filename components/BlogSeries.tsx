@@ -3,7 +3,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 import { BLOG_POSTS } from '../constants';
 import { BlogPost } from '../types';
-import PersonaCTABanner from './PersonaCTABanner';
+import PersonaBanner from './PersonaBanner';
 
 const TypewriterText: React.FC<{ text: string }> = ({ text }) => {
   const [displayedText, setDisplayedText] = useState('');
@@ -260,7 +260,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
               </div>
             </div>
 
-            <PersonaCTABanner />
+            <PersonaBanner />
           </article>
 
           <aside className="sticky top-32 space-y-10 hidden lg:block">

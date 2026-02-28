@@ -1,6 +1,29 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
+const revealVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 1.2,
+      ease: [0.16, 1, 0.3, 1],
+    }
+  }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+      delayChildren: 0.1,
+    }
+  }
+};
+
 const Solutions: React.FC = () => {
   const categories = [
     {
@@ -45,20 +68,29 @@ const Solutions: React.FC = () => {
   return (
     <section id="solutions" className="py-32 bg-slate-50 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center max-w-3xl mx-auto mb-20 space-y-6">
-          <h2 className="text-xs font-black uppercase tracking-[0.4em] text-blue-600">Administrative Product Catalog</h2>
-          <h1 className="text-4xl md:text-6xl font-black tracking-tight text-slate-900 leading-tight">Expertise built for the <span className="text-blue-600">modern enterprise.</span></h1>
-          <p className="text-xl text-slate-500 font-medium">I don't just fix systems; I re-architect them for peak efficiency. Here is how I transform organizations.</p>
-        </div>
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-10%" }}
+          className="text-center max-w-3xl mx-auto mb-20 space-y-6"
+        >
+          <motion.h2 variants={revealVariants} className="text-xs font-black uppercase tracking-[0.4em] text-blue-600">Administrative Product Catalog</motion.h2>
+          <motion.h1 variants={revealVariants} className="text-4xl md:text-6xl font-black tracking-tight text-slate-900 leading-tight">Expertise built for the <span className="text-blue-600">modern enterprise.</span></motion.h1>
+          <motion.p variants={revealVariants} className="text-xl text-slate-500 font-medium">I don't just fix systems; I re-architect them for peak efficiency. Here is how I transform organizations.</motion.p>
+        </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-10%" }}
+          className="grid md:grid-cols-3 gap-8"
+        >
           {categories.map((cat, idx) => (
             <motion.div
               key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.1 }}
-              viewport={{ once: true }}
+              variants={revealVariants}
               className="bg-white p-12 rounded-[3.5rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-500 group h-full flex flex-col"
             >
               <div className="text-blue-600 mb-8 w-20 h-20 bg-slate-50 rounded-3xl flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 shadow-sm">{cat.icon}</div>
@@ -71,9 +103,15 @@ const Solutions: React.FC = () => {
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
 
-        <div className="mt-32 bg-slate-900 text-white rounded-[4rem] p-12 md:p-24 relative overflow-hidden group shadow-3xl shadow-slate-950/20">
+        <motion.div
+          variants={revealVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-10%" }}
+          className="mt-32 bg-slate-900 text-white rounded-[4rem] p-12 md:p-24 relative overflow-hidden group shadow-3xl shadow-slate-950/20"
+        >
           <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 blur-[150px] pointer-events-none group-hover:bg-blue-600/20 transition-all duration-1000"></div>
 
           <div className="relative z-10 grid lg:grid-cols-[1.2fr_0.8fr] gap-20 items-start">
@@ -121,7 +159,7 @@ const Solutions: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

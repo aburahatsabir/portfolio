@@ -3,12 +3,14 @@
 export const EXPERIENCES: Experience[] = [
   {
     company: 'Prominent Tec (Gulshan, Dhaka)',
-    role: 'Executive â€“ Administration',
-    period: '2024 â€” PRESENT',
+    role: 'Executive — Administration',
+    period: '2024 — PRESENT',
     description: [
-      'Proactively manage complex C-suite schedules, multi-national travel, and confidential communications.',
-      'Prepare board materials, strategic reports, and high-impact executive presentations.',
-      'Oversee HR operations, IT support and financial administration, introducing automation to reduce manual work.'
+      'Orchestrate C-suite executive schedules across multiple time zones, international travel coordination, and confidential stakeholder communications to maximize leadership productivity.',
+      'Author board materials, strategic reports, and high-impact executive presentations using advanced tools, ensuring precision and professional formatting.',
+      'Oversee administrative operations and staff, streamlining workflows and implementing process improvements to boost efficiency.',
+      'Provide essential cross-functional IT support and system administration, resolving complex network, hardware, and software issues for executive leadership and staff to ensure uninterrupted operations.',
+      'Manage key HR and people operations, encompassing strategic talent acquisition, policy development, and employee engagement, cultivating an efficient and compliant workforce.'
     ],
     logo: './images/logos/logo-prominent-tec.webp',
     narrativeStage: 'Autonomous Sovereignty',
@@ -21,11 +23,12 @@ export const EXPERIENCES: Experience[] = [
   {
     company: 'Dreams IT Park (Sylhet)',
     role: 'Administrative Coordinator',
-    period: '2022 â€” 2023',
+    period: '2022 — 2023',
     description: [
-      'Directed end-to-end curriculum cycles for multiple technical programs.',
-      'Managed logistics, resource allocation and academic compliance.',
-      'Mentored 650+ learners with strong completion and placement outcomes.'
+      'Directed end-to-end curriculum development for multiple technical programs, transforming complex concepts into structured training modules that exceeded learning objectives.',
+      'Managed program logistics and resource allocation, ensuring rigorous administrative and academic compliance across all courses and personnel.',
+      'Coordinated cross-functional operations between instructional staff, administrative teams, and stakeholders to maintain seamless program delivery.',
+      'Implemented quality assurance processes and performance tracking to continuously improve educational outcomes and operational efficiency.'
     ],
     logo: './images/logos/logo-daricomma.webp',
     narrativeStage: 'Standardized Architecture',
@@ -38,11 +41,11 @@ export const EXPERIENCES: Experience[] = [
   {
     company: 'I-Con Computer Institute (Sylhet)',
     role: 'Operations Officer',
-    period: '2019 â€” 2021',
+    period: '2019 — 2021',
     description: [
-      'Redesigned core curriculum, improving learning outcomes by ~30%.',
-      'Oversaw lab operations and IT assets, ensuring safe, efficient workflows.',
-      'Conducted continuous assessments and mentoring to build technical proficiency.'
+      'Redesigned core curriculum for technical training programs, achieving 30% improvement in student learning outcomes through structured content delivery.',
+      'Oversaw lab operations and IT asset management, providing technical support for hardware and software while maintaining safe, efficient workflows.',
+      'Conducted continuous performance assessments and personalized mentoring to build technical proficiency and enhance career readiness.'
     ],
     logo: './images/logos/logo-greenosoft.webp',
     narrativeStage: 'Chaos Remediation',

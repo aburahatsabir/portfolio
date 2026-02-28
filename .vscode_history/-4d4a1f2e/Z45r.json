@@ -1,0 +1,12 @@
+[
+	{
+		"name": "Gemini",
+		"vendor": "gemini",
+		"apiKey": "${input:chat.lm.secret.70123114}"
+	},
+	{
+		"name": "OpenAI",
+		"vendor": "openai",
+		"apiKey": "${input:chat.lm.secret.15390231}"
+	}
+]

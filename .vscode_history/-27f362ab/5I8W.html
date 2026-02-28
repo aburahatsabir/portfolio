@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Weekly Finance Close Control System | Case Study — Abu Rahat Sabir</title>
+  <meta name="description" content="Engineering a zero-tolerance finance close system. Moving beyond spreadsheets to a logic-gated system." />
+  <meta name="theme-color" content="#0f172a" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Weekly Finance Close Control System | Case Study — Abu Rahat Sabir" />
+  <meta property="og:description" content="Engineering a zero-tolerance finance close system. Moving beyond spreadsheets to a logic-gated system." />
+  <meta property="og:type" content="website" />
+
+  <!-- Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <!-- Icons -->
+  <script src="https://kit.fontawesome.com/6d23f536e4.js" crossorigin="anonymous"></script>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind Config -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            slate: {
+              50: '#f8fafc',
+              100: '#f1f5f9',
+              200: '#e2e8f0',
+              300: '#cbd5e1',
+              400: '#94a3b8',
+              500: '#64748b',
+              600: '#475569',
+              700: '#334155',
+              800: '#1e293b',
+              900: '#0f172a',
+              950: '#020617',
+            },
+            accent: {
+              50:  '#fff3ef',
+              100: '#ffe4db',
+              200: '#ffc4b0',
+              300: '#ff9a76',
+              400: '#FF5722', // Brand Orange
+              500: '#E64A19',
+              600: '#cc3f16',
+              700: '#b33612',
+              800: '#8f2b0e',
+              900: '#6b200a',
+            },
+            success: '#10b981',
+            danger: '#ef4444',
+            code: {
+              bg: '#1e1e1e',
+              text: '#d4d4d4',
+              keyword: '#569cd6',
+              string: '#ce9178',
+              function: '#dcdcaa',
+              comment: '#6a9955',
+            }
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+            'draw-line': 'drawLine 1s ease-out forwards',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' },
+            },
+            fadeInUp: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            drawLine: {
+              '0%': { width: '0%' },
+              '100%': { width: '100%' },
+            }
+          },
+          boxShadow: {
+            'glow': '0 0 20px rgba(255, 87, 34, 0.3)',
+            'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+          }
+        },
+      },
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+    /* Glass Effects */
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+    }
+    
+    .glass-card {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    }
+
+    .glass-dark {
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Grid Background */
+    .bg-grid-slate {
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(148, 163, 184, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
+    }
+
+    /* Utility Classes */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .btn-primary {
+      @apply bg-accent-400 text-white px-6 py-2.5 rounded-full font-semibold hover:bg-accent-500 transition-all shadow-lg shadow-accent-400/20 active:scale-95 flex items-center gap-2;
+    }
+
+    /* Code Syntax Highlighting Classes (Simulated) */
+    .token.keyword { color: #569cd6; }
+    .token.function { color: #dcdcaa; }
+    .token.string { color: #ce9178; }
+    .token.comment { color: #6a9955; font-style: italic; }
+    .token.number { color: #b5cea8; }
+    .token.operator { color: #d4d4d4; }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-accent-400 selection:text-white">
+
+  <!-- Floating Nav -->
+  <header class="fixed top-0 w-full z-50 glass-nav transition-all duration-300" id="navbar">
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2 group">
+        <div class="w-8 h-8 bg-accent-400 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-lg group-hover:scale-105 transition-transform">A</div>
+        <span class="font-bold text-slate-800 tracking-tight hidden sm:block">ARS.work</span>
+      </a>
+      
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+        <a href="#" class="hover:text-accent-400 transition-colors">Overview</a>
+        <a href="#problem" class="hover:text-accent-400 transition-colors">The Challenge</a>
+        <a href="#solution" class="hover:text-accent-400 transition-colors">Architecture</a>
+        <a href="#demo" class="text-accent-400 flex items-center gap-2">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-accent-500"></span>
+          </span>
+          Live Demo
+        </a>
+      </nav>
+
+      <a href="AbuRahatSabir-Resume.pdf" class="text-xs font-bold border border-slate-200 px-4 py-2 rounded-full hover:bg-slate-800 hover:text-white hover:border-slate-800 transition-all">
+        Download Resume
+      </a>
+    </div>
+  </header>
+
+  <main class="pt-24 pb-20 overflow-x-hidden">
+
+    <!-- HERO SECTION -->
+    <section class="max-w-7xl mx-auto px-6 mb-32 relative">
+      <!-- Background Decorations -->
+      <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-accent-100/40 to-transparent rounded-full blur-3xl -z-10 opacity-60 pointer-events-none"></div>
+      <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-blue-100/40 to-transparent rounded-full blur-3xl -z-10 opacity-60 pointer-events-none"></div>
+
+      <div class="max-w-4xl pt-10">
+        <div class="reveal">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-slate-100 border border-slate-200 text-slate-600 text-[11px] font-mono font-bold tracking-wider mb-6 uppercase">
+            <i class="fa-solid fa-layer-group text-accent-400"></i> System Architecture Case Study
+          </div>
+          
+          <h1 class="text-5xl md:text-7xl lg:text-8xl font-black text-slate-900 tracking-tight leading-[1.05] mb-8">
+            Engineering Trust in <br />
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent-600 via-accent-400 to-orange-400">
+              Weekly Finance
+            </span>
+          </h1>
+          
+          <p class="text-xl text-slate-600 leading-relaxed max-w-2xl font-light mb-10">
+            Moving beyond spreadsheets to a <strong class="text-slate-900 font-semibold">logic-gated system</strong>. How we eliminated version drift and reduced reporting risk by 100% through forced reconciliation checkpoints in Excel & VBA.
+          </p>
+
+          <div class="flex flex-wrap gap-4">
+            <div class="flex items-center gap-3 px-5 py-3 bg-white border border-slate-200 rounded-xl shadow-sm">
+              <div class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-green-600">
+                <i class="fa-solid fa-file-excel"></i>
+              </div>
+              <div>
+                <div class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Stack</div>
+                <div class="text-sm font-bold text-slate-700">Excel VBA + PowerQuery</div>
+              </div>
+            </div>
+            
+            <div class="flex items-center gap-3 px-5 py-3 bg-white border border-slate-200 rounded-xl shadow-sm">
+              <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                <i class="fa-solid fa-code-branch"></i>
+              </div>
+              <div>
+                <div class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Role</div>
+                <div class="text-sm font-bold text-slate-700">System Architect</div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3 px-5 py-3 bg-white border border-slate-200 rounded-xl shadow-sm">
+              <div class="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center text-purple-600">
+                <i class="fa-solid fa-shield-halved"></i>
+              </div>
+              <div>
+                <div class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Outcome</div>
+                <div class="text-sm font-bold text-slate-700">Audit-Ready</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROBLEM (TERMINAL) SECTION -->
+    <section id="problem" class="max-w-7xl mx-auto px-6 mb-40">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+        <!-- Left Content -->
+        <div class="lg:col-span-5 reveal">
+          <h2 class="text-sm font-bold text-accent-500 uppercase tracking-widest mb-3">The Challenge</h2>
+          <h3 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6">The "V2_Final_Real" Chaos</h3>
+          <p class="text-slate-600 mb-6 leading-relaxed">
+            The finance team was operating on a monthly close cadence, but executives demanded weekly visibility. 
+            The result was a frantic Friday morning rush involving manual copy-pasting, broken formulas, and 
+            <span class="bg-red-50 text-red-700 px-1 py-0.5 rounded font-mono text-sm font-semibold">zero version control</span>.
+          </p>
+          
+          <ul class="space-y-4 mt-8">
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-circle-xmark text-red-500 mt-1"></i>
+              <div>
+                <strong class="block text-slate-800 text-sm">No Input Validation</strong>
+                <span class="text-sm text-slate-500">Users could overwrite formulas with hardcoded numbers.</span>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-circle-xmark text-red-500 mt-1"></i>
+              <div>
+                <strong class="block text-slate-800 text-sm">Retroactive Fixes</strong>
+                <span class="text-sm text-slate-500">Reconciliations happened <i>after</i> reporting, eroding trust.</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Right Terminal -->
+        <div class="lg:col-span-7 reveal delay-200">
+          <div class="relative group">
+            <!-- Glow Effect -->
+            <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-accent-600 rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+            
+            <div class="relative rounded-xl overflow-hidden bg-[#1e1e1e] shadow-2xl border border-slate-700 font-mono text-xs md:text-sm leading-relaxed">
+              <!-- Window Header -->
+              <div class="bg-[#252526] px-4 py-2 flex items-center justify-between border-b border-[#333]">
+                <div class="flex gap-2">
+                  <div class="w-3 h-3 rounded-full bg-[#ff5f56]"></div>
+                  <div class="w-3 h-3 rounded-full bg-[#ffbd2e]"></div>
+                  <div class="w-3 h-3 rounded-full bg-[#27c93f]"></div>
+                </div>
+                <div class="text-slate-400 text-[10px]">finance_legacy_audit.log — bash — 80x24</div>
+                <div class="w-4"></div>
+              </div>
+
+              <!-- Terminal Body -->
+              <div class="p-6 h-[340px] overflow-y-auto custom-scrollbar" id="terminal-output">
+                <!-- Content injected via JS -->
+              </div>
+              
+              <!-- Status Bar -->
+              <div class="bg-[#007acc] px-3 py-1 text-white text-[10px] flex justify-between items-center">
+                <div class="flex gap-4">
+                  <span><i class="fa-solid fa-code-branch"></i> master*</span>
+                  <span><i class="fa-regular fa-circle-xmark"></i> 4 Errors</span>
+                </div>
+                <span>Ln 42, Col 8</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ARCHITECTURE DIAGRAM -->
+    <section id="solution" class="max-w-7xl mx-auto px-6 mb-40">
+      <div class="text-center mb-16 reveal">
+        <span class="text-accent-500 font-mono text-xs tracking-widest uppercase font-bold">The Solution</span>
+        <h2 class="text-3xl md:text-5xl font-bold text-slate-900 mt-3">The Logic Gate Architecture</h2>
+        <p class="text-slate-500 mt-4 max-w-2xl mx-auto">
+          We replaced the "honor system" with hard-coded logic gates. Data cannot physically proceed to the reporting stage without passing validation.
+        </p>
+      </div>
+
+      <div class="relative reveal">
+        <!-- Connecting Line (Desktop) -->
+        <div class="hidden md:block absolute top-12 left-0 w-full h-1 bg-slate-200 -z-10">
+          <div class="h-full bg-accent-400 w-0 animate-draw-line" style="animation-delay: 0.5s; animation-fill-mode: forwards;"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Step 1 -->
+          <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-lg relative group hover:-translate-y-2 transition-transform duration-300">
+            <div class="w-24 h-24 mx-auto bg-slate-50 rounded-full border-4 border-white shadow-sm flex items-center justify-center mb-6 relative z-10">
+              <i class="fa-solid fa-database text-3xl text-slate-400 group-hover:text-accent-400 transition-colors"></i>
+              <div class="absolute top-0 right-0 bg-slate-800 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">1</div>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 text-center mb-3">Standardization</h3>
+            <p class="text-slate-600 text-sm text-center">
+              Raw extracts are dropped into a directory. <strong>PowerQuery</strong> automatically cleans, formats, and flags data type errors immediately.
+            </p>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="bg-white p-8 rounded-2xl border-2 border-accent-100 shadow-[0_20px_50px_-12px_rgba(255,87,34,0.15)] relative group hover:-translate-y-2 transition-transform duration-300 z-20">
+            <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-accent-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+              Control Point
+            </div>
+            <div class="w-24 h-24 mx-auto bg-white rounded-full border-4 border-accent-100 flex items-center justify-center mb-6 relative z-10">
+              <i class="fa-solid fa-lock text-3xl text-accent-500"></i>
+              <div class="absolute top-0 right-0 bg-accent-500 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">2</div>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 text-center mb-3">Forced Validation</h3>
+            <p class="text-slate-600 text-sm text-center">
+              <code class="bg-slate-100 text-accent-700 px-1 rounded text-xs">If Variance > 0</code> then <strong>Lock</strong>.
+              The "Publish" ribbon is disabled via XML until variance = 0 or an explanation is logged.
+            </p>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-lg relative group hover:-translate-y-2 transition-transform duration-300">
+            <div class="w-24 h-24 mx-auto bg-slate-50 rounded-full border-4 border-white shadow-sm flex items-center justify-center mb-6 relative z-10">
+              <i class="fa-solid fa-file-pdf text-3xl text-slate-400 group-hover:text-accent-400 transition-colors"></i>
+              <div class="absolute top-0 right-0 bg-slate-800 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">3</div>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 text-center mb-3">Immutable Output</h3>
+            <p class="text-slate-600 text-sm text-center">
+              System hard-codes values into a PDF with timestamp watermarks and auto-archives to a read-only network directory.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE DEMO SECTION -->
+    <section id="demo" class="max-w-7xl mx-auto px-6 mb-40">
+      <div class="grid grid-cols-1 xl:grid-cols-2 gap-16">
+        
+        <!-- Logic Explanation -->
+        <div class="order-2 xl:order-1 reveal">
+          <h3 class="text-3xl font-bold text-slate-900 mb-6">Under the Hood</h3>
+          <p class="text-slate-600 mb-6 text-lg">
+            This interactive demo simulates the actual VBA logic deployed. The system hooks into the <code class="bg-slate-100 px-1 py-0.5 rounded text-accent-700 text-sm">Workbook_BeforeSave</code> event and custom Ribbon XML.
+          </p>
+          
+          <div class="bg-[#1e1e1e] rounded-lg shadow-xl overflow-hidden text-xs md:text-sm font-mono border border-slate-700">
+            <div class="flex items-center px-4 py-2 border-b border-slate-700 bg-[#252526]">
+              <i class="fa-brands fa-js text-yellow-400 mr-2"></i>
+              <span class="text-slate-400">gate_logic.vba</span>
+            </div>
+            <pre class="p-4 text-[#d4d4d4] overflow-x-auto">
+<span class="token keyword">Function</span> <span class="token function">CheckGateStatus</span>() <span class="token keyword">As Boolean</span>
+    <span class="token keyword">Dim</span> cell <span class="token keyword">As</span> Range
+    <span class="token comment">' Loop through defined named range</span>
+    <span class="token keyword">For Each</span> cell <span class="token keyword">In</span> Range(<span class="token string">"Control_Range"</span>)
+
+        <span class="token comment">' Logic Gate: Variance exists</span>
+        <span class="token keyword">If</span> cell.Value <> <span class="token number">0</span> <span class="token keyword">Then</span>
+            CheckGateStatus = <span class="token keyword">False</span>
+            <span class="token function">LockDashboard</span> <span class="token comment">' Disables Ribbon</span>
+            MsgBox <span class="token string">"Variance detected at "</span> & cell.Address
+            <span class="token keyword">Exit Function</span>
+        <span class="token keyword">End If</span>
+    <span class="token keyword">Next</span> cell
+
+    CheckGateStatus = <span class="token keyword">True</span>
+    <span class="token function">UnlockExport</span> <span class="token comment">' Enables PDF Button</span>
+<span class="token keyword">End Function</span></pre>
+          </div>
+        </div>
+
+        <!-- Interactive Artifact -->
+        <div class="order-1 xl:order-2 reveal">
+          <div class="relative group" id="excel-app">
+            <!-- Glow Behind -->
+            <div class="absolute -inset-2 bg-gradient-to-r from-accent-400 to-blue-600 rounded-xl blur-lg opacity-20 group-hover:opacity-30 transition duration-500"></div>
+
+            <div class="relative bg-white rounded-lg border border-slate-300 shadow-2xl overflow-hidden flex flex-col h-[500px]">
+              
+              <!-- Excel Header -->
+              <div class="bg-[#217346] text-white px-4 py-2 flex items-center justify-between select-none">
+                <div class="flex items-center gap-4">
+                  <i class="fa-regular fa-file-excel text-xl"></i>
+                  <div class="flex flex-col leading-none">
+                    <span class="text-xs opacity-80">AutoSave <span class="font-bold">Off</span></span>
+                    <span class="font-semibold text-sm">Weekly_Close_Control_v3.xlsm</span>
+                  </div>
+                </div>
+                <div class="flex gap-2 text-xs">
+                  <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">AS</div>
+                  <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center"><i class="fa-solid fa-minus"></i></div>
+                  <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center"><i class="fa-regular fa-square"></i></div>
+                  <div class="w-8 h-8 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center cursor-pointer"><i class="fa-solid fa-xmark"></i></div>
+                </div>
+              </div>
+
+              <!-- Ribbon Simulation -->
+              <div class="bg-slate-50 border-b border-slate-200 p-2 flex gap-1 overflow-x-auto">
+                 <!-- Import Tab -->
+                 <div class="px-2 flex flex-col items-center justify-center gap-1 min-w-[60px] cursor-pointer hover:bg-slate-200 rounded p-1 group/btn">
+                    <i class="fa-solid fa-database text-slate-500 text-lg group-hover/btn:text-slate-700"></i>
+                    <span class="text-[10px] text-slate-600">Import Data</span>
+                 </div>
+                 <div class="w-px bg-slate-300 mx-1"></div>
+                 
+                 <!-- Validate Button (Active) -->
+                 <button onclick="runValidation()" id="validateBtn" class="px-4 bg-slate-100 hover:bg-white border border-slate-200 hover:border-accent-300 rounded flex flex-col items-center justify-center gap-1 min-w-[70px] transition-all relative group/validate">
+                    <div class="relative">
+                      <i class="fa-solid fa-check-to-slot text-accent-500 text-xl group-hover/validate:scale-110 transition-transform"></i>
+                      <span class="absolute -top-1 -right-1 flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-accent-500"></span>
+                      </span>
+                    </div>
+                    <span class="text-[10px] font-bold text-accent-600">Validate</span>
+                 </button>
+
+                 <div class="w-px bg-slate-300 mx-1"></div>
+
+                 <!-- Publish Button (Disabled Initially) -->
+                 <button id="publishBtn" disabled class="px-4 bg-slate-100 rounded flex flex-col items-center justify-center gap-1 min-w-[70px] transition-all opacity-40 cursor-not-allowed grayscale">
+                    <i class="fa-solid fa-file-pdf text-red-500 text-xl"></i>
+                    <span class="text-[10px] text-slate-600">Publish PDF</span>
+                    <i class="fa-solid fa-lock absolute top-1 right-2 text-[8px] text-slate-400"></i>
+                 </button>
+              </div>
+
+              <!-- Formula Bar -->
+              <div class="flex items-center gap-2 border-b border-slate-200 px-2 py-1 bg-white text-xs font-mono">
+                <span class="text-slate-400">fx</span>
+                <div class="w-px h-4 bg-slate-300"></div>
+                <input type="text" value="=SUM(TrialBalance!G:G) - SUM(Subledger!E:E)" class="w-full outline-none text-slate-600" readonly>
+              </div>
+
+              <!-- Spreadsheet Area -->
+              <div class="flex-1 bg-slate-100 relative overflow-hidden font-mono text-xs">
+                <!-- Headers -->
+                <div class="grid grid-cols-12 bg-slate-200 border-b border-slate-300 text-slate-600 font-semibold text-center h-6 items-center">
+                  <div class="col-span-1 border-r border-slate-300"></div>
+                  <div class="col-span-5 border-r border-slate-300">A</div>
+                  <div class="col-span-3 border-r border-slate-300">B</div>
+                  <div class="col-span-3">C</div>
+                </div>
+
+                <!-- Rows Container -->
+                <div id="excel-rows" class="bg-white h-full">
+                  <!-- JS Injected Rows -->
+                </div>
+
+                <!-- Scanning Overlay -->
+                <div id="scanning-overlay" class="absolute inset-0 bg-white/90 backdrop-blur-sm z-20 flex flex-col items-center justify-center hidden">
+                  <i class="fa-solid fa-circle-notch fa-spin text-4xl text-accent-500 mb-4"></i>
+                  <span class="text-slate-600 font-bold uppercase tracking-widest text-xs">Scanning Logic Gates...</span>
+                </div>
+                
+                <!-- Success Overlay -->
+                <div id="success-overlay" class="absolute inset-0 bg-white/95 backdrop-blur-md z-30 flex flex-col items-center justify-center hidden text-center p-8">
+                  <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4 animate-bounce">
+                    <i class="fa-solid fa-check text-2xl text-green-600"></i>
+                  </div>
+                  <h4 class="text-xl font-bold text-slate-900 mb-2">Validation Passed</h4>
+                  <p class="text-slate-500 mb-6">Weekly Finance Report has been generated, timestamped, and archived.</p>
+                  <button onclick="resetDemo()" class="text-xs text-accent-500 hover:underline">Reset Simulation</button>
+                </div>
+              </div>
+
+              <!-- Footer Status Bar -->
+              <div class="bg-[#217346] text-white/80 px-3 py-1 flex justify-between items-center text-[10px] font-sans">
+                <span id="status-text">Ready</span>
+                <div class="flex gap-4">
+                  <span>Calculation: Automatic</span>
+                  <span id="gate-status" class="font-bold text-white">GATE: PENDING</span>
+                </div>
+              </div>
+
+            </div>
+            
+            <!-- Floating Helper Tooltip -->
+            <div id="demo-tooltip" class="absolute -right-4 top-32 translate-x-full hidden lg:block transition-opacity opacity-100">
+               <div class="flex items-center gap-2">
+                 <i class="fa-solid fa-arrow-left text-slate-400 animate-bounce-x"></i>
+                 <span class="bg-slate-800 text-white text-xs px-3 py-2 rounded shadow-lg max-w-[150px]">
+                   Click <strong>Validate</strong> to test the system controls.
+                 </span>
+               </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- METRICS SECTION -->
+    <section class="max-w-7xl mx-auto px-6 mb-32">
+       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+         <div class="glass-card p-8 rounded-2xl text-center group hover:bg-white transition-colors reveal">
+            <div class="text-5xl font-black text-slate-900 mb-2 group-hover:text-accent-500 transition-colors">100<span class="text-3xl">%</span></div>
+            <div class="h-1 w-12 bg-slate-200 mx-auto mb-4 rounded-full group-hover:bg-accent-200"></div>
+            <div class="uppercase tracking-widest text-xs font-bold text-slate-500">Audit Confidence</div>
+            <p class="text-sm text-slate-400 mt-2">Zero logic errors in 12 months</p>
+         </div>
+         
+         <div class="glass-card p-8 rounded-2xl text-center group hover:bg-white transition-colors reveal delay-100">
+            <div class="text-5xl font-black text-slate-900 mb-2 group-hover:text-blue-500 transition-colors">-6<span class="text-3xl">hrs</span></div>
+            <div class="h-1 w-12 bg-slate-200 mx-auto mb-4 rounded-full group-hover:bg-blue-200"></div>
+            <div class="uppercase tracking-widest text-xs font-bold text-slate-500">Weekly Admin Time</div>
+            <p class="text-sm text-slate-400 mt-2">Recovered via automation</p>
+         </div>
+
+         <div class="glass-card p-8 rounded-2xl text-center group hover:bg-white transition-colors reveal delay-200">
+            <div class="text-5xl font-black text-slate-900 mb-2 group-hover:text-green-500 transition-colors">ZERO</div>
+            <div class="h-1 w-12 bg-slate-200 mx-auto mb-4 rounded-full group-hover:bg-green-200"></div>
+            <div class="uppercase tracking-widest text-xs font-bold text-slate-500">Post-Close Adjustments</div>
+            <p class="text-sm text-slate-400 mt-2">First time in company history</p>
+         </div>
+       </div>
+    </section>
+
+    <!-- PROJECT CTA -->
+    <section class="max-w-5xl mx-auto px-6 mb-24 reveal">
+      <div class="relative group">
+        <!-- Subtle Glow -->
+        <div class="absolute -inset-1 bg-gradient-to-r from-accent-200/50 to-slate-200/50 rounded-2xl blur opacity-30 group-hover:opacity-60 transition duration-700"></div>
+        
+        <div class="relative bg-white/80 backdrop-blur-sm rounded-xl p-8 md:p-10 shadow-xl border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-8">
+           
+           <div class="text-center md:text-left max-w-2xl">
+             <div class="inline-flex items-center gap-2 mb-3">
+               <span class="relative flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+               </span>
+               <span class="text-[10px] font-mono font-bold tracking-widest uppercase text-slate-500">Available for Contracts</span>
+             </div>
+             
+             <h2 class="text-2xl md:text-3xl font-black text-slate-900 mb-2 tracking-tight">
+               Ready to upgrade your Operating System?
+             </h2>
+             <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+               I engineer <strong>audit-proof financial workflows</strong> that scale. Let's turn data anxiety into decision confidence.
+             </p>
+           </div>
+
+           <div class="flex flex-col sm:flex-row gap-3 shrink-0 w-full md:w-auto">
+             <a href="mailto:hello@example.com" class="group/btn inline-flex items-center justify-center gap-2 bg-slate-900 text-white px-6 py-3 rounded-lg font-bold text-sm transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-95">
+               <span>Start Conversation</span>
+               <i class="fa-solid fa-arrow-right group-hover/btn:translate-x-1 transition-transform text-accent-400"></i>
+             </a>
+             <a href="https://linkedin.com" target="_blank" class="inline-flex items-center justify-center gap-2 bg-white text-slate-700 border border-slate-200 px-6 py-3 rounded-lg font-bold text-sm transition-all hover:bg-slate-50 hover:border-slate-300">
+               <i class="fa-brands fa-linkedin text-[#0077b5]"></i>
+               <span>Connect</span>
+             </a>
+           </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="bg-slate-900 text-slate-300 py-12 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 text-sm">
+      <div class="col-span-1 md:col-span-1">
+        <a href="index.html" class="flex items-center gap-2 mb-4 text-white">
+          <div class="w-6 h-6 bg-accent-500 rounded flex items-center justify-center font-bold text-xs">A</div>
+          <span class="font-bold">ARS.work</span>
+        </a>
+        <p class="text-slate-500">
+          Building systems that bridge the gap between financial strategy and technical execution.
+        </p>
+      </div>
+      
+      <div>
+        <h4 class="text-white font-bold mb-4 uppercase tracking-wider text-xs">Case Studies</h4>
+        <ul class="space-y-2">
+           <li><a href="#" class="hover:text-accent-400 transition-colors">Finance Controls</a></li>
+           <li><a href="#" class="hover:text-accent-400 transition-colors">Dashboard Design</a></li>
+           <li><a href="#" class="hover:text-accent-400 transition-colors">ERP Migration</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-white font-bold mb-4 uppercase tracking-wider text-xs">Connect</h4>
+        <ul class="space-y-2">
+           <li><a href="#" class="hover:text-accent-400 transition-colors">LinkedIn</a></li>
+           <li><a href="mailto:hello@example.com" class="hover:text-accent-400 transition-colors">Email</a></li>
+           <li><a href="#" class="hover:text-accent-400 transition-colors">GitHub</a></li>
+        </ul>
+      </div>
+
+      <div class="text-right flex flex-col justify-end">
+        <p class="text-slate-600">© 2025 Abu Rahat Sabir.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // --- 1. Terminal Simulation Logic ---
+    const terminalOutput = document.getElementById('terminal-output');
+    const logs = [
+      { text: "> Initializing monthly_close_v2_final_REAL.xlsx...", color: "text-slate-400", delay: 100 },
+      { text: "> Connecting to SQL_Data_Warehouse...", color: "text-blue-400", delay: 800 },
+      { text: "> Fetching Trial Balance (Entities: US, UK, CAN)...", color: "text-slate-300", delay: 1500 },
+      { text: "[WARNING] Cell F42: String detected in numeric field.", color: "text-yellow-400", delay: 2200 },
+      { text: "> Attempting auto-correction...", color: "text-slate-400", delay: 2800 },
+      { text: "[ERROR] Correction Failed. Data Type Mismatch.", color: "text-red-500 font-bold", delay: 3200 },
+      { text: "> Recalculating variance analysis...", color: "text-slate-300", delay: 3800 },
+      { text: "[CRITICAL] AP Subledger does not tie to GL.", color: "text-red-500 font-bold", delay: 4200 },
+      { text: "   Diff: $1,402.50", color: "text-red-400", delay: 4300 },
+      { text: "> SYSTEM LOCK ENGAGED. Export disabled.", color: "text-orange-500 font-bold", delay: 4500 },
+      { text: "_", color: "text-slate-500 animate-pulse", delay: 4600 } // Blinking cursor
+    ];
+
+    function typeWriter(text, element, colorClass, speed = 20) {
+      const line = document.createElement('div');
+      line.className = `font-mono mb-1 ${colorClass}`;
+      element.appendChild(line);
+      
+      let i = 0;
+      function type() {
+        if (i < text.length) {
+          line.innerHTML += text.charAt(i);
+          i++;
+          element.scrollTop = element.scrollHeight;
+          setTimeout(type, speed);
+        }
+      }
+      type();
+    }
+
+    const observerOptions = { threshold: 0.3 };
+    const terminalObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          terminalOutput.innerHTML = ''; // Clear previous
+          let currentDelay = 0;
+          logs.forEach(log => {
+            setTimeout(() => {
+              typeWriter(log.text, terminalOutput, log.color, 15);
+            }, currentDelay + log.delay);
+          });
+          terminalObserver.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+    
+    terminalObserver.observe(document.getElementById('problem'));
+
+
+    // --- 2. Interactive Excel Simulation ---
+    let excelState = {
+      isFixed: false,
+      isValidated: false
+    };
+
+    const rowsData = [
+      { id: 1, name: "Bank Rec: Operating", valA: 45000, valB: 45000, status: "PASS" },
+      { id: 2, name: "AP Subledger Tie-out", valA: 12500, valB: 11097.50, status: "FAIL" }, // The error
+      { id: 3, name: "Payroll Accrual", valA: 8200, valB: 8200, status: "PASS" },
+      { id: 4, name: "Fixed Asset Roll", valA: 34000, valB: 34000, status: "PASS" }
+    ];
+
+    function renderRows() {
+      const container = document.getElementById('excel-rows');
+      container.innerHTML = '';
+      
+      rowsData.forEach((row, index) => {
+        let variance = row.valA - row.valB;
+        if(excelState.isFixed && row.id === 2) variance = 0; // Simulate fix
+
+        const isError = variance !== 0;
+        let statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-400">PENDING</span>`;
+        
+        if (excelState.isValidated) {
+          if (isError) {
+             statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-100 text-red-600 animate-pulse">LOCKED</span>`;
+          } else {
+             statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-green-100 text-green-600">PASS</span>`;
+          }
+        }
+
+        const div = document.createElement('div');
+        div.className = `grid grid-cols-12 border-b border-slate-200 h-10 items-center text-slate-600 ${isError && excelState.isValidated ? 'bg-red-50' : 'hover:bg-slate-50'} transition-colors`;
+        
+        div.innerHTML = `
+          <div class="col-span-1 border-r border-slate-200 text-center text-slate-400 bg-slate-100 h-full flex items-center justify-center text-[10px]">${index + 1}</div>
+          <div class="col-span-5 border-r border-slate-200 px-3 truncate text-xs">${row.name}</div>
+          <div class="col-span-3 border-r border-slate-200 px-3 text-right font-mono text-xs ${isError && excelState.isValidated ? 'text-red-600 font-bold' : ''}">
+            ${excelState.isValidated && row.id === 2 && !excelState.isFixed ? 
+              `<div class="flex items-center justify-end gap-2">
+                 <span>${variance.toFixed(2)}</span>
+                 <button onclick="fixVariance()" class="bg-accent-500 text-white text-[9px] px-2 py-0.5 rounded shadow hover:bg-accent-600 animate-pulse">FIX</button>
+               </div>` 
+              : variance.toFixed(2)
+            }
+          </div>
+          <div class="col-span-3 px-3 text-center">${statusBadge}</div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function runValidation() {
+      const overlay = document.getElementById('scanning-overlay');
+      const tooltip = document.getElementById('demo-tooltip');
+      
+      overlay.classList.remove('hidden');
+      if(tooltip) tooltip.style.opacity = '0';
+
+      setTimeout(() => {
+        overlay.classList.add('hidden');
+        excelState.isValidated = true;
+        renderRows();
+        updateUI();
+      }, 1000);
+    }
+
+    function fixVariance() {
+      // Simulate user correcting the data
+      excelState.isFixed = true;
+      // Re-run validation automatically for smooth UX
+      runValidation();
+    }
+
+    function updateUI() {
+      const statusText = document.getElementById('status-text');
+      const gateStatus = document.getElementById('gate-status');
+      const publishBtn = document.getElementById('publishBtn');
+
+      if (excelState.isValidated && !excelState.isFixed) {
+        // Error State
+        statusText.innerText = "CRITICAL: Variance Detected. Logic Gate Locked.";
+        statusText.className = "text-red-200 font-bold animate-pulse";
+        gateStatus.innerText = "GATE: LOCKED";
+        gateStatus.className = "font-bold text-red-300";
+        publishBtn.classList.add('shake-horizontal');
+      } else if (excelState.isValidated && excelState.isFixed) {
+        // Success State
+        statusText.innerText = "Validation Complete. All checks passed.";
+        statusText.className = "text-white";
+        gateStatus.innerText = "GATE: OPEN";
+        gateStatus.className = "font-bold text-green-300";
+        
+        // Enable Publish Button
+        publishBtn.disabled = false;
+        publishBtn.classList.remove('opacity-40', 'cursor-not-allowed', 'grayscale');
+        publishBtn.classList.add('bg-white', 'text-slate-800', 'hover:bg-green-50', 'border-green-200', 'shadow-lg');
+        publishBtn.innerHTML = `
+          <div class="relative">
+            <i class="fa-solid fa-file-pdf text-green-600 text-xl"></i>
+            <i class="fa-solid fa-check absolute -bottom-1 -right-1 bg-green-500 text-white text-[8px] rounded-full p-0.5"></i>
+          </div>
+          <span class="text-[10px] font-bold text-green-700">Publish</span>
+        `;
+        publishBtn.onclick = showSuccess;
+      }
+    }
+
+    function showSuccess() {
+      document.getElementById('success-overlay').classList.remove('hidden');
+    }
+
+    function resetDemo() {
+      excelState = { isFixed: false, isValidated: false };
+      document.getElementById('success-overlay').classList.add('hidden');
+      
+      const publishBtn = document.getElementById('publishBtn');
+      publishBtn.disabled = true;
+      publishBtn.onclick = null;
+      publishBtn.className = "px-4 bg-slate-100 rounded flex flex-col items-center justify-center gap-1 min-w-[70px] transition-all opacity-40 cursor-not-allowed grayscale";
+      publishBtn.innerHTML = `
+        <i class="fa-solid fa-file-pdf text-red-500 text-xl"></i>
+        <span class="text-[10px] text-slate-600">Publish PDF</span>
+        <i class="fa-solid fa-lock absolute top-1 right-2 text-[8px] text-slate-400"></i>
+      `;
+
+      document.getElementById('status-text').innerText = "Ready";
+      document.getElementById('status-text').className = "text-white/80";
+      document.getElementById('gate-status').innerText = "GATE: PENDING";
+      document.getElementById('gate-status').className = "font-bold text-white";
+
+      const tooltip = document.getElementById('demo-tooltip');
+      if(tooltip) tooltip.style.opacity = '1';
+
+      renderRows();
+    }
+
+    // Initialize Excel
+    renderRows();
+
+
+    // --- 3. Scroll Reveal Animation ---
+    const revealElements = document.querySelectorAll('.reveal');
+    const scrollObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    revealElements.forEach(el => scrollObserver.observe(el));
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('navbar');
+      if (window.scrollY > 20) {
+        nav.classList.add('shadow-glass');
+      } else {
+        nav.classList.remove('shadow-glass');
+      }
+    });
+
+  </script>
+
+  <style>
+    /* Shake Animation for Error */
+    .shake-horizontal { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+    @keyframes shake {
+      10%, 90% { transform: translate3d(-1px, 0, 0); }
+      20%, 80% { transform: translate3d(2px, 0, 0); }
+      30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+      40%, 60% { transform: translate3d(4px, 0, 0); }
+    }
+    
+    .animate-bounce-x {
+      animation: bounceX 1s infinite;
+    }
+    @keyframes bounceX {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(-5px); }
+    }
+  </style>
+</body>
+</html>

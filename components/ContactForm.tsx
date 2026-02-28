@@ -1,16 +1,14 @@
-
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 import Button from './shared/Button';
-import { trackFormSubmission } from '../utils/analytics';
+import { trackFormSubmission, trackCustomEvent } from '../utils/analytics';
+import SectionLabel from './shared/SectionLabel';
 
 interface ContactFormData {
     name: string;
     email: string;
-    role: string;
-    challenge: string;
-    timeline: string;
+    subject: string;
     message: string;
 }
 
@@ -18,331 +16,250 @@ const ContactForm: React.FC = () => {
     const [formData, setFormData] = useState<ContactFormData>({
         name: '',
         email: '',
-        role: '',
-        challenge: '',
-        timeline: '',
+        subject: '',
         message: ''
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSent, setIsSent] = useState(false);
     const [errors, setErrors] = useState<Partial<ContactFormData>>({});
-
-    // ✅ REFACTORED: Explicit state machine for better debugging and state tracking
-    const [formState, setFormState] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-
-    const roles = [
-        { value: '', label: 'Select your role...' },
-        { value: 'executive-assistant', label: 'Executive Assistant' },
-        { value: 'finance-leader', label: 'Finance Leader' },
-        { value: 'founder', label: 'Founder / CEO' },
-        { value: 'hiring-manager', label: 'Hiring Manager' },
-        { value: 'operations', label: 'Operations Manager' },
-        { value: 'other', label: 'Other' }
-    ];
-
-    const challenges = [
-        { value: '', label: 'Select primary challenge...' },
-        { value: 'month-end-close', label: 'Month-end Close Process' },
-        { value: 'manual-tasks', label: 'Manual Repetitive Tasks' },
-        { value: 'systems-integration', label: 'Systems Integration' },
-        { value: 'governance', label: 'Governance & Compliance' },
-        { value: 'scaling', label: 'Scaling Operations' },
-        { value: 'hiring', label: 'Hiring & Team Building' },
-        { value: 'other', label: 'Other Challenge' }
-    ];
-
-    const timelines = [
-        { value: '', label: 'Select timeline...' },
-        { value: 'asap', label: 'ASAP (Urgent)' },
-        { value: '30-days', label: 'Within 30 Days' },
-        { value: 'q2', label: 'Planning for Q2' },
-        { value: 'exploring', label: 'Just Exploring' }
-    ];
+    const [focusedField, setFocusedField] = useState<string | null>(null);
+    const [formStarted, setFormStarted] = useState(false);
 
     const validateForm = (): boolean => {
         const newErrors: Partial<ContactFormData> = {};
-
-        if (!formData.name.trim()) newErrors.name = 'Name is required';
+        if (!formData.name.trim()) newErrors.name = 'Required';
         if (!formData.email.trim()) {
-            newErrors.email = 'Email is required';
+            newErrors.email = 'Required';
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-            newErrors.email = 'Invalid email format';
+            newErrors.email = 'Invalid format';
         }
-        if (!formData.role) newErrors.role = 'Please select your role';
-        if (!formData.challenge) newErrors.challenge = 'Please select a challenge';
-        if (!formData.timeline) newErrors.timeline = 'Please select a timeline';
+        if (!formData.subject.trim()) newErrors.subject = 'Required';
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
+    const handleFormStart = () => {
+        if (!formStarted) {
+            setFormStarted(true);
+            trackCustomEvent('form_start', { event_category: 'Conversion Funnel', form_type: 'contact' });
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         if (!validateForm()) return;
 
-        // ✅ STATE MACHINE: idle → submitting
-        setFormState('submitting');
         setIsSubmitting(true);
 
         try {
-            // EmailJS configuration from environment variables
             const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
             const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
             const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
-            // Validate environment variables are configured
             if (!serviceId || !templateId || !publicKey) {
-                console.error('EmailJS configuration missing. Please check environment variables.');
-                alert('Email service is not properly configured. Please contact the administrator.');
+                alert('Configuration error. Please contact directly via email.');
                 return;
             }
 
-            // Prepare template parameters
-            const templateParams = {
+            await emailjs.send(serviceId, templateId, {
                 from_name: formData.name,
                 from_email: formData.email,
-                name: formData.name,
-                email: formData.email,
-                subject: `Portfolio Contact: ${formData.name} - ${formData.role}`,
-                role: formData.role,
-                challenge: formData.challenge,
-                timeline: formData.timeline,
-                message: formData.message || 'No additional message'
-            };
+                subject: formData.subject,
+                message: formData.message || 'No additional details provided.'
+            }, publicKey);
 
-            // Send email using EmailJS
-            await emailjs.send(
-                serviceId,
-                templateId,
-                templateParams,
-                publicKey
-            );
-
-
-            // Track successful form submission
             trackFormSubmission({
-                formType: 'qualification',
-                role: formData.role,
-                challenge: formData.challenge,
-                timeline: formData.timeline
+                formType: 'contact',
+                subject: formData.subject
             });
 
-            // ✅ STATE MACHINE: submitting → success
-            setFormState('success');
             setIsSent(true);
-            setFormData({ name: '', email: '', role: '', challenge: '', timeline: '', message: '' });
-            setErrors({});
-
-            // Reset to idle after 5 seconds
-            setTimeout(() => {
-                setIsSent(false);
-                setFormState('idle');
-            }, 5000);
-
+            setFormData({ name: '', email: '', subject: '', message: '' });
+            setTimeout(() => setIsSent(false), 6000);
         } catch (error) {
-            console.error('EmailJS Error:', error);
-
-            // ✅ STATE MACHINE: submitting → error
-            setFormState('error');
-
-            alert('Failed to send message. Please try again or email directly at aburahatsabir178@gmail.com');
+            console.error('Submission failed:', error);
+            alert('Message failed to send. Please try again.');
         } finally {
             setIsSubmitting(false);
         }
-
-        // ✅ DEBUG: Log state transitions (remove in production if needed)
-        console.log(`[ContactForm] State transition: ${formState} → ${formState}`);
     };
 
     const handleChange = (field: keyof ContactFormData, value: string) => {
         setFormData({ ...formData, [field]: value });
-        if (errors[field]) {
-            setErrors({ ...errors, [field]: undefined });
-        }
+        if (errors[field]) setErrors({ ...errors, [field]: undefined });
     };
 
+    const hasValue = (field: keyof ContactFormData) => formData[field].trim().length > 0;
+    const showLabel = (field: keyof ContactFormData) => focusedField === field || hasValue(field);
+
     return (
-        <div className="bg-slate-900 text-white rounded-[3.5rem] p-8 md:p-14 shadow-2xl relative overflow-hidden min-h-[700px] flex flex-col">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 blur-[100px] pointer-events-none"></div>
+        <div className="bg-white border border-slate-200/60 rounded-2xl p-8 executive-shadow relative overflow-hidden noise-bg">
+            {/* Architectural Background Atmospherics */}
+            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-50/50 blur-[100px] rounded-full pointer-events-none" />
+            <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-slate-50 blur-[80px] rounded-full pointer-events-none" />
 
-            <div className="relative z-10 flex-1 flex flex-col">
-                <div className="flex items-center justify-between mb-12 border-b border-slate-800 pb-8">
-                    <div className="flex items-center gap-4">
-                        <div className="px-3 py-1 bg-blue-600 text-white rounded-lg text-[9px] font-black uppercase tracking-widest">Lead Qualification</div>
-                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
-                    </div>
-                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">CONTACT_FORM // V2</span>
-                </div>
-
+            <div className="relative z-10">
                 <AnimatePresence mode="wait">
                     {isSent ? (
                         <motion.div
                             key="sent"
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 1.05 }}
-                            className="flex-1 flex flex-col items-center justify-center text-center space-y-8"
+                            initial={{ opacity: 0, scale: 0.98, y: 10 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.98, y: -10 }}
+                            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                            className="flex flex-col items-center justify-center text-center py-20 px-6"
                         >
-                            <div className="w-24 h-24 bg-emerald-500/20 text-emerald-500 rounded-[2.5rem] flex items-center justify-center border border-emerald-500/30">
-                                <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" /></svg>
-                            </div>
-                            <div className="space-y-4">
-                                <h4 className="text-3xl font-black">Message Sent Successfully.</h4>
-                                <p className="text-slate-400 font-medium leading-relaxed max-w-sm">
-                                    Your inquiry has been received. I'll respond within 24 hours based on your timeline.
-                                </p>
-                            </div>
-                            <button
-                                onClick={() => setIsSent(false)}
-                                className="px-8 py-4 bg-slate-800 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-700 transition-all"
+                            <motion.div
+                                initial={{ scale: 0, rotate: -10 }}
+                                animate={{ scale: 1, rotate: 0 }}
+                                transition={{ delay: 0.2, type: "spring", stiffness: 150, damping: 12 }}
+                                className="w-20 h-20 bg-slate-900 text-white rounded-2xl flex items-center justify-center shadow-2xl shadow-slate-200 mb-8"
                             >
-                                Submit Another Inquiry
-                            </button>
+                                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </motion.div>
+                            <h3 className="text-3xl font-[900] text-slate-900 tracking-tighter leading-none mb-4">Message Sent.</h3>
+                            <p className="text-sm text-slate-500 font-medium leading-relaxed max-w-sm">
+                                Your communication has been received. Expect a response within the next business cycle.
+                            </p>
                         </motion.div>
                     ) : (
                         <motion.form
                             key="form"
-                            initial={{ opacity: 0, y: 10 }}
+                            initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                             onSubmit={handleSubmit}
-                            className="space-y-8 flex-1 flex flex-col"
+                            className="space-y-8"
+                            onFocus={handleFormStart}
                         >
-                            <div className="grid md:grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <label htmlFor="qual-name" className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">
-                                        Full Name *
+                            <div className="mb-10">
+                                <h3 className="text-3xl md:text-4xl font-[900] text-slate-900 tracking-tighter leading-none">Send a Message</h3>
+                            </div>
+
+                            {/* Name and Email Row */}
+                            <div className="grid md:grid-cols-2 gap-8">
+                                {/* Name Field */}
+                                <div className="relative group">
+                                    <label className={`absolute left-0 transition-all duration-300 pointer-events-none font-mono text-[9px] uppercase tracking-[0.2em] ${showLabel('name') ? '-top-5 text-blue-600 opacity-100' : 'top-5 text-slate-400 opacity-0'}`}>
+                                        Your Name
                                     </label>
                                     <input
-                                        id="qual-name"
+                                        required
                                         type="text"
                                         value={formData.name}
                                         onChange={(e) => handleChange('name', e.target.value)}
-                                        className={`w-full px-6 py-5 rounded-2xl bg-slate-800 border ${errors.name ? 'border-red-500' : 'border-slate-700'} focus:border-blue-500 outline-none transition-all placeholder:text-slate-600`}
-                                        placeholder="e.g. Sarah Chen"
-                                        aria-invalid={!!errors.name}
-                                        aria-describedby={errors.name ? 'qual-name-error' : undefined}
+                                        onFocus={() => setFocusedField('name')}
+                                        onBlur={() => setFocusedField(null)}
+                                        className={`w-full py-4 bg-transparent border-b ${errors.name ? 'border-red-300' : 'border-slate-200'} text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:placeholder-transparent transition-all outline-none text-base font-medium tracking-tight`}
+                                        placeholder={focusedField === 'name' ? '' : 'Name'}
                                     />
                                     {errors.name && (
-                                        <p id="qual-name-error" className="text-red-400 text-xs ml-2" role="alert">{errors.name}</p>
+                                        <motion.p
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            className="text-[10px] font-bold text-red-500 mt-2 uppercase tracking-widest"
+                                        >
+                                            {errors.name}
+                                        </motion.p>
                                     )}
                                 </div>
 
-                                <div className="space-y-2">
-                                    <label htmlFor="qual-email" className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">
-                                        Email Address *
+                                {/* Email Field */}
+                                <div className="relative group">
+                                    <label className={`absolute left-0 transition-all duration-300 pointer-events-none font-mono text-[9px] uppercase tracking-[0.2em] ${showLabel('email') ? '-top-5 text-blue-600 opacity-100' : 'top-5 text-slate-400 opacity-0'}`}>
+                                        Email Address
                                     </label>
                                     <input
-                                        id="qual-email"
+                                        required
                                         type="email"
                                         value={formData.email}
                                         onChange={(e) => handleChange('email', e.target.value)}
-                                        className={`w-full px-6 py-5 rounded-2xl bg-slate-800 border ${errors.email ? 'border-red-500' : 'border-slate-700'} focus:border-blue-500 outline-none transition-all placeholder:text-slate-600`}
-                                        placeholder="sarah@company.com"
-                                        aria-invalid={!!errors.email}
-                                        aria-describedby={errors.email ? 'qual-email-error' : undefined}
+                                        onFocus={() => setFocusedField('email')}
+                                        onBlur={() => setFocusedField(null)}
+                                        className={`w-full py-4 bg-transparent border-b ${errors.email ? 'border-red-300' : 'border-slate-200'} text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:placeholder-transparent transition-all outline-none text-base font-medium tracking-tight`}
+                                        placeholder={focusedField === 'email' ? '' : 'Email'}
                                     />
                                     {errors.email && (
-                                        <p id="qual-email-error" className="text-red-400 text-xs ml-2" role="alert">{errors.email}</p>
+                                        <motion.p
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            className="text-[10px] font-bold text-red-500 mt-2 uppercase tracking-widest"
+                                        >
+                                            {errors.email}
+                                        </motion.p>
                                     )}
                                 </div>
                             </div>
 
-                            <div className="space-y-2">
-                                <label htmlFor="qual-role" className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">
-                                    Your Role *
+                            {/* Subject Field */}
+                            <div className="relative group">
+                                <label className={`absolute left-0 transition-all duration-300 pointer-events-none font-mono text-[9px] uppercase tracking-[0.2em] ${showLabel('subject') ? '-top-5 text-blue-600 opacity-100' : 'top-5 text-slate-400 opacity-0'}`}>
+                                    Subject Line
                                 </label>
-                                <select
-                                    id="qual-role"
-                                    value={formData.role}
-                                    onChange={(e) => handleChange('role', e.target.value)}
-                                    className={`w-full px-6 py-5 rounded-2xl bg-slate-800 border ${errors.role ? 'border-red-500' : 'border-slate-700'} focus:border-blue-500 outline-none transition-all text-white`}
-                                    aria-invalid={!!errors.role}
-                                    aria-describedby={errors.role ? 'qual-role-error' : undefined}
-                                >
-                                    {roles.map(role => (
-                                        <option key={role.value} value={role.value} disabled={!role.value}>
-                                            {role.label}
-                                        </option>
-                                    ))}
-                                </select>
-                                {errors.role && (
-                                    <p id="qual-role-error" className="text-red-400 text-xs ml-2" role="alert">{errors.role}</p>
+                                <input
+                                    required
+                                    type="text"
+                                    value={formData.subject}
+                                    onChange={(e) => handleChange('subject', e.target.value)}
+                                    onFocus={() => setFocusedField('subject')}
+                                    onBlur={() => setFocusedField(null)}
+                                    className={`w-full py-4 bg-transparent border-b ${errors.subject ? 'border-red-300' : 'border-slate-200'} text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:placeholder-transparent transition-all outline-none text-base font-medium tracking-tight`}
+                                    placeholder={focusedField === 'subject' ? '' : 'Subject'}
+                                />
+                                {errors.subject && (
+                                    <motion.p
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        className="text-[10px] font-bold text-red-500 mt-2 uppercase tracking-widest"
+                                    >
+                                        {errors.subject}
+                                    </motion.p>
                                 )}
                             </div>
 
-                            <div className="space-y-2">
-                                <label htmlFor="qual-challenge" className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">
-                                    Primary Challenge *
-                                </label>
-                                <select
-                                    id="qual-challenge"
-                                    value={formData.challenge}
-                                    onChange={(e) => handleChange('challenge', e.target.value)}
-                                    className={`w-full px-6 py-5 rounded-2xl bg-slate-800 border ${errors.challenge ? 'border-red-500' : 'border-slate-700'} focus:border-blue-500 outline-none transition-all text-white`}
-                                    aria-invalid={!!errors.challenge}
-                                    aria-describedby={errors.challenge ? 'qual-challenge-error' : undefined}
-                                >
-                                    {challenges.map(challenge => (
-                                        <option key={challenge.value} value={challenge.value} disabled={!challenge.value}>
-                                            {challenge.label}
-                                        </option>
-                                    ))}
-                                </select>
-                                {errors.challenge && (
-                                    <p id="qual-challenge-error" className="text-red-400 text-xs ml-2" role="alert">{errors.challenge}</p>
-                                )}
-                            </div>
-
-                            <div className="space-y-2">
-                                <label htmlFor="qual-timeline" className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">
-                                    Timeline *
-                                </label>
-                                <select
-                                    id="qual-timeline"
-                                    value={formData.timeline}
-                                    onChange={(e) => handleChange('timeline', e.target.value)}
-                                    className={`w-full px-6 py-5 rounded-2xl bg-slate-800 border ${errors.timeline ? 'border-red-500' : 'border-slate-700'} focus:border-blue-500 outline-none transition-all text-white`}
-                                    aria-invalid={!!errors.timeline}
-                                    aria-describedby={errors.timeline ? 'qual-timeline-error' : undefined}
-                                >
-                                    {timelines.map(timeline => (
-                                        <option key={timeline.value} value={timeline.value} disabled={!timeline.value}>
-                                            {timeline.label}
-                                        </option>
-                                    ))}
-                                </select>
-                                {errors.timeline && (
-                                    <p id="qual-timeline-error" className="text-red-400 text-xs ml-2" role="alert">{errors.timeline}</p>
-                                )}
-                            </div>
-
-                            <div className="space-y-2 flex-1 flex flex-col">
-                                <label htmlFor="qual-message" className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">
-                                    Additional Context (Optional)
+                            {/* Message Field */}
+                            <div className="relative group">
+                                <label className={`absolute left-0 transition-all duration-300 pointer-events-none font-mono text-[9px] uppercase tracking-[0.2em] ${showLabel('message') ? '-top-5 text-blue-600 opacity-100' : 'top-5 text-slate-400 opacity-0'}`}>
+                                    Detailed Message
                                 </label>
                                 <textarea
-                                    id="qual-message"
                                     rows={4}
                                     value={formData.message}
                                     onChange={(e) => handleChange('message', e.target.value)}
-                                    className="w-full flex-1 px-6 py-5 rounded-2xl bg-slate-800 border border-slate-700 focus:border-blue-500 outline-none transition-all placeholder:text-slate-600 resize-none"
-                                    placeholder="Tell us more about your specific needs..."
+                                    onFocus={() => setFocusedField('message')}
+                                    onBlur={() => setFocusedField(null)}
+                                    className="w-full py-4 bg-transparent border-b border-slate-200 text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:placeholder-transparent transition-all outline-none text-base font-medium tracking-tight resize-none"
+                                    placeholder={focusedField === 'message' ? '' : 'Your Message'}
                                 />
                             </div>
 
-                            <div className="pt-8 mt-auto border-t border-slate-800 flex gap-4">
+                            {/* Submit Button */}
+                            <div className="pt-4">
                                 <Button
                                     variant="accent"
                                     size="lg"
                                     type="submit"
                                     disabled={isSubmitting}
                                     loading={isSubmitting}
-                                    className="flex-1"
+                                    className="w-full py-6 bg-slate-900 text-white rounded-2xl font-bold text-[10px] uppercase tracking-[0.3em] hover:bg-blue-600 transition-all duration-500 shadow-xl shadow-slate-200 flex items-center justify-between group/btn relative overflow-hidden"
                                 >
-                                    {isSubmitting ? 'Sending...' : 'Submit Qualification Form'}
-                                    <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                                    <span className="relative z-10 flex items-center gap-4 px-4 overflow-hidden">
+                                        <span className="inline-block transition-transform duration-500 group-hover/btn:-translate-y-[120%]">
+                                            {isSubmitting ? 'Processing...' : 'Send Message'}
+                                        </span>
+                                        <span className="absolute left-4 inline-block transition-transform duration-500 translate-y-[120%] group-hover/btn:translate-y-0">
+                                            {isSubmitting ? 'Processing...' : 'Send Now'}
+                                        </span>
+                                    </span>
+                                    <div className="relative z-10 w-10 h-10 bg-white/10 rounded-full flex items-center justify-center mr-2 transition-transform duration-500 group-hover/btn:scale-110 group-hover/btn:bg-white/20">
+                                        <svg className="w-4 h-4 transition-transform duration-500 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                        </svg>
+                                    </div>
                                 </Button>
                             </div>
                         </motion.form>

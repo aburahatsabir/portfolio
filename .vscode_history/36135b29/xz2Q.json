@@ -1,0 +1,10 @@
+{
+    "chat.mcp.gallery.enabled": true,
+    "editor.minimap.enabled": false,
+    "security.workspace.trust.untrustedFiles": "open",
+    "git.autofetch": true,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "chat.tools.terminal.autoApprove": {
+        "npm run build:html": true
+    }
+}

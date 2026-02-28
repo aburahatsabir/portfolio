@@ -1,0 +1,35 @@
+OPEN index-standalone.html
+
+That's it. Double-click it. Website opens.
+
+No commands. No installation. No "npm install". No "npm run dev".
+
+Just:
+1. Find: index-standalone.html
+2. Double-click it
+3. Done
+
+---
+
+Why this works:
+- It's a standalone HTML file
+- Doesn't need Node.js
+- Doesn't need a dev server
+- Contains everything the website needs
+- Works offline
+
+---
+
+If you want the full React development version:
+
+Option A: Use Python (most systems have Python 3)
+- Double-click: start-server.bat
+- Opens at localhost:3000
+
+Option B: Use Node.js (requires npm install first)
+- Double-click: start-dev.bat
+- Opens at localhost:3000
+
+---
+
+But honestly? Just open index-standalone.html. It's the simplest.

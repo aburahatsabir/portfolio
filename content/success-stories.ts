@@ -4,40 +4,40 @@ export const SUCCESS_STORIES: SuccessStory[] = [
   {
     id: 'ss1',
     clientName: 'Prominent Tec',
-    industry: 'Corporate',
-    challenge: 'Handling complex C-suite schedules and sensitive board-level travel across multiple timezones manually.',
-    solution: 'Engineered an automated Support Cluster using Apps Script to synchronize cross-timezone logic and confidential filings.',
+    industry: 'Executive Operations',
+    operationalRisk: 'Manual C-suite scheduling across time zones created conflict risk and overhead.',
+    systemBuilt: 'Automated executive support cluster with timezone logic, travel controls, and routing.',
+    measuredOutcome: 'Eliminated scheduling conflicts. Reduced board prep 90%, freeing leadership for strategic work.',
     metrics: [
-      { label: 'Time Reclaimed', value: '450+ Hrs/Yr' },
-      { label: 'Error Rate', value: '0.00%' }
+      { label: 'Executive Time Reclaimed', value: '450+ hrs/year' },
+      { label: 'Scheduling Error Rate', value: '0.00%' }
     ],
-    logo: './images/logos/logo-prominent-tec.webp',
-    outcomeDescription: 'Neutralized scheduling conflicts entirely while reclaiming 90% of manual compilation time.'
+    logo: './images/logos/logo-prominent-tec.webp'
   },
   {
     id: 'ss2',
-    clientName: 'Healthcare Logistics',
-    industry: 'Medical Ops',
-    challenge: 'Managing the complex lifecycle of 3,100+ patients with fragmented manual visa and clinical document checks.',
-    solution: 'Architected a governed patient pipeline with automated verification gates and a unified relational ledger.',
+    clientName: 'Healthcare Logistics Network',
+    industry: 'Medical Operations',
+    operationalRisk: 'Fragmented manual checks for 3,100+ patient cases created compliance gaps and delays.',
+    systemBuilt: 'Governed pipeline with automated verification gates, status controls, and unified ledger.',
+    measuredOutcome: 'Achieved 100% compliance. Eliminated 48-hour reporting lag for near real-time visibility.',
     metrics: [
-      { label: 'Volume Managed', value: '3,100+ Patients' },
-      { label: 'Pipeline Failure', value: '0.0%' }
+      { label: 'Records Governed', value: '3,100+ patients' },
+      { label: 'Pipeline Failure Rate', value: '0.0%' }
     ],
-    logo: './images/logos/logo-greenotex.webp',
-    outcomeDescription: 'Achieved 100% clinical documentation compliance and eliminated 48-hour reporting lags.'
+    logo: './images/logos/logo-greenotex.webp'
   },
   {
     id: 'ss3',
     clientName: 'FMCG Wholesaler',
-    industry: 'Supply Chain',
-    challenge: 'High-volume wholesale invoicing with 15-20% order shortfalls due to manual ledger blindness.',
-    solution: 'Deployed a "One Source of Truth" relational ERP layer that enforced credit limits and live stock validation.',
+    industry: 'Distribution and Supply Chain',
+    operationalRisk: 'Disconnected ledgers caused inventory blind spots, credit breaches, and order shortfalls.',
+    systemBuilt: 'Single-source ERP layer with live stock validation, pricing controls, and credit-limit enforcement.',
+    measuredOutcome: 'Eliminated ghost sales. Recovered BDT 300,000 monthly through tighter transactional control.',
     metrics: [
-      { label: 'Invoicing Speed', value: '80% Gain' },
+      { label: 'Invoicing Cycle Compression', value: '80% faster' },
       { label: 'Pricing Accuracy', value: '100%' }
     ],
-    logo: './images/logos/logo-modern-accessories.webp',
-    outcomeDescription: 'Eliminated ghost inventory sales and reclaimed à§³3L monthly in previously untracked revenue leakage.'
+    logo: './images/logos/logo-modern-accessories.webp'
   }
 ];

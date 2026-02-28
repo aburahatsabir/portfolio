@@ -16,3 +16,4 @@ export * from './standards';
 export * from './blueprints';
 export * from './success-stories';
 export * from './post-mortems';
+export * from './certificates';

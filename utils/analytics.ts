@@ -10,7 +10,7 @@ import { analyticsFallback } from './analytics-fallback';
 // Type definitions for analytics events
 export interface ContactCTAEvent {
     location: string;
-    conversionType: 'contact_form' | 'email_click' | 'resume_download';
+    conversionType: 'contact_form' | 'email_click' | 'resume_download' | 'phone_click' | 'whatsapp_click';
     label?: string;
 }
 
@@ -18,6 +18,7 @@ export interface FormSubmissionEvent {
     role?: string;
     challenge?: string;
     timeline?: string;
+    subject?: string;
     formType: 'contact' | 'qualification';
 }
 

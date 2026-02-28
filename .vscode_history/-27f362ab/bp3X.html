@@ -1,0 +1,542 @@
+Here is the complete code in **one single file**.
+
+Since you provided two different pages (the "Work" list and the "Case Study" detail) but asked for a **single file**, I have combined them using a simple **View Switcher**.
+
+**How to use this:**
+
+1. Save the code below as `index.html`.
+2. Open it in your browser.
+3. You will see the **"Work"** page by default.
+4. **Click the blue "View Case Study" button** fixed at the bottom-right of the screen to toggle between the Main Work Page and the Case Study Page.
+
+```html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portfolio - Work & Case Study</title>
+  <style>
+    /* --- CSS START --- */
+    :root{
+      --bg:#0b0d12;
+      --panel:#111524;
+      --panel2:#0f1320;
+      --text:#e8ebf3;
+      --muted:#a7afc3;
+      --line:#242a3d;
+      --accent:#7aa2ff;
+      --chip:#1a2040;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(122,162,255,.18), transparent 60%),
+                  radial-gradient(900px 500px at 90% 10%, rgba(160,122,255,.14), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      /* Ensure background stays fixed during scroll */
+      background-attachment: fixed; 
+    }
+
+    a{color:inherit; text-decoration:none}
+    .container{max-width:1050px; margin:0 auto; padding:0 18px}
+    .page{padding:34px 0 70px}
+
+    .site-header{
+      position:sticky; top:0;
+      backdrop-filter: blur(10px);
+      background: rgba(11,13,18,.75);
+      border-bottom:1px solid rgba(255,255,255,.06);
+      z-index:10;
+    }
+    .header-row{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 0;
+    }
+    .brand{
+      font-weight:700; letter-spacing:.2px;
+      padding:10px 12px;
+      border-radius:12px;
+      background: rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.06);
+    }
+    .nav a{
+      margin-left:10px;
+      padding:10px 12px;
+      border-radius:12px;
+      color:var(--muted);
+    }
+    .nav a.active, .nav a:hover{
+      color:var(--text);
+      background: rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.06);
+    }
+
+    .page-hero h1{font-size:40px; margin:8px 0 8px}
+    .lead{color:var(--muted); max-width:760px; line-height:1.55}
+    .meta-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px}
+    .meta{color:var(--muted); font-size:13px; border:1px solid rgba(255,255,255,.08); padding:8px 10px; border-radius:999px; background: rgba(255,255,255,.03)}
+    .pill{font-size:13px; padding:8px 10px; border-radius:999px; background: rgba(122,162,255,.16); border:1px solid rgba(122,162,255,.25); color:#d7e2ff}
+
+    .section{margin-top:26px}
+    .section-head{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom:12px}
+    .section-head h2{margin:0}
+    .muted{color:var(--muted)}
+    .hint{color:var(--muted); font-size:12px}
+    .back{display:inline-block; margin:8px 0 18px; color:var(--muted); cursor: pointer;}
+    .back:hover{color:var(--text)}
+
+    .filters{display:flex; gap:10px; flex-wrap:wrap; margin-top:18px}
+    .chip{
+      background: rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+      color:var(--muted);
+      padding:10px 12px;
+      border-radius:999px;
+      cursor:pointer;
+    }
+    .chip-active{
+      background: rgba(122,162,255,.16);
+      border:1px solid rgba(122,162,255,.25);
+      color:var(--text);
+    }
+
+    .grid{display:grid; gap:14px}
+    .grid-2{grid-template-columns:repeat(2, minmax(0,1fr))}
+    .grid-3{grid-template-columns:repeat(3, minmax(0,1fr))}
+    @media (max-width: 860px){
+      .grid-2,.grid-3{grid-template-columns:1fr}
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      padding:18px;
+      box-shadow: var(--shadow);
+    }
+    .card-lg{padding:20px}
+    .card-muted{opacity:.85}
+    .card-top{
+      display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px
+    }
+    .card h3{margin:10px 0 8px; font-size:18px}
+    .card p{margin:0 0 10px}
+
+    .card-dl{display:grid; gap:10px; margin:12px 0 14px}
+    .card-dl dt{font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.12em}
+    .card-dl dd{margin:4px 0 0; line-height:1.45}
+
+    .card-actions{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:8px; flex-wrap:wrap}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:10px 14px;
+      border-radius:12px;
+      background: rgba(122,162,255,.18);
+      border:1px solid rgba(122,162,255,.25);
+      color:var(--text);
+      cursor: pointer;
+    }
+    .btn:hover{background: rgba(122,162,255,.25)}
+    .btn-ghost{
+      background: rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .link{color:var(--accent); cursor: pointer;}
+    .link:hover{text-decoration:underline}
+
+    .bullets{margin:10px 0 0; padding-left:18px}
+    .bullets li{margin:8px 0; color:var(--muted); line-height:1.5}
+    .bullets b{color:var(--text); font-weight:600}
+
+    .mini{padding:14px; border-radius:14px; border:1px solid rgba(255,255,255,.08); background: rgba(0,0,0,.15)}
+    .h3{font-size:18px; margin:0 0 10px}
+    .h4{font-size:14px; margin:0 0 8px}
+
+    .artifact{background: linear-gradient(180deg, rgba(122,162,255,.10), rgba(255,255,255,.03))}
+
+    .library{list-style:none; padding:0; margin:0}
+    .library li{
+      display:flex; justify-content:space-between; gap:14px;
+      padding:12px 0;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .library li:last-child{border-bottom:none}
+    .lib-name{font-weight:600}
+    .lib-outcome{color:var(--muted); text-align:right}
+
+    .cta-box{
+      display:flex; align-items:center; justify-content:space-between; gap:16px;
+      padding:18px;
+      border-radius: var(--radius);
+      border:1px solid rgba(122,162,255,.25);
+      background: radial-gradient(600px 200px at 20% 0%, rgba(122,162,255,.20), transparent 60%),
+                  rgba(255,255,255,.03);
+    }
+    @media (max-width: 860px){
+      .cta-box{flex-direction:column; align-items:flex-start}
+    }
+
+    .site-footer{
+      border-top:1px solid rgba(255,255,255,.06);
+      padding:18px 0;
+      background: rgba(11,13,18,.65);
+    }
+    .footer-row{display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap}
+
+    /* --- DEMO SWITCHER STYLES (Added for single-file functionality) --- */
+    .view-container {
+      display: none; /* Hidden by default */
+      animation: fadeIn 0.3s ease;
+    }
+    .view-container.active {
+      display: block; /* Show active */
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    #demo-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--accent);
+      color: #000;
+      padding: 12px 20px;
+      border-radius: 50px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+      border: 2px solid white;
+      z-index: 100;
+    }
+    #demo-toggle:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="view-work" class="view-container active">
+    <header class="site-header">
+      <div class="container header-row">
+        <a class="brand" href="#" onclick="switchView('view-work')">Your Name</a>
+        <nav class="nav">
+          <a href="#" class="active">Work</a>
+          <a href="#">About</a>
+          <a href="#">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container page">
+      <section class="page-hero">
+        <h1>Work</h1>
+        <p class="lead">
+          Operational systems I’ve designed, implemented, and maintained. Featured case studies show complete systems with measurable impact.
+        </p>
+      </section>
+
+      <section class="filters">
+        <button class="chip chip-active">All</button>
+        <button class="chip">Dashboards</button>
+        <button class="chip">HR Systems</button>
+        <button class="chip">Payroll / Finance</button>
+        <button class="chip">Documentation</button>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>Featured Case Studies</h2>
+          <p class="muted">Primary evidence. Deep write-ups with artifacts and outcomes.</p>
+        </div>
+
+        <div class="grid grid-2">
+          <article class="card card-lg">
+            <div class="card-top">
+              <span class="pill">Payroll / Controls</span>
+              <span class="meta">Monthly · High risk</span>
+            </div>
+            <h3>Centralized HR & Payroll Control System</h3>
+            <p class="muted">
+              Built an attendance-linked payroll system with validation, approval flow, and audit-ready outputs.
+            </p>
+            <dl class="card-dl">
+              <div>
+                <dt>Problem</dt>
+                <dd>Manual payroll reconciliation caused errors and delayed approvals.</dd>
+              </div>
+              <div>
+                <dt>Outcome</dt>
+                <dd>Stabilized month-end processing; reduced recurring calculation mismatches.</dd>
+              </div>
+            </dl>
+            <div class="card-actions">
+              <a class="btn" href="#" onclick="switchView('view-case')">View case study</a>
+              <span class="hint">Includes artifacts (redacted templates + checklist)</span>
+            </div>
+          </article>
+
+          <article class="card card-lg">
+            <div class="card-top">
+              <span class="pill">Dashboards</span>
+              <span class="meta">Weekly · Decision support</span>
+            </div>
+            <h3>Executive KPI Dashboard System</h3>
+            <p class="muted">
+              Created self-serve KPI dashboards with filters, KPIs, and consistent layout to replace manual reporting.
+            </p>
+            <dl class="card-dl">
+              <div>
+                <dt>Problem</dt>
+                <dd>Reporting was slow, inconsistent, and required manual slicing.</dd>
+              </div>
+              <div>
+                <dt>Outcome</dt>
+                <dd>Reduced reporting time; improved decision clarity in reviews.</dd>
+              </div>
+            </dl>
+            <div class="card-actions">
+              <a class="btn" href="#">View case study</a>
+              <span class="hint">Includes artifacts (redacted dashboard views)</span>
+            </div>
+          </article>
+
+          <article class="card card-lg">
+            <div class="card-top">
+              <span class="pill">Tracking Systems</span>
+              <span class="meta">Daily · Operational control</span>
+            </div>
+            <h3>Operational Tracking “Zero-Cost ERP”</h3>
+            <p class="muted">
+              Built a structured pipeline system with master data, validation layers, and summary reporting.
+            </p>
+            <dl class="card-dl">
+              <div>
+                <dt>Problem</dt>
+                <dd>Data was fragmented; handoffs caused delays and missing updates.</dd>
+              </div>
+              <div>
+                <dt>Outcome</dt>
+                <dd>Centralized tracking; reduced missing fields via validation.</dd>
+              </div>
+            </dl>
+            <div class="card-actions">
+              <a class="btn" href="#">View case study</a>
+              <span class="hint">Includes artifacts (schema + workflow diagram)</span>
+            </div>
+          </article>
+
+          <article class="card card-lg card-muted">
+            <div class="card-top">
+              <span class="pill">Coming next</span>
+              <span class="meta">Documentation</span>
+            </div>
+            <h3>HR Governance & Templates System</h3>
+            <p class="muted">Policy manual + forms + versioning + approval workflows.</p>
+            <div class="card-actions">
+              <a class="btn btn-ghost" href="#">Request details</a>
+              <span class="hint">Will be added after redaction</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>System Library (Selected)</h2>
+          <p class="muted">
+            Additional systems built to support operations and governance. Listed for breadth — not expanded into full case studies.
+          </p>
+        </div>
+
+        <div class="card">
+          <ul class="library">
+            <li><span class="lib-name">Attendance Validation Sheet</span><span class="lib-outcome">Prevented payroll mismatches</span></li>
+            <li><span class="lib-name">Interview Scorecard Template</span><span class="lib-outcome">Standardized candidate evaluation</span></li>
+            <li><span class="lib-name">Policy Index & Version Control</span><span class="lib-outcome">Reduced compliance ambiguity</span></li>
+            <li><span class="lib-name">Commission Tracking Variant</span><span class="lib-outcome">Prevented missed receivables</span></li>
+            <li><span class="lib-name">Asset Handover Tracking</span><span class="lib-outcome">Improved exit accountability</span></li>
+            <li><span class="lib-name">Document Control Folder Structure</span><span class="lib-outcome">Improved audit readiness</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section cta">
+        <div class="cta-box">
+          <div>
+            <h2>Want a system like this in your org?</h2>
+            <p class="muted">Happy to discuss scope and fit. Initial conversations are exploratory.</p>
+          </div>
+          <a class="btn" href="#">Contact</a>
+        </div>
+      </section>
+    </main>
+  </div>
+  <div id="view-case" class="view-container">
+    <header class="site-header">
+      <div class="container header-row">
+        <a class="brand" href="#" onclick="switchView('view-work')">Your Name</a>
+        <nav class="nav">
+          <a href="#" onclick="switchView('view-work')">Work</a>
+          <a href="#">About</a>
+          <a href="#">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container page">
+      <a class="back" onclick="switchView('view-work')">← Back to Work</a>
+
+      <section class="page-hero">
+        <h1>Centralized HR & Payroll Control System</h1>
+        <p class="lead">Attendance-linked payroll engine with validations, approvals, and audit-ready outputs.</p>
+        <div class="meta-row">
+          <span class="pill">Payroll / Controls</span>
+          <span class="meta">Frequency: Monthly</span>
+          <span class="meta">Stakeholders: HR · Accounts · Leadership</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="card">
+          <h2 class="h3">Overview</h2>
+          <ul class="bullets">
+            <li><b>Problem:</b> Manual reconciliation caused errors and delayed approvals.</li>
+            <li><b>Constraints:</b> No new tools; high accuracy; signature workflow required.</li>
+            <li><b>Solution:</b> Standardized salary sheet + validation rules + approval checklist.</li>
+            <li><b>Outcome:</b> Reduced recurring mismatches; stabilized month-end processing.</li>
+            <li><b>Tools:</b> Google Sheets / Excel (VBA where applicable).</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="grid grid-2">
+          <div class="card">
+            <h2 class="h3">Problem & Context</h2>
+            <p class="muted">
+              Describe what was broken, what risks existed (money, compliance), and how delays affected approvals.
+            </p>
+          </div>
+          <div class="card">
+            <h2 class="h3">Constraints & Requirements</h2>
+            <ul class="bullets">
+              <li>Accuracy and audit traceability</li>
+              <li>Multiple sign-off stages</li>
+              <li>Existing spreadsheet ecosystem</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="card">
+          <h2 class="h3">System Design</h2>
+          <div class="grid grid-3">
+            <div class="mini">
+              <h3 class="h4">Inputs</h3>
+              <p class="muted">Attendance, salary data, adjustments.</p>
+            </div>
+            <div class="mini">
+              <h3 class="h4">Processing</h3>
+              <p class="muted">Validation + calculation logic + exception handling.</p>
+            </div>
+            <div class="mini">
+              <h3 class="h4">Outputs</h3>
+              <p class="muted">Approval-ready sheets + summaries + records.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="card">
+          <h2 class="h3">Results & Impact</h2>
+          <ul class="bullets">
+            <li><b>Time saved:</b> ~2–3 hours per month (conservative).</li>
+            <li><b>Error reduction:</b> From frequent mismatches → near-zero recurring calculation errors.</li>
+            <li><b>Decision reliability:</b> Faster approvals and clearer exception handling.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>Artifacts (Redacted Evidence)</h2>
+          <p class="muted">These are outputs of the same system. Not separate projects.</p>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card artifact">
+            <h3 class="h4">Payroll Template (Redacted)</h3>
+            <p class="muted">Shows calculation zones, approval areas, and exception notes without personal data.</p>
+            <a class="link" href="#">View screenshot →</a>
+          </div>
+          <div class="card artifact">
+            <h3 class="h4">Monthly Verification Checklist</h3>
+            <p class="muted">Shows controls used to prevent errors before printing/signatures.</p>
+            <a class="link" href="#">View excerpt →</a>
+          </div>
+          <div class="card artifact">
+            <h3 class="h4">Approval Flow Diagram</h3>
+            <p class="muted">HR → Accounts → Admin → CEO/COO → MD workflow for sign-off.</p>
+            <a class="link" href="#">View diagram →</a>
+          </div>
+          <div class="card artifact">
+            <h3 class="h4">Exception Handling Example</h3>
+            <p class="muted">Partial month, deductions, or special cases documented as controlled exceptions.</p>
+            <a class="link" href="#">View sample →</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section cta">
+        <div class="cta-box">
+          <div>
+            <h2>If you want this outcome in your organization, let’s talk.</h2>
+            <p class="muted">I can help design or stabilize systems like this across reporting, HR, and operations.</p>
+          </div>
+          <a class="btn" href="#">Contact</a>
+        </div>
+      </section>
+    </main>
+  </div>
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <span class="muted">© Your Name</span>
+      <span class="muted">GitHub Pages · Minimal proof-driven portfolio</span>
+    </div>
+  </footer>
+
+  <button id="demo-toggle" onclick="toggleDemo()">Switch Page View</button>
+
+  <script>
+    // Simple script to toggle between Work and Case Study views
+    function switchView(viewId) {
+      document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
+      document.getElementById(viewId).classList.add('active');
+      window.scrollTo(0,0);
+    }
+
+    // Function for the floating demo button
+    function toggleDemo() {
+      const workView = document.getElementById('view-work');
+      if (workView.classList.contains('active')) {
+        switchView('view-case');
+      } else {
+        switchView('view-work');
+      }
+    }
+  </script>
+
+</body>
+</html>
+
+```

@@ -171,7 +171,7 @@ const PERSONAS: Record<string, PersonaConfig> = {
             },
             {
                 step: 'Active Execution',
-                description: 'Managing stakeholder coordination, clearing inbox bottlenecks, and executing cross-functional workflows autonomously.'
+                description: 'Managing stakeholder coordination, clearing inbox bottlenecks, and executing workflows autonomously.'
             },
             {
                 step: 'Preparation & Reporting',
@@ -208,8 +208,8 @@ const PERSONAS: Record<string, PersonaConfig> = {
             statement: 'A single, ruthless execution standard applied homogeneously across both environments.'
         },
         differentiation: {
-            title: 'Traditional admin support focuses on task completion. I focus on executive operating reliability.',
-            description: 'I do not only manage requests — I build repeatable systems for decision flow, follow-up control, and leadership visibility. My approach is rooted in systems thinking, ensuring the executive office functions as a predictable, auditable unit. I create institutional memory so the office is never dependent on one person\'s recall or availability. The role output is not activity volume. The role output is decision speed, execution consistency, and reduced coordination risk.'
+            title: 'From task management to executive reliability.',
+            description: 'I don’t just finish tasks; I build the systems that protect your time. By structuring decision flows and follow-up, I turn your office into a predictable, high-speed unit. The result is total execution consistency and faster decision speed for you.'
         },
         toolStack: {
             title: 'Structure comes first. Tools support the model.',
@@ -254,73 +254,196 @@ const PERSONAS: Record<string, PersonaConfig> = {
             primary: 'Start Hiring Conversation',
             primaryLink: '/contact',
             secondary: 'Review Operating Approach',
-            secondaryLink: '/contact'
+            secondaryLink: '/about'
         },
         relevantCaseStudies: ['payroll-control', 'hr-docs'],
         relevantTestimonials: [1, 2]
     },
     'operations-leaders': {
         id: 'operations-leaders',
-        headline: 'Scale Systems Without Headcount',
-        subheadline: 'Enterprise-grade operational architecture that eliminates bottlenecks and multiplies team capacity',
+        headline: 'Scale Your Operations Without the Chaos.',
+        subheadline: 'Transforming fragile workflows into predictable, high-speed operations. Eliminating manual bottlenecks so your team can focus on execution, not administration.',
+        whoThisIsFor: [
+            'COOs & Operations Directors',
+            'Plant & Factory Managers',
+            'General Managers & Country Heads',
+            'Supply Chain & Logistics Leaders',
+            'MNC Regional Operations Teams'
+        ],
+        problemStatement: {
+            title: 'Growth stalls when processes live in people\'s heads.',
+            description: 'Every new order, new hire, and new location adds administrative weight. Teams spend their Fridays manually consolidating spreadsheets just to figure out what happened all week. Critical tasks depend on specific individuals, creating invisible single points of failure. The result isn\'t just lost time—it\'s margin-crushing inefficiency and a constant cycle of firefighting.'
+        },
         painPoints: [
             {
                 icon: (
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
                 ),
-                title: 'Process Bottlenecks',
-                description: 'Workflows dependent on specific people, creating single points of failure'
+                title: 'The Hero Dependency',
+                description: 'Crucial workflows depend on specific individuals working late. When they are on leave or overloaded, the entire process simply stops.'
             },
             {
                 icon: (
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
                 ),
-                title: 'Data Reconciliation',
-                description: 'Manual data entry and reconciliation across disconnected operational silos'
+                title: 'The Reporting Black Hole',
+                description: 'Data is fragmented across emails, WhatsApp, and disconnected spreadsheets, causing agonizingly slow reporting cycles and decision paralysis.'
             },
             {
                 icon: (
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                    </svg>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
                 ),
-                title: 'Capacity Limits',
-                description: 'Growth stalls because every new order requires proportional headcount increase'
+                title: 'Margin-Crushing Headcount',
+                description: 'Capacity is locked to people. Every time business grows 10%, you have to hire more staff just to handle the administrative mess.'
             }
         ],
         solution: {
-            title: 'Zero-Cost ERP Systems',
-            description: 'I architect relational data systems and governance frameworks that scale operations without enterprise software costs.',
-            features: [
-                'Relational data architecture on existing tools',
-                'Workflow orchestration with idempotency',
-                'Real-time operational KPI dashboards',
-                'Governance frameworks with compliance controls',
-                'Self-healing automation architectures'
+            title: 'Governed Operations',
+            description: 'I act as your strategic operations partner, designing bulletproof workflows and reporting frameworks that scale your capacity—built entirely on the tools your team already uses.',
+            features: []
+        },
+        pillars: [
+            {
+                title: 'Single Source of Truth',
+                positioning: 'Ending the multi-spreadsheet chaos. We create unified, reliable trackers using the tools you already own so everyone looks at the same numbers in real-time, eliminating duplicate entry and manual errors.',
+                outcomes: [
+                    'Eliminating duplicate data entry and manual errors across departments',
+                    'Providing real-time visibility without hours of manual consolidation',
+                    'Enforcing strict data integrity so information never drifts'
+                ]
+            },
+            {
+                title: 'Automated Handoffs & Approvals',
+                positioning: 'Work moves forward automatically. We convert manual approvals and task routing into strict workflows, removing human bottlenecks and scaling your team\'s throughput without adding headcount.',
+                outcomes: [
+                    'Removing human bottlenecks from critical approval chains',
+                    'Scaling process throughput without adding new headcount',
+                    'Building self-healing systems that flag exceptions immediately'
+                ]
+            },
+            {
+                title: 'Real-Time Visibility',
+                positioning: 'You get dashboards that tell you what\'s breaking before the customer complains. We surface your exact operational SLAs instantly, replacing subjective verbal updates with auditable, live data.',
+                outcomes: [
+                    'Generating decision-ready, executive-level reports in minutes',
+                    'Replacing subjective verbal updates with auditable, live data',
+                    'Detecting threshold breaches before minor issues compound'
+                ]
+            },
+            {
+                title: 'Built-In Accountability',
+                positioning: 'The process enforces the rules so you don\'t have to micromanage. Regulatory demands, whether it\'s the BD Labour Act or trade compliance, are embedded directly into how daily work gets done.',
+                outcomes: [
+                    'Enforcing internal policies and local regulatory standards at the data-entry level',
+                    'Implementing role-based access with fully immutable transaction logs',
+                    'Creating resilient governance that survives employee turnover'
+                ]
+            }
+        ],
+        operatingModel: [
+            {
+                step: 'Operations Audit',
+                description: 'Where is the bleeding occurring? We map your existing workflows, data silos, and ownership gaps to pinpoint the exact bottlenecks holding your team back.'
+            },
+            {
+                step: 'Workflow Design',
+                description: 'Creating the ideal, streamlined workflow for your specific team and constraints, defining exactly what happens, and who is responsible for it.'
+            },
+            {
+                step: 'Tool Configuration',
+                description: 'Setting up the strict logic, trackers, and automated dashboards heavily utilizing the software stack you already own (like Excel and Google Workspace).'
+            },
+            {
+                step: 'Team Adoption',
+                description: 'Deploying the system with parallel runs, training your team, and embedding standard operating procedures so flawless execution becomes natural rapidly.'
+            },
+            {
+                step: 'Optimization & Support',
+                description: 'Refining the process, adjusting operational thresholds, and ensuring the architectural setup scales smoothly alongside your organization\'s volume.'
+            }
+        ],
+        compatibility: {
+            environments: [
+                {
+                    name: 'Bangladesh Corporate Dynamics',
+                    attributes: [
+                        'Bridging the gap from legacy manual systems',
+                        'Adapting cleanly to hierarchical approval cultures',
+                        'Enforcing local regulatory compliance (Labour, VAT, Tax)'
+                    ]
+                },
+                {
+                    name: 'MNC Framework Standards',
+                    attributes: [
+                        'Ensuring global reporting compliance and audit readiness',
+                        'Implementing cross-border data governance protocols',
+                        'Structuring clear regional-to-HQ escalation paths'
+                    ]
+                }
+            ],
+            statement: 'One unified operating standard. Seamlessly adapted to local realities and global demands.'
+        },
+        differentiation: {
+            title: 'From manual firefighting to autonomous execution.',
+            description: 'I do not just optimize your team\'s spreadsheets; I replace them with governed systems. Your operations will run according to logical, strict workflows using the software you likely already pay for. By building structural logic directly within familiar tools, your team isn\'t forced to learn complex new SaaS interfaces, and you are saved from expensive vendor lock-in.'
+        },
+        toolStack: {
+            title: 'Maximizing the tools you already pay for.',
+            items: [
+                'Core Trackers: Advanced Google Sheets and Excel setups acting as strict, single-source-of-truth records.',
+                'Workflow Engines: Apps Script, VBA, and Custom Functions turn manual handoffs into rapid self-auditing pipelines.',
+                'Reporting Dashboards: Auto-refreshing KPI views built specifically for non-technical stakeholders to make fast, informed choices.',
+                'Governance Enablers: Role-based access protocols and embedded SOPs enforcing operational compliance without introducing new friction.'
             ]
         },
+        finalStatement: 'Scale capacity. Eliminate dependency.',
+        caseReferences: [
+            {
+                sector: 'FMCG Distribution Network',
+                challenge: 'Thousands of deliveries tracked on brittle spreadsheets. Ghost inventory generated daily, credit limits ignored, and 48-hour reporting blind spots led to significant revenue leakage.',
+                outcome: 'Built a centralized relational tracking engine. Delivered 80% faster invoicing workflows, full pricing accuracy, and near-zero unauthorized credit extensions.'
+            },
+            {
+                sector: 'International Healthcare Logistics',
+                challenge: 'Patient pipelines, hospital relations, and agency commissions managed in siloed systems. Unreconciled accounts and tracking failures caused unpredictable execution.',
+                outcome: 'Deployed a 3-layer Zero-Cost ERP yielding complete cross-functional visibility, eliminated pipeline failures, and fully auditable commission trails.'
+            }
+        ],
         metrics: [
-            { value: '3,100+', label: 'Records Managed' },
+            { value: '3,100+', label: 'Records Governed' },
             { value: '0%', label: 'Pipeline Failures' },
-            { value: '80%', label: 'Efficiency Gains' }
+            { value: '80%+', label: 'Efficiency Gains' },
+            { value: '<24hrs', label: 'Reporting Cycle' },
+            { value: '100%', label: 'Audit Compliance' }
         ],
         cta: {
-            primary: 'Explore Solutions',
-            primaryLink: '/solutions',
-            secondary: 'System Audit',
-            secondaryLink: '/contact'
+            primary: 'Discuss Your Operations',
+            primaryLink: '/contact',
+            secondary: 'Review System Cases',
+            secondaryLink: '/work'
         },
-        relevantCaseStudies: ['med-ops', 'fmcg-erp', 'payroll-control'],
-        relevantTestimonials: [0, 2]
+        ctaSubtext: {
+            primary: 'No commitment. Let\'s map your bottlenecks.',
+            secondary: 'Documented production evidence.'
+        },
+        relevantCaseStudies: ['med-ops', 'fmcg-erp'],
+        relevantTestimonials: [0, 1]
     },
     'founders': {
         id: 'founders',
-        headline: 'Eliminate $50K In SaaS Overhead',
-        subheadline: 'Institutional sovereignty through owned logic kernels that eliminate SaaS sprawl and vendor lock-in',
+        headline: 'Scale Your Revenue. Stop Scaling Your Chaos.',
+        subheadline: 'Most founders try to solve growth by throwing more money at software or hiring more people for manual work. I build the silent operational engines that let your current team handle triple the volume—without breaking a sweat.',
+        whoThisIsFor: [
+            'Early-Stage Founders',
+            'SME Owners Scaling Operations',
+            'Bootstrapped Startups',
+            'Non-Technical CEOs',
+            'Growth-Stage Leadership Teams'
+        ],
+        problemStatement: {
+            title: 'Revenue is scaling. Profit isn\'t.',
+            description: 'Revenue is up, but so is your headcount, your error rate, and your daily stress. You spend more time putting out fires over lost orders, botched payroll, or delayed reports than you do focusing on actual strategy. The business is outgrowing the systems that got you here.'
+        },
         painPoints: [
             {
                 icon: (
@@ -328,8 +451,8 @@ const PERSONAS: Record<string, PersonaConfig> = {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 ),
-                title: 'SaaS Sprawl',
-                description: 'Paying for multiple overlapping tools, losing capital to redundant subscriptions'
+                title: 'The Hiring Reflex',
+                description: 'Every time there\'s a new bottleneck, your first instinct is to hire another junior employee to manage spreadsheets. You are building a company reliant on human copy-pasting, which destroys your margin as you scale.'
             },
             {
                 icon: (
@@ -337,8 +460,8 @@ const PERSONAS: Record<string, PersonaConfig> = {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                     </svg>
                 ),
-                title: 'Vendor Lock-in',
-                description: 'Core logic trapped in proprietary platforms, making migration impossible'
+                title: 'The "Check On It" Tax',
+                description: 'You can\'t fully step away. If you don\'t double-check the payroll, the inventory count, or the commission ledger yourself, mistakes happen. Your business relies entirely on your constant babysitting.'
             },
             {
                 icon: (
@@ -346,33 +469,140 @@ const PERSONAS: Record<string, PersonaConfig> = {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
                 ),
-                title: 'Human-Bridge Debt',
-                description: 'Teams manually bridging disconnected systems instead of doing strategic work'
+                title: 'Flying Blind on Gut Instinct',
+                description: 'You need to make a critical financial decision today, but your team needs 48 hours to manually compile the data from five different places. By the time you get the report, the numbers are already old.'
             }
         ],
         solution: {
-            title: 'Institutional Sovereignty',
-            description: 'I build logic kernels you own completely—centralized, version-controlled systems that outlast vendor cycles.',
-            features: [
-                'Custom automation scripts you control',
-                'Relational data architecture independently owned',
-                'Deterministic logic with full audit trails',
-                'Migration-ready systems with zero lock-in',
-                'ROI-positive automation (3-6mo payback)'
+            title: 'Operations on Autopilot.',
+            description: 'I architect the systems that make your existing operations run flawlessly in the background. We eliminate the manual chaos without disrupting your team, turning your daily operations into a unified, predictable engine.',
+            features: []
+        },
+        pillars: [
+            {
+                title: 'Bulletproof Reliability',
+                positioning: 'We replace fragile, manual routines with systems that simply don\'t make mistakes. Because they run automatically, whether it\'s 50 orders a day or 5,000, the engine processes them with zero dropped balls.',
+                outcomes: [
+                    'Eliminate human error from your most critical operational daily loops',
+                    'Zero reliance on tribal knowledge — the system knows exactly what to do',
+                    'Consistent, perfect execution of your business rules every single time'
+                ]
+            },
+            {
+                title: 'Triple The Work. Same Team.',
+                positioning: 'Your best people are freed from mindless data entry. We automate the admin so your core team can focus on actual growth, client relationships, and strategy instead of copy-pasting numbers.',
+                outcomes: [
+                    'Scale your output exponentially without scaling your headcount',
+                    'Drastically improve employee retention by removing the worst parts of their job',
+                    'Turn operational bottlenecks into competitive advantages'
+                ]
+            },
+            {
+                title: 'Pure Margin Expansion',
+                positioning: 'Every system I build is designed to stop cash leaks permanently. Whether it\'s recovering lost commissions, eliminating redundant tools, or delaying the need for three new hires — it all goes straight to your bottom line.',
+                outcomes: [
+                    'Concrete monthly savings documented and measurable from day one',
+                    'Investment recovered within 3–6 months, then pure profit',
+                    'Capital freed from operations redeployed to actual market growth'
+                ]
+            },
+            {
+                title: 'True Founder Freedom',
+                positioning: 'The business runs the process. The process runs the people. When the operations are systemized, you finally get your time back. You can leave for a week and know nothing will break.',
+                outcomes: [
+                    'Step away from daily fire-fighting and focus on high-level strategy',
+                    'New team members onboard to a running system instantly',
+                    'Investor and board audits are clean, documented, and ready from day one'
+                ]
+            }
+        ],
+        operatingModel: [
+            {
+                step: 'Find The Bleeding',
+                description: 'We identify exactly where you are losing money to manual errors, redundant tools, and wasted human hours. We put a hard number on the monthly waste.'
+            },
+            {
+                step: 'Design The Engine',
+                description: 'I map out the custom system that will process your daily operations on autopilot, showing you the exact impact on your headcount and margin.'
+            },
+            {
+                step: 'The Silent Build',
+                description: 'I build the solution in the background. There is zero disruption to your daily operations while the new engine is constructed.'
+            },
+            {
+                step: 'Parallel Testing',
+                description: 'We run the new fully-automated system alongside your old manual one until your team trusts it 100%. We only switch over when you are ready.'
+            },
+            {
+                step: 'Keys to the Kingdom',
+                description: 'I hand over the fully documented system. Your team is trained, the process belongs to your business entirely, and I step away. No ongoing retainers.'
+            }
+        ],
+        compatibility: {
+            environments: [
+                {
+                    name: 'Bangladesh Startups & SMEs',
+                    attributes: [
+                        'Tight budgets where every taka of saved burn matters',
+                        'WhatsApp-first teams that need simple, familiar inputs',
+                        'VAT, Tax, and Labour Act compliance built directly in'
+                    ]
+                },
+                {
+                    name: 'MNC & International Operations',
+                    attributes: [
+                        'Multi-entity and multi-currency financial tracking',
+                        'Investor reporting and board-level audit readiness',
+                        'Cross-border compliance with clear documentation trails'
+                    ]
+                }
+            ],
+            statement: 'The same clean, owned system — regardless of company size or geography.'
+        },
+        differentiation: {
+            title: 'Consultants advise. Agencies retain. I build and leave.',
+            description: 'Consultants give you a 50-page PDF of advice you won\'t read. Agencies want a monthly retainer to manage the mess. I actually build the machine that fixes the mess, hand it to you, and leave. You get a permanent upgrade to your business with zero ongoing fees.'
+        },
+        toolStack: {
+            title: 'The Operational Capabilities.',
+            items: [
+                'Automated Order & Inventory Engines: Tracking stock, raising alerts, and processing invoices instantly. No more "ghost inventory" or missed shipments.',
+                'Financial & Compliance Ledgers: Payroll, commissions, and VAT processed perfectly accurately in minutes instead of days. Full audit trails.',
+                'Executive Dashboards: Your entire business health, updated live on your phone, without waiting 48 hours for the finance team back at the office.',
+                'Process Independence: Works across your entire org without you needing to install new apps. If you can open a link, the system works for you.'
             ]
         },
-        metrics: [
-            { value: '৳2-3L', label: 'Monthly Savings' },
-            { value: '100%', label: 'Logic Ownership' },
-            { value: '3-6mo', label: 'ROI Payback' }
+        caseReferences: [
+            {
+                sector: 'FMCG Distribution Network',
+                challenge: 'A Dhaka-based wholesale distributor was losing ৳2–3L every month — not to theft, but to confusion. Invoices took 20 minutes to generate. Credit limits were guesswork. Nobody knew actual inventory until it was already gone.',
+                outcome: 'Rebuilt the entire operation into an automated engine. Invoicing dropped to 4 minutes per order. Inventory became real-time and accurate. Credit limits were enforced automatically. Total headcount added: zero.'
+            },
+            {
+                sector: 'International Trade Finance',
+                challenge: 'Agent commissions across USD, GBP, and BDT were tracked in three separate, disconnected places. Nobody knew exactly what was owed or when. 5–15% per transaction was quietly disappearing every month.',
+                outcome: 'One unified tracking ledger replaced the scattered records. Full commission visibility from day one. 15% in previously lost revenue was recovered immediately.'
+            }
         ],
+        metrics: [
+            { value: '৳2–3L', label: 'Monthly Margin Added' },
+            { value: '100%', label: 'Process Accuracy' },
+            { value: '3–6 mo', label: 'ROI Payback' },
+            { value: 'Unlimited', label: 'Volume Capacity' },
+            { value: 'Zero', label: 'New Hires Needed' }
+        ],
+        finalStatement: 'Build once. Scale forever.',
         cta: {
-            primary: 'Calculate ROI',
-            primaryLink: '/work',
-            secondary: 'See Cases',
+            primary: 'Book a Free Stack Audit',
+            primaryLink: '/contact',
+            secondary: 'See Real Production Cases',
             secondaryLink: '/work'
         },
-        relevantCaseStudies: ['trade-finance', 'fmcg-erp', 'hr-docs'],
+        ctaSubtext: {
+            primary: 'No commitment. 30 minutes to find your leaks and calculate your exact monthly saving.',
+            secondary: 'Real systems. Real numbers. Documented results.'
+        },
+        relevantCaseStudies: ['trade-finance', 'fmcg-erp'],
         relevantTestimonials: [0, 1]
     },
     'hiring-managers': {
@@ -446,9 +676,9 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
         return (
             <div className="min-h-screen flex items-center justify-center bg-white">
                 <div className="text-center space-y-6">
-                    <p className="mono text-[10px] text-slate-400 uppercase tracking-widest">Error 404</p>
-                    <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Persona Not Found</h1>
-                    <a href="/" className="inline-block text-blue-600 hover:text-blue-700 text-sm font-semibold tracking-tight border-b border-blue-600/30">Return to Index</a>
+                    <p className="mono text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold">Error 404</p>
+                    <h1 className="text-3xl font-[900] text-slate-900 text-tighter">Persona Not Found</h1>
+                    <a href="/" className="inline-block text-blue-600 hover:text-blue-700 text-[11px] font-bold tracking-widest uppercase border-b border-blue-600/30 pb-1">Return to Index</a>
                 </div>
             </div>
         );
@@ -458,59 +688,53 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
     const relevantTestimonials = persona.relevantTestimonials.map(idx => TESTIMONIALS[idx]);
 
     return (
-        <div className="min-h-screen bg-[#FBFBFA] selection:bg-blue-700 selection:text-white text-slate-900">
+        <div className="min-h-screen bg-white selection:bg-blue-600 selection:text-white text-slate-900 font-sans">
 
-            {/* SECTION 01: EXECUTIVE BRIEFING (HERO) */}
-            <section className="relative z-10 pt-28 md:pt-40 pb-16 md:pb-24 border-b border-slate-200/60">
+            {/* 01: HERO / EXECUTIVE BRIEFING */}
+            <section className="relative pt-32 md:pt-40 pb-12 md:pb-16 border-b border-slate-200/60 bg-[#FBFBFA]">
                 <div className="max-w-7xl mx-auto px-4 md:px-6">
-                    <div className="grid grid-cols-12 gap-y-12">
-                        <div className="col-span-12 lg:col-span-10">
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                                className="space-y-6 md:space-y-8"
-                            >
-                                <div className="mb-6 md:mb-8">
-                                    <span className="mono text-[10px] font-bold text-slate-400 tracking-[0.2em] uppercase">Executive Briefing</span>
+                    <motion.div
+                        initial="hidden"
+                        animate="visible"
+                        variants={staggerContainer}
+                        className="max-w-4xl"
+                    >
+                        <motion.div variants={revealVariants} className="mb-8 md:mb-12">
+                            <span className="mono text-[10px] font-bold text-slate-900 tracking-[0.3em] uppercase">Executive Briefing</span>
+                        </motion.div>
+
+                        <motion.h1 variants={revealVariants} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-[900] tracking-tighter leading-[1.02] text-slate-900 mb-6 md:mb-8">
+                            {persona.headline}
+                        </motion.h1>
+
+                        <motion.p variants={revealVariants} className="text-base md:text-xl text-slate-500 font-medium leading-relaxed max-w-2xl">
+                            {persona.subheadline}
+                        </motion.p>
+
+                        {persona.whoThisIsFor && (
+                            <motion.div variants={revealVariants} className="pt-8 mt-8 md:pt-12 md:mt-12 border-t border-slate-200/60 flex flex-col md:flex-row md:items-start gap-8 md:gap-16">
+
+                                <div className="flex flex-wrap gap-x-8 gap-y-4">
+                                    {persona.whoThisIsFor.map((item, i) => (
+                                        <div key={i} className="flex items-center gap-3">
+                                            <span className="w-1.5 h-1.5 bg-blue-600/80" />
+                                            <span className="text-xs md:text-sm font-bold text-slate-900 text-tight">{item}</span>
+                                        </div>
+                                    ))}
                                 </div>
-
-                                <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight leading-[1.05] text-slate-900 max-w-4xl">
-                                    {persona.headline}
-                                </h1>
-
-                                <p className="text-base md:text-lg lg:text-xl text-slate-500 font-medium leading-relaxed max-w-2xl">
-                                    {persona.subheadline}
-                                </p>
-
-                                {persona.whoThisIsFor && (
-                                    <div className="pt-8 md:pt-12 mt-8 md:mt-12 flex flex-wrap items-start gap-x-8 gap-y-4 border-t border-slate-100">
-                                        <div className="flex items-center gap-3 w-full md:w-auto mb-1 md:mb-0">
-                                            <span className="mono text-[10px] font-bold text-slate-400 tracking-[0.2em] uppercase">Target Focus</span>
-                                        </div>
-                                        <div className="flex flex-wrap gap-x-6 gap-y-3">
-                                            {persona.whoThisIsFor.map((item, i) => (
-                                                <div key={i} className="flex items-center gap-2">
-                                                    <span className="w-1 h-1 rounded-full bg-slate-200" />
-                                                    <span className="text-[11px] font-black text-slate-900 tracking-tight">{item}</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
                             </motion.div>
-                        </div>
-                    </div>
+                        )}
+                    </motion.div>
                 </div>
             </section>
 
             {/* SECTION 02: PERFORMANCE INDEX (METRICS) */}
-            <section className="relative z-10 bg-white border-b border-slate-200/60">
+            <section className="relative z-10 bg-white border-b border-slate-100">
                 <div className="max-w-7xl mx-auto px-4 md:px-6">
                     <div className="grid grid-cols-2 md:grid-cols-5 gap-px bg-slate-100 border-y border-slate-100">
                         {persona.metrics.map((metric, i) => (
                             <div key={i} className="bg-white py-8 md:py-10 px-4 md:px-6 group hover:bg-slate-50 transition-colors duration-500">
-                                <span className="block mono text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-2 group-hover:text-blue-600 transition-colors">
+                                <span className="block mono text-[8px] font-bold text-slate-500 uppercase tracking-widest mb-2 group-hover:text-blue-600 transition-colors">
                                     {metric.label}
                                 </span>
                                 <span className="text-xl md:text-3xl font-bold text-slate-900 tracking-tight tabular-nums">
@@ -528,10 +752,10 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
                     <div className="max-w-7xl mx-auto px-4 md:px-6">
                         <div className="grid grid-cols-12 gap-8 md:gap-12 lg:gap-24">
                             <div className="col-span-12 lg:col-span-5 space-y-4 md:space-y-8 lg:sticky lg:top-32 h-fit">
-                                <div className="mb-4 md:mb-6">
-                                    <span className="mono text-[10px] font-bold text-slate-400 tracking-[0.2em] uppercase">The Bottleneck</span>
+                                <div className="mb-6 md:mb-8">
+                                    <span className="mono text-[9px] md:text-[10px] font-bold text-slate-900 tracking-[0.3em] uppercase">The Bottleneck</span>
                                 </div>
-                                <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] text-slate-900 max-w-full md:max-w-none pr-2 md:pr-0 lg:-mr-24 xl:-mr-32 relative z-10 w-full lg:w-[130%]">
+                                <h2 className="text-3xl md:text-5xl lg:text-6xl font-[900] text-tighter leading-[1.1] text-slate-900 max-w-full md:max-w-none pr-2 md:pr-0 lg:-mr-24 xl:-mr-32 relative z-10 w-full lg:w-[130%]">
                                     {persona.problemStatement.title}
                                 </h2>
                             </div>
@@ -565,68 +789,72 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
                 </section>
             )}
 
-            {/* SECTION 04: RESOLUTION ARCHITECTURE (SOLUTION) */}
-            <section className="relative z-10 py-16 md:py-32 bg-white border-y border-slate-200/60">
+            {/* 04: RESOLUTION ARCHITECTURE (SOLUTION) */}
+            <section className="py-24 md:py-40 bg-[#FBFBFA] border-y border-slate-200/60">
                 <div className="max-w-7xl mx-auto px-4 md:px-6">
-                    <div className="grid grid-cols-12 gap-8 md:gap-12 lg:gap-24">
-                        <div className="col-span-12 lg:col-span-4 space-y-6 md:space-y-8 lg:sticky lg:top-32 h-fit">
-                            <div className="mb-6">
-                                <span className="mono text-[10px] font-bold text-slate-400 tracking-[0.2em] uppercase">Resolution</span>
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
+                        <div className="lg:col-span-4 lg:sticky lg:top-40 h-fit">
+                            <div className="mb-8">
+                                <span className="mono text-[9px] md:text-[10px] font-bold text-slate-900 tracking-[0.3em] uppercase">Resolution</span>
                             </div>
-                            <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] text-slate-900">
+                            <h2 className="text-4xl md:text-6xl font-[900] text-tighter leading-[1.05] text-slate-900 mb-8">
                                 {persona.solution.title}
                             </h2>
-                            <p className="text-base text-slate-500 font-medium leading-relaxed">
+                            <p className="text-lg text-slate-500 font-medium leading-[1.6]">
                                 {persona.solution.description}
                             </p>
                         </div>
 
-                        <div className="col-span-12 lg:col-span-8 space-y-4">
-                            {(persona.pillars || []).map((pillar, i) => (
-                                <div key={i} className="p-6 md:p-10 bg-[#FBFBFA] border border-slate-100 rounded-xl group hover:bg-slate-50 transition-all duration-500">
-                                    <div className="grid md:grid-cols-12 gap-6 md:gap-8">
-                                        <div className="md:col-span-4">
-                                            <span className="mono text-[10px] font-bold text-blue-600 uppercase tracking-widest block mb-3 md:mb-4">Pillar 0{i + 1}</span>
-                                            <h3 className="text-xl font-bold text-slate-900 tracking-tight">{pillar.title}</h3>
-                                        </div>
-                                        <div className="md:col-span-8 space-y-4 md:space-y-6">
-                                            <p className="text-sm text-slate-500 font-medium leading-relaxed">
-                                                {pillar.positioning}
-                                            </p>
-                                            <div className="grid grid-cols-1 gap-3">
-                                                {pillar.outcomes.map((outcome, j) => (
-                                                    <div key={j} className="flex items-start gap-3 text-[11px] font-bold text-slate-700 tracking-tight">
-                                                        <div className="w-1 h-1 rounded-full bg-blue-600/40 mt-1.5 shrink-0" />
-                                                        {outcome}
-                                                    </div>
-                                                ))}
+                        <div className="lg:col-span-8">
+                            <div className="flex flex-col">
+                                {(persona.pillars || []).map((pillar, i) => (
+                                    <div key={i} className="p-6 md:p-10 bg-white border border-slate-100 rounded-xl group hover:border-blue-200 transition-all duration-500 my-4">
+                                        <div className="grid md:grid-cols-12 gap-6 md:gap-8">
+                                            <div className="md:col-span-4">
+                                                <span className="mono text-[10px] font-bold text-blue-600 uppercase tracking-widest block mb-3 md:mb-4">Pillar 0{i + 1}</span>
+                                                <h3 className="text-xl font-bold text-slate-900 tracking-tight">{pillar.title}</h3>
+                                            </div>
+                                            <div className="md:col-span-8 space-y-4 md:space-y-6">
+                                                <p className="text-sm text-slate-500 font-medium leading-relaxed">
+                                                    {pillar.positioning}
+                                                </p>
+                                                <div className="grid grid-cols-1 gap-3">
+                                                    {pillar.outcomes.map((outcome, j) => (
+                                                        <div key={j} className="flex items-start gap-3 text-[11px] font-bold text-slate-700 tracking-tight">
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-blue-600/40 mt-1.5 shrink-0" />
+                                                            {outcome}
+                                                        </div>
+                                                    ))}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
 
-                            {!persona.pillars && persona.solution.features.map((feature, i) => (
-                                <div key={i} className="p-6 md:p-8 bg-[#FBFBFA] border border-slate-100 rounded-lg flex items-center justify-between group hover:bg-slate-50 transition-all">
-                                    <span className="text-base md:text-lg font-bold text-slate-900 tracking-tight">{feature}</span>
-                                    <span className="text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 ml-4">→</span>
-                                </div>
-                            ))}
+                                {!persona.pillars && persona.solution.features.map((feature, i) => (
+                                    <div key={i} className="py-8 border-b border-slate-200/60 flex items-center justify-between group">
+                                        <div className="flex items-center gap-6">
+                                            <span className="mono text-[10px] font-bold text-slate-400 tracking-[0.2em]">0{i + 1}</span>
+                                            <span className="text-lg md:text-xl font-[900] text-slate-900 text-tight group-hover:text-blue-600 transition-colors duration-500">{feature}</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* SECTION 05: OPERATING PROTOCOL (PROCESS) */}
+            {/* 05: OPERATING PROTOCOL */}
             {persona.operatingModel && (
-                <section className="relative z-10 py-16 md:py-32 bg-[#FBFBFA]">
+                <section className="py-24 md:py-40 bg-white">
                     <div className="max-w-7xl mx-auto px-4 md:px-6">
-                        <div className="grid grid-cols-12 gap-8 md:gap-12 mb-12 md:mb-20">
-                            <div className="col-span-12 lg:col-span-6 space-y-4 md:space-y-6">
-                                <div className="mb-6">
-                                    <span className="mono text-[10px] font-bold text-slate-400 tracking-[0.2em] uppercase">Operating Protocol</span>
+                        <div className="mb-16 md:mb-24 flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-slate-200/60 pb-12">
+                            <div>
+                                <div className="mb-8">
+                                    <span className="mono text-[9px] md:text-[10px] font-bold text-slate-900 tracking-[0.3em] uppercase">Operating Protocol</span>
                                 </div>
-                                <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] text-slate-900">
+                                <h2 className="text-4xl md:text-6xl font-[900] text-tighter leading-[1.05] text-slate-900">
                                     Execution Rhythm.
                                 </h2>
                             </div>
@@ -655,8 +883,8 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
                                     {/* Column 01: The Strategic Architecture Heading */}
                                     <div className="md:col-span-12 lg:col-span-5 lg:pr-14 space-y-12">
                                         <div className="space-y-8">
-                                            <div className="flex items-center gap-4">
-                                                <SectionLabel variant="secondary">GOVERNANCE</SectionLabel>
+                                            <div className="mb-8">
+                                                <span className="mono text-[9px] md:text-[10px] font-bold text-slate-900 tracking-[0.3em] uppercase">Governance</span>
                                             </div>
                                             <div className="space-y-10">
                                                 <h2 className="text-4xl md:text-5xl lg:text-7xl font-[900] tracking-tighter leading-[0.92] text-slate-900">
@@ -666,10 +894,10 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
 
                                                 {/* Strategic Statement moved here */}
                                                 <div className="space-y-6">
-                                                    <p className="text-xl md:text-2xl lg:text-3xl font-[900] text-slate-900 tracking-tighter leading-[1.1] italic relative">
+                                                    <div className="text-xl md:text-2xl lg:text-3xl font-[900] text-slate-900 tracking-tighter leading-[1.1] italic relative">
                                                         <div className="absolute -left-6 top-1 bottom-1 w-1 bg-blue-700 opacity-20"></div>
                                                         "{typeof persona.compatibility === 'object' ? persona.compatibility.statement : persona.compatibility}"
-                                                    </p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -682,7 +910,7 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
                                                 <div className="grid grid-cols-2 gap-12 lg:gap-16">
                                                     {persona.compatibility.environments.map((env, i) => (
                                                         <div key={i} className="space-y-10">
-                                                            <div className="pb-4 border-b border-slate-100/60 flex items-center justify-between">
+                                                            <div className="pb-4 border-b border-slate-100/60 flex items-center justify-between group/ledger">
                                                                 <h4 className="text-sm font-black text-slate-900 tracking-tight uppercase group-hover/ledger:text-blue-700 transition-colors">
                                                                     {env.name}
                                                                 </h4>
@@ -715,79 +943,103 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
 
             {/* SECTION 06: PRODUCTION EVIDENCE (CASE STUDIES) */}
             {relevantCaseStudies.length > 0 && (
-                <section className="relative z-10 py-16 md:py-32 bg-[#FBFBFA] border-y border-slate-200/60">
-                    <div className="max-w-7xl mx-auto px-4 md:px-6">
-                        <div className="flex items-center justify-between mb-10 md:mb-20">
-                            <div className="space-y-4">
-                                <div className="mb-4 md:mb-6">
-                                    <span className="mono text-[10px] font-bold text-slate-400 tracking-[0.2em] uppercase">The Ledger</span>
+                <section className="relative z-10 py-12 md:py-20 bg-white overflow-hidden border-y border-slate-100">
+                    <div className="max-w-7xl mx-auto px-4 md:px-6 relative">
+                        <div className="mb-12">
+                            <motion.div
+                                initial={{ opacity: 0, x: -20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.6 }}
+                            >
+                                <div className="mb-8">
+                                    <span className="mono text-[9px] md:text-[10px] font-bold text-slate-900 tracking-[0.3em] uppercase">The Ledger</span>
                                 </div>
-                                <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.05] text-slate-900">
+                                <h2 className="text-4xl md:text-6xl font-[900] text-tighter leading-[1.05] text-slate-900">
                                     Production Evidence.
                                 </h2>
-                            </div>
+                            </motion.div>
                         </div>
 
-                        <div className="divide-y divide-slate-100 border-t border-slate-100">
+                        <div className="relative">
                             {relevantCaseStudies.map((project, i) => (
-                                <a
+                                <motion.div
                                     key={project.id}
-                                    href={`/work/${project.id}`}
-                                    className="group flex flex-col md:grid md:grid-cols-12 gap-3 md:gap-8 py-8 md:py-12 items-start md:items-center hover:md:px-6 transition-all duration-500 ease-[0.16,1,0.3,1]"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        window.history.pushState({}, '', `/work/${project.id}`);
-                                        window.dispatchEvent(new PopStateEvent('popstate'));
-                                        window.scrollTo(0, 0);
-                                    }}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true, margin: "-50px" }}
+                                    transition={{ duration: 0.5, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
+                                    className="relative group"
                                 >
-                                    <div className="md:col-span-2">
-                                        <span className="mono text-[9px] font-bold uppercase tracking-widest text-slate-400 group-hover:text-blue-600 transition-colors">
-                                            {project.category}
-                                        </span>
-                                    </div>
-                                    <div className="md:col-span-6">
-                                        <h3 className="text-xl md:text-2xl font-bold text-slate-900 group-hover:md:translate-x-2 transition-transform duration-500 tracking-tight">
-                                            {project.title}
-                                        </h3>
-                                    </div>
-                                    <div className="md:col-span-3">
-                                        <p className="text-xs text-slate-500 font-medium leading-relaxed md:pr-8 line-clamp-2">
-                                            {project.headline}
-                                        </p>
-                                    </div>
-                                    <div className="hidden md:flex md:col-span-1 justify-end">
-                                        <div className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-slate-900 group-hover:border-slate-900 transition-all duration-300">
-                                            <svg className="w-3.5 h-3.5 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                            </svg>
+                                    <a
+                                        href={`/work/${project.id}`}
+                                        className="block py-8 md:py-10 border-t border-slate-100 relative z-10"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            window.history.pushState({}, '', `/work/${project.id}`);
+                                            window.dispatchEvent(new PopStateEvent('popstate'));
+                                            window.scrollTo(0, 0);
+                                        }}
+                                    >
+                                        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center relative">
+                                            <div className="md:col-span-3">
+                                                <span className="mono text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 group-hover:text-blue-600 transition-colors duration-400">
+                                                    {project.category}
+                                                </span>
+                                            </div>
+
+                                            <div className="md:col-span-12 lg:col-span-5">
+                                                <motion.h3
+                                                    whileHover={{ x: 6 }}
+                                                    className="text-xl md:text-2xl lg:text-3xl font-bold text-slate-900 tracking-tight leading-tight transition-colors duration-400 group-hover:text-blue-600"
+                                                >
+                                                    {project.title}
+                                                </motion.h3>
+                                            </div>
+
+                                            <div className="md:col-span-12 lg:col-span-3">
+                                                <p className="text-xs md:text-sm text-slate-500 font-medium leading-relaxed opacity-70 group-hover:opacity-100 transition-opacity duration-400">
+                                                    {project.headline}
+                                                </p>
+                                            </div>
+
+                                            <div className="hidden lg:flex lg:col-span-1 justify-end">
+                                                <div className="w-10 h-10 flex items-center justify-center">
+                                                    <span className="text-xl text-slate-300 font-light group-hover:text-blue-600 group-hover:translate-x-2 transition-all duration-400">
+                                                        →
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </a>
+                                    </a>
+                                    {i === relevantCaseStudies.length - 1 && (
+                                        <div className="border-b border-slate-100 w-full" />
+                                    )}
+                                </motion.div>
                             ))}
                         </div>
                     </div>
                 </section>
             )}
 
-            {/* SECTION 07: FIELD REFERENCES (SECTORS) */}
+            {/* 07: FIELD REFERENCES (SECTORS) */}
             {persona.caseReferences && (
-                <section className="relative z-10 py-16 md:py-32 bg-[#FBFBFA]">
+                <section className="py-24 md:py-40 bg-white border-b border-slate-200/60">
                     <div className="max-w-7xl mx-auto px-4 md:px-6">
-                        <div className="grid grid-cols-12 gap-8 md:gap-12 lg:gap-24">
-                            <div className="col-span-12 lg:col-span-4 space-y-6 md:space-y-8">
-                                <div className="mb-4 md:mb-6">
-                                    <span className="mono text-[10px] font-bold text-slate-400 tracking-[0.2em] uppercase">Field References</span>
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
+                            <div className="lg:col-span-4 lg:sticky lg:top-40 h-fit space-y-8">
+                                <div className="mb-8">
+                                    <span className="mono text-[9px] md:text-[10px] font-bold text-slate-900 tracking-[0.3em] uppercase">Field References</span>
                                 </div>
-                                <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.05] text-slate-900">
+                                <h2 className="text-4xl md:text-6xl font-[900] text-tighter leading-[1.05] text-slate-900">
                                     Delivered in Practice.
                                 </h2>
-                                <p className="text-xs text-slate-400 font-medium leading-relaxed uppercase tracking-widest">
+                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] leading-[1.8] pt-2">
                                     Sector-level transparency. Client identity protected by NDA.
                                 </p>
                             </div>
 
-                            <div className="col-span-12 lg:col-span-8 space-y-6">
+                            <div className="lg:col-span-8 space-y-6">
                                 {persona.caseReferences.map((ref, i) => (
                                     <div key={i} className="bg-white border border-slate-200/60 p-6 md:p-10 rounded-xl space-y-8 md:space-y-10 group hover:border-blue-200 transition-all">
                                         <div className="flex items-center justify-between border-b border-slate-100 pb-6">
@@ -812,7 +1064,7 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
                 </section>
             )}
 
-            {/* SECTION 08: SOVEREIGNTY (DIFFERENTIATION) */}
+            {/* 08: SOVEREIGNTY (DIFFERENTIATION) */}
             {(persona.differentiation || persona.toolStack) && (
                 <section className="relative z-10 py-16 md:py-32 bg-[#FBFBFA] border-y border-slate-200/60">
                     <div className="max-w-7xl mx-auto px-4 md:px-6">
@@ -820,8 +1072,8 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
                             {persona.differentiation && (
                                 <div className="col-span-12 lg:col-span-6 space-y-8 md:space-y-12">
                                     <div className="space-y-4">
-                                        <div className="mb-6">
-                                            <span className="mono text-[10px] font-bold text-slate-400 tracking-[0.2em] uppercase">The Differential</span>
+                                        <div className="mb-8">
+                                            <span className="mono text-[9px] md:text-[10px] font-bold text-slate-900 tracking-[0.3em] uppercase">The Differential</span>
                                         </div>
                                         <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight leading-[1.05] text-slate-900">
                                             {persona.differentiation.title}
@@ -836,8 +1088,8 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
                             {persona.toolStack && (
                                 <div className="col-span-12 lg:col-span-6 space-y-8 md:space-y-12">
                                     <div className="space-y-4">
-                                        <div className="mb-6">
-                                            <span className="mono text-[10px] font-bold text-slate-400 tracking-[0.2em] uppercase">Technical Sovereignty</span>
+                                        <div className="mb-8">
+                                            <span className="mono text-[9px] md:text-[10px] font-bold text-slate-900 tracking-[0.3em] uppercase">Technical Sovereignty</span>
                                         </div>
                                         <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight leading-[1.05] text-slate-900">
                                             {persona.toolStack.title}
@@ -861,58 +1113,88 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
                 </section>
             )}
 
-            {/* SECTION 09: VALIDATION (TESTIMONIALS) */}
+            {/* 09: VALIDATION (TESTIMONIALS) */}
             {relevantTestimonials.length > 0 && (
-                <section className="relative z-10 py-16 md:py-32 bg-white">
-                    <div className="max-w-7xl mx-auto px-4 md:px-6">
-                        <div className="mb-10 md:mb-20">
-                            <span className="mono text-[10px] font-bold text-slate-400 tracking-[0.2em] uppercase">Validation Protocol</span>
-                        </div>
-                        <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+                <section className="py-20 md:py-32 bg-[#FBFBFA] border-y border-slate-200/60">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                            className="mb-12 md:mb-20 flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-slate-200/60 pb-8"
+                        >
+                            <div>
+                                <div className="mb-8">
+                                    <span className="mono text-[9px] md:text-[10px] font-bold text-slate-900 tracking-[0.3em] uppercase">Validation Protocol</span>
+                                </div>
+                                <h2 className="text-3xl md:text-5xl font-[900] text-tighter leading-[1.05] text-slate-900">
+                                    Verified Impact.
+                                </h2>
+                            </div>
+                        </motion.div>
+
+                        <div className="grid md:grid-cols-2 gap-px bg-slate-200/70 border border-slate-200/70 overflow-hidden rounded-xl">
                             {relevantTestimonials.map((testimonial, i) => (
-                                <div key={i} className="bg-white p-6 md:p-12 rounded-xl border border-slate-200/60 space-y-6 md:space-y-10 group">
-                                    <p className="text-base md:text-xl text-slate-700 font-medium leading-relaxed italic">
-                                        "{testimonial.content}"
-                                    </p>
-                                    <div className="flex items-center gap-4 md:gap-5 pt-6 md:pt-10 border-t border-slate-100">
-                                        <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden bg-slate-50 border border-slate-100 shrink-0">
-                                            <OptimizedImage
-                                                src={testimonial.avatar}
-                                                alt={testimonial.name}
-                                                width={48}
-                                                height={48}
-                                                className="w-full h-full object-cover filter grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
-                                            />
+                                <motion.div
+                                    key={i}
+                                    initial={{ opacity: 0 }}
+                                    whileInView={{ opacity: 1 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 1, delay: i * 0.1 }}
+                                    className="bg-white p-6 md:p-10 hover:bg-slate-50 transition-colors duration-700 flex flex-col justify-between group relative"
+                                >
+                                    <div className="flex-1">
+                                        <div className="mb-6 md:mb-8">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-slate-200 group-hover:text-blue-600 transition-colors duration-700">
+                                                <path d="M10 7L8 11H11V17H5V11L7 7H10ZM19 7L17 11H20V17H14V11L16 7H19Z" fill="currentColor" />
+                                            </svg>
                                         </div>
-                                        <div>
-                                            <div className="text-[13px] font-bold text-slate-900 tracking-tight">{testimonial.name}</div>
-                                            <div className="mono text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">{testimonial.position}</div>
+
+                                        <p className="text-lg md:text-xl text-slate-800 font-medium tracking-tight leading-[1.5] group-hover:text-slate-900 transition-colors duration-700 mb-8 md:mb-10">
+                                            {testimonial.content}
+                                        </p>
+                                    </div>
+
+                                    <div className="flex items-center justify-between gap-4 pt-6 md:pt-8 border-t border-slate-100 group-hover:border-slate-200 transition-colors duration-700 mt-auto">
+                                        <div className="flex items-center gap-4 md:gap-5">
+                                            <div className="w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden bg-slate-100 shrink-0 border border-slate-200/60 shadow-sm">
+                                                <OptimizedImage
+                                                    src={testimonial.avatar}
+                                                    alt={testimonial.name}
+                                                    width={56}
+                                                    height={56}
+                                                    className="w-full h-full object-cover transition-all duration-700 grayscale mix-blend-luminosity group-hover:grayscale-0 group-hover:mix-blend-normal group-hover:scale-105"
+                                                />
+                                            </div>
+                                            <div>
+                                                <div className="text-sm md:text-[15px] font-bold text-slate-900 tracking-tight leading-tight mb-1">
+                                                    {testimonial.name}
+                                                </div>
+                                                <div className="mono text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                                    {testimonial.position}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </motion.div>
                             ))}
                         </div>
                     </div>
                 </section>
             )}
 
-            {/* SECTION 10: DEPLOYMENT (CTA) */}
-            <section className="relative z-10 py-24 md:py-48 bg-white overflow-hidden border-t border-slate-100">
-                <div className="max-w-4xl mx-auto px-4 md:px-6 text-center space-y-10 md:space-y-16">
-                    <div className="space-y-5 md:space-y-6">
-                        <div className="inline-flex items-center gap-4 bg-[#FBFBFA] px-4 py-2 rounded-full border border-slate-100">
-                            <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse" />
-                            <span className="text-[10px] font-black text-slate-500 tracking-[0.3em] uppercase">Available for Engagement</span>
-                        </div>
-                        <h2 className="text-3xl md:text-6xl lg:text-[80px] font-bold tracking-tight text-slate-900 leading-[1.05]">
-                            {persona.finalStatement || 'I am the infrastructure that allows you to lead.'}
-                        </h2>
-                    </div>
+            {/* 10: DEPLOYMENT (CTA) */}
+            <section className="py-24 md:py-32 lg:py-40 bg-[#FBFBFA] flex flex-col justify-center min-h-[60vh]">
+                <div className="max-w-4xl mx-auto px-6 md:px-12 text-center w-full">
+                    <h2 className="text-4xl md:text-5xl lg:text-7xl font-[900] text-tighter text-slate-900 leading-[1.05]">
+                        {persona.finalStatement || 'I am the infrastructure that allows you to lead.'}
+                    </h2>
 
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6 mt-8 md:mt-12">
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-12 md:mt-16">
                         <a
                             href={persona.cta.primaryLink}
-                            className="w-full sm:w-auto px-8 md:px-10 py-4 md:py-5 bg-slate-900 text-white font-bold text-[11px] uppercase tracking-widest hover:bg-blue-600 transition-all duration-300 rounded-lg shadow-sm text-center"
+                            className="w-full sm:w-auto px-12 py-5 bg-slate-900 text-white font-bold text-[11px] uppercase tracking-[0.2em] hover:bg-blue-600 transition-all duration-500 text-center rounded-lg"
                             onClick={(e) => {
                                 e.preventDefault();
                                 window.history.pushState({}, '', persona.cta.primaryLink);
@@ -924,7 +1206,7 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
                         </a>
                         <a
                             href={persona.cta.secondaryLink}
-                            className="w-full sm:w-auto px-8 md:px-10 py-4 md:py-5 bg-white border border-slate-200 text-slate-500 font-bold text-[11px] uppercase tracking-widest hover:border-slate-300 hover:text-slate-900 transition-all duration-300 rounded-lg shadow-sm text-center"
+                            className="w-full sm:w-auto px-12 py-5 bg-white border border-slate-200/60 text-slate-500 font-bold text-[11px] uppercase tracking-[0.2em] hover:border-slate-900 hover:text-slate-900 transition-all duration-500 text-center rounded-lg"
                             onClick={(e) => {
                                 e.preventDefault();
                                 window.history.pushState({}, '', persona.cta.secondaryLink);
@@ -936,12 +1218,9 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
                         </a>
                     </div>
 
-                    <p className="text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold">
-                        Established in Dhaka. Operating Worldwide.
-                    </p>
                 </div>
-            </section>
-        </div>
+            </section >
+        </div >
     );
 };
 

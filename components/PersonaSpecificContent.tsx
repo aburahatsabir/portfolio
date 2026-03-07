@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { TESTIMONIALS, PROJECTS } from '../constants';
 import OptimizedImage from './OptimizedImage';
@@ -102,88 +102,110 @@ interface PersonaConfig {
 const PERSONAS: Record<string, PersonaConfig> = {
     'executive-assistants': {
         id: 'executive-assistants',
-        headline: 'Executive Operations & Systems',
-        subheadline: 'Strategic operations support for CEOs and senior leadership. Protecting principal time, structuring decisions, and enforcing disciplined execution across complex, confidential work.',
+        headline: 'A Calm, Reliable Executive Office.',
+        subheadline: 'For leaders who need strong executive support: clear priorities, protected time, and fast follow-through on confidential work.',
         whoThisIsFor: [
-            'CEOs & Managing Directors',
-            'Country Heads & Chair Offices',
+            'CEOs and Managing Directors',
+            'Country Heads and Chair Offices',
             'Founders Scaling Operations',
-            'MNC Leadership Teams',
-            'Executive Search & HR'
+            'Executive Search and HR Teams',
+            'Regional Leadership Teams'
         ],
         problemStatement: {
-            title: 'The core problem: Urgency without structure.',
-            description: 'When requests hit from every direction and priorities shift hourly, ownership breaks down. The result isn\'t just lost time—it is missed decisions, dropped handoffs, and exposed confidentiality risks. The root cause is never a lack of effort; it is a lack of structure.'
+            title: 'When everything is urgent, priorities disappear.',
+            description: 'Most executive offices lose time in three places: calendar conflict, unclear ownership, and follow-up gaps. The result is avoidable stress, delayed decisions, and repeated status chasing.'
         },
-        painPoints: [],
+        painPoints: [
+            {
+                icon: (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                ),
+                title: 'Calendar Collisions',
+                description: 'Back-to-back requests and last-minute changes force constant context switching for the principal.'
+            },
+            {
+                icon: (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                ),
+                title: 'Follow-Up Drift',
+                description: 'Decisions are made in meetings, but actions get delayed because no single follow-up system exists.'
+            },
+            {
+                icon: (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                ),
+                title: 'Confidentiality Risk',
+                description: 'Sensitive files and approvals pass through inconsistent channels, creating avoidable exposure.'
+            }
+        ],
         solution: {
-            title: 'Operational Resolution',
-            description: 'I design disciplined execution frameworks that enforce accountability, guarantee predictability, and reclaim your time.',
+            title: 'Executive Office Control',
+            description: 'I set up a practical operating rhythm so the office stays organized even during high-pressure weeks.',
             features: [
-                'Time protection and structured request filtering',
-                'Decision flow and follow-up tracking with defined owners',
-                'Board-level documentation and preparation',
-                'Inter-departmental and cross-functional coordination'
+                'Priority and calendar triage rules',
+                'Decision and action tracking with named owners',
+                'Board pack and reporting preparation',
+                'Confidential workflow access controls'
             ]
         },
         pillars: [
             {
-                title: 'Executive Time Protection',
-                positioning: 'Calendar and request rules designed to protect focus blocks, decision windows, and priority order. Meetings, briefs, and approvals are filtered by importance and timing — not urgency.',
+                title: 'Priority and Calendar Control',
+                positioning: 'Your calendar becomes intentional, not reactive. Meetings and requests are filtered by business value and timing.',
                 outcomes: [
-                    'Filtering operational noise before it reaches the Principal',
-                    'Focusing executive attention on high-value decision points',
-                    'Protecting strategic bandwidth with structured request protocols'
+                    'Fewer interruptions to strategic focus time',
+                    'Better meeting quality and decision readiness',
+                    'Less last-minute reshuffling across teams'
                 ]
             },
             {
-                title: 'Decision & Follow-Up Systems',
-                positioning: 'Leadership decisions converted into clear action logs with owners, deadlines, and escalation points. Follow-up does not depend on memory or message history.',
+                title: 'Decision Follow-Through',
+                positioning: 'Every decision is tracked to completion with a named owner and a due date.',
                 outcomes: [
-                    'Enforcing follow-up loops across departments with defined accountability',
-                    'Ensuring executive directives are fully executed to close',
-                    'Predictable progress tracking with named escalation paths'
+                    'Reduced need for repeated status chasing',
+                    'Higher close rate on executive actions',
+                    'Clear escalation path when deadlines slip'
                 ]
             },
             {
-                title: 'Operational Coordination',
-                positioning: 'Finance, HR, Operations, Legal, and external stakeholders aligned around one execution rhythm. Board prep, reporting cycles, and leadership communication stay synchronised.',
+                title: 'Leadership Communication Rhythm',
+                positioning: 'Board updates, weekly summaries, and cross-functional communications follow a predictable cadence.',
                 outcomes: [
-                    'Bridging communication gaps between cross-functional teams',
-                    'Zero-intervention logistical management across departments',
-                    'Stakeholder alignment with consistent delivery timelines'
+                    'Cleaner reporting with fewer version conflicts',
+                    'Faster preparation for critical meetings',
+                    'More confidence across internal stakeholders'
                 ]
             },
             {
-                title: 'Crisis & Risk Management',
-                positioning: 'When urgency strikes, clear heads and structured responses matter. Sensitive escalations handled, misinformation contained, and the right people informed—without panic or delay.',
+                title: 'Quiet Risk Handling',
+                positioning: 'Sensitive issues are triaged quickly and handled discreetly with the right people involved at the right time.',
                 outcomes: [
-                    'Spotting operational risks before they reach the Principal',
-                    'Resolving escalations calmly and with clear ownership',
-                    'Staying composed and decisive under pressure'
+                    'Stronger confidentiality discipline',
+                    'Calmer response during urgent incidents',
+                    'Better executive trust in office operations'
                 ]
             }
         ],
         operatingModel: [
             {
-                step: 'Morning Briefing',
-                description: 'Aligning on priorities and triaging urgent requests. The day starts with clarity, not chaos.'
+                step: 'Daily Priority Setup',
+                description: 'Start each day with a clear list of must-win outcomes and risk items.'
             },
             {
-                step: 'Active Execution',
-                description: 'Managing stakeholder coordination, clearing inbox bottlenecks, and executing workflows autonomously.'
+                step: 'Execution and Coordination',
+                description: 'Run communications, meetings, and approvals against defined priority rules.'
             },
             {
-                step: 'Preparation & Reporting',
-                description: 'Board packs, critical documents, and weekly reports are gathered and finalized well ahead of schedule.'
+                step: 'Decision Log Management',
+                description: 'Capture decisions in one place and assign owners with due dates immediately.'
             },
             {
-                step: 'Relentless Follow-Up',
-                description: 'Chasing down pending items, holding teams accountable to deadlines, and ensuring no tasks fall through the cracks.'
+                step: 'End-of-Day Closeout',
+                description: 'Send a concise completion summary and highlight items that need escalation.'
             },
             {
-                step: 'End-of-Day Debrief',
-                description: 'A quick summary of completed work and a structured preview of tomorrow for a clean clock-out.'
+                step: 'Weekly Reliability Reset',
+                description: 'Review recurring friction points and tune process rules for the next week.'
             }
         ],
         compatibility: {
@@ -191,239 +213,253 @@ const PERSONAS: Record<string, PersonaConfig> = {
                 {
                     name: 'Bangladesh Corporate Dynamics',
                     attributes: [
-                        'Local hierarchy navigation',
-                        'Strict confidentiality norms',
-                        'Fast-changing executive direction'
+                        'Works with hierarchy-driven approval styles',
+                        'Supports high confidentiality expectations',
+                        'Handles frequent priority changes gracefully'
                     ]
                 },
                 {
                     name: 'MNC Framework Standards',
                     attributes: [
-                        'Reporting discipline',
-                        'Documentation quality',
-                        'Cross-border coordination'
+                        'Consistent reporting and documentation quality',
+                        'Structured cross-functional coordination',
+                        'Strong readiness for leadership reviews'
                     ]
                 }
             ],
-            statement: 'A single, ruthless execution standard applied homogeneously across both environments.'
+            statement: 'One disciplined execution standard, adapted to local and global work cultures.'
         },
         differentiation: {
-            title: 'From task management to executive reliability.',
-            description: 'I don’t just finish tasks; I build the systems that protect your time. By structuring decision flows and follow-up, I turn your office into a predictable, high-speed unit. The result is total execution consistency and faster decision speed for you.'
+            title: 'Support that reduces stress, not just workload.',
+            description: 'This is not task chasing. It is a reliable office operating model that protects leader focus, closes loops quickly, and keeps sensitive work under control.'
         },
         toolStack: {
-            title: 'Structure comes first. Tools support the model.',
+            title: 'How the work is managed day to day.',
             items: [
-                'Core Stack: Microsoft 365, Google Workspace, Excel/VBA, and Apps Script to enforce ownership, timeline control, documentation discipline, and secure communication flow.',
-                'Relational Tracking: Auditable systems built on existing organisational tools — no new subscriptions required.',
-                'Governed Communication: Structured protocols for high-stakes correspondence, board-level reporting, and role-based confidential access control.',
-                'Documentation Libraries: SOPs and institutional records that preserve knowledge beyond any single team member.'
+                'Calendar and Priority Rules: Structured triage so high-value work gets first access to executive time.',
+                'Action and Follow-Up Tracking: One shared view of commitments, owners, deadlines, and escalation points.',
+                'Reporting Packs: Consistent templates for board notes, leadership briefs, and cross-team updates.',
+                'Confidential Workflows: Controlled access and approval paths for personnel and financial information.'
             ]
         },
-        finalStatement: 'I am the infrastructure that allows you to lead.',
+        finalStatement: 'Your office runs smoothly, even on your busiest week.',
         caseReferences: [
             {
                 sector: 'Manufacturing Group',
-                challenge: 'Board pack inputs arrived from five production units without a single owner, causing version conflicts and last-minute preparation failures.',
-                outcome: 'Built a centralised submission and review flow with defined cutoff points. Board pack readiness moved to a predictable 24–48 hour pre-meeting timeline, eliminating documentation errors.'
+                challenge: 'Board pack inputs arrived from five units without clear ownership, causing version conflicts and late preparation.',
+                outcome: 'Introduced a submission and review workflow with deadlines and owners. Board packs became ready 24–48 hours before meetings.'
             },
             {
                 sector: 'Executive Office',
-                challenge: 'CEO and functional heads issued overlapping urgent requests with no priority logic, creating calendar conflict and decision bottlenecks across departments.',
-                outcome: 'Introduced priority routing and escalation logic. Calendar conflict resolved. Decision throughput improved with a defined triage and handoff protocol.'
+                challenge: 'Overlapping urgent requests from multiple leaders created calendar conflict and delayed decisions.',
+                outcome: 'Applied routing and priority rules. Calendar conflict dropped and decision throughput improved.'
             },
             {
-                sector: 'HR & Payroll Operations',
-                challenge: 'Sensitive personnel files and payroll data were being shared through inconsistent channels with no access control or audit trail.',
-                outcome: 'Applied role-based file access and controlled approval paths. Confidential handling became traceable, auditable, and review-ready — with zero incidents since implementation.'
+                sector: 'HR and Payroll Operations',
+                challenge: 'Sensitive personnel files were being shared through inconsistent channels.',
+                outcome: 'Set role-based access and approval controls. Confidential handling became traceable and incident-free.'
             },
             {
                 sector: 'Cross-Functional Delivery',
-                challenge: 'Vendor and internal deliverables were agreed in meetings but follow-through was inconsistent, with no central ownership log or closure tracking.',
-                outcome: 'Centralised action tracking with accountable owners and due dates. Closure rate improved significantly and leadership updates became cleaner, more reliable, and less time-consuming.'
+                challenge: 'Meeting actions were agreed but not consistently closed due to weak ownership tracking.',
+                outcome: 'Centralized action logs with owners and due dates. Closure rates improved and leadership updates became clearer.'
             }
         ],
         metrics: [
-            { value: '8–12 hrs', label: 'Time Reclaimed / Wk' },
-            { value: '90%+', label: 'Closed Actions' },
-            { value: '24–48 hrs', label: 'Reporting Speed' },
-            { value: 'Zero', label: 'Security Leaks' },
-            { value: '100%', label: 'Execution Rate' }
+            { value: '8–12 hrs', label: 'Executive Time Saved/Week' },
+            { value: '90%+', label: 'Action Closure Rate' },
+            { value: '24–48 hrs', label: 'Board Pack Readiness' },
+            { value: '0', label: 'Confidentiality Incidents' },
+            { value: '100%', label: 'Tracked Decisions' }
         ],
         cta: {
-            primary: 'Start Hiring Conversation',
+            primary: 'Discuss Executive Support',
             primaryLink: '/contact',
-            secondary: 'Review Operating Approach',
-            secondaryLink: '/about'
+            secondary: 'View Related Case Studies',
+            secondaryLink: '/work'
+        },
+        ctaSubtext: {
+            primary: 'No commitment. 30 minutes to map your office priorities.',
+            secondary: 'Real scenarios. Documented outcomes.'
         },
         relevantCaseStudies: ['payroll-control', 'hr-docs'],
         relevantTestimonials: [1, 2]
     },
     'operations-leaders': {
         id: 'operations-leaders',
-        headline: 'Scale Your Operations Without the Chaos.',
-        subheadline: 'Transforming fragile workflows into predictable, high-speed operations. Eliminating manual bottlenecks so your team can focus on execution, not administration.',
+        headline: 'Stabilize, Scale, Succeed.',
+        subheadline: 'For operations leaders who need reliable execution: structured workflows, clear oversight, and cleaner data for decision making.',
         whoThisIsFor: [
-            'COOs & Operations Directors',
-            'Plant & Factory Managers',
-            'General Managers & Country Heads',
-            'Supply Chain & Logistics Leaders',
-            'MNC Regional Operations Teams'
+            'COOs and Operations Directors',
+            'Departmental Heads (HR, Finance, Logistics)',
+            'Supply Chain and Distribution Leads',
+            'Project Management Office (PMO)',
+            'Regional Operations Managers'
         ],
         problemStatement: {
-            title: 'Growth stalls when processes live in people\'s heads.',
-            description: 'Every new order, new hire, and new location adds administrative weight. Teams spend their Fridays manually consolidating spreadsheets just to figure out what happened all week. Critical tasks depend on specific individuals, creating invisible single points of failure. The result isn\'t just lost time—it\'s margin-crushing inefficiency and a constant cycle of firefighting.'
+            title: 'Scaling without structure is scaling chaos.',
+            description: 'Operational risk creates friction in three core areas: data fragmentation, manual dependency, and lack of audit trails. This leads to slow delivery, rising costs, and high management overhead.'
         },
         painPoints: [
             {
                 icon: (
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
                 ),
-                title: 'The Hero Dependency',
-                description: 'Crucial workflows depend on specific individuals working late. When they are on leave or overloaded, the entire process simply stops.'
+                title: 'Fragile Workflows',
+                description: 'Processes depend on individual memory rather than documentation, making scaling impossible.'
             },
             {
                 icon: (
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
                 ),
-                title: 'The Reporting Black Hole',
-                description: 'Data is fragmented across emails, WhatsApp, and disconnected spreadsheets, causing agonizingly slow reporting cycles and decision paralysis.'
+                title: 'Data Fragmentation',
+                description: 'Critical operational data lives in silos, preventing a unified view of performance.'
             },
             {
                 icon: (
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
                 ),
-                title: 'Margin-Crushing Headcount',
-                description: 'Capacity is locked to people. Every time business grows 10%, you have to hire more staff just to handle the administrative mess.'
+                title: 'Manual Overhead',
+                description: 'Teams spend more time on status updates and manual coordination than on actual delivery.'
             }
         ],
         solution: {
-            title: 'Governed Operations',
-            description: 'I act as your strategic operations partner, designing bulletproof workflows and reporting frameworks that scale your capacity—built entirely on the tools your team already uses.',
+            title: 'Structured Operational Control',
+            description: 'I design and implement governance systems that turn fragmented tasks into a predictable production line.',
             features: []
         },
         pillars: [
             {
-                title: 'Single Source of Truth',
-                positioning: 'Ending the multi-spreadsheet chaos. We create unified, reliable trackers using the tools you already own so everyone looks at the same numbers in real-time, eliminating duplicate entry and manual errors.',
+                title: 'Systematic Governance',
+                positioning: 'Standardize how data is captured, moved, and reported across departments.',
                 outcomes: [
-                    'Eliminating duplicate data entry and manual errors across departments',
-                    'Providing real-time visibility without hours of manual consolidation',
-                    'Enforcing strict data integrity so information never drifts'
+                    'Consistent reporting quality across units',
+                    'Reduced data entry errors and reversals',
+                    'Easier audit and compliance tracking'
                 ]
             },
             {
-                title: 'Automated Handoffs & Approvals',
-                positioning: 'Work moves forward automatically. We convert manual approvals and task routing into strict workflows, removing human bottlenecks and scaling your team\'s throughput without adding headcount.',
+                title: 'Process Automation',
+                positioning: 'Identify and automate repetitive steps in high-volume operational workflows.',
                 outcomes: [
-                    'Removing human bottlenecks from critical approval chains',
-                    'Scaling process throughput without adding new headcount',
-                    'Building self-healing systems that flag exceptions immediately'
+                    'Significant reduction in manual rework',
+                    'Faster turnaround for critical business steps',
+                    'Increased team capacity without hiring'
                 ]
             },
             {
-                title: 'Real-Time Visibility',
-                positioning: 'You get dashboards that tell you what\'s breaking before the customer complains. We surface your exact operational SLAs instantly, replacing subjective verbal updates with auditable, live data.',
+                title: 'Operational Visibility',
+                positioning: 'Create real-time views of performance and bottlenecks for leadership teams.',
                 outcomes: [
-                    'Generating decision-ready, executive-level reports in minutes',
-                    'Replacing subjective verbal updates with auditable, live data',
-                    'Detecting threshold breaches before minor issues compound'
+                    'Faster identification of operational leaks',
+                    'More proactive response to blockers',
+                    'Higher confidence in resource allocation'
                 ]
             },
             {
-                title: 'Built-In Accountability',
-                positioning: 'The process enforces the rules so you don\'t have to micromanage. Regulatory demands, whether it\'s the BD Labour Act or trade compliance, are embedded directly into how daily work gets done.',
+                title: 'Reliable Team Handover',
+                positioning: 'Document systems so clearly that they run independently of the person who built them.',
                 outcomes: [
-                    'Enforcing internal policies and local regulatory standards at the data-entry level',
-                    'Implementing role-based access with fully immutable transaction logs',
-                    'Creating resilient governance that survives employee turnover'
+                    'Shorter onboarding time for new staff',
+                    'Less founder/leader intervention in daily tasks',
+                    'Durable operational memory'
                 ]
             }
         ],
         operatingModel: [
             {
-                step: 'Operations Audit',
-                description: 'Where is the bleeding occurring? We map your existing workflows, data silos, and ownership gaps to pinpoint the exact bottlenecks holding your team back.'
+                step: 'Systems Audit',
+                description: 'Map current workflows to find leaks, bottlenecks, and manual friction points.'
             },
             {
-                step: 'Workflow Design',
-                description: 'Creating the ideal, streamlined workflow for your specific team and constraints, defining exactly what happens, and who is responsible for it.'
+                step: 'Design Governance',
+                description: 'Define the rules, tools, and owners needed for a stable operating environment.'
             },
             {
-                step: 'Tool Configuration',
-                description: 'Setting up the strict logic, trackers, and automated dashboards heavily utilizing the software stack you already own (like Excel and Google Workspace).'
+                step: 'Prototype Build',
+                description: 'Deliver a working model for a single high-impact workflow to prove the value.'
             },
             {
-                step: 'Team Adoption',
-                description: 'Deploying the system with parallel runs, training your team, and embedding standard operating procedures so flawless execution becomes natural rapidly.'
+                step: 'Rollout and Refine',
+                description: 'Scale the system across related units, tuning rules based on production feedback.'
             },
             {
-                step: 'Optimization & Support',
-                description: 'Refining the process, adjusting operational thresholds, and ensuring the architectural setup scales smoothly alongside your organization\'s volume.'
+                step: 'Continuous Governance',
+                description: 'Maintain the system through regular audits and performance reviews.'
             }
         ],
         compatibility: {
             environments: [
                 {
-                    name: 'Bangladesh Corporate Dynamics',
+                    name: 'Bangladesh Core Operations',
                     attributes: [
-                        'Bridging the gap from legacy manual systems',
-                        'Adapting cleanly to hierarchical approval cultures',
-                        'Enforcing local regulatory compliance (Labour, VAT, Tax)'
+                        'Works with existing local team habits',
+                        'Supports practical, high-impact tool choices',
+                        'Handles local compliance and reporting nuances'
                     ]
                 },
                 {
-                    name: 'MNC Framework Standards',
+                    name: 'MNC Operational Standards',
                     attributes: [
-                        'Ensuring global reporting compliance and audit readiness',
-                        'Implementing cross-border data governance protocols',
-                        'Structuring clear regional-to-HQ escalation paths'
+                        'Meets formal documentation and audit needs',
+                        'Enables structured cross-border coordination',
+                        'Provides scalable reporting for regional leaders'
                     ]
                 }
             ],
-            statement: 'One unified operating standard. Seamlessly adapted to local realities and global demands.'
+            statement: 'A disciplined framework for operations that bridges the gap between local speed and global standards.'
         },
         differentiation: {
-            title: 'From manual firefighting to autonomous execution.',
-            description: 'I do not just optimize your team\'s spreadsheets; I replace them with governed systems. Your operations will run according to logical, strict workflows using the software you likely already pay for. By building structural logic directly within familiar tools, your team isn\'t forced to learn complex new SaaS interfaces, and you are saved from expensive vendor lock-in.'
+            title: 'Systems that serve people, not the other way around.',
+            description: 'Successful operations are about consistency and control. I build the systems that ensure your team can deliver high-quality output every single day.'
         },
         toolStack: {
-            title: 'Maximizing the tools you already pay for.',
+            title: 'Tools used to enforce governance.',
             items: [
-                'Core Trackers: Advanced Google Sheets and Excel setups acting as strict, single-source-of-truth records.',
-                'Workflow Engines: Apps Script, VBA, and Custom Functions turn manual handoffs into rapid self-auditing pipelines.',
-                'Reporting Dashboards: Auto-refreshing KPI views built specifically for non-technical stakeholders to make fast, informed choices.',
-                'Governance Enablers: Role-based access protocols and embedded SOPs enforcing operational compliance without introducing new friction.'
+                'Advanced Spreadsheet Control: Complex ledgers with role-based access and data validation.',
+                'Workflow Automation: VBA, Apps Script, and low-code tools to bridge process gaps.',
+                'Reporting Architecture: KPI dashboards that give a single source of truth for leaders.',
+                'Docs-as-Code: Documentation that lives where the work happens, keeping SOPs current.'
             ]
         },
-        finalStatement: 'Scale capacity. Eliminate dependency.',
+        finalStatement: 'Operations that stay stable under pressure.',
         caseReferences: [
             {
-                sector: 'FMCG Distribution Network',
-                challenge: 'Thousands of deliveries tracked on brittle spreadsheets. Ghost inventory generated daily, credit limits ignored, and 48-hour reporting blind spots led to significant revenue leakage.',
-                outcome: 'Built a centralized relational tracking engine. Delivered 80% faster invoicing workflows, full pricing accuracy, and near-zero unauthorized credit extensions.'
+                sector: 'Medical Logistics',
+                challenge: 'Patient records and partner commissions were tracked in disparate sheets with no central audit path.',
+                outcome: 'Built an integrated control ledger. Lost revenue recovery hit 15% and audit readiness reached 100%.'
             },
             {
-                sector: 'International Healthcare Logistics',
-                challenge: 'Patient pipelines, hospital relations, and agency commissions managed in siloed systems. Unreconciled accounts and tracking failures caused unpredictable execution.',
-                outcome: 'Deployed a 3-layer Zero-Cost ERP yielding complete cross-functional visibility, eliminated pipeline failures, and fully auditable commission trails.'
+                sector: 'Manufacturing & FMCG',
+                challenge: 'The invoicing and order flow was manual, leading to frequent pricing errors and stock mismatches.',
+                outcome: 'Introduced structured validation rules. Error rates dropped to near zero and capacity doubled.'
+            },
+            {
+                sector: 'Government Relations & HR',
+                challenge: 'Sensitive personnel files and approvals were managed over email with no version control.',
+                outcome: 'Implemented a docs-as-code documentation system. Confidentiality record remained 100% stable.'
+            },
+            {
+                sector: 'Operations Logistics',
+                challenge: 'Daily reporting for high-volume units took hours of manual compilation every morning.',
+                outcome: 'Automated the data aggregation process. Reports now arrive in minutes, not hours.'
             }
         ],
         metrics: [
+            { value: '5', label: 'Production Systems Built' },
             { value: '3,100+', label: 'Records Governed' },
-            { value: '0%', label: 'Pipeline Failures' },
-            { value: '80%+', label: 'Efficiency Gains' },
-            { value: '<24hrs', label: 'Reporting Cycle' },
-            { value: '100%', label: 'Audit Compliance' }
+            { value: '100%', label: 'Audit Readiness' },
+            { value: '<1%', label: 'Process Failure Rate' },
+            { value: '40%+', label: 'Manual Rework Reduction' }
         ],
         cta: {
-            primary: 'Discuss Your Operations',
+            primary: 'Book an Operational Review',
             primaryLink: '/contact',
-            secondary: 'Review System Cases',
+            secondary: 'Review Case Evidence',
             secondaryLink: '/work'
         },
         ctaSubtext: {
-            primary: 'No commitment. Let\'s map your bottlenecks.',
+            primary: 'No commitment. Map your bottlenecks in 30 minutes.',
             secondary: 'Documented production evidence.'
         },
         relevantCaseStudies: ['med-ops', 'fmcg-erp'],
@@ -431,237 +467,382 @@ const PERSONAS: Record<string, PersonaConfig> = {
     },
     'founders': {
         id: 'founders',
-        headline: 'Scale Your Revenue. Stop Scaling Your Chaos.',
-        subheadline: 'Most founders try to solve growth by throwing more money at software or hiring more people for manual work. I build the silent operational engines that let your current team handle triple the volume—without breaking a sweat.',
+        headline: 'Grow Revenue Without Growing Chaos.',
+        subheadline: 'For founders who want better margins, clearer numbers, and less daily operational stress as the business scales.',
         whoThisIsFor: [
-            'Early-Stage Founders',
-            'SME Owners Scaling Operations',
-            'Bootstrapped Startups',
+            'Startup Founders',
+            'SME Owners',
+            'Bootstrapped Teams',
             'Non-Technical CEOs',
             'Growth-Stage Leadership Teams'
         ],
         problemStatement: {
-            title: 'Revenue is scaling. Profit isn\'t.',
-            description: 'Revenue is up, but so is your headcount, your error rate, and your daily stress. You spend more time putting out fires over lost orders, botched payroll, or delayed reports than you do focusing on actual strategy. The business is outgrowing the systems that got you here.'
+            title: 'If you must check everything yourself, growth will stall.',
+            description: 'Many founders grow sales but stay trapped in daily operational checking. Manual steps, tool sprawl, and delayed reports eat margin and drain leadership time.'
         },
         painPoints: [
             {
                 icon: (
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 ),
-                title: 'The Hiring Reflex',
-                description: 'Every time there\'s a new bottleneck, your first instinct is to hire another junior employee to manage spreadsheets. You are building a company reliant on human copy-pasting, which destroys your margin as you scale.'
+                title: 'Hiring to Patch Process Gaps',
+                description: 'Headcount keeps increasing to handle manual coordination that should be structured and repeatable.'
             },
             {
                 icon: (
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                    </svg>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                 ),
-                title: 'The "Check On It" Tax',
-                description: 'You can\'t fully step away. If you don\'t double-check the payroll, the inventory count, or the commission ledger yourself, mistakes happen. Your business relies entirely on your constant babysitting.'
+                title: 'Too Many Tools, Low Trust in Data',
+                description: 'Key numbers live in different places, so decision-making depends on manual checking.'
             },
             {
                 icon: (
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                 ),
-                title: 'Flying Blind on Gut Instinct',
-                description: 'You need to make a critical financial decision today, but your team needs 48 hours to manually compile the data from five different places. By the time you get the report, the numbers are already old.'
+                title: 'Delayed Decisions',
+                description: 'By the time reports are ready, the business has already moved and opportunities are missed.'
             }
         ],
         solution: {
-            title: 'Operations on Autopilot.',
-            description: 'I architect the systems that make your existing operations run flawlessly in the background. We eliminate the manual chaos without disrupting your team, turning your daily operations into a unified, predictable engine.',
+            title: 'Lean, Predictable Operations',
+            description: 'I help founders simplify core operations so work runs reliably, numbers stay clear, and growth does not require constant firefighting.',
             features: []
         },
         pillars: [
             {
-                title: 'Bulletproof Reliability',
-                positioning: 'We replace fragile, manual routines with systems that simply don\'t make mistakes. Because they run automatically, whether it\'s 50 orders a day or 5,000, the engine processes them with zero dropped balls.',
+                title: 'Protect Margin',
+                positioning: 'Fix repetitive leaks in order flow, payroll, reconciliation, and exception handling.',
                 outcomes: [
-                    'Eliminate human error from your most critical operational daily loops',
-                    'Zero reliance on tribal knowledge — the system knows exactly what to do',
-                    'Consistent, perfect execution of your business rules every single time'
+                    'Lower monthly operational waste',
+                    'Fewer avoidable errors and reversals',
+                    'Clear visibility into where money is lost or recovered'
                 ]
             },
             {
-                title: 'Triple The Work. Same Team.',
-                positioning: 'Your best people are freed from mindless data entry. We automate the admin so your core team can focus on actual growth, client relationships, and strategy instead of copy-pasting numbers.',
+                title: 'Increase Team Capacity',
+                positioning: 'Let the same team handle more volume by reducing manual coordination and rework.',
                 outcomes: [
-                    'Scale your output exponentially without scaling your headcount',
-                    'Drastically improve employee retention by removing the worst parts of their job',
-                    'Turn operational bottlenecks into competitive advantages'
+                    'Higher output without proportional hiring',
+                    'Less burnout from repetitive administrative tasks',
+                    'Better use of skilled team time'
                 ]
             },
             {
-                title: 'Pure Margin Expansion',
-                positioning: 'Every system I build is designed to stop cash leaks permanently. Whether it\'s recovering lost commissions, eliminating redundant tools, or delaying the need for three new hires — it all goes straight to your bottom line.',
+                title: 'Improve Decision Speed',
+                positioning: 'Leadership gets cleaner numbers faster, so important decisions do not wait for manual report assembly.',
                 outcomes: [
-                    'Concrete monthly savings documented and measurable from day one',
-                    'Investment recovered within 3–6 months, then pure profit',
-                    'Capital freed from operations redeployed to actual market growth'
+                    'Shorter reporting turnaround',
+                    'Higher confidence in day-to-day decisions',
+                    'Faster response to operational issues'
                 ]
             },
             {
-                title: 'True Founder Freedom',
-                positioning: 'The business runs the process. The process runs the people. When the operations are systemized, you finally get your time back. You can leave for a week and know nothing will break.',
+                title: 'Reduce Founder Load',
+                positioning: 'Shift from founder-dependent execution to a process that runs reliably with clear ownership.',
                 outcomes: [
-                    'Step away from daily fire-fighting and focus on high-level strategy',
-                    'New team members onboard to a running system instantly',
-                    'Investor and board audits are clean, documented, and ready from day one'
+                    'Less need for daily founder intervention',
+                    'Easier onboarding of new team members',
+                    'More founder time for strategy and growth'
                 ]
             }
         ],
         operatingModel: [
             {
-                step: 'Find The Bleeding',
-                description: 'We identify exactly where you are losing money to manual errors, redundant tools, and wasted human hours. We put a hard number on the monthly waste.'
+                step: 'Leak Discovery',
+                description: 'Identify where margin and time are being lost in current workflows.'
             },
             {
-                step: 'Design The Engine',
-                description: 'I map out the custom system that will process your daily operations on autopilot, showing you the exact impact on your headcount and margin.'
+                step: 'Flow Redesign',
+                description: 'Redesign high-impact processes so execution is clear, repeatable, and easy to adopt.'
             },
             {
-                step: 'The Silent Build',
-                description: 'I build the solution in the background. There is zero disruption to your daily operations while the new engine is constructed.'
+                step: 'Build on Existing Stack',
+                description: 'Implement improvements using tools the team already understands.'
             },
             {
-                step: 'Parallel Testing',
-                description: 'We run the new fully-automated system alongside your old manual one until your team trusts it 100%. We only switch over when you are ready.'
+                step: 'Parallel Validation',
+                description: 'Run old and new methods in parallel until output quality is consistent.'
             },
             {
-                step: 'Keys to the Kingdom',
-                description: 'I hand over the fully documented system. Your team is trained, the process belongs to your business entirely, and I step away. No ongoing retainers.'
+                step: 'Handover and Enablement',
+                description: 'Document key workflows and train owners so the process stays stable.'
             }
         ],
         compatibility: {
             environments: [
                 {
-                    name: 'Bangladesh Startups & SMEs',
+                    name: 'Bangladesh Startups and SMEs',
                     attributes: [
-                        'Tight budgets where every taka of saved burn matters',
-                        'WhatsApp-first teams that need simple, familiar inputs',
-                        'VAT, Tax, and Labour Act compliance built directly in'
+                        'Works with lean budgets and small teams',
+                        'Supports practical chat-first and spreadsheet-heavy operations',
+                        'Handles local VAT, tax, and labour needs'
                     ]
                 },
                 {
-                    name: 'MNC & International Operations',
+                    name: 'MNC and International Operations',
                     attributes: [
-                        'Multi-entity and multi-currency financial tracking',
-                        'Investor reporting and board-level audit readiness',
-                        'Cross-border compliance with clear documentation trails'
+                        'Supports multi-entity and multi-currency reporting',
+                        'Improves leadership and investor reporting readiness',
+                        'Strengthens documented control across regions'
                     ]
                 }
             ],
-            statement: 'The same clean, owned system — regardless of company size or geography.'
+            statement: 'A practical operating model that scales from local teams to international workflows.'
         },
         differentiation: {
-            title: 'Consultants advise. Agencies retain. I build and leave.',
-            description: 'Consultants give you a 50-page PDF of advice you won\'t read. Agencies want a monthly retainer to manage the mess. I actually build the machine that fixes the mess, hand it to you, and leave. You get a permanent upgrade to your business with zero ongoing fees.'
+            title: 'Working systems, not long advisory decks.',
+            description: 'The goal is simple: measurable operational improvement you can own and run. No dependency-heavy setup and no unnecessary complexity.'
         },
         toolStack: {
-            title: 'The Operational Capabilities.',
+            title: 'Where improvements usually happen first.',
             items: [
-                'Automated Order & Inventory Engines: Tracking stock, raising alerts, and processing invoices instantly. No more "ghost inventory" or missed shipments.',
-                'Financial & Compliance Ledgers: Payroll, commissions, and VAT processed perfectly accurately in minutes instead of days. Full audit trails.',
-                'Executive Dashboards: Your entire business health, updated live on your phone, without waiting 48 hours for the finance team back at the office.',
-                'Process Independence: Works across your entire org without you needing to install new apps. If you can open a link, the system works for you.'
+                'Sales and Order Flow: Cleaner handoff from order capture to invoicing and fulfillment.',
+                'Finance Controls: Better payroll, commission, and reconciliation discipline with clear audit trails.',
+                'Founder Dashboards: Fast daily view of key business numbers without manual report chasing.',
+                'Documentation and SOPs: Clear process notes so performance does not depend on one person.'
             ]
         },
+        finalStatement: 'Build once. Operate with confidence.',
         caseReferences: [
             {
                 sector: 'FMCG Distribution Network',
-                challenge: 'A Dhaka-based wholesale distributor was losing ৳2–3L every month — not to theft, but to confusion. Invoices took 20 minutes to generate. Credit limits were guesswork. Nobody knew actual inventory until it was already gone.',
-                outcome: 'Rebuilt the entire operation into an automated engine. Invoicing dropped to 4 minutes per order. Inventory became real-time and accurate. Credit limits were enforced automatically. Total headcount added: zero.'
+                challenge: 'A wholesale business was losing BDT 2\u20133L monthly due to order confusion, weak credit control, and delayed inventory visibility.',
+                outcome: 'Reworked the flow with better controls and tracking. Invoice time dropped sharply, inventory visibility improved, and no extra headcount was needed.'
             },
             {
                 sector: 'International Trade Finance',
-                challenge: 'Agent commissions across USD, GBP, and BDT were tracked in three separate, disconnected places. Nobody knew exactly what was owed or when. 5–15% per transaction was quietly disappearing every month.',
-                outcome: 'One unified tracking ledger replaced the scattered records. Full commission visibility from day one. 15% in previously lost revenue was recovered immediately.'
+                challenge: 'Commission tracking was split across disconnected records in multiple currencies.',
+                outcome: 'Unified the ledger and reporting logic. Visibility improved immediately and lost revenue recovery reached 15%.'
             }
         ],
         metrics: [
-            { value: '৳2–3L', label: 'Monthly Margin Added' },
-            { value: '100%', label: 'Process Accuracy' },
-            { value: '3–6 mo', label: 'ROI Payback' },
-            { value: 'Unlimited', label: 'Volume Capacity' },
-            { value: 'Zero', label: 'New Hires Needed' }
+            { value: 'BDT 2\u20133L', label: 'Monthly Margin Opportunity' },
+            { value: '100%', label: 'Tracked Critical Processes' },
+            { value: '3\u20136 mo', label: 'Typical Payback Window' },
+            { value: '2x', label: 'Capacity Potential' },
+            { value: '0', label: 'Mandatory New Hires' }
         ],
-        finalStatement: 'Build once. Scale forever.',
         cta: {
-            primary: 'Book a Free Stack Audit',
+            primary: 'Book a Free Operations Audit',
             primaryLink: '/contact',
-            secondary: 'See Real Production Cases',
+            secondary: 'See Founder-Relevant Cases',
             secondaryLink: '/work'
         },
         ctaSubtext: {
-            primary: 'No commitment. 30 minutes to find your leaks and calculate your exact monthly saving.',
-            secondary: 'Real systems. Real numbers. Documented results.'
+            primary: 'No commitment. 30 minutes to map your operational gaps.',
+            secondary: 'Real systems. Documented results.'
         },
         relevantCaseStudies: ['trade-finance', 'fmcg-erp'],
         relevantTestimonials: [0, 1]
     },
+
     'hiring-managers': {
         id: 'hiring-managers',
-        headline: 'Expert Executive Operations',
-        subheadline: 'Proven track record in C-suite support, enterprise automation, and operational governance',
+        headline: 'Hire With Evidence, Not Guesswork.',
+        subheadline: 'For hiring teams evaluating executive operations talent: this page focuses on proven outcomes, working style, and role fit.',
+        whoThisIsFor: [
+            'HR Directors & Talent Acquisition Leads',
+            'COOs and Operations Leaders',
+            'Executive Search Firms',
+            'Leadership Teams Hiring Trusted Operators',
+            'Outsourcing and Agency Recruiters'
+        ],
+        problemStatement: {
+            title: 'Strong CVs are common. Reliable execution is rare.',
+            description: 'Interview performance does not always predict day-one delivery. Hiring risk usually comes from three gaps: proof of execution, speed to productivity, and trust with confidential work.'
+        },
         painPoints: [
             {
                 icon: (
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                 ),
-                title: 'Talent Scalability',
-                description: 'Difficulty finding roles that combine technical skills with business acumen'
+                title: 'Resume Overlap',
+                description: 'Many candidates use similar keywords, making true role fit hard to judge.'
             },
             {
                 icon: (
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 ),
-                title: 'Technical Trust',
-                description: 'Verifying automation expertise beyond claims with production-grade results'
+                title: '90-Day Ramp Risk',
+                description: 'Hiring teams need someone who can stabilize quickly, not spend months figuring out the operating rhythm.'
             },
             {
                 icon: (
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-                    </svg>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
                 ),
-                title: 'Execution Standards',
-                description: 'Need for zero-error candidates who can operate autonomously at C-suite levels'
+                title: 'Trust and Confidentiality',
+                description: 'Executive and personnel workflows require discipline under pressure and careful data handling.'
             }
         ],
         solution: {
-            title: 'Verified Technical Utility',
-            description: 'Portfolio of production systems serving 3,100+ users with documented efficiency gains and zero failures.',
+            title: 'A Verifiable Candidate Profile',
+            description: 'This portfolio is structured as hiring evidence: real scenarios, measurable outcomes, and references you can validate.',
             features: [
-                'Current: Executive – Administration at Prominent Tec',
-                'Tech Stack: VBA, Apps Script, SQL, LaTeX',
-                'Built 5+ production ERPs for enterprise use',
-                'Experience with BD Labour Act & Compliance',
-                'Advanced C-suite lifecycle management'
+                'Current role & organization',
+                'Tech stack proficiency',
+                'Number of production systems built',
+                'Regulatory/compliance experience',
+                'Years of C-suite support'
             ]
         },
+        pillars: [
+            {
+                title: 'Executive Office Experience',
+                positioning: 'Hands-on support for principal time management, follow-through, and cross-team coordination.',
+                outcomes: [
+                    '8–12 hours of executive time recovered weekly',
+                    'Consistent action closure across departments',
+                    'Cleaner communication rhythm with leadership teams'
+                ]
+            },
+            {
+                title: 'Proven Operational Delivery',
+                positioning: 'Built and maintained production workflows that improved speed and reduced recurring process failure.',
+                outcomes: [
+                    '5 production systems delivered',
+                    '3,100+ records handled in daily operations',
+                    'Strong reliability under real business pressure'
+                ]
+            },
+            {
+                title: 'Compliance and Confidentiality Discipline',
+                positioning: 'Sensitive data handling and process controls are treated as core responsibilities, not afterthoughts.',
+                outcomes: [
+                    'Role-based access and control-driven workflows',
+                    'Consistent audit readiness for critical processes',
+                    'Zero reported confidentiality incidents'
+                ]
+            },
+            {
+                title: 'Autonomous Ownership',
+                positioning: 'Able to take a process from problem discovery to stable handover with minimal supervision.',
+                outcomes: [
+                    'Faster transition from onboarding to delivery',
+                    'Better closure rate on open actions',
+                    'Reduced management overhead for hiring leaders'
+                ]
+            }
+        ],
+        operatingModel: [
+            {
+                step: 'Week 1: Alignment',
+                description: 'Understand leadership priorities, risks, and immediate operational pressure points.'
+            },
+            {
+                step: 'Weeks 2–4: Stabilize',
+                description: 'Create clear tracking, reporting rhythm, and owner visibility for urgent workflows.'
+            },
+            {
+                step: 'Month 2: Improve',
+                description: 'Implement high-impact process fixes and remove repeated friction in coordination and follow-up.'
+            },
+            {
+                step: 'Month 3: Standardize',
+                description: 'Document SOPs, handover rules, and review cadence to make execution consistent.'
+            },
+            {
+                step: 'Post 90 Days: Optimize',
+                description: 'Refine edge cases using production feedback and maintain reliability at higher volume.'
+            }
+        ],
+        compatibility: {
+            environments: [
+                {
+                    name: 'Bangladesh Corporate Dynamics',
+                    attributes: [
+                        'Works well within hierarchy-based decision environments',
+                        'Strong local compliance awareness',
+                        'Comfort with high-context stakeholder communication'
+                    ]
+                },
+                {
+                    name: 'MNC Framework Standards',
+                    attributes: [
+                        'Structured reporting and documentation habits',
+                        'Cross-functional and cross-border coordination readiness',
+                        'Consistent execution under formal governance expectations'
+                    ]
+                }
+            ],
+            statement: 'One clear operating standard that adapts to local and global teams.'
+        },
+        differentiation: {
+            title: 'Not just a resume narrative. A delivery record.',
+            description: 'You are not asked to trust claims blindly. You can review case evidence, outcomes, and working approach before making a hiring decision.'
+        },
+        toolStack: {
+            title: 'Tools used to deliver outcomes.',
+            items: [
+                'Core Productivity: Microsoft 365, Google Workspace, and advanced spreadsheet workflows.',
+                'Automation Support: VBA and Apps Script for repetitive operational steps.',
+                'Reporting Discipline: KPI dashboards and structured management reporting.',
+                'Documentation Quality: SOP and process records that enable clean team handover.'
+            ]
+        },
+        finalStatement: 'Reliable execution. Zero guesswork.',
+        caseReferences: [
+            {
+                sector: 'Executive Office (Manufacturing Group)',
+                challenge: 'Leadership managed five units with no central board-pack flow and frequent data gaps.',
+                outcome: 'Implemented a structured submission process. Board packs became consistently ready before meeting day.'
+            },
+            {
+                sector: 'FMCG Operations',
+                challenge: 'High daily transaction volume was manually tracked with slow invoicing and recurring errors.',
+                outcome: 'Improved process flow reduced invoice time and raised reliability without additional headcount.'
+            },
+            {
+                sector: 'HR and Payroll',
+                challenge: 'Personnel files were shared through uncontrolled channels with weak traceability.',
+                outcome: 'Role-based access controls improved confidentiality and audit readiness.'
+            },
+            {
+                sector: 'Medical Logistics',
+                challenge: 'Patient and partner operations ran in disconnected trackers causing handoff failures.',
+                outcome: 'Introduced a unified workflow with end-to-end visibility and more stable execution.'
+            }
+        ],
         metrics: [
-            { value: '6+', label: 'Years Experience' },
-            { value: '5', label: 'Production Systems' },
-            { value: '3,100+', label: 'Users Supported' }
+            { value: '6+', label: 'Years in Operations' },
+            { value: '5', label: 'Production Systems Built' },
+            { value: '3,100+', label: 'Records Governed' },
+            { value: '100%', label: 'Confidentiality Record' },
+            { value: '0', label: 'Security Incidents' }
         ],
         cta: {
-            primary: 'Review Credentials',
-            primaryLink: '/about',
-            secondary: 'Request Resume',
+            primary: 'Review Executive Portfolio',
+            primaryLink: '/resume.pdf',
+            secondary: 'Schedule a Screening Call',
             secondaryLink: '/contact'
         },
-        relevantCaseStudies: ['payroll-control', 'hr-docs', 'med-ops'],
-        relevantTestimonials: [0, 1, 2]
+        ctaSubtext: {
+            primary: 'Detailed operational history and systems architecture portfolio.',
+            secondary: '20-minute intro call. Direct, no fluff.'
+        },
+        faq: [
+            {
+                question: 'What\'s your core value in a team?',
+                answer: 'Systems thinking and autonomous execution. I build the infrastructure so the team runs predictably without constant micromanagement.'
+            },
+            {
+                question: 'Can you work under pressure at C-suite pace?',
+                answer: 'Already doing it. I filter operational noise before it reaches the Principal and resolve escalations calmly with clear ownership.'
+            },
+            {
+                question: 'How do you handle confidential information?',
+                answer: 'Everything is governed by role-based access and audit trails. I maintain a zero-incident track record when handling sensitive executive or personnel data.'
+            },
+            {
+                question: 'What\'s your technology comfort level?',
+                answer: 'I build production-grade systems using VBA, Apps Script, SQL-logic, and LaTeX. But my real skill is designing the logical process, not just using the tool.'
+            },
+            {
+                question: 'Why should we hire you over someone with a CS degree?',
+                answer: 'Because I don\'t just write code — I solve operational problems. Every system I\'ve built exists because a real business was bleeding money or losing time.'
+            }
+        ],
+        relevantCaseStudies: ['payroll-control', 'hr-docs'],
+        relevantTestimonials: [0, 2]
     }
 };
 

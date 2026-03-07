@@ -6,29 +6,29 @@ const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   const footerLinks = {
-    core: [
-      { name: 'About Sabir', path: '/about' },
-      { name: 'Portfolio / Work', path: '/work' },
-      { name: 'Certifications', path: '/certifications' },
-      { name: 'Contact & Briefing', path: '/contact' },
+    explore: [
+      { name: 'About', path: '/about' },
+      { name: 'Work', path: '/work' },
+      { name: 'Solutions', path: '/solutions' },
+      { name: 'Contact', path: '/contact' },
     ],
-    personas: [
+    whoThisHelps: [
       { name: 'Executive Assistants', path: '/persona/executive-assistants' },
       { name: 'Operations Leaders', path: '/persona/operations-leaders' },
-      { name: 'Founders & CEOs', path: '/persona/founders' },
+      { name: 'Founders', path: '/persona/founders' },
       { name: 'Hiring Managers', path: '/persona/hiring-managers' },
     ],
-    solutions: [
-      { name: 'Operational Solutions', path: '/solutions' },
-      { name: 'Systems Audit', path: '/diagnostic' },
+    resources: [
+      { name: 'Certifications', path: '/certifications' },
+      { name: 'Free Readiness Audit', path: '/resources/operational-readiness-audit' },
     ],
-    governance: [
+    standards: [
       { name: 'Reliability Standards', path: '/governance' },
     ],
-    proof: [
+    evidence: [
       { name: 'Success Stories', path: '/success-stories' },
-      { name: 'System Post-Mortems', path: '/post-mortems' },
-      { name: 'Insights / Blog', path: '/blog' },
+      { name: 'Post-Mortems', path: '/post-mortems' },
+      { name: 'Blog', path: '/blog' },
     ]
   };
 
@@ -49,9 +49,9 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <p className="font-black text-[10px] uppercase tracking-[0.3em] text-slate-600 mb-8">Core Navigation</p>
+            <p className="font-black text-[10px] uppercase tracking-[0.3em] text-slate-600 mb-8">EXPLORE</p>
             <ul className="space-y-4">
-              {footerLinks.core.map(link => (
+              {footerLinks.explore.map(link => (
                 <li key={link.name}>
                   <a href={link.path} className="text-slate-600 hover:text-blue-600 font-bold text-sm transition-colors block py-0.5">{link.name}</a>
                 </li>
@@ -60,9 +60,9 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-blue-600 mb-8">Solutions For</h4>
+            <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-blue-600 mb-8">WHO THIS HELPS</h4>
             <ul className="space-y-4">
-              {footerLinks.personas.map(link => (
+              {footerLinks.whoThisHelps.map(link => (
                 <li key={link.name}>
                   <a href={link.path} className="text-slate-600 hover:text-blue-600 font-bold text-sm transition-colors block py-0.5">{link.name}</a>
                 </li>
@@ -71,9 +71,9 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <p className="font-black text-[10px] uppercase tracking-[0.3em] text-slate-600 mb-8">Solutions</p>
+            <p className="font-black text-[10px] uppercase tracking-[0.3em] text-slate-600 mb-8">RESOURCES</p>
             <ul className="space-y-4">
-              {footerLinks.solutions.map(link => (
+              {footerLinks.resources.map(link => (
                 <li key={link.name}>
                   <a href={link.path} className="text-slate-600 hover:text-blue-600 font-bold text-sm transition-colors block py-0.5">{link.name}</a>
                 </li>
@@ -82,9 +82,9 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <p className="font-black text-[10px] uppercase tracking-[0.3em] text-slate-600 mb-8">Governance</p>
+            <p className="font-black text-[10px] uppercase tracking-[0.3em] text-slate-600 mb-8">STANDARDS</p>
             <ul className="space-y-4">
-              {footerLinks.governance.map(link => (
+              {footerLinks.standards.map(link => (
                 <li key={link.name}>
                   <a href={link.path} className="text-slate-600 hover:text-blue-600 font-bold text-sm transition-colors block py-0.5">{link.name}</a>
                 </li>
@@ -93,9 +93,9 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <p className="font-black text-[10px] uppercase tracking-[0.3em] text-slate-600 mb-8">Proof</p>
+            <p className="font-black text-[10px] uppercase tracking-[0.3em] text-slate-600 mb-8">EVIDENCE</p>
             <ul className="space-y-4">
-              {footerLinks.proof.map(link => (
+              {footerLinks.evidence.map(link => (
                 <li key={link.name}>
                   <a href={link.path} className="text-slate-600 hover:text-blue-600 font-bold text-sm transition-colors block py-0.5">{link.name}</a>
                 </li>
@@ -111,9 +111,9 @@ const Footer: React.FC = () => {
           </div>
 
           <div className="flex gap-8 items-center">
-            <a href="/accessibility" className="hover:text-blue-600 transition-colors">Accessibility</a>
-            <a href="/privacy" className="hover:text-blue-600 transition-colors">Privacy Protocol</a>
-            <a href="/cookies" className="hover:text-blue-600 transition-colors">Cookie Audit</a>
+            <a href="/accessibility" className="hover:text-blue-600 transition-colors">ACCESSIBILITY STATEMENT</a>
+            <a href="/privacy" className="hover:text-blue-600 transition-colors">PRIVACY</a>
+            <a href="/cookies" className="hover:text-blue-600 transition-colors">COOKIES</a>
           </div>
         </div>
       </div>

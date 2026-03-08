@@ -5,10 +5,20 @@ interface SmoothScrollProps {
     children: React.ReactNode;
 }
 
+// Expose Lenis on window for global scroll-to-top access
+declare global {
+    interface Window { __lenis?: Lenis; }
+}
+
 const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
     const lenisRef = useRef<Lenis | null>(null);
 
     useEffect(() => {
+        // Prevent browser from restoring scroll position on navigation
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+
         const lenis = new Lenis({
             duration: 1.2,
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -21,6 +31,7 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
         });
 
         lenisRef.current = lenis;
+        window.__lenis = lenis;
 
         function raf(time: number) {
             lenis.raf(time);
@@ -40,6 +51,7 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
 
         return () => {
             lenis.destroy();
+            window.__lenis = undefined;
         };
     }, []);
 

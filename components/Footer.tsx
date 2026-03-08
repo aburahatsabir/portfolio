@@ -20,14 +20,9 @@ const Footer: React.FC = () => {
     ],
     resources: [
       { name: 'Certifications', path: '/certifications' },
-      { name: 'Free Readiness Audit', path: '/resources/operational-readiness-audit' },
-    ],
-    standards: [
-      { name: 'Reliability Standards', path: '/governance' },
     ],
     evidence: [
       { name: 'Success Stories', path: '/success-stories' },
-      { name: 'Post-Mortems', path: '/post-mortems' },
       { name: 'Blog', path: '/blog' },
     ]
   };
@@ -35,7 +30,7 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-white border-t border-slate-100 pt-32 pb-12 overflow-hidden relative">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-16 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-16 mb-24">
           <div className="lg:col-span-1 space-y-8">
             <div className="flex flex-col gap-4">
               <a href="/" className="flex items-center gap-3 group">
@@ -74,17 +69,6 @@ const Footer: React.FC = () => {
             <p className="font-black text-[10px] uppercase tracking-[0.3em] text-slate-600 mb-8">RESOURCES</p>
             <ul className="space-y-4">
               {footerLinks.resources.map(link => (
-                <li key={link.name}>
-                  <a href={link.path} className="text-slate-600 hover:text-blue-600 font-bold text-sm transition-colors block py-0.5">{link.name}</a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <p className="font-black text-[10px] uppercase tracking-[0.3em] text-slate-600 mb-8">STANDARDS</p>
-            <ul className="space-y-4">
-              {footerLinks.standards.map(link => (
                 <li key={link.name}>
                   <a href={link.path} className="text-slate-600 hover:text-blue-600 font-bold text-sm transition-colors block py-0.5">{link.name}</a>
                 </li>

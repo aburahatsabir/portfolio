@@ -1,4 +1,7 @@
 
+// Global Lenis instance type (exposed by SmoothScroll component)
+declare global { interface Window { __lenis?: import('lenis').default; } }
+
 import React, { useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -19,7 +22,6 @@ const PersonaDirectory = lazyLoadPage(() => import('./components/PersonaDirector
 const PrivacyPolicy = lazyLoadPage(() => import('./components/PrivacyPolicy'));
 const CookiePolicy = lazyLoadPage(() => import('./components/CookiePolicy'));
 const AccessibilityStatement = lazyLoadPage(() => import('./components/AccessibilityStatement'));
-const PostMortems = lazyLoadPage(() => import('./components/PostMortems'));
 const Certifications = lazyLoadPage(() => import('./components/Certifications'));
 
 // Below-the-fold components - lazy load for better initial load
@@ -89,7 +91,6 @@ function getBreadcrumbsForRoute(currentPath: string): Array<{ name: string; url:
         '/governance': 'Governance',
         '/blog': 'Blog',
         '/for': 'For',
-        '/post-mortems': 'Post-Mortems',
         '/success-stories': 'Success Stories',
         // '/certifications': 'Certifications',
         '/privacy': 'Privacy Policy',
@@ -163,7 +164,12 @@ function App() {
         const handlePopState = () => {
             const newPath = window.location.pathname || '/';
             setCurrentPath(newPath);
-            window.scrollTo(0, 0);
+            // Use Lenis if available for consistent scroll behavior
+            if (window.__lenis) {
+                window.__lenis.scrollTo(0, { immediate: true });
+            } else {
+                window.scrollTo(0, 0);
+            }
         };
 
         window.addEventListener('popstate', handlePopState);
@@ -205,8 +211,6 @@ function App() {
                         <ErrorBoundary><PersonaDirectory /></ErrorBoundary>
                     </div>
                 );
-            case '/post-mortems':
-                return <div className="pt-20"><ErrorBoundary><PostMortems /></ErrorBoundary></div>;
             case '/success-stories':
                 return <div className="pt-20"><ErrorBoundary><SuccessStories /></ErrorBoundary><ErrorBoundary><Endorsements /></ErrorBoundary></div>;
             case '/about':

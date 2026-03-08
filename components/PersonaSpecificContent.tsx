@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion } from 'framer-motion';
 import { TESTIMONIALS, PROJECTS } from '../constants';
 import OptimizedImage from './OptimizedImage';
@@ -247,7 +247,7 @@ const PERSONAS: Record<string, PersonaConfig> = {
             {
                 sector: 'Manufacturing Group',
                 challenge: 'Board pack inputs arrived from five units without clear ownership, causing version conflicts and late preparation.',
-                outcome: 'Introduced a submission and review workflow with deadlines and owners. Board packs became ready 24–48 hours before meetings.'
+                outcome: 'Introduced a submission and review workflow with deadlines and owners. Board packs became ready 24â€“48 hours before meetings.'
             },
             {
                 sector: 'Executive Office',
@@ -266,9 +266,9 @@ const PERSONAS: Record<string, PersonaConfig> = {
             }
         ],
         metrics: [
-            { value: '8–12 hrs', label: 'Executive Time Saved/Week' },
+            { value: '8â€“12 hrs', label: 'Executive Time Saved/Week' },
             { value: '90%+', label: 'Action Closure Rate' },
-            { value: '24–48 hrs', label: 'Board Pack Readiness' },
+            { value: '24â€“48 hrs', label: 'Board Pack Readiness' },
             { value: '0', label: 'Confidentiality Incidents' },
             { value: '100%', label: 'Tracked Decisions' }
         ],
@@ -690,7 +690,7 @@ const PERSONAS: Record<string, PersonaConfig> = {
                 title: 'Executive Office Experience',
                 positioning: 'Hands-on support for principal time management, follow-through, and cross-team coordination.',
                 outcomes: [
-                    '8–12 hours of executive time recovered weekly',
+                    '8â€“12 hours of executive time recovered weekly',
                     'Consistent action closure across departments',
                     'Cleaner communication rhythm with leadership teams'
                 ]
@@ -729,7 +729,7 @@ const PERSONAS: Record<string, PersonaConfig> = {
                 description: 'Understand leadership priorities, risks, and immediate operational pressure points.'
             },
             {
-                step: 'Weeks 2–4: Stabilize',
+                step: 'Weeks 2â€“4: Stabilize',
                 description: 'Create clear tracking, reporting rhythm, and owner visibility for urgent workflows.'
             },
             {
@@ -838,7 +838,7 @@ const PERSONAS: Record<string, PersonaConfig> = {
             },
             {
                 question: 'Why should we hire you over someone with a CS degree?',
-                answer: 'Because I don\'t just write code — I solve operational problems. Every system I\'ve built exists because a real business was bleeding money or losing time.'
+                answer: 'Because I don\'t just write code â€” I solve operational problems. Every system I\'ve built exists because a real business was bleeding money or losing time.'
             }
         ],
         relevantCaseStudies: ['payroll-control', 'hr-docs'],
@@ -850,16 +850,36 @@ interface PersonaSpecificContentProps {
     personaId: string;
 }
 
+const fadeUp = {
+    hidden: { opacity: 0, y: 10 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
+    }
+};
+
+const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1,
+            delayChildren: 0.1,
+        }
+    }
+};
+
 const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ personaId }) => {
     const persona = PERSONAS[personaId];
 
     if (!persona) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-white">
-                <div className="text-center space-y-6">
-                    <p className="mono text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold">Error 404</p>
-                    <h1 className="text-3xl font-[900] text-slate-900 text-tighter">Persona Not Found</h1>
-                    <a href="/" className="inline-block text-blue-600 hover:text-blue-700 text-[11px] font-bold tracking-widest uppercase border-b border-blue-600/30 pb-1">Return to Index</a>
+                <div className="text-center space-y-4">
+                    <p className="text-[10px] text-zinc-400 uppercase tracking-widest font-medium">Error 404</p>
+                    <h1 className="text-xl font-medium text-zinc-900">Persona Not Found</h1>
+                    <a href="/" className="inline-block text-zinc-500 hover:text-zinc-800 text-[11px] font-medium tracking-widest uppercase transition-colors pt-4">Return to Index</a>
                 </div>
             </div>
         );
@@ -869,37 +889,31 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
     const relevantTestimonials = persona.relevantTestimonials.map(idx => TESTIMONIALS[idx]);
 
     return (
-        <div className="min-h-screen bg-white selection:bg-blue-600 selection:text-white text-slate-900 font-sans">
+        <div className="min-h-screen bg-white selection:bg-zinc-100 selection:text-zinc-900 text-zinc-900 font-sans antialiased">
 
-            {/* 01: HERO / EXECUTIVE BRIEFING */}
-            <section className="relative pt-32 md:pt-40 pb-12 md:pb-16 border-b border-slate-200/60 bg-[#FBFBFA]">
-                <div className="max-w-7xl mx-auto px-4 md:px-6">
-                    <motion.div
-                        initial="hidden"
-                        animate="visible"
-                        variants={staggerContainer}
-                        className="max-w-4xl"
-                    >
-                        <motion.div variants={revealVariants} className="mb-8 md:mb-12">
-                            <span className="mono text-[10px] font-bold text-slate-900 tracking-[0.3em] uppercase">Executive Briefing</span>
+            {/* 01: HERO */}
+            <section className="pt-32 pb-20 md:pt-40 md:pb-24">
+                <div className="max-w-5xl mx-auto px-6 md:px-8">
+                    <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="max-w-3xl">
+                        <motion.div variants={fadeUp} className="mb-8">
+                            <span className="text-[10px] font-medium text-zinc-400 tracking-widest uppercase">Executive Briefing</span>
                         </motion.div>
 
-                        <motion.h1 variants={revealVariants} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-[900] tracking-tighter leading-[1.02] text-slate-900 mb-6 md:mb-8">
+                        <motion.h1 variants={fadeUp} className="text-3xl md:text-4xl lg:text-5xl font-medium tracking-tight text-zinc-900 mb-6 leading-[1.15]">
                             {persona.headline}
                         </motion.h1>
 
-                        <motion.p variants={revealVariants} className="text-base md:text-xl text-slate-500 font-medium leading-relaxed max-w-2xl">
+                        <motion.p variants={fadeUp} className="text-base md:text-lg text-zinc-500 font-normal leading-relaxed max-w-2xl">
                             {persona.subheadline}
                         </motion.p>
 
                         {persona.whoThisIsFor && (
-                            <motion.div variants={revealVariants} className="pt-8 mt-8 md:pt-12 md:mt-12 border-t border-slate-200/60 flex flex-col md:flex-row md:items-start gap-8 md:gap-16">
-
+                            <motion.div variants={fadeUp} className="pt-12 mt-12 border-t border-zinc-100">
                                 <div className="flex flex-wrap gap-x-8 gap-y-4">
                                     {persona.whoThisIsFor.map((item, i) => (
-                                        <div key={i} className="flex items-center gap-3">
-                                            <span className="w-1.5 h-1.5 bg-blue-600/80" />
-                                            <span className="text-xs md:text-sm font-bold text-slate-900 text-tight">{item}</span>
+                                        <div key={i} className="flex items-center gap-2">
+                                            <span className="w-1 h-1 rounded-full bg-zinc-300" />
+                                            <span className="text-[13px] font-medium text-zinc-600">{item}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -909,16 +923,16 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
                 </div>
             </section>
 
-            {/* SECTION 02: PERFORMANCE INDEX (METRICS) */}
-            <section className="relative z-10 bg-white border-b border-slate-100">
-                <div className="max-w-7xl mx-auto px-4 md:px-6">
-                    <div className="grid grid-cols-2 md:grid-cols-5 gap-px bg-slate-100 border-y border-slate-100">
+            {/* SECTION 02: METRICS */}
+            <section className="border-t border-zinc-100 bg-zinc-50/50">
+                <div className="max-w-5xl mx-auto px-6 md:px-8">
+                    <div className="grid grid-cols-2 md:grid-cols-5 gap-8 py-12">
                         {persona.metrics.map((metric, i) => (
-                            <div key={i} className="bg-white py-8 md:py-10 px-4 md:px-6 group hover:bg-slate-50 transition-colors duration-500">
-                                <span className="block mono text-[8px] font-bold text-slate-500 uppercase tracking-widest mb-2 group-hover:text-blue-600 transition-colors">
+                            <div key={i} className="flex flex-col space-y-2">
+                                <span className="text-[10px] font-medium text-zinc-400 uppercase tracking-widest">
                                     {metric.label}
                                 </span>
-                                <span className="text-xl md:text-3xl font-bold text-slate-900 tracking-tight tabular-nums">
+                                <span className="text-2xl font-medium text-zinc-900 tracking-tight">
                                     {metric.value}
                                 </span>
                             </div>
@@ -927,37 +941,32 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
                 </div>
             </section>
 
-            {/* SECTION 03: THE BOTTLENECK (CHALLENGE) */}
+            {/* SECTION 03: THE BOTTLENECK */}
             {persona.problemStatement && (
-                <section className="relative z-10 py-16 md:py-32 bg-[#FBFBFA]">
-                    <div className="max-w-7xl mx-auto px-4 md:px-6">
-                        <div className="grid grid-cols-12 gap-8 md:gap-12 lg:gap-24">
-                            <div className="col-span-12 lg:col-span-5 space-y-4 md:space-y-8 lg:sticky lg:top-32 h-fit">
-                                <div className="mb-6 md:mb-8">
-                                    <span className="mono text-[9px] md:text-[10px] font-bold text-slate-900 tracking-[0.3em] uppercase">The Bottleneck</span>
-                                </div>
-                                <h2 className="text-3xl md:text-5xl lg:text-6xl font-[900] text-tighter leading-[1.1] text-slate-900 max-w-full md:max-w-none pr-2 md:pr-0 lg:-mr-24 xl:-mr-32 relative z-10 w-full lg:w-[130%]">
+                <section className="py-20 md:py-32 border-t border-zinc-100">
+                    <div className="max-w-5xl mx-auto px-6 md:px-8">
+                        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
+                            <div className="md:col-span-4 space-y-6 lg:sticky lg:top-32 h-fit">
+                                <span className="text-[10px] font-medium text-zinc-400 tracking-widest uppercase block">The Bottleneck</span>
+                                <h2 className="text-2xl md:text-3xl font-medium tracking-tight text-zinc-900 leading-[1.2]">
                                     {persona.problemStatement.title}
                                 </h2>
                             </div>
 
-                            <div className="col-span-12 lg:col-span-7 space-y-6 md:space-y-12">
-                                <p className="text-base md:text-xl text-slate-500 font-medium leading-relaxed">
+                            <div className="md:col-span-8 md:pl-8 xl:pl-16 space-y-12">
+                                <p className="text-base text-zinc-500 leading-relaxed font-normal">
                                     {persona.problemStatement.description}
                                 </p>
 
-                                <div className="grid gap-4 md:gap-6">
-                                    {(persona.painPoints && persona.painPoints.length > 0 ? persona.painPoints : [
-                                        { title: 'Fragmented Communication', description: 'Communication channels lack structure.' },
-                                        { title: 'Unclear Task Ownership', description: 'Decision loops are often left open.' },
-                                        { title: 'Unfiltered Urgencies', description: 'High-value time lost to operational noise.' }
-                                    ]).map((pt, i) => (
-                                        <div key={i} className="p-5 md:p-8 bg-white border border-slate-200/60 rounded-lg group hover:border-blue-200 transition-all duration-300">
-                                            <h4 className="text-sm font-bold text-slate-900 uppercase tracking-tight mb-2 flex items-center gap-3">
-                                                <span className="text-blue-600">0{i + 1}</span> {pt.title}
+                                <div className="space-y-12">
+                                    {(persona.painPoints && persona.painPoints.length > 0 ? persona.painPoints : []).map((pt, i) => (
+                                        <div key={i} className="space-y-3">
+                                            <h4 className="text-sm font-medium text-zinc-900 flex items-center gap-4">
+                                                <span className="text-[10px] text-zinc-400 font-mono tracking-widest">0{i + 1}</span>
+                                                {pt.title}
                                             </h4>
                                             {pt.description && (
-                                                <p className="text-sm text-slate-500 font-medium leading-relaxed">
+                                                <p className="text-sm text-zinc-500 leading-relaxed pl-8">
                                                     {pt.description}
                                                 </p>
                                             )}
@@ -970,54 +979,43 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
                 </section>
             )}
 
-            {/* 04: RESOLUTION ARCHITECTURE (SOLUTION) */}
-            <section className="py-24 md:py-40 bg-[#FBFBFA] border-y border-slate-200/60">
-                <div className="max-w-7xl mx-auto px-4 md:px-6">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
-                        <div className="lg:col-span-4 lg:sticky lg:top-40 h-fit">
-                            <div className="mb-8">
-                                <span className="mono text-[9px] md:text-[10px] font-bold text-slate-900 tracking-[0.3em] uppercase">Resolution</span>
-                            </div>
-                            <h2 className="text-4xl md:text-6xl font-[900] text-tighter leading-[1.05] text-slate-900 mb-8">
+            {/* 04: RESOLUTION */}
+            <section className="py-20 md:py-32 bg-zinc-50/30 border-t border-zinc-100">
+                <div className="max-w-5xl mx-auto px-6 md:px-8">
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
+                        <div className="md:col-span-4 space-y-6 lg:sticky lg:top-32 h-fit">
+                            <span className="text-[10px] font-medium text-zinc-400 tracking-widest uppercase block">Resolution</span>
+                            <h2 className="text-2xl md:text-3xl font-medium tracking-tight text-zinc-900 leading-[1.2]">
                                 {persona.solution.title}
                             </h2>
-                            <p className="text-lg text-slate-500 font-medium leading-[1.6]">
+                            <p className="text-sm text-zinc-500 leading-relaxed font-normal">
                                 {persona.solution.description}
                             </p>
                         </div>
 
-                        <div className="lg:col-span-8">
-                            <div className="flex flex-col">
+                        <div className="md:col-span-8 md:pl-8 xl:pl-16">
+                            <div className="grid gap-12">
                                 {(persona.pillars || []).map((pillar, i) => (
-                                    <div key={i} className="p-6 md:p-10 bg-white border border-slate-100 rounded-xl group hover:border-blue-200 transition-all duration-500 my-4">
-                                        <div className="grid md:grid-cols-12 gap-6 md:gap-8">
-                                            <div className="md:col-span-4">
-                                                <span className="mono text-[10px] font-bold text-blue-600 uppercase tracking-widest block mb-3 md:mb-4">Pillar 0{i + 1}</span>
-                                                <h3 className="text-xl font-bold text-slate-900 tracking-tight">{pillar.title}</h3>
-                                            </div>
-                                            <div className="md:col-span-8 space-y-4 md:space-y-6">
-                                                <p className="text-sm text-slate-500 font-medium leading-relaxed">
-                                                    {pillar.positioning}
-                                                </p>
-                                                <div className="grid grid-cols-1 gap-3">
-                                                    {pillar.outcomes.map((outcome, j) => (
-                                                        <div key={j} className="flex items-start gap-3 text-[11px] font-bold text-slate-700 tracking-tight">
-                                                            <div className="w-1.5 h-1.5 rounded-full bg-blue-600/40 mt-1.5 shrink-0" />
-                                                            {outcome}
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div key={i} className="space-y-4">
+                                        <h3 className="text-lg font-medium text-zinc-900 tracking-tight">{pillar.title}</h3>
+                                        <p className="text-sm text-zinc-500 leading-relaxed max-w-xl">
+                                            {pillar.positioning}
+                                        </p>
+                                        <ul className="space-y-2 pt-2">
+                                            {pillar.outcomes.map((outcome, j) => (
+                                                <li key={j} className="flex items-start gap-3 text-[13px] text-zinc-600">
+                                                    <span className="w-1 h-1 rounded-full bg-zinc-300 mt-1.5 shrink-0" />
+                                                    {outcome}
+                                                </li>
+                                            ))}
+                                        </ul>
                                     </div>
                                 ))}
 
                                 {!persona.pillars && persona.solution.features.map((feature, i) => (
-                                    <div key={i} className="py-8 border-b border-slate-200/60 flex items-center justify-between group">
-                                        <div className="flex items-center gap-6">
-                                            <span className="mono text-[10px] font-bold text-slate-400 tracking-[0.2em]">0{i + 1}</span>
-                                            <span className="text-lg md:text-xl font-[900] text-slate-900 text-tight group-hover:text-blue-600 transition-colors duration-500">{feature}</span>
-                                        </div>
+                                    <div key={i} className="flex items-center gap-4 py-4 border-b border-zinc-100 last:border-0">
+                                        <span className="text-[10px] font-medium text-zinc-400 font-mono tracking-widest">0{i + 1}</span>
+                                        <span className="text-sm font-medium text-zinc-900">{feature}</span>
                                     </div>
                                 ))}
                             </div>
@@ -1028,27 +1026,23 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
 
             {/* 05: OPERATING PROTOCOL */}
             {persona.operatingModel && (
-                <section className="py-24 md:py-40 bg-white">
-                    <div className="max-w-7xl mx-auto px-4 md:px-6">
-                        <div className="mb-16 md:mb-24 flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-slate-200/60 pb-12">
-                            <div>
-                                <div className="mb-8">
-                                    <span className="mono text-[9px] md:text-[10px] font-bold text-slate-900 tracking-[0.3em] uppercase">Operating Protocol</span>
-                                </div>
-                                <h2 className="text-4xl md:text-6xl font-[900] text-tighter leading-[1.05] text-slate-900">
-                                    Execution Rhythm.
-                                </h2>
-                            </div>
+                <section className="py-20 md:py-32 border-t border-zinc-100">
+                    <div className="max-w-5xl mx-auto px-6 md:px-8">
+                        <div className="mb-16 md:mb-20 space-y-6">
+                            <span className="text-[10px] font-medium text-zinc-400 tracking-widest uppercase block">Operating Protocol</span>
+                            <h2 className="text-2xl md:text-3xl font-medium tracking-tight text-zinc-900">
+                                Execution Rhythm
+                            </h2>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-px bg-slate-200 border border-slate-200 overflow-hidden rounded-lg">
+                        <div className="grid grid-cols-1 md:grid-cols-5 gap-px bg-zinc-100 border border-zinc-100 rounded-lg overflow-hidden">
                             {persona.operatingModel.map((item, i) => (
-                                <div key={i} className="bg-white p-6 md:p-8 space-y-4 md:space-y-6 hover:bg-slate-50 transition-colors duration-500">
-                                    <span className="mono text-[10px] font-bold text-slate-300 block">STEP 0{i + 1}</span>
-                                    <h3 className="text-base font-bold text-slate-900 tracking-tight">
+                                <div key={i} className="bg-white p-6 space-y-4 hover:bg-zinc-50/50 transition-colors">
+                                    <span className="text-[10px] font-medium text-zinc-400 font-mono">STEP 0{i + 1}</span>
+                                    <h3 className="text-sm font-medium text-zinc-900">
                                         {item.step}
                                     </h3>
-                                    <p className="text-xs text-slate-500 font-medium leading-relaxed">
+                                    <p className="text-xs text-zinc-500 leading-relaxed">
                                         {item.description}
                                     </p>
                                 </div>
@@ -1056,62 +1050,38 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
                         </div>
 
                         {persona.compatibility && (
-                            <div className="mt-24 md:mt-48 border-t border-slate-100 pt-24 md:pt-40 relative">
-                                {/* Section vertical axis (Core Theme consistency) */}
-                                <div className="absolute left-[41.666%] top-0 bottom-0 w-px bg-slate-100 hidden lg:block"></div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-12 gap-y-20 relative">
-                                    {/* Column 01: The Strategic Architecture Heading */}
-                                    <div className="md:col-span-12 lg:col-span-5 lg:pr-14 space-y-12">
-                                        <div className="space-y-8">
-                                            <div className="mb-8">
-                                                <span className="mono text-[9px] md:text-[10px] font-bold text-slate-900 tracking-[0.3em] uppercase">Governance</span>
-                                            </div>
-                                            <div className="space-y-10">
-                                                <h2 className="text-4xl md:text-5xl lg:text-7xl font-[900] tracking-tighter leading-[0.92] text-slate-900">
-                                                    Operating <br />
-                                                    <span className="text-slate-400">Architecture.</span>
-                                                </h2>
-
-                                                {/* Strategic Statement moved here */}
-                                                <div className="space-y-6">
-                                                    <div className="text-xl md:text-2xl lg:text-3xl font-[900] text-slate-900 tracking-tighter leading-[1.1] italic relative">
-                                                        <div className="absolute -left-6 top-1 bottom-1 w-1 bg-blue-700 opacity-20"></div>
-                                                        "{typeof persona.compatibility === 'object' ? persona.compatibility.statement : persona.compatibility}"
-                                                    </div>
-                                                </div>
-                                            </div>
+                            <div className="mt-24 md:mt-32 pt-20 md:pt-24 border-t border-zinc-100">
+                                <div className="grid grid-cols-1 md:grid-cols-12 gap-16">
+                                    <div className="md:col-span-5 space-y-8">
+                                        <span className="text-[10px] font-medium text-zinc-400 tracking-widest uppercase block">Governance</span>
+                                        <h2 className="text-2xl md:text-3xl font-medium tracking-tight text-zinc-900">
+                                            Operating Architecture
+                                        </h2>
+                                        <div className="text-lg md:text-xl font-medium text-zinc-800 tracking-tight leading-snug pt-4">
+                                            "{typeof persona.compatibility === 'object' ? persona.compatibility.statement : persona.compatibility}"
                                         </div>
-
                                     </div>
 
-                                    <div className="md:col-span-12 lg:col-span-7 lg:pl-14">
+                                    <div className="md:col-span-7 md:pl-8 xl:pl-16">
                                         {typeof persona.compatibility === 'object' && (
-                                            <div className="space-y-16">
-                                                <div className="grid grid-cols-2 gap-12 lg:gap-16">
-                                                    {persona.compatibility.environments.map((env, i) => (
-                                                        <div key={i} className="space-y-10">
-                                                            <div className="pb-4 border-b border-slate-100/60 flex items-center justify-between group/ledger">
-                                                                <h4 className="text-sm font-black text-slate-900 tracking-tight uppercase group-hover/ledger:text-blue-700 transition-colors">
-                                                                    {env.name}
-                                                                </h4>
-                                                                <div className="flex gap-1.5">
-                                                                    <div className="w-1 h-1 rounded-full bg-blue-700"></div>
+                                            <div className="grid sm:grid-cols-2 gap-12">
+                                                {persona.compatibility.environments.map((env, i) => (
+                                                    <div key={i} className="space-y-6">
+                                                        <h4 className="text-xs font-medium text-zinc-900 tracking-widest uppercase border-b border-zinc-100 pb-4">
+                                                            {env.name}
+                                                        </h4>
+                                                        <div className="space-y-4">
+                                                            {env.attributes.map((attr, j) => (
+                                                                <div key={j} className="flex items-start gap-3">
+                                                                    <div className="w-1 h-1 rounded-full bg-zinc-300 mt-2 shrink-0"></div>
+                                                                    <p className="text-[13px] text-zinc-600 flex-1">
+                                                                        {attr}
+                                                                    </p>
                                                                 </div>
-                                                            </div>
-                                                            <div className="space-y-6">
-                                                                {env.attributes.map((attr, j) => (
-                                                                    <div key={j} className="group/item flex items-start gap-3">
-                                                                        <div className="w-1 h-1 rounded-full bg-slate-200 mt-2 shrink-0 group-hover/item:bg-blue-700 transition-colors"></div>
-                                                                        <p className="text-[13px] md:text-[14px] font-medium text-slate-600 group-hover/item:text-slate-900 transition-colors leading-snug">
-                                                                            {attr}
-                                                                        </p>
-                                                                    </div>
-                                                                ))}
-                                                            </div>
+                                                            ))}
                                                         </div>
-                                                    ))}
-                                                </div>
+                                                    </div>
+                                                ))}
                                             </div>
                                         )}
                                     </div>
@@ -1122,119 +1092,86 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
                 </section>
             )}
 
-            {/* SECTION 06: PRODUCTION EVIDENCE (CASE STUDIES) */}
+            {/* 06: PRODUCTION EVIDENCE */}
             {relevantCaseStudies.length > 0 && (
-                <section className="relative z-10 py-12 md:py-20 bg-white overflow-hidden border-y border-slate-100">
-                    <div className="max-w-7xl mx-auto px-4 md:px-6 relative">
-                        <div className="mb-12">
-                            <motion.div
-                                initial={{ opacity: 0, x: -20 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.6 }}
-                            >
-                                <div className="mb-8">
-                                    <span className="mono text-[9px] md:text-[10px] font-bold text-slate-900 tracking-[0.3em] uppercase">The Ledger</span>
-                                </div>
-                                <h2 className="text-4xl md:text-6xl font-[900] text-tighter leading-[1.05] text-slate-900">
-                                    Production Evidence.
-                                </h2>
-                            </motion.div>
+                <section className="py-20 md:py-32 bg-zinc-50/50 border-t border-zinc-100">
+                    <div className="max-w-5xl mx-auto px-6 md:px-8">
+                        <div className="mb-16 space-y-6">
+                            <span className="text-[10px] font-medium text-zinc-400 tracking-widest uppercase block">The Ledger</span>
+                            <h2 className="text-2xl md:text-3xl font-medium tracking-tight text-zinc-900">
+                                Production Evidence
+                            </h2>
                         </div>
 
-                        <div className="relative">
+                        <div className="border-t border-zinc-200/50">
                             {relevantCaseStudies.map((project, i) => (
-                                <motion.div
+                                <a
                                     key={project.id}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true, margin: "-50px" }}
-                                    transition={{ duration: 0.5, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
-                                    className="relative group"
+                                    href={`/work/${project.id}`}
+                                    className="block py-8 border-b border-zinc-200/50 group"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        window.history.pushState({}, '', `/work/${project.id}`);
+                                        window.dispatchEvent(new Event('popstate'));
+                                        window.scrollTo(0, 0);
+                                    }}
                                 >
-                                    <a
-                                        href={`/work/${project.id}`}
-                                        className="block py-8 md:py-10 border-t border-slate-100 relative z-10"
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            window.history.pushState({}, '', `/work/${project.id}`);
-                                            window.dispatchEvent(new PopStateEvent('popstate'));
-                                            window.scrollTo(0, 0);
-                                        }}
-                                    >
-                                        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center relative">
-                                            <div className="md:col-span-3">
-                                                <span className="mono text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 group-hover:text-blue-600 transition-colors duration-400">
-                                                    {project.category}
-                                                </span>
-                                            </div>
-
-                                            <div className="md:col-span-12 lg:col-span-5">
-                                                <motion.h3
-                                                    whileHover={{ x: 6 }}
-                                                    className="text-xl md:text-2xl lg:text-3xl font-bold text-slate-900 tracking-tight leading-tight transition-colors duration-400 group-hover:text-blue-600"
-                                                >
-                                                    {project.title}
-                                                </motion.h3>
-                                            </div>
-
-                                            <div className="md:col-span-12 lg:col-span-3">
-                                                <p className="text-xs md:text-sm text-slate-500 font-medium leading-relaxed opacity-70 group-hover:opacity-100 transition-opacity duration-400">
-                                                    {project.headline}
-                                                </p>
-                                            </div>
-
-                                            <div className="hidden lg:flex lg:col-span-1 justify-end">
-                                                <div className="w-10 h-10 flex items-center justify-center">
-                                                    <span className="text-xl text-slate-300 font-light group-hover:text-blue-600 group-hover:translate-x-2 transition-all duration-400">
-                                                        →
-                                                    </span>
-                                                </div>
-                                            </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                                        <div className="md:col-span-3">
+                                            <span className="text-[10px] font-medium text-zinc-400 uppercase tracking-widest group-hover:text-zinc-900 transition-colors">
+                                                {project.category}
+                                            </span>
                                         </div>
-                                    </a>
-                                    {i === relevantCaseStudies.length - 1 && (
-                                        <div className="border-b border-slate-100 w-full" />
-                                    )}
-                                </motion.div>
+
+                                        <div className="md:col-span-6">
+                                            <h3 className="text-lg md:text-xl font-medium tracking-tight text-zinc-900 group-hover:text-zinc-600 transition-colors">
+                                                {project.title}
+                                            </h3>
+                                        </div>
+
+                                        <div className="md:col-span-3 text-right hidden md:block">
+                                            <span className="text-zinc-300 group-hover:text-zinc-900 transition-colors text-lg inline-block group-hover:translate-x-1 duration-300">
+                                                â†’
+                                            </span>
+                                        </div>
+                                    </div>
+                                </a>
                             ))}
                         </div>
                     </div>
                 </section>
             )}
 
-            {/* 07: FIELD REFERENCES (SECTORS) */}
+            {/* 07: FIELD REFERENCES */}
             {persona.caseReferences && (
-                <section className="py-24 md:py-40 bg-white border-b border-slate-200/60">
-                    <div className="max-w-7xl mx-auto px-4 md:px-6">
-                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
-                            <div className="lg:col-span-4 lg:sticky lg:top-40 h-fit space-y-8">
-                                <div className="mb-8">
-                                    <span className="mono text-[9px] md:text-[10px] font-bold text-slate-900 tracking-[0.3em] uppercase">Field References</span>
-                                </div>
-                                <h2 className="text-4xl md:text-6xl font-[900] text-tighter leading-[1.05] text-slate-900">
-                                    Delivered in Practice.
+                <section className="py-20 md:py-32 border-t border-zinc-100">
+                    <div className="max-w-5xl mx-auto px-6 md:px-8">
+                        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
+                            <div className="md:col-span-4 space-y-6 lg:sticky lg:top-32 h-fit">
+                                <span className="text-[10px] font-medium text-zinc-400 tracking-widest uppercase block">Field References</span>
+                                <h2 className="text-2xl md:text-3xl font-medium tracking-tight text-zinc-900">
+                                    Delivered in Practice
                                 </h2>
-                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] leading-[1.8] pt-2">
+                                <p className="text-[10px] text-zinc-400 uppercase tracking-widest pt-2">
                                     Sector-level transparency. Client identity protected by NDA.
                                 </p>
                             </div>
 
-                            <div className="lg:col-span-8 space-y-6">
+                            <div className="md:col-span-8 md:pl-8 xl:pl-16 space-y-8">
                                 {persona.caseReferences.map((ref, i) => (
-                                    <div key={i} className="bg-white border border-slate-200/60 p-6 md:p-10 rounded-xl space-y-8 md:space-y-10 group hover:border-blue-200 transition-all">
-                                        <div className="flex items-center justify-between border-b border-slate-100 pb-6">
-                                            <span className="text-[11px] font-bold text-slate-900 uppercase tracking-widest">{ref.sector}</span>
-                                            <span className="mono text-[10px] text-slate-300 font-bold">REF/0{i + 1}</span>
+                                    <div key={i} className="pt-8 border-t border-zinc-100 first:border-0 first:pt-0">
+                                        <div className="flex items-center justify-between mb-8">
+                                            <span className="text-xs font-medium text-zinc-900 uppercase tracking-widest">{ref.sector}</span>
+                                            <span className="text-[10px] text-zinc-400 font-mono">REF/0{i + 1}</span>
                                         </div>
-                                        <div className="grid md:grid-cols-2 gap-8 md:gap-12">
-                                            <div className="space-y-3">
-                                                <span className="mono text-[9px] font-bold text-slate-400 uppercase tracking-widest block">The Challenge</span>
-                                                <p className="text-sm text-slate-500 font-medium leading-relaxed">{ref.challenge}</p>
+                                        <div className="grid md:grid-cols-2 gap-8">
+                                            <div className="space-y-2">
+                                                <span className="text-[10px] font-medium text-zinc-400 uppercase tracking-widest block">The Challenge</span>
+                                                <p className="text-sm text-zinc-500 leading-relaxed">{ref.challenge}</p>
                                             </div>
-                                            <div className="space-y-3">
-                                                <span className="mono text-[9px] font-bold text-blue-600 uppercase tracking-widest block">The Outcome</span>
-                                                <p className="text-sm text-slate-900 font-bold leading-relaxed">{ref.outcome}</p>
+                                            <div className="space-y-2">
+                                                <span className="text-[10px] font-medium text-zinc-800 uppercase tracking-widest block">The Outcome</span>
+                                                <p className="text-sm text-zinc-900 font-medium leading-relaxed">{ref.outcome}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1245,44 +1182,38 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
                 </section>
             )}
 
-            {/* 08: SOVEREIGNTY (DIFFERENTIATION) */}
+            {/* 08: SOVEREIGNTY / DIFFERENTIATION */}
             {(persona.differentiation || persona.toolStack) && (
-                <section className="relative z-10 py-16 md:py-32 bg-[#FBFBFA] border-y border-slate-200/60">
-                    <div className="max-w-7xl mx-auto px-4 md:px-6">
-                        <div className="grid grid-cols-12 gap-8 md:gap-12 lg:gap-24">
+                <section className="py-20 md:py-32 bg-zinc-50/50 border-t border-zinc-100">
+                    <div className="max-w-5xl mx-auto px-6 md:px-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24">
                             {persona.differentiation && (
-                                <div className="col-span-12 lg:col-span-6 space-y-8 md:space-y-12">
-                                    <div className="space-y-4">
-                                        <div className="mb-8">
-                                            <span className="mono text-[9px] md:text-[10px] font-bold text-slate-900 tracking-[0.3em] uppercase">The Differential</span>
-                                        </div>
-                                        <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight leading-[1.05] text-slate-900">
-                                            {persona.differentiation.title}
-                                        </h3>
-                                    </div>
-                                    <p className="text-base md:text-lg text-slate-500 font-medium leading-relaxed pl-6 md:pl-8 border-l-2 border-slate-100 italic">
+                                <div className="space-y-8">
+                                    <span className="text-[10px] font-medium text-zinc-400 tracking-widest uppercase block">The Differential</span>
+                                    <h3 className="text-xl md:text-2xl font-medium tracking-tight text-zinc-900 leading-[1.3]">
+                                        {persona.differentiation.title}
+                                    </h3>
+                                    <p className="text-sm md:text-base text-zinc-500 leading-relaxed font-normal">
                                         {persona.differentiation.description}
                                     </p>
                                 </div>
                             )}
 
                             {persona.toolStack && (
-                                <div className="col-span-12 lg:col-span-6 space-y-8 md:space-y-12">
-                                    <div className="space-y-4">
-                                        <div className="mb-8">
-                                            <span className="mono text-[9px] md:text-[10px] font-bold text-slate-900 tracking-[0.3em] uppercase">Technical Sovereignty</span>
-                                        </div>
-                                        <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight leading-[1.05] text-slate-900">
-                                            {persona.toolStack.title}
-                                        </h3>
-                                    </div>
-                                    <div className="grid gap-4">
+                                <div className="space-y-8">
+                                    <span className="text-[10px] font-medium text-zinc-400 tracking-widest uppercase block">Technical Sovereignty</span>
+                                    <h3 className="text-xl md:text-2xl font-medium tracking-tight text-zinc-900 leading-[1.3]">
+                                        {persona.toolStack.title}
+                                    </h3>
+                                    <div className="space-y-6 pt-4">
                                         {persona.toolStack.items.map((item, i) => {
-                                            const [title, desc] = item.split(':');
+                                            const parts = item.split(':');
+                                            const title = parts[0];
+                                            const desc = parts.length > 1 ? parts.slice(1).join(':').trim() : '';
                                             return (
-                                                <div key={i} className="p-4 md:p-6 bg-white border border-slate-100 rounded-lg group hover:border-blue-100 transition-all">
-                                                    <span className="text-[10px] font-bold text-slate-900 uppercase tracking-widest mb-2 block">{title}</span>
-                                                    <p className="text-xs text-slate-500 font-medium leading-relaxed">{desc}</p>
+                                                <div key={i} className="space-y-2">
+                                                    <span className="text-xs font-medium text-zinc-900 uppercase tracking-widest block">{title}</span>
+                                                    {desc && <p className="text-sm text-zinc-500 leading-relaxed">{desc}</p>}
                                                 </div>
                                             );
                                         })}
@@ -1294,92 +1225,65 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
                 </section>
             )}
 
-            {/* 09: VALIDATION (TESTIMONIALS) */}
+            {/* 09: VALIDATION */}
             {relevantTestimonials.length > 0 && (
-                <section className="py-20 md:py-32 bg-[#FBFBFA] border-y border-slate-200/60">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                            className="mb-12 md:mb-20 flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-slate-200/60 pb-8"
-                        >
-                            <div>
-                                <div className="mb-8">
-                                    <span className="mono text-[9px] md:text-[10px] font-bold text-slate-900 tracking-[0.3em] uppercase">Validation Protocol</span>
-                                </div>
-                                <h2 className="text-3xl md:text-5xl font-[900] text-tighter leading-[1.05] text-slate-900">
-                                    Verified Impact.
-                                </h2>
-                            </div>
-                        </motion.div>
+                <section className="py-20 md:py-32 border-t border-zinc-100">
+                    <div className="max-w-5xl mx-auto px-6 md:px-8">
+                        <div className="mb-16 space-y-6">
+                            <span className="text-[10px] font-medium text-zinc-400 tracking-widest uppercase block">Validation Protocol</span>
+                            <h2 className="text-2xl md:text-3xl font-medium tracking-tight text-zinc-900">
+                                Verified Impact
+                            </h2>
+                        </div>
 
-                        <div className="grid md:grid-cols-2 gap-px bg-slate-200/70 border border-slate-200/70 overflow-hidden rounded-xl">
+                        <div className="grid md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-start">
                             {relevantTestimonials.map((testimonial, i) => (
-                                <motion.div
-                                    key={i}
-                                    initial={{ opacity: 0 }}
-                                    whileInView={{ opacity: 1 }}
-                                    viewport={{ once: true }}
-                                    transition={{ duration: 1, delay: i * 0.1 }}
-                                    className="bg-white p-6 md:p-10 hover:bg-slate-50 transition-colors duration-700 flex flex-col justify-between group relative"
-                                >
-                                    <div className="flex-1">
-                                        <div className="mb-6 md:mb-8">
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-slate-200 group-hover:text-blue-600 transition-colors duration-700">
-                                                <path d="M10 7L8 11H11V17H5V11L7 7H10ZM19 7L17 11H20V17H14V11L16 7H19Z" fill="currentColor" />
-                                            </svg>
+                                <div key={i} className="space-y-8">
+                                    <p className="text-base md:text-lg text-zinc-800 leading-[1.6] font-normal tracking-tight">
+                                        "{testimonial.content}"
+                                    </p>
+
+                                    <div className="flex items-center gap-4 pt-6 border-t border-zinc-100">
+                                        <div className="w-10 h-10 rounded-full overflow-hidden bg-zinc-100 shrink-0">
+                                            <OptimizedImage
+                                                src={testimonial.avatar}
+                                                alt={testimonial.name}
+                                                width={40}
+                                                height={40}
+                                                className="w-full h-full object-cover grayscale opacity-80 mix-blend-multiply"
+                                            />
                                         </div>
-
-                                        <p className="text-lg md:text-xl text-slate-800 font-medium tracking-tight leading-[1.5] group-hover:text-slate-900 transition-colors duration-700 mb-8 md:mb-10">
-                                            {testimonial.content}
-                                        </p>
-                                    </div>
-
-                                    <div className="flex items-center justify-between gap-4 pt-6 md:pt-8 border-t border-slate-100 group-hover:border-slate-200 transition-colors duration-700 mt-auto">
-                                        <div className="flex items-center gap-4 md:gap-5">
-                                            <div className="w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden bg-slate-100 shrink-0 border border-slate-200/60 shadow-sm">
-                                                <OptimizedImage
-                                                    src={testimonial.avatar}
-                                                    alt={testimonial.name}
-                                                    width={56}
-                                                    height={56}
-                                                    className="w-full h-full object-cover transition-all duration-700 grayscale mix-blend-luminosity group-hover:grayscale-0 group-hover:mix-blend-normal group-hover:scale-105"
-                                                />
+                                        <div>
+                                            <div className="text-sm font-medium text-zinc-900">
+                                                {testimonial.name}
                                             </div>
-                                            <div>
-                                                <div className="text-sm md:text-[15px] font-bold text-slate-900 tracking-tight leading-tight mb-1">
-                                                    {testimonial.name}
-                                                </div>
-                                                <div className="mono text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                                                    {testimonial.position}
-                                                </div>
+                                            <div className="text-[10px] text-zinc-500 uppercase tracking-widest mt-0.5">
+                                                {testimonial.position}
                                             </div>
                                         </div>
                                     </div>
-                                </motion.div>
+                                </div>
                             ))}
                         </div>
                     </div>
                 </section>
             )}
 
-            {/* 10: DEPLOYMENT (CTA) */}
-            <section className="py-24 md:py-32 lg:py-40 bg-[#FBFBFA] flex flex-col justify-center min-h-[60vh]">
-                <div className="max-w-4xl mx-auto px-6 md:px-12 text-center w-full">
-                    <h2 className="text-4xl md:text-5xl lg:text-7xl font-[900] text-tighter text-slate-900 leading-[1.05]">
-                        {persona.finalStatement || 'I am the infrastructure that allows you to lead.'}
+            {/* 10: DEPLOYMENT */}
+            <section className="py-32 md:py-48 bg-zinc-50/50 border-t border-zinc-100 flex flex-col justify-center">
+                <div className="max-w-3xl mx-auto px-6 md:px-8 text-center w-full">
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium tracking-tight text-zinc-900 leading-[1.15]">
+                        {persona.finalStatement || 'The infrastructure that allows you to lead.'}
                     </h2>
 
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-12 md:mt-16">
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12">
                         <a
                             href={persona.cta.primaryLink}
-                            className="w-full sm:w-auto px-12 py-5 bg-slate-900 text-white font-bold text-[11px] uppercase tracking-[0.2em] hover:bg-blue-600 transition-all duration-500 text-center rounded-lg"
+                            className="w-full sm:w-auto px-8 py-3.5 bg-zinc-900 text-white font-medium text-[11px] uppercase tracking-widest hover:bg-zinc-800 transition-colors rounded-none"
                             onClick={(e) => {
                                 e.preventDefault();
                                 window.history.pushState({}, '', persona.cta.primaryLink);
-                                window.dispatchEvent(new PopStateEvent('popstate'));
+                                window.dispatchEvent(new Event('popstate'));
                                 window.scrollTo(0, 0);
                             }}
                         >
@@ -1387,21 +1291,20 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
                         </a>
                         <a
                             href={persona.cta.secondaryLink}
-                            className="w-full sm:w-auto px-12 py-5 bg-white border border-slate-200/60 text-slate-500 font-bold text-[11px] uppercase tracking-[0.2em] hover:border-slate-900 hover:text-slate-900 transition-all duration-500 text-center rounded-lg"
+                            className="w-full sm:w-auto px-8 py-3.5 bg-transparent border border-zinc-200 text-zinc-600 font-medium text-[11px] uppercase tracking-widest hover:border-zinc-300 hover:text-zinc-900 transition-colors rounded-none"
                             onClick={(e) => {
                                 e.preventDefault();
                                 window.history.pushState({}, '', persona.cta.secondaryLink);
-                                window.dispatchEvent(new PopStateEvent('popstate'));
+                                window.dispatchEvent(new Event('popstate'));
                                 window.scrollTo(0, 0);
                             }}
                         >
                             {persona.cta.secondary}
                         </a>
                     </div>
-
                 </div>
-            </section >
-        </div >
+            </section>
+        </div>
     );
 };
 

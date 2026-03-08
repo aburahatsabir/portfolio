@@ -17,11 +17,14 @@ export interface BlogPost {
   date: string;
   readTime: string;
   excerpt: string;
-  category: 'Strategy' | 'Engineering' | 'Governance' | 'Finance' | 'Systems';
+  category: string;
+  tags?: string[];
   content: string;
+  image: string; // Added image property
   author: {
     name: string;
     role: string;
+    avatar?: string; // Added avatar property
   };
 }
 

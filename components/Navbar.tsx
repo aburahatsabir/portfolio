@@ -9,11 +9,26 @@ import { trackResumeDownload } from '../utils/analytics';
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isDarkThemePage, setIsDarkThemePage] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    // Check if we are on a page with a dark hero (only /blog listing, not individual posts)
+    const checkTheme = () => {
+      setIsDarkThemePage(window.location.pathname === '/blog');
+    };
+    checkTheme();
+    window.addEventListener('popstate', checkTheme);
+    // Also re-check when blog internal navigation happens (custom event, no full popstate)
+    window.addEventListener('blog-navigate', checkTheme);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('popstate', checkTheme);
+      window.removeEventListener('blog-navigate', checkTheme);
+    };
   }, []);
 
   const handleLinkClick = () => {
@@ -65,11 +80,11 @@ const Navbar: React.FC = () => {
       <nav className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-500 ${isScrolled || isOpen ? 'glass-nav border-b border-slate-100 py-4 shadow-sm' : 'bg-transparent py-8'}`}>
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           <a href="/" className="flex items-center gap-4 group" onClick={handleLinkClick}>
-            <div className="w-11 h-11 bg-slate-900 text-white rounded-[1.25rem] flex items-center justify-center font-black group-hover:rotate-[10deg] transition-all shadow-xl group-hover:bg-blue-600">AR</div>
+            <div className={`w-11 h-11 rounded-[1.25rem] flex items-center justify-center font-black group-hover:rotate-[10deg] transition-all shadow-xl group-hover:bg-blue-600 group-hover:text-white ${!isScrolled && isDarkThemePage ? 'bg-white text-blue-600' : 'bg-slate-900 text-white'}`}>AR</div>
             <div className="flex flex-col">
-              <span className="text-xl font-black tracking-tighter text-slate-900 leading-none">ABU RAHAT SABIR</span>
-              <span className="text-[9px] font-black text-blue-600 uppercase tracking-widest mt-1.5 flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
+              <span className={`text-xl font-black tracking-tighter leading-none transition-colors ${!isScrolled && isDarkThemePage ? 'text-white' : 'text-slate-900'}`}>ABU RAHAT SABIR</span>
+              <span className={`text-[9px] font-black uppercase tracking-widest mt-1.5 flex items-center gap-2 transition-colors ${!isScrolled && isDarkThemePage ? 'text-blue-200' : 'text-blue-600'}`}>
+                <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${!isScrolled && isDarkThemePage ? 'bg-white' : 'bg-blue-500'}`}></span>
                 Executive Admin & Automation
               </span>
             </div>
@@ -80,10 +95,10 @@ const Navbar: React.FC = () => {
               <a
                 key={link.name}
                 href={link.path}
-                className="group relative text-[11px] font-black text-slate-700 hover:text-blue-600 focus-visible:text-blue-600 transition-colors uppercase tracking-[0.25em] py-1"
+                className={`group relative text-[11px] font-black transition-colors uppercase tracking-[0.25em] py-1 ${!isScrolled && isDarkThemePage ? 'text-white/80 hover:text-white focus-visible:text-white' : 'text-slate-700 hover:text-blue-600 focus-visible:text-blue-600'}`}
               >
                 {link.name}
-                <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 ease-out group-hover:w-full"></span>
+                <span className={`absolute bottom-0 left-0 w-0 h-[2px] transition-all duration-300 ease-out group-hover:w-full ${!isScrolled && isDarkThemePage ? 'bg-white' : 'bg-blue-600'}`}></span>
               </a>
             ))}
           </div>
@@ -96,7 +111,7 @@ const Navbar: React.FC = () => {
                 handleResumeClick('navbar_top');
               }}
               aria-label="Download resume in PDF format"
-              className="hidden sm:flex items-center gap-3 bg-slate-900 text-white text-[10px] font-black uppercase tracking-[0.2em] px-8 py-4 rounded-xl hover:bg-blue-600 transition-all shadow-xl shadow-slate-900/10 active:scale-95"
+              className={`hidden sm:flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] px-8 py-4 rounded-xl transition-all shadow-xl active:scale-95 ${!isScrolled && isDarkThemePage ? 'bg-white text-blue-700 hover:bg-slate-50 shadow-black/10' : 'bg-slate-900 text-white hover:bg-blue-600 shadow-slate-900/10'}`}
             >
 
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -115,15 +130,15 @@ const Navbar: React.FC = () => {
             >
               <motion.span
                 animate={isOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
-                className="w-6 h-0.5 bg-slate-900 rounded-full block transition-transform"
+                className={`w-6 h-0.5 rounded-full block transition-transform ${(!isScrolled && !isOpen) && isDarkThemePage ? 'bg-white' : 'bg-slate-900'}`}
               />
               <motion.span
                 animate={isOpen ? { opacity: 0, x: -10 } : { opacity: 1, x: 0 }}
-                className="w-6 h-0.5 bg-slate-900 rounded-full block transition-all"
+                className={`w-6 h-0.5 rounded-full block transition-all ${(!isScrolled && !isOpen) && isDarkThemePage ? 'bg-white' : 'bg-slate-900'}`}
               />
               <motion.span
                 animate={isOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
-                className="w-6 h-0.5 bg-slate-900 rounded-full block transition-transform"
+                className={`w-6 h-0.5 rounded-full block transition-transform ${(!isScrolled && !isOpen) && isDarkThemePage ? 'bg-white' : 'bg-slate-900'}`}
               />
             </button>
           </div>

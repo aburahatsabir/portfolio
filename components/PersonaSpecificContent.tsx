@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { TESTIMONIALS, PROJECTS } from '../constants';
 import OptimizedImage from './OptimizedImage';
@@ -859,16 +859,7 @@ const fadeUp = {
     }
 };
 
-const staggerContainer = {
-    hidden: { opacity: 0 },
-    visible: {
-        opacity: 1,
-        transition: {
-            staggerChildren: 0.1,
-            delayChildren: 0.1,
-        }
-    }
-};
+
 
 const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ personaId }) => {
     const persona = PERSONAS[personaId];

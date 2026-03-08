@@ -60,51 +60,8 @@ const InlineText: React.FC<{ text: string }> = ({ text }) => {
   );
 };
 
-// ─── Share Buttons ─────────────────────────────────────────────────────────────
 
-const ShareButtons: React.FC<{ title: string }> = ({ title }) => {
-  const [copied, setCopied] = useState(false);
-
-  const share = (platform: 'x' | 'facebook' | 'linkedin' | 'copy') => {
-    const url = window.location.href;
-    if (platform === 'copy') {
-      navigator.clipboard.writeText(url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-      return;
-    }
-    const map = {
-      x: `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`,
-      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
-      linkedin: `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`,
-    };
-    window.open(map[platform], '_blank', 'width=600,height=400');
-  };
-
-  const btnClass = `w-9 h-9 rounded-full flex items-center justify-center bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition-all text-slate-500 hover:text-slate-800`;
-
-  return (
-    <div className="flex flex-row gap-2">
-      <button type="button" onClick={() => share('x')} title="Share on X" className={btnClass}>
-        <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
-      </button>
-      <button type="button" onClick={() => share('facebook')} title="Share on Facebook" className={btnClass}>
-        <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" /></svg>
-      </button>
-      <button type="button" onClick={() => share('linkedin')} title="Share on LinkedIn" className={btnClass}>
-        <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" /></svg>
-      </button>
-      <button type="button" onClick={() => share('copy')} title={copied ? 'Copied!' : 'Copy link'} className={btnClass}>
-        {copied
-          ? <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" /></svg>
-          : <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
-        }
-      </button>
-    </div>
-  );
-};
-
-// ─── Blog Post Detail (Webflow-style) ─────────────────────────────────────────
+// ─── Blog Post Detail (100% Webflow Replica) ──────────────────────────────────
 
 const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
   const { scrollYProgress } = useScroll();
@@ -121,6 +78,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
   const blocks = useMemo(() => parseContent(post.content), [post.content]);
   const headings = useMemo(() => extractHeadings(post.content), [post.content]);
 
+  // For the "Keep Reading" / Related Posts section
   const relatedPosts = useMemo(() => {
     const others = BLOG_POSTS.filter(p => p.id !== post.id);
     return [...others.filter(p => p.category === post.category), ...others.filter(p => p.category !== post.category)].slice(0, 3);
@@ -142,96 +100,126 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
 
   const scrollToHeading = (id: string) => {
     const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (el) {
+      const offset = 80;
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = el.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
   };
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="bg-white min-h-screen">
-      {/* Progress bar */}
-      <motion.div className="fixed top-0 left-0 right-0 h-0.5 bg-[#444CE7] origin-left z-[200]" style={{ scaleX }} />
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="bg-white min-h-screen font-sans selection:bg-blue-200">
+      {/* Scroll Progress bar */}
+      <motion.div className="fixed top-0 left-0 right-0 h-1 bg-[#146ef5] origin-left z-[200]" style={{ scaleX }} />
 
-      {/* ── HERO ── */}
-      <div
-        className="relative overflow-hidden pt-28 pb-16"
-        style={{ background: 'linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 30%, #C7D2FE 60%, #dbeafe 100%)' }}
-      >
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute -top-20 -right-20 w-[600px] h-[600px] rounded-full bg-white/20 blur-3xl" />
-          <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] rounded-full bg-blue-200/30 blur-3xl" />
-        </div>
+      {/* ── HERO SECTION ── */}
+      <div className="bg-[#f5f7fa] pt-32 pb-24 border-b border-[#e2e4e8]">
+        <div className="max-w-[1280px] mx-auto px-6 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          
+          {/* Hero Content (Left) */}
+          <div className="max-w-xl">
+            {/* Breadcrumb */}
+            <div className="flex items-center gap-2 text-[14px] font-medium text-slate-500 mb-8">
+               <button type="button" onClick={navigateBack} className="hover:text-slate-900 transition-colors">Blog</button>
+               <span className="text-slate-300">›</span>
+               <span className="text-slate-900">{post.category}</span>
+            </div>
 
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm text-slate-500 mb-8">
-            <button type="button" onClick={navigateBack} className="hover:text-[#444CE7] transition-colors font-medium">Blog</button>
-            <svg className="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
-            <span className="text-slate-700 font-medium">{post.category}</span>
+            <h1 className="text-[48px] md:text-[56px] lg:text-[64px] font-bold text-[#1a1b1f] leading-[1.05] tracking-[-0.02em] mb-6">
+              {post.title}
+            </h1>
+            
+            {post.excerpt && (
+              <p className="text-[20px] md:text-[22px] text-slate-600 leading-[1.5] font-normal max-w-lg">
+                {post.excerpt}
+              </p>
+            )}
           </div>
 
-          {/* Split: text left, image right */}
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <span className="inline-block px-3 py-1 bg-[#444CE7]/10 text-[#444CE7] text-xs font-semibold rounded-full mb-6 uppercase tracking-wider">
-                {post.category}
-              </span>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 leading-[1.15] tracking-tight mb-5">
-                {post.title}
-              </h1>
-              <p className="text-lg text-slate-600 leading-relaxed mb-8 max-w-xl">{post.excerpt}</p>
-              <div className="flex items-center gap-4">
-                <img src={post.author.avatar} alt={post.author.name} className="w-11 h-11 rounded-full object-cover ring-2 ring-white shadow-sm" />
-                <div>
-                  <p className="text-sm font-semibold text-slate-900">{post.author.name}</p>
-                  <p className="text-xs text-slate-500">{post.date} · {post.readTime}</p>
+          {/* Hero Image (Right) */}
+          <div className="w-full">
+            <div className="w-full rounded-[16px] overflow-hidden bg-slate-200 aspect-[16/10] shadow-lg border border-slate-200/50 relative">
+              <img
+                src={post.image || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2000'}
+                alt={post.title}
+                className="w-full h-full object-cover"
+                loading="eager"
+              />
+              
+              {/* Overlay matching the dribbble shot */}
+              <div className="absolute inset-x-0 bottom-0 pt-24 pb-6 px-6 sm:px-8 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col sm:flex-row justify-between sm:items-end gap-6 sm:gap-0">
+                <div className="flex items-center">
+                  <p className="text-white text-[15px] tracking-wide flex items-center gap-2">
+                    <span className="opacity-90 font-medium">Published on</span>
+                    <span className="font-semibold">{post.date}</span>
+                  </p>
+                </div>
+                
+                <div className="flex gap-2">
+                  <button onClick={() => { navigator.clipboard.writeText(window.location.href); alert('Link copied!'); }} className="flex items-center gap-2 px-3 py-1.5 border border-white/40 rounded-sm bg-transparent hover:bg-white/10 transition-all text-white text-[13px] font-medium tracking-wide">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                    Copy link
+                  </button>
+                  <button onClick={() => window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(window.location.href)}&title=${encodeURIComponent(post.title)}`, '_blank')} className="w-8 h-8 border border-white/40 rounded-sm bg-transparent hover:bg-white/10 transition-all text-white flex items-center justify-center">
+                    <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                  </button>
+                  <button onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank')} className="w-8 h-8 border border-white/40 rounded-sm bg-transparent hover:bg-white/10 transition-all text-white flex items-center justify-center">
+                    <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                  </button>
+                  <button onClick={() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(window.location.href)}`, '_blank')} className="w-8 h-8 border border-white/40 rounded-sm bg-transparent hover:bg-white/10 transition-all text-white flex items-center justify-center">
+                    <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                  </button>
                 </div>
               </div>
-            </div>
-            <div className="relative">
-              <div className="rounded-2xl overflow-hidden shadow-2xl shadow-indigo-200/50 aspect-[16/10] bg-slate-200">
-                <img
-                  src={post.image || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200'}
-                  alt={post.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="absolute -bottom-4 -left-4 bg-white rounded-xl px-4 py-2.5 shadow-lg border border-slate-100 flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-xs font-semibold text-slate-700">{post.readTime}</span>
-              </div>
+              
             </div>
           </div>
+          
         </div>
       </div>
 
-      {/* ── BODY ── */}
-      <div className="max-w-7xl mx-auto px-6 py-16">
-        <div className="grid lg:grid-cols-[280px_1fr] gap-16 items-start">
+      {/* ── ARTICLE SECTION ── */}
+      <div className="max-w-[1280px] mx-auto px-6 pt-24 pb-32">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-24 items-start">
 
-          {/* ── LEFT SIDEBAR (sticky) ── */}
-          <aside className="hidden lg:block sticky top-28 space-y-8">
-            {/* Author */}
-            <div className="flex items-start gap-3 pb-6 border-b border-slate-100">
-              <img src={post.author.avatar} alt={post.author.name} className="w-10 h-10 rounded-full object-cover shrink-0" />
-              <div>
-                <p className="text-sm font-semibold text-slate-900">{post.author.name}</p>
-                <p className="text-xs text-slate-500 leading-snug mt-0.5">{post.author.role}</p>
+          {/* ── LEFT SIDEBAR (Sticky) ── */}
+          <aside className="w-full lg:w-[320px] shrink-0 lg:sticky top-32 lg:pb-12">
+            
+            {/* Author Info */}
+            <div className="flex items-center gap-4 mb-12">
+              <div className="w-12 h-12 bg-slate-200 rounded-lg overflow-hidden shrink-0 border border-slate-200/50 shadow-[0_2px_4px_rgba(0,0,0,0.04)]">
+                <img src={post.author.avatar} alt={post.author.name} className="w-full h-full object-cover object-top origin-[50%_15%] scale-[1.6]" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[17px] font-bold text-slate-900 leading-snug">{post.author.name}</span>
+                <span className="text-[15px] text-slate-500 leading-snug">{post.author.role}</span>
               </div>
             </div>
 
             {/* Table of Contents */}
             {headings.length > 0 && (
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-4">Table of contents</p>
-                <nav className="space-y-1">
-                  {headings.map(h => (
+              <div className="bg-white border border-slate-200 rounded-xl p-6 mb-12 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+                <p className="text-[15px] font-bold text-slate-900 mb-4 tracking-wide uppercase text-xs">Table of contents</p>
+                <nav className="flex flex-col space-y-3 relative">
+                  {headings.map((h, i) => (
                     <button
                       key={h.id}
                       type="button"
                       onClick={() => scrollToHeading(h.id)}
-                      className={`flex items-start gap-2 w-full text-left py-1.5 text-sm transition-colors group ${activeToc === h.id ? 'text-[#444CE7] font-semibold' : 'text-slate-500 hover:text-slate-800'}`}
+                      className="group flex gap-2.5 items-start text-left text-[15px] leading-snug transition-colors"
                     >
-                      <span className={`mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 transition-colors ${activeToc === h.id ? 'bg-[#444CE7]' : 'bg-slate-200 group-hover:bg-slate-400'}`} />
-                      <span className="leading-snug">{h.text}</span>
+                      <svg className={`w-4 h-4 mt-0.5 shrink-0 transition-colors ${activeToc === h.id ? 'text-[#146ef5]' : 'text-slate-300 group-hover:text-slate-400'}`} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 2v6c0 1.1.9 2 2 2h6M11 7l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      <span className={`block transition-colors ${activeToc === h.id ? 'text-slate-900 font-bold' : 'text-slate-500 hover:text-slate-800'}`}>
+                        {h.text}
+                      </span>
                     </button>
                   ))}
                 </nav>
@@ -239,115 +227,138 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
             )}
 
             {/* Share */}
-            <div className="pb-6 border-b border-slate-100">
-              <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-4">Share</p>
-              <ShareButtons title={post.title} />
+            <div className="mb-14">
+               <p className="text-[14px] font-bold text-slate-800 mb-4 uppercase tracking-wider">Share</p>
+               <div className="flex flex-row gap-5 items-center">
+                 <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=https://aburahatsabir.vercel.app/blog/${post.id}`} target="_blank" rel="noopener noreferrer" className="text-slate-600 hover:text-slate-900 transition-colors" aria-label="Share on X">
+                   <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
+                 </a>
+                 <a href={`https://www.facebook.com/sharer/sharer.php?u=https://aburahatsabir.vercel.app/blog/${post.id}`} target="_blank" rel="noopener noreferrer" className="text-slate-600 hover:text-slate-900 transition-colors" aria-label="Share on Facebook">
+                   <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" /></svg>
+                 </a>
+                 <a href={`https://www.linkedin.com/shareArticle?mini=true&url=https://aburahatsabir.vercel.app/blog/${post.id}&title=${encodeURIComponent(post.title)}`} target="_blank" rel="noopener noreferrer" className="text-slate-600 hover:text-slate-900 transition-colors" aria-label="Share on LinkedIn">
+                   <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" /></svg>
+                 </a>
+                 <button onClick={() => {
+                   navigator.clipboard.writeText(`https://aburahatsabir.vercel.app/blog/${post.id}`);
+                   alert('Link copied!');
+                 }} className="text-slate-600 hover:text-slate-900 transition-colors flex items-center justify-center p-1" aria-label="Copy link">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
+                 </button>
+               </div>
             </div>
 
-            {/* Subscribe CTA */}
-            <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100">
-              <p className="text-sm font-semibold text-slate-900 mb-1">Get exclusive insights</p>
-              <p className="text-xs text-slate-500 leading-relaxed mb-4">Subscribe for best practices, frameworks, and case studies.</p>
-              <form onSubmit={(e) => e.preventDefault()} className="space-y-2">
+            {/* Newsletter CTA */}
+            <div className="bg-[#f5f7fa] p-8 rounded-xl border border-slate-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.02)]">
+              <p className="text-[18px] font-bold text-slate-900 mb-2 tracking-tight">Unlock exclusive insights</p>
+              <p className="text-[15px] text-slate-600 leading-[1.6] mb-6">Subscribe now for best practices, research reports, and more.</p>
+              <form onSubmit={(e) => e.preventDefault()} className="space-y-3">
                 <input
                   type="email"
-                  placeholder="Enter your email"
-                  className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg bg-white outline-none focus:ring-2 focus:ring-[#444CE7]/20 focus:border-[#444CE7] placeholder:text-slate-400 transition-all"
+                  placeholder="name@email.com"
+                  className="w-full px-4 py-3 text-[15px] border border-slate-300 rounded-lg bg-white outline-none focus:ring-2 focus:ring-[#146ef5] focus:border-transparent placeholder:text-slate-400 transition-all shadow-sm"
                 />
-                <button type="submit" className="w-full py-2 text-sm font-semibold text-white bg-[#444CE7] hover:bg-[#3538CD] rounded-lg transition-colors">
+                <button type="submit" className="w-full py-3 text-[15px] font-semibold text-white bg-[#146ef5] hover:bg-blue-700 rounded-lg transition-colors shadow-sm">
                   Subscribe
                 </button>
               </form>
             </div>
-
-            {/* Back */}
-            <button
-              type="button"
-              onClick={navigateBack}
-              className="flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-slate-700 transition-colors group"
-            >
-              <svg className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-              </svg>
-              Back to all posts
-            </button>
           </aside>
 
           {/* ── MAIN CONTENT ── */}
-          <article ref={contentRef}>
-            <button
-              type="button"
-              onClick={navigateBack}
-              className="lg:hidden flex items-center gap-2 text-sm text-slate-500 hover:text-[#444CE7] transition-colors mb-8 font-medium"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
-              All posts
-            </button>
-
-            <div className="max-w-none">
+          <article ref={contentRef} className="flex-1 min-w-0 max-w-[800px] pb-12">
+            
+            <div className="prose prose-lg max-w-none text-slate-800 tracking-normal">
               {blocks.map((block, i) => {
                 if (block.type === 'h2') {
                   const id = (block.text || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-                  return <h2 key={i} id={id} className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight mt-12 mb-5 scroll-mt-32">{block.text}</h2>;
+                  return <h2 key={i} id={id} className="text-[36px] md:text-[40px] font-bold text-[#1a1b1f] tracking-[-0.01em] mt-16 mb-6 leading-[1.2] scroll-mt-32">{block.text}</h2>;
                 }
                 if (block.type === 'h3') {
-                  return <h3 key={i} className="text-xl font-semibold text-slate-800 mt-8 mb-3">{block.text}</h3>;
+                  return <h3 key={i} className="text-[28px] font-bold text-[#1a1b1f] mt-12 mb-4">{block.text}</h3>;
                 }
                 if (block.type === 'ul') {
                   return (
-                    <ul key={i} className="my-5 space-y-2 pl-0">
+                    <ul key={i} className="my-10 space-y-4 pl-0 list-none">
                       {(block.items || []).map((item, j) => (
-                        <li key={j} className="flex items-start gap-3 text-slate-600 leading-relaxed text-[17px]">
-                          <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#444CE7] shrink-0" />
+                        <li key={j} className="flex items-start gap-5 text-[20px] leading-[1.6] text-[#1a1b1f]">
+                          <span className="mt-[11px] w-[5px] h-[5px] rounded-full bg-[#146ef5] shrink-0" />
                           <span><InlineText text={item} /></span>
                         </li>
                       ))}
                     </ul>
                   );
                 }
-                const isLead = i === 0;
                 return (
-                  <p key={i} className={`${isLead ? 'text-xl text-slate-700 font-medium leading-relaxed mb-7' : 'text-[17px] text-slate-600 leading-relaxed mb-5'}`}>
+                  <p key={i} className={`text-[20px] leading-[1.6] text-[#1a1b1f] mb-8 font-normal`}>
                     <InlineText text={block.text || ''} />
                   </p>
                 );
               })}
             </div>
-
-            {/* Keep Reading */}
-            {relatedPosts.length > 0 && (
-              <div className="mt-20 pt-12 border-t border-slate-100">
-                <h2 className="text-2xl font-bold text-slate-900 mb-8">Keep reading</h2>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {relatedPosts.map(related => (
-                    <motion.div
-                      key={related.id}
-                      whileHover={{ y: -4 }}
-                      transition={{ duration: 0.2 }}
-                      className="group cursor-pointer"
-                      onClick={() => {
-                        window.history.pushState({}, '', `/blog/${related.id}`);
-                        window.dispatchEvent(new CustomEvent('blog-navigate', { detail: { postId: related.id } }));
-                      }}
-                    >
-                      <div className="aspect-[16/10] rounded-xl overflow-hidden bg-slate-100 mb-4">
-                        <img
-                          src={related.image || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800'}
-                          alt={related.title}
-                          className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
-                          loading="lazy"
-                        />
-                      </div>
-                      <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">{related.category}</span>
-                      <h3 className="text-base font-semibold text-slate-900 group-hover:text-[#444CE7] transition-colors leading-snug mt-1.5 mb-2 line-clamp-2">{related.title}</h3>
-                      <p className="text-xs text-slate-500">{related.author.name} · {related.date}</p>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            )}
+            
+            {/* Post Tags & Bottom Meta */}
+            <div className="mt-20 pt-8 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
+               <div className="flex gap-2">
+                 {(post.tags || [post.category]).map((tag, i) => (
+                   <span key={i} className="px-3 py-1.5 bg-slate-100/80 text-slate-600 text-[14px] font-semibold tracking-wide uppercase rounded-md">
+                     {tag}
+                   </span>
+                 ))}
+               </div>
+               <div className="text-[14px] text-slate-500 font-medium tracking-wide">
+                 LAST UPDATED: <span className="text-slate-900">{post.date}</span>
+               </div>
+            </div>
+            
           </article>
         </div>
+
+        {/* Keep Reading Section at bottom */}
+        {relatedPosts.length > 0 && (
+          <div className="mt-24 pt-16 border-t border-slate-200">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
+               <h2 className="text-[32px] font-bold text-[#1a1b1f] tracking-[-0.01em]">Get started for free</h2>
+               <button 
+                 onClick={navigateBack}
+                 className="inline-flex items-center justify-center px-6 py-3 border border-slate-300 bg-white rounded-lg text-[15px] font-semibold text-slate-700 hover:bg-slate-50 hover:shadow-sm transition-all self-start sm:self-auto"
+               >
+                 View more templates
+               </button>
+            </div>
+            
+            <div className="grid md:grid-cols-3 gap-8">
+              {relatedPosts.slice(0, 3).map(related => (
+                <motion.div
+                  key={related.id}
+                  whileHover={{ y: -4 }}
+                  transition={{ duration: 0.2 }}
+                  className="group cursor-pointer flex flex-col h-full bg-white border border-slate-200/60 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                  onClick={() => {
+                    window.history.pushState({}, '', `/blog/${related.id}`);
+                    window.dispatchEvent(new CustomEvent('blog-navigate', { detail: { postId: related.id } }));
+                  }}
+                >
+                  <div className="aspect-[16/10] bg-slate-100 border-b border-slate-200/60">
+                    <img
+                      src={related.image || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800'}
+                      alt={related.title}
+                      className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="p-6 flex flex-col flex-1">
+                    <h3 className="text-[20px] font-bold text-[#1a1b1f] group-hover:text-[#146ef5] transition-colors leading-[1.3] mb-3 line-clamp-2">{related.title}</h3>
+                    <p className="text-[15px] text-slate-600 mb-6 flex-1 line-clamp-2">{related.excerpt}</p>
+                    <span className="text-[14px] font-semibold text-[#146ef5] mt-auto flex items-center gap-1 group-hover:gap-2 transition-all">
+                      Read more <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    </span>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </motion.div>
   );

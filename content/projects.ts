@@ -1,4 +1,4 @@
-﻿import { Project, Experience, Testimonial, PostMortemEntry, SuccessStory, IndustryBlueprint, Standard, BlogPost } from '../types';
+import { Project, Experience, Testimonial, PostMortemEntry, SuccessStory, IndustryBlueprint, Standard, BlogPost } from '../types';
 
 export const PROJECTS: Project[] = [
   {
@@ -167,7 +167,7 @@ export const PROJECTS: Project[] = [
       { label: 'Exception Logic', value: '100% Tracked' }
     ],
     dataSchema: [
-      'Salary Matrix Kernel (9 Grades Ã— 20 Steps)',
+      'Salary Matrix Kernel (9 Grades × 20 Steps)',
       'Exception Runtime (SpellNumberBDT + Logging)',
       'Pro-Rata Engine (EOMONTH / Calendar logic)',
       'Audit Artifacts (Memos / Decision Logs)'
@@ -179,8 +179,8 @@ export const PROJECTS: Project[] = [
       'Currency-to-Words Output Logic'
     ],
     fullCaseStudy: {
-      challenge: '80+ employees across 9 entities faced a pro-rata compensation crisis. Manual math (days/30 Ã— salary) caused persistent payout variances. Unauthorized salary promises broke internal equity, while bonuses and deductions remained trapped in fragmented email chains.',
-      solution: 'Architected an "Inputs â†’ Controls â†’ Outputs" engine. Implemented a hard-coded Salary Matrix Kernel to prevent off-grid pay deviations. Developed a Pro-Rata runtime using EOMONTH() date arithmetic that ensures precision for mid-month joining (e.g., (17/31) Ã— à§³45,000 for a May 15 start).',
+      challenge: '80+ employees across 9 entities faced a pro-rata compensation crisis. Manual math (days/30 × salary) caused persistent payout variances. Unauthorized salary promises broke internal equity, while bonuses and deductions remained trapped in fragmented email chains.',
+      solution: 'Architected an "Inputs → Controls → Outputs" engine. Implemented a hard-coded Salary Matrix Kernel to prevent off-grid pay deviations. Developed a Pro-Rata runtime using EOMONTH() date arithmetic that ensures precision for mid-month joining (e.g., (17/31) × ৳45,000 for a May 15 start).',
       result: 'Reached 100% payroll accuracy with zero unauthorized salary adjustments. Reduced the processing cycle from 5 days to 2 hours while ensuring a complete BDT-level audit trail for every transaction.',
       painPoints: [
         'Pro-Rata Calculation Errors',

@@ -12,7 +12,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: { 
       name: 'Abu Rahat Sabir', 
       role: 'Executive – Administration',
-      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+      avatar: '/images/hero/Abu Rahat Hero 01.webp'
     },
     content: `Administrative "Human-Bridge" debt is the most expensive unlisted liability on your P&L. It represents the hours spent manually reconciling disparate systems (Stripe to NetSuite, WhatsApp to Excel) that could be neutralized with deterministic script logic. In my latest audit, I identified that manual ledger lag was costing a mid-market FMCG player over ৳3L monthly in untracked revenue leakage. Reclaiming this capital requires moving from 'Support' to 'Architecture'.`,
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2000'
@@ -28,9 +28,9 @@ export const BLOG_POSTS: BlogPost[] = [
     author: { 
       name: 'Abu Rahat Sabir', 
       role: 'Executive – Administration',
-      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+      avatar: '/images/hero/Abu Rahat Hero 01.webp'
     },
-    content: `A system that breaks when triggered twice is a liability, not an asset. In corporate administration, we must build for idempotencyÃ¢â‚¬â€ensuring that an automated invoice, travel booking, or board report remains in a valid state even if the trigger repeats. By leveraging 'Static Reference' triggers in Apps Script, we ensure our administrative loops are self-healing and audit-proof.`,
+    content: `A system that breaks when triggered twice is a liability, not an asset. In corporate administration, we must build for idempotency—ensuring that an automated invoice, travel booking, or board report remains in a valid state even if the trigger repeats. By leveraging 'Static Reference' triggers in Apps Script, we ensure our administrative loops are self-healing and audit-proof.`,
     image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=2000'
   },
   {
@@ -44,9 +44,9 @@ export const BLOG_POSTS: BlogPost[] = [
     author: { 
       name: 'Abu Rahat Sabir', 
       role: 'Executive – Administration',
-      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+      avatar: '/images/hero/Abu Rahat Hero 01.webp'
     },
-    content: `SaaS sprawl is a threat to institutional memory. When your core logic lives inside 40 different proprietary apps, you lose operational sovereignty. My methodology focuses on building 'Logic Kernels'Ã¢â‚¬â€centralized, version-controlled scripts and schemas that the organization owns completely. This ensures that even if you switch vendors, your administrative intelligence remains intact.`,
+    content: `SaaS sprawl is a threat to institutional memory. When your core logic lives inside 40 different proprietary apps, you lose operational sovereignty. My methodology focuses on building 'Logic Kernels'—centralized, version-controlled scripts and schemas that the organization owns completely. This ensures that even if you switch vendors, your administrative intelligence remains intact.`,
     image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=2000'
   },
   {
@@ -60,9 +60,9 @@ export const BLOG_POSTS: BlogPost[] = [
     author: { 
       name: 'Abu Rahat Sabir', 
       role: 'Executive – Administration',
-      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+      avatar: '/images/hero/Abu Rahat Hero 01.webp'
     },
-    content: `Every month-end close that takes 5 days instead of 8 hours represents $8,000+ in wasted labor costs for a mid-sized finance team. But the real cost isn't just timeÃ¢â‚¬â€it's the compounding errors, delayed decisions, and revenue leakage that manual processes create.
+    content: `Every month-end close that takes 5 days instead of 8 hours represents $8,000+ in wasted labor costs for a mid-sized finance team. But the real cost isn't just time—it's the compounding errors, delayed decisions, and revenue leakage that manual processes create.
 
 ## The Hidden Costs of Manual Finance Operations
 
@@ -104,7 +104,7 @@ manual processes cost, finance automation ROI, month-end close optimization, acc
     author: { 
       name: 'Abu Rahat Sabir', 
       role: 'Executive – Administration',
-      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+      avatar: '/images/hero/Abu Rahat Hero 01.webp'
     },
     content: `Enterprise software vendors promise "digital transformation" but deliver vendor lock-in and change management nightmares. After analyzing 5+ failed ERP implementations, I've identified the architectural patterns that separate success from $500K write-offs.
 
@@ -116,14 +116,14 @@ Organizations select ERP platforms based on vendor demos instead of documented b
 **The Fix:** Document your relational data model FIRST. Map every entity (customers, products, orders) and their relationships. Only then evaluate whether you need enterprise software or if a zero-cost architecture can deliver 80% of the value.
 
 ### Mistake #2: Ignoring Data Migration Complexity
-"We'll clean up the data during migration" is the most expensive lie in enterprise IT. Dirty data doesn't get cleanerÃ¢â‚¬â€it multiplies during migration, creating referential integrity nightmares.
+"We'll clean up the data during migration" is the most expensive lie in enterprise IT. Dirty data doesn't get cleaner—it multiplies during migration, creating referential integrity nightmares.
 
 **The Fix:** Build data governance BEFORE migration. In my medical operations system, I implemented a static CSV data definition layer that enforced normalization rules. This prevented the "12 naming variations for the same hospital" problem that kills most healthcare ERPs.
 
 [See the Medical Operations case study](/work/med-ops)
 
 ### Mistake #3: Treating ERP as a Technology Project
-ERP implementations fail when treated as IT initiatives instead of operational redesign. The technology is easyÃ¢â‚¬â€changing how people work is hard.
+ERP implementations fail when treated as IT initiatives instead of operational redesign. The technology is easy—changing how people work is hard.
 
 **The Fix:** Start with workflow automation on existing tools (Excel, Google Sheets). Build the governance logic, validate the business rules, and THEN decide if you need enterprise software. Often, you don't.
 
@@ -157,9 +157,9 @@ ERP implementation failure, ERP best practices, enterprise system migration, leg
     author: { 
       name: 'Abu Rahat Sabir', 
       role: 'Executive – Administration',
-      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+      avatar: '/images/hero/Abu Rahat Hero 01.webp'
     },
-    content: `Spreadsheets are the duct tape of business operationsÃ¢â‚¬â€quick, flexible, and eventually catastrophic. Here's how to migrate from spreadsheet chaos to production-grade systems in 90 days without enterprise software.
+    content: `Spreadsheets are the duct tape of business operations—quick, flexible, and eventually catastrophic. Here's how to migrate from spreadsheet chaos to production-grade systems in 90 days without enterprise software.
 
 ## Phase 1: Data Architecture (Days 1-30)
 
@@ -208,10 +208,10 @@ Every change needs a paper trail:
 
 ### Automate Repetitive Workflows
 Identify the "Human-Bridge" tasks:
-- Manual data entry from emails Ã¢â€ ' Apps Script parsers
-- Cross-system reconciliation Ã¢â€ ' QUERY functions
-- Report generation Ã¢â€ ' Automated dashboards
-- Approval workflows Ã¢â€ ' Trigger-based notifications
+- Manual data entry from emails → Apps Script parsers
+- Cross-system reconciliation → QUERY functions
+- Report generation → Automated dashboards
+- Approval workflows → Trigger-based notifications
 
 ### Build Self-Healing Systems
 Production systems need error recovery:
@@ -245,9 +245,9 @@ spreadsheet migration, business process automation, operational systems, data ar
     author: { 
       name: 'Abu Rahat Sabir', 
       role: 'Executive – Administration',
-      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+      avatar: '/images/hero/Abu Rahat Hero 01.webp'
     },
-    content: `Governance isn't a compliance checkboxÃ¢â‚¬â€it's the architecture that prevents $500K audit findings and wrongful termination lawsuits. Here's how to build governance into your operational systems instead of bolting it on later.
+    content: `Governance isn't a compliance checkbox—it's the architecture that prevents $500K audit findings and wrongful termination lawsuits. Here's how to build governance into your operational systems instead of bolting it on later.
 
 ## The Governance Gap
 
@@ -280,7 +280,7 @@ Every operational system needs append-only transaction logs:
 - **Why** it changed (reference to approval or trigger)
 - **How** to reverse it (correction protocol)
 
-In my payroll system, unauthorized salary adjustments are **architecturally impossible**Ã¢â‚¬â€the matrix is hard-coded and requires multi-sig approval for deviations.
+In my payroll system, unauthorized salary adjustments are **architecturally impossible**—the matrix is hard-coded and requires multi-sig approval for deviations.
 
 ### 3. Automated Compliance Injection
 
@@ -296,7 +296,7 @@ Don't rely on humans to remember compliance requirements:
 **Challenge:** 80 employees across 9 entities with unauthorized salary promises creating legal liability.
 
 **Solution:** Built a "Policy Kernel" in Google Sheets with:
-- Hard-coded 9Ãƒ—20 salary matrix (Grade Ãƒ— Step)
+- Hard-coded 9×20 salary matrix (Grade × Step)
 - Pro-rata calculation engine (EOMONTH date arithmetic)
 - Exception logging with approval workflow
 - Currency-to-words output for audit compliance
@@ -322,11 +322,11 @@ Don't rely on humans to remember compliance requirements:
 
 Every operational system should answer YES to these questions:
 
-Ã¢Å“â€¦ Can you reconstruct any transaction from audit logs?  
-Ã¢Å“â€¦ Are unauthorized changes architecturally impossible?  
-Ã¢Å“â€¦ Do approval workflows have evidence requirements?  
-Ã¢Å“â€¦ Is compliance logic enforced at compile-time?  
-Ã¢Å“â€¦ Can you prove who approved what and when?  
+✅ Can you reconstruct any transaction from audit logs?  
+✅ Are unauthorized changes architecturally impossible?  
+✅ Do approval workflows have evidence requirements?  
+✅ Is compliance logic enforced at compile-time?  
+✅ Can you prove who approved what and when?  
 
 If you answered NO to any of these, you have a governance gap.
 

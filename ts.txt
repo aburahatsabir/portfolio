@@ -1,0 +1,43 @@
+﻿components/__tests__/ContactForm.test.tsx(2,18): error TS2305: Module '"@testing-library/react"' has no exported member 'screen'.
+components/__tests__/ContactForm.test.tsx(2,26): error TS2305: Module '"@testing-library/react"' has no exported member 'waitFor'.
+components/__tests__/ContactForm.test.tsx(31,59): error TS2339: Property 'toBeInTheDocument' does not exist on type 'Assertion<any>'.
+components/__tests__/ContactForm.test.tsx(32,60): error TS2339: Property 'toBeInTheDocument' does not exist on type 'Assertion<any>'.
+components/__tests__/ContactForm.test.tsx(33,57): error TS2339: Property 'toBeInTheDocument' does not exist on type 'Assertion<any>'.
+components/__tests__/ContactForm.test.tsx(34,62): error TS2339: Property 'toBeInTheDocument' does not exist on type 'Assertion<any>'.
+components/__tests__/ContactForm.test.tsx(83,68): error TS2339: Property 'toBeInTheDocument' does not exist on type 'Assertion<any>'.
+components/__tests__/ContactForm.test.tsx(105,30): error TS2339: Property 'toBeDisabled' does not exist on type 'Assertion<any>'.
+components/__tests__/ContactForm.test.tsx(153,34): error TS2339: Property 'toBeDisabled' does not exist on type 'Assertion<any>'.
+components/__tests__/ContactForm.test.tsx(163,30): error TS2339: Property 'toBeDisabled' does not exist on type 'Assertion<any>'.
+components/__tests__/ContactForm.test.tsx(167,68): error TS2339: Property 'toBeInTheDocument' does not exist on type 'Assertion<any>'.
+components/CaseStudyPage.tsx(32,21): error TS2339: Property 'completionDate' does not exist on type 'Project'.
+components/ErrorBoundary.tsx(19,14): error TS2339: Property 'state' does not exist on type 'ErrorBoundary'.
+components/ErrorBoundary.tsx(44,14): error TS2339: Property 'setState' does not exist on type 'ErrorBoundary'.
+components/ErrorBoundary.tsx(48,18): error TS2339: Property 'state' does not exist on type 'ErrorBoundary'.
+components/ErrorBoundary.tsx(50,22): error TS2339: Property 'props' does not exist on type 'ErrorBoundary'.
+components/ErrorBoundary.tsx(51,29): error TS2339: Property 'props' does not exist on type 'ErrorBoundary'.
+components/ErrorBoundary.tsx(51,49): error TS2339: Property 'state' does not exist on type 'ErrorBoundary'.
+components/ErrorBoundary.tsx(67,31): error TS2339: Property 'state' does not exist on type 'ErrorBoundary'.
+components/ErrorBoundary.tsx(73,43): error TS2339: Property 'state' does not exist on type 'ErrorBoundary'.
+components/ErrorBoundary.tsx(74,43): error TS2339: Property 'state' does not exist on type 'ErrorBoundary'.
+components/ErrorBoundary.tsx(74,76): error TS2339: Property 'state' does not exist on type 'ErrorBoundary'.
+components/ErrorBoundary.tsx(101,133): error TS2339: Property 'state' does not exist on type 'ErrorBoundary'.
+components/ErrorBoundary.tsx(116,21): error TS2339: Property 'props' does not exist on type 'ErrorBoundary'.
+tmp/original_persona.tsx(4,28): error TS2307: Cannot find module './OptimizedImage' or its corresponding type declarations.
+tmp/original_persona.tsx(5,26): error TS2307: Cannot find module './shared/SectionLabel' or its corresponding type declarations.
+tmp/original_persona_utf8.tsx(4,28): error TS2307: Cannot find module './OptimizedImage' or its corresponding type declarations.
+tmp/original_persona_utf8.tsx(5,26): error TS2307: Cannot find module './shared/SectionLabel' or its corresponding type declarations.
+utils/__tests__/api-resilience.test.ts(23,57): error TS2561: Object literal may only specify known properties, but 'maxRetries' does not exist in type 'ResilientApiOptions'. Did you mean to write 'retries'?
+utils/__tests__/api-resilience.test.ts(33,40): error TS2561: Object literal may only specify known properties, but 'maxRetries' does not exist in type 'ResilientApiOptions'. Did you mean to write 'retries'?
+utils/__tests__/api-resilience.test.ts(46,42): error TS2561: Object literal may only specify known properties, but 'maxRetries' does not exist in type 'ResilientApiOptions'. Did you mean to write 'retries'?
+utils/__tests__/api-resilience.test.ts(57,46): error TS2561: Object literal may only specify known properties, but 'maxRetries' does not exist in type 'ResilientApiOptions'. Did you mean to write 'retries'?
+utils/__tests__/api-resilience.test.ts(68,40): error TS2561: Object literal may only specify known properties, but 'maxRetries' does not exist in type 'ResilientApiOptions'. Did you mean to write 'retries'?
+utils/__tests__/form-backup.test.ts(2,32): error TS2724: '"../form-backup"' has no exported member named 'getFailedSubmissions'. Did you mean 'saveFailedSubmission'?
+utils/__tests__/form-backup.test.ts(21,47): error TS2345: Argument of type '{ name: string; email: string; subject: string; message: string; }' is not assignable to parameter of type '{ name: string; email: string; role: string; challenge: string; timeline: string; message: string; }'.
+  Type '{ name: string; email: string; subject: string; message: string; }' is missing the following properties from type '{ name: string; email: string; role: string; challenge: string; timeline: string; message: string; }': role, challenge, timeline
+utils/__tests__/form-backup.test.ts(35,30): error TS2345: Argument of type '{ name: string; email: string; subject: string; message: string; }' is not assignable to parameter of type '{ name: string; email: string; role: string; challenge: string; timeline: string; message: string; }'.
+  Type '{ name: string; email: string; subject: string; message: string; }' is missing the following properties from type '{ name: string; email: string; role: string; challenge: string; timeline: string; message: string; }': role, challenge, timeline
+vite.config.ts(18,3): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type '("" | Plugin<any>[] | Plugin<any> | undefined)[]' is not assignable to type 'PluginOption[]'.
+      Type '"" | Plugin<any>[] | Plugin<any> | undefined' is not assignable to type 'PluginOption'.
+        Type '""' is not assignable to type 'PluginOption'.

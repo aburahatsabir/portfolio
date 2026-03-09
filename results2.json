@@ -1,0 +1,46 @@
+[
+  {
+    "label": "Category",
+    "tag": "A",
+    "text": "WordPress",
+    "fontSize": "17px",
+    "lineHeight": "25.5px",
+    "fontWeight": "600",
+    "color": "rgb(255, 255, 255)",
+    "letterSpacing": "1px",
+    "textTransform": "none"
+  },
+  {
+    "label": "Category",
+    "tag": "A",
+    "text": "WordPress",
+    "fontSize": "14px",
+    "lineHeight": "33.6px",
+    "fontWeight": "800",
+    "color": "rgb(51, 28, 116)",
+    "letterSpacing": "normal",
+    "textTransform": "uppercase"
+  },
+  {
+    "label": "Title",
+    "tag": "A",
+    "text": "What’s new in WordPress 6.9?",
+    "fontSize": "20px",
+    "lineHeight": "20px",
+    "fontWeight": "700",
+    "color": "rgb(51, 28, 116)",
+    "letterSpacing": "normal",
+    "textTransform": "none"
+  },
+  {
+    "label": "Excerpt",
+    "tag": "P",
+    "text": "WordPress 6.9 marks the second and final",
+    "fontSize": "14px",
+    "lineHeight": "21px",
+    "fontWeight": "400",
+    "color": "rgb(88, 88, 94)",
+    "letterSpacing": "normal",
+    "textTransform": "none"
+  }
+]

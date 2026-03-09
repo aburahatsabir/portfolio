@@ -1,0 +1,8 @@
+﻿{
+  "bodyStyle": "",
+  "mainWrapBg": "rgb(8, 8, 8) none repeat scroll 0% 0% / auto padding-box border-box",
+  "mainWrapColor": "rgb(255, 255, 255)",
+  "heroBg": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+  "heroClasses": "section",
+  "gradientElements": []
+}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useSpring } from 'framer-motion';
 import { TESTIMONIALS, PROJECTS } from '../constants';
 import OptimizedImage from './OptimizedImage';
 import SectionLabel from './shared/SectionLabel';
@@ -850,17 +850,6 @@ interface PersonaSpecificContentProps {
     personaId: string;
 }
 
-const fadeUp = {
-    hidden: { opacity: 0, y: 10 },
-    visible: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
-    }
-};
-
-
-
 const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ personaId }) => {
     const persona = PERSONAS[personaId];
 
@@ -876,426 +865,229 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
         );
     }
 
-    const relevantCaseStudies = PROJECTS.filter(p => persona.relevantCaseStudies.includes(p.id));
-    const relevantTestimonials = persona.relevantTestimonials.map(idx => TESTIMONIALS[idx]);
+    const { scrollYProgress } = useScroll();
+    const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
     return (
-        <div className="min-h-screen bg-white selection:bg-zinc-100 selection:text-zinc-900 text-zinc-900 font-sans antialiased">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="bg-white min-h-screen font-sans selection:bg-indigo-100">
+            {/* Scroll Progress bar */}
+            <motion.div className="fixed top-0 left-0 right-0 h-1.5 bg-brand-blue origin-left z-[200]" style={{ scaleX }} />
 
-            {/* 01: HERO */}
-            <section className="pt-32 pb-20 md:pt-40 md:pb-24">
-                <div className="max-w-5xl mx-auto px-6 md:px-8">
-                    <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="max-w-3xl">
-                        <motion.div variants={fadeUp} className="mb-8">
-                            <span className="text-[10px] font-medium text-zinc-400 tracking-widest uppercase">Executive Briefing</span>
-                        </motion.div>
-
-                        <motion.h1 variants={fadeUp} className="text-3xl md:text-4xl lg:text-5xl font-medium tracking-tight text-zinc-900 mb-6 leading-[1.15]">
+            {/* ── HERO SECTION ── */}
+            <div className="bg-[#f5f7fa] pt-32 pb-24 border-b border-[#e2e4e8]">
+                <div className="max-w-[1280px] mx-auto px-6 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                    <div className="max-w-xl">
+                        {/* Breadcrumb */}
+                        <div className="flex items-center gap-2 text-[14px] font-medium text-slate-500 mb-8">
+                            <span className="text-slate-900 uppercase tracking-widest text-[10px]">Executive Briefing</span>
+                        </div>
+                        <h1 className="text-[48px] md:text-[56px] lg:text-[64px] font-bold text-[#1a1b1f] leading-[1.05] tracking-[-0.02em] mb-6">
                             {persona.headline}
-                        </motion.h1>
-
-                        <motion.p variants={fadeUp} className="text-base md:text-lg text-zinc-500 font-normal leading-relaxed max-w-2xl">
+                        </h1>
+                        <p className="text-[20px] md:text-[22px] text-slate-600 leading-[1.5] font-normal max-w-lg">
                             {persona.subheadline}
-                        </motion.p>
-
-                        {persona.whoThisIsFor && (
-                            <motion.div variants={fadeUp} className="pt-12 mt-12 border-t border-zinc-100">
-                                <div className="flex flex-wrap gap-x-8 gap-y-4">
-                                    {persona.whoThisIsFor.map((item, i) => (
-                                        <div key={i} className="flex items-center gap-2">
-                                            <span className="w-1 h-1 rounded-full bg-zinc-300" />
-                                            <span className="text-[13px] font-medium text-zinc-600">{item}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </motion.div>
-                        )}
-                    </motion.div>
-                </div>
-            </section>
-
-            {/* SECTION 02: METRICS */}
-            <section className="border-t border-zinc-100 bg-zinc-50/50">
-                <div className="max-w-5xl mx-auto px-6 md:px-8">
-                    <div className="grid grid-cols-2 md:grid-cols-5 gap-8 py-12">
-                        {persona.metrics.map((metric, i) => (
-                            <div key={i} className="flex flex-col space-y-2">
-                                <span className="text-[10px] font-medium text-zinc-400 uppercase tracking-widest">
-                                    {metric.label}
-                                </span>
-                                <span className="text-2xl font-medium text-zinc-900 tracking-tight">
-                                    {metric.value}
-                                </span>
-                            </div>
-                        ))}
+                        </p>
                     </div>
                 </div>
-            </section>
+            </div>
 
-            {/* SECTION 03: THE BOTTLENECK */}
-            {persona.problemStatement && (
-                <section className="py-20 md:py-32 border-t border-zinc-100">
-                    <div className="max-w-5xl mx-auto px-6 md:px-8">
-                        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
-                            <div className="md:col-span-4 space-y-6 lg:sticky lg:top-32 h-fit">
-                                <span className="text-[10px] font-medium text-zinc-400 tracking-widest uppercase block">The Bottleneck</span>
-                                <h2 className="text-2xl md:text-3xl font-medium tracking-tight text-zinc-900 leading-[1.2]">
-                                    {persona.problemStatement.title}
-                                </h2>
-                            </div>
+            {/* ── ARTICLE SECTION ── */}
+            <div className="max-w-[1280px] mx-auto px-6 pt-24 pb-32">
+                <div className="flex flex-col lg:flex-row gap-8 lg:gap-24 items-start justify-center">
 
-                            <div className="md:col-span-8 md:pl-8 xl:pl-16 space-y-12">
-                                <p className="text-base text-zinc-500 leading-relaxed font-normal">
-                                    {persona.problemStatement.description}
-                                </p>
+                    {/* ── MAIN CONTENT ── */}
+                    <article className="flex-1 min-w-0 max-w-[850px] pb-12 w-full">
+                        <div className="max-w-none text-[#595959] tracking-normal leading-[1.5]">
+                            
+                            {/* The Bottleneck */}
+                            {persona.problemStatement && (
+                                <>
+                                    <h2 className="text-[26px] font-semibold text-slate-900 tracking-tight my-[20px] leading-[1.2]">
+                                        {persona.problemStatement.title}
+                                    </h2>
+                                    <p className="text-[16px] text-[#595959] mb-[20px] font-normal leading-[1.5]">
+                                        {persona.problemStatement.description}
+                                    </p>
+                                    
+                                    {persona.painPoints && persona.painPoints.length > 0 && (
+                                        <div className="my-8">
+                                            <ul className="space-y-4 pl-6 list-disc text-[16px] md:text-[18px]">
+                                                {persona.painPoints.map((pt, i) => (
+                                                    <li key={i} className="text-slate-800">
+                                                        <strong className="font-bold text-slate-900">{pt.title}:</strong> {pt.description}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                </>
+                            )}
 
-                                <div className="space-y-12">
-                                    {(persona.painPoints && persona.painPoints.length > 0 ? persona.painPoints : []).map((pt, i) => (
-                                        <div key={i} className="space-y-3">
-                                            <h4 className="text-sm font-medium text-zinc-900 flex items-center gap-4">
-                                                <span className="text-[10px] text-zinc-400 font-mono tracking-widest">0{i + 1}</span>
-                                                {pt.title}
-                                            </h4>
-                                            {pt.description && (
-                                                <p className="text-sm text-zinc-500 leading-relaxed pl-8">
-                                                    {pt.description}
-                                                </p>
-                                            )}
+                            {/* The Solution */}
+                            {persona.solution && (
+                                <>
+                                    <h2 className="text-[26px] font-semibold text-slate-900 tracking-tight my-[20px] leading-[1.2]">
+                                        {persona.solution.title}
+                                    </h2>
+                                    <p className="text-[16px] text-[#595959] mb-[20px] font-normal leading-[1.5]">
+                                        {persona.solution.description}
+                                    </p>
+
+                                    {persona.pillars && persona.pillars.map((pillar, i) => (
+                                        <div key={i}>
+                                            <h3 className="text-[22px] font-semibold text-slate-900 tracking-tight my-[20px] leading-[1.2]">
+                                                {pillar.title}
+                                            </h3>
+                                            <p className="text-[16px] text-[#595959] mb-[20px] font-normal leading-[1.5]">
+                                                {pillar.positioning}
+                                            </p>
+                                            <ul className="my-[20px] space-y-[10px] pl-6 list-disc text-[16px] text-[#595959] leading-[1.5]">
+                                                {pillar.outcomes.map((outcome, j) => (
+                                                    <li key={j} className="text-slate-800">{outcome}</li>
+                                                ))}
+                                            </ul>
                                         </div>
                                     ))}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            )}
-
-            {/* 04: RESOLUTION */}
-            <section className="py-20 md:py-32 bg-zinc-50/30 border-t border-zinc-100">
-                <div className="max-w-5xl mx-auto px-6 md:px-8">
-                    <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
-                        <div className="md:col-span-4 space-y-6 lg:sticky lg:top-32 h-fit">
-                            <span className="text-[10px] font-medium text-zinc-400 tracking-widest uppercase block">Resolution</span>
-                            <h2 className="text-2xl md:text-3xl font-medium tracking-tight text-zinc-900 leading-[1.2]">
-                                {persona.solution.title}
-                            </h2>
-                            <p className="text-sm text-zinc-500 leading-relaxed font-normal">
-                                {persona.solution.description}
-                            </p>
-                        </div>
-
-                        <div className="md:col-span-8 md:pl-8 xl:pl-16">
-                            <div className="grid gap-12">
-                                {(persona.pillars || []).map((pillar, i) => (
-                                    <div key={i} className="space-y-4">
-                                        <h3 className="text-lg font-medium text-zinc-900 tracking-tight">{pillar.title}</h3>
-                                        <p className="text-sm text-zinc-500 leading-relaxed max-w-xl">
-                                            {pillar.positioning}
-                                        </p>
-                                        <ul className="space-y-2 pt-2">
-                                            {pillar.outcomes.map((outcome, j) => (
-                                                <li key={j} className="flex items-start gap-3 text-[13px] text-zinc-600">
-                                                    <span className="w-1 h-1 rounded-full bg-zinc-300 mt-1.5 shrink-0" />
-                                                    {outcome}
-                                                </li>
+                                    
+                                    {!persona.pillars && persona.solution.features && persona.solution.features.length > 0 && (
+                                        <ul className="my-[20px] space-y-[10px] pl-6 list-disc text-[16px] text-[#595959] leading-[1.5]">
+                                            {persona.solution.features.map((feature, i) => (
+                                                <li key={i} className="text-slate-800">{feature}</li>
                                             ))}
                                         </ul>
-                                    </div>
-                                ))}
-
-                                {!persona.pillars && persona.solution.features.map((feature, i) => (
-                                    <div key={i} className="flex items-center gap-4 py-4 border-b border-zinc-100 last:border-0">
-                                        <span className="text-[10px] font-medium text-zinc-400 font-mono tracking-widest">0{i + 1}</span>
-                                        <span className="text-sm font-medium text-zinc-900">{feature}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* 05: OPERATING PROTOCOL */}
-            {persona.operatingModel && (
-                <section className="py-20 md:py-32 border-t border-zinc-100">
-                    <div className="max-w-5xl mx-auto px-6 md:px-8">
-                        <div className="mb-16 md:mb-20 space-y-6">
-                            <span className="text-[10px] font-medium text-zinc-400 tracking-widest uppercase block">Operating Protocol</span>
-                            <h2 className="text-2xl md:text-3xl font-medium tracking-tight text-zinc-900">
-                                Execution Rhythm
-                            </h2>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-5 gap-px bg-zinc-100 border border-zinc-100 rounded-lg overflow-hidden">
-                            {persona.operatingModel.map((item, i) => (
-                                <div key={i} className="bg-white p-6 space-y-4 hover:bg-zinc-50/50 transition-colors">
-                                    <span className="text-[10px] font-medium text-zinc-400 font-mono">STEP 0{i + 1}</span>
-                                    <h3 className="text-sm font-medium text-zinc-900">
-                                        {item.step}
-                                    </h3>
-                                    <p className="text-xs text-zinc-500 leading-relaxed">
-                                        {item.description}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-
-                        {persona.compatibility && (
-                            <div className="mt-24 md:mt-32 pt-20 md:pt-24 border-t border-zinc-100">
-                                <div className="grid grid-cols-1 md:grid-cols-12 gap-16">
-                                    <div className="md:col-span-5 space-y-8">
-                                        <span className="text-[10px] font-medium text-zinc-400 tracking-widest uppercase block">Governance</span>
-                                        <h2 className="text-2xl md:text-3xl font-medium tracking-tight text-zinc-900">
-                                            Operating Architecture
-                                        </h2>
-                                        <div className="text-lg md:text-xl font-medium text-zinc-800 tracking-tight leading-snug pt-4">
-                                            "{typeof persona.compatibility === 'object' ? persona.compatibility.statement : persona.compatibility}"
-                                        </div>
-                                    </div>
-
-                                    <div className="md:col-span-7 md:pl-8 xl:pl-16">
-                                        {typeof persona.compatibility === 'object' && (
-                                            <div className="grid sm:grid-cols-2 gap-12">
-                                                {persona.compatibility.environments.map((env, i) => (
-                                                    <div key={i} className="space-y-6">
-                                                        <h4 className="text-xs font-medium text-zinc-900 tracking-widest uppercase border-b border-zinc-100 pb-4">
-                                                            {env.name}
-                                                        </h4>
-                                                        <div className="space-y-4">
-                                                            {env.attributes.map((attr, j) => (
-                                                                <div key={j} className="flex items-start gap-3">
-                                                                    <div className="w-1 h-1 rounded-full bg-zinc-300 mt-2 shrink-0"></div>
-                                                                    <p className="text-[13px] text-zinc-600 flex-1">
-                                                                        {attr}
-                                                                    </p>
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                </section>
-            )}
-
-            {/* 06: PRODUCTION EVIDENCE */}
-            {relevantCaseStudies.length > 0 && (
-                <section className="py-20 md:py-32 bg-zinc-50/50 border-t border-zinc-100">
-                    <div className="max-w-5xl mx-auto px-6 md:px-8">
-                        <div className="mb-16 space-y-6">
-                            <span className="text-[10px] font-medium text-zinc-400 tracking-widest uppercase block">The Ledger</span>
-                            <h2 className="text-2xl md:text-3xl font-medium tracking-tight text-zinc-900">
-                                Production Evidence
-                            </h2>
-                        </div>
-
-                        <div className="border-t border-zinc-200/50">
-                            {relevantCaseStudies.map((project, i) => (
-                                <a
-                                    key={project.id}
-                                    href={`/work/${project.id}`}
-                                    className="block py-8 border-b border-zinc-200/50 group"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        window.history.pushState({}, '', `/work/${project.id}`);
-                                        window.dispatchEvent(new Event('popstate'));
-                                        window.scrollTo(0, 0);
-                                    }}
-                                >
-                                    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-                                        <div className="md:col-span-3">
-                                            <span className="text-[10px] font-medium text-zinc-400 uppercase tracking-widest group-hover:text-zinc-900 transition-colors">
-                                                {project.category}
-                                            </span>
-                                        </div>
-
-                                        <div className="md:col-span-6">
-                                            <h3 className="text-lg md:text-xl font-medium tracking-tight text-zinc-900 group-hover:text-zinc-600 transition-colors">
-                                                {project.title}
-                                            </h3>
-                                        </div>
-
-                                        <div className="md:col-span-3 text-right hidden md:block">
-                                            <span className="text-zinc-300 group-hover:text-zinc-900 transition-colors text-lg inline-block group-hover:translate-x-1 duration-300">
-                                                â†’
-                                            </span>
-                                        </div>
-                                    </div>
-                                </a>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-            )}
-
-            {/* 07: FIELD REFERENCES */}
-            {persona.caseReferences && (
-                <section className="py-20 md:py-32 border-t border-zinc-100">
-                    <div className="max-w-5xl mx-auto px-6 md:px-8">
-                        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
-                            <div className="md:col-span-4 space-y-6 lg:sticky lg:top-32 h-fit">
-                                <span className="text-[10px] font-medium text-zinc-400 tracking-widest uppercase block">Field References</span>
-                                <h2 className="text-2xl md:text-3xl font-medium tracking-tight text-zinc-900">
-                                    Delivered in Practice
-                                </h2>
-                                <p className="text-[10px] text-zinc-400 uppercase tracking-widest pt-2">
-                                    Sector-level transparency. Client identity protected by NDA.
-                                </p>
-                            </div>
-
-                            <div className="md:col-span-8 md:pl-8 xl:pl-16 space-y-8">
-                                {persona.caseReferences.map((ref, i) => (
-                                    <div key={i} className="pt-8 border-t border-zinc-100 first:border-0 first:pt-0">
-                                        <div className="flex items-center justify-between mb-8">
-                                            <span className="text-xs font-medium text-zinc-900 uppercase tracking-widest">{ref.sector}</span>
-                                            <span className="text-[10px] text-zinc-400 font-mono">REF/0{i + 1}</span>
-                                        </div>
-                                        <div className="grid md:grid-cols-2 gap-8">
-                                            <div className="space-y-2">
-                                                <span className="text-[10px] font-medium text-zinc-400 uppercase tracking-widest block">The Challenge</span>
-                                                <p className="text-sm text-zinc-500 leading-relaxed">{ref.challenge}</p>
-                                            </div>
-                                            <div className="space-y-2">
-                                                <span className="text-[10px] font-medium text-zinc-800 uppercase tracking-widest block">The Outcome</span>
-                                                <p className="text-sm text-zinc-900 font-medium leading-relaxed">{ref.outcome}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            )}
-
-            {/* 08: SOVEREIGNTY / DIFFERENTIATION */}
-            {(persona.differentiation || persona.toolStack) && (
-                <section className="py-20 md:py-32 bg-zinc-50/50 border-t border-zinc-100">
-                    <div className="max-w-5xl mx-auto px-6 md:px-8">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24">
-                            {persona.differentiation && (
-                                <div className="space-y-8">
-                                    <span className="text-[10px] font-medium text-zinc-400 tracking-widest uppercase block">The Differential</span>
-                                    <h3 className="text-xl md:text-2xl font-medium tracking-tight text-zinc-900 leading-[1.3]">
-                                        {persona.differentiation.title}
-                                    </h3>
-                                    <p className="text-sm md:text-base text-zinc-500 leading-relaxed font-normal">
-                                        {persona.differentiation.description}
-                                    </p>
-                                </div>
+                                    )}
+                                </>
                             )}
 
-                            {persona.toolStack && (
-                                <div className="space-y-8">
-                                    <span className="text-[10px] font-medium text-zinc-400 tracking-widest uppercase block">Technical Sovereignty</span>
-                                    <h3 className="text-xl md:text-2xl font-medium tracking-tight text-zinc-900 leading-[1.3]">
-                                        {persona.toolStack.title}
-                                    </h3>
-                                    <div className="space-y-6 pt-4">
-                                        {persona.toolStack.items.map((item, i) => {
-                                            const parts = item.split(':');
-                                            const title = parts[0];
-                                            const desc = parts.length > 1 ? parts.slice(1).join(':').trim() : '';
-                                            return (
-                                                <div key={i} className="space-y-2">
-                                                    <span className="text-xs font-medium text-zinc-900 uppercase tracking-widest block">{title}</span>
-                                                    {desc && <p className="text-sm text-zinc-500 leading-relaxed">{desc}</p>}
+                            {/* Execution Rhythm */}
+                            {persona.operatingModel && (
+                                <>
+                                    <h2 className="text-[26px] font-semibold text-slate-900 tracking-tight my-[20px] leading-[1.2]">
+                                        Execution Rhythm
+                                    </h2>
+                                    <ul className="my-[20px] space-y-[10px] pl-6 list-disc text-[16px] text-[#595959] leading-[1.5]">
+                                        {persona.operatingModel.map((item, i) => (
+                                            <li key={i} className="text-slate-800">
+                                                <strong className="font-bold text-slate-900">{item.step}:</strong> {item.description}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </>
+                            )}
+
+                            {/* Governance */}
+                            {persona.compatibility && (
+                                <>
+                                    <h2 className="text-[26px] font-semibold text-slate-900 tracking-tight my-[20px] leading-[1.2]">
+                                        Operating Architecture
+                                    </h2>
+                                    {typeof persona.compatibility === 'object' ? (
+                                        <>
+                                            <p className="text-[16px] text-[#595959] mb-[20px] font-normal leading-[1.5]">
+                                                {persona.compatibility.statement}
+                                            </p>
+                                            {persona.compatibility.environments.map((env, i) => (
+                                                <div key={i}>
+                                                    <h3 className="text-[22px] font-semibold text-slate-900 tracking-tight my-[20px] leading-[1.2]">
+                                                        {env.name}
+                                                    </h3>
+                                                    <ul className="my-[20px] space-y-[10px] pl-6 list-disc text-[16px] text-[#595959] leading-[1.5]">
+                                                        {env.attributes.map((attr, j) => (
+                                                            <li key={j} className="text-slate-800">{attr}</li>
+                                                        ))}
+                                                    </ul>
                                                 </div>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
+                                            ))}
+                                        </>
+                                    ) : (
+                                        <p className="text-[16px] text-[#595959] mb-[20px] font-normal leading-[1.5]">
+                                            {persona.compatibility}
+                                        </p>
+                                    )}
+                                </>
                             )}
-                        </div>
-                    </div>
-                </section>
-            )}
 
-            {/* 09: VALIDATION */}
-            {relevantTestimonials.length > 0 && (
-                <section className="py-20 md:py-32 border-t border-zinc-100">
-                    <div className="max-w-5xl mx-auto px-6 md:px-8">
-                        <div className="mb-16 space-y-6">
-                            <span className="text-[10px] font-medium text-zinc-400 tracking-widest uppercase block">Validation Protocol</span>
-                            <h2 className="text-2xl md:text-3xl font-medium tracking-tight text-zinc-900">
-                                Verified Impact
-                            </h2>
-                        </div>
-
-                        <div className="grid md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-start">
-                            {relevantTestimonials.map((testimonial, i) => (
-                                <div key={i} className="space-y-8">
-                                    <p className="text-base md:text-lg text-zinc-800 leading-[1.6] font-normal tracking-tight">
-                                        "{testimonial.content}"
-                                    </p>
-
-                                    <div className="flex items-center gap-4 pt-6 border-t border-zinc-100">
-                                        <div className="w-10 h-10 rounded-full overflow-hidden bg-zinc-100 shrink-0">
-                                            <OptimizedImage
-                                                src={testimonial.avatar}
-                                                alt={testimonial.name}
-                                                width={40}
-                                                height={40}
-                                                className="w-full h-full object-cover grayscale opacity-80 mix-blend-multiply"
-                                            />
+                            {/* Field References */}
+                            {persona.caseReferences && (
+                                <>
+                                    <h2 className="text-[26px] font-semibold text-slate-900 tracking-tight my-[20px] leading-[1.2]">
+                                        Delivered in Practice
+                                    </h2>
+                                    {persona.caseReferences.map((ref, i) => (
+                                        <div key={i}>
+                                            <h3 className="text-[22px] font-semibold text-slate-900 tracking-tight my-[20px] leading-[1.2]">
+                                                {ref.sector}
+                                            </h3>
+                                            <p className="text-[16px] text-[#595959] mb-[20px] font-normal leading-[1.5]">
+                                                <strong className="font-bold text-slate-900">Challenge:</strong> {ref.challenge}
+                                            </p>
+                                            <p className="text-[16px] text-[#595959] mb-[20px] font-normal leading-[1.5]">
+                                                <strong className="font-bold text-slate-900">Outcome:</strong> {ref.outcome}
+                                            </p>
                                         </div>
-                                        <div>
-                                            <div className="text-sm font-medium text-zinc-900">
-                                                {testimonial.name}
-                                            </div>
-                                            <div className="text-[10px] text-zinc-500 uppercase tracking-widest mt-0.5">
-                                                {testimonial.position}
-                                            </div>
-                                        </div>
-                                    </div>
+                                    ))}
+                                </>
+                            )}
+
+                            {/* Tech Stack / Differentiation */}
+                            {(persona.differentiation || persona.toolStack) && (
+                                <>
+                                    {persona.differentiation && (
+                                        <>
+                                            <h2 className="text-[26px] font-semibold text-slate-900 tracking-tight my-[20px] leading-[1.2]">
+                                                The Differential: {persona.differentiation.title}
+                                            </h2>
+                                            <p className="text-[16px] text-[#595959] mb-[20px] font-normal leading-[1.5]">
+                                                {persona.differentiation.description}
+                                            </p>
+                                        </>
+                                    )}
+
+                                    {persona.toolStack && (
+                                        <>
+                                            <h2 className="text-[26px] font-semibold text-slate-900 tracking-tight my-[20px] leading-[1.2]">
+                                                {persona.toolStack.title}
+                                            </h2>
+                                            <ul className="my-[20px] space-y-[10px] pl-6 list-disc text-[16px] text-[#595959] leading-[1.5]">
+                                                {persona.toolStack.items.map((item, i) => {
+                                                    const parts = item.split(':');
+                                                    return (
+                                                        <li key={i} className="text-slate-800">
+                                                            {parts.length > 1 ? (
+                                                                <><strong className="font-bold text-slate-900">{parts[0]}:</strong>{parts.slice(1).join(':')}</>
+                                                            ) : item}
+                                                        </li>
+                                                    );
+                                                })}
+                                            </ul>
+                                        </>
+                                    )}
+                                </>
+                            )}
+
+                            {/* Links as "Read more" style */}
+                            <div className="mt-16 border-t border-slate-200 pt-8">
+                                <h3 className="text-[22px] font-semibold text-slate-900 tracking-tight mb-[20px] leading-[1.2]">
+                                    Next Steps
+                                </h3>
+                                <div className="bg-slate-50 border-l-[4px] border-brand-blue py-3 px-5 my-4 rounded-[2px] transition-all hover:bg-slate-100 group w-fit">
+                                    <a href={persona.cta.primaryLink} className="text-brand-blue font-semibold text-[15px] md:text-[16px] leading-tight flex items-center gap-2">
+                                        <span className="group-hover:underline underline-offset-4 decoration-2">{persona.cta.primary}</span>
+                                    </a>
                                 </div>
-                            ))}
+                                <div className="bg-slate-50 border-l-[4px] border-brand-blue py-3 px-5 my-4 rounded-[2px] transition-all hover:bg-slate-100 group w-fit">
+                                    <a href={persona.cta.secondaryLink} className="text-brand-blue font-semibold text-[15px] md:text-[16px] leading-tight flex items-center gap-2">
+                                        <span className="group-hover:underline underline-offset-4 decoration-2">{persona.cta.secondary}</span>
+                                    </a>
+                                </div>
+                            </div>
+
                         </div>
-                    </div>
-                </section>
-            )}
+                    </article>
 
-            {/* 10: DEPLOYMENT */}
-            <section className="py-32 md:py-48 bg-zinc-50/50 border-t border-zinc-100 flex flex-col justify-center">
-                <div className="max-w-3xl mx-auto px-6 md:px-8 text-center w-full">
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium tracking-tight text-zinc-900 leading-[1.15]">
-                        {persona.finalStatement || 'The infrastructure that allows you to lead.'}
-                    </h2>
-
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12">
-                        <a
-                            href={persona.cta.primaryLink}
-                            className="w-full sm:w-auto px-8 py-3.5 bg-zinc-900 text-white font-medium text-[11px] uppercase tracking-widest hover:bg-zinc-800 transition-colors rounded-none"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                window.history.pushState({}, '', persona.cta.primaryLink);
-                                window.dispatchEvent(new Event('popstate'));
-                                window.scrollTo(0, 0);
-                            }}
-                        >
-                            {persona.cta.primary}
-                        </a>
-                        <a
-                            href={persona.cta.secondaryLink}
-                            className="w-full sm:w-auto px-8 py-3.5 bg-transparent border border-zinc-200 text-zinc-600 font-medium text-[11px] uppercase tracking-widest hover:border-zinc-300 hover:text-zinc-900 transition-colors rounded-none"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                window.history.pushState({}, '', persona.cta.secondaryLink);
-                                window.dispatchEvent(new Event('popstate'));
-                                window.scrollTo(0, 0);
-                            }}
-                        >
-                            {persona.cta.secondary}
-                        </a>
-                    </div>
                 </div>
-            </section>
-        </div>
+            </div>
+        </motion.div>
     );
 };
 

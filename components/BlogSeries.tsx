@@ -457,19 +457,25 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
                 );
               })}
             </div>
-            
-            {/* Post Tags & Bottom Meta */}
-            <div className="mt-20 pt-8 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
-               <div className="flex gap-2">
-                 {(post.tags || [post.category]).map((tag, i) => (
-                   <span key={i} className="px-3 py-1.5 bg-slate-100/80 text-slate-600 text-[14px] font-semibold tracking-wide uppercase rounded-md">
-                     {tag}
-                   </span>
-                 ))}
-               </div>
-               <div className="text-[14px] text-slate-500 font-medium tracking-wide">
-                 LAST UPDATED: <span className="text-slate-900">{post.date}</span>
-               </div>
+            {/* Post Tags & Bottom Meta — Webflow-Inspired Premium Minimal */}
+            <div className="mt-16 pt-8 border-t border-slate-100">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-12 sm:gap-16">
+                <div className="col-span-1 sm:col-span-3 flex flex-col gap-2 justify-center">
+                  <div className="flex flex-wrap gap-x-6 gap-y-2">
+                    {['Search', 'AI', 'Marketing'].map((tag, i) => (
+                      <span 
+                        key={i} 
+                        className="text-[16px] font-medium text-slate-900 hover:text-blue-600 transition-colors cursor-pointer"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2 justify-center sm:text-right">
+                  <span className="text-[16px] font-medium text-slate-900 whitespace-nowrap">March 2026</span>
+                </div>
+              </div>
             </div>
           </article>
 
@@ -609,20 +615,23 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
           </aside>
         </div>
 
-        {/* Keep Reading Section at bottom */}
+        {/* Related Posts — Webflow-Inspired Premium Minimal */}
         {relatedPosts.length > 0 && (
-          <div className="mt-24 pt-16 border-t border-slate-200">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
-               <h2 className="text-[32px] font-bold text-[#1a1b1f] tracking-[-0.01em]">Get started for free</h2>
-               <button 
-                 onClick={navigateBack}
-                 className="inline-flex items-center justify-center px-6 py-3 border border-slate-300 bg-white rounded-lg text-[15px] font-semibold text-slate-700 hover:bg-slate-50 hover:shadow-sm transition-all self-start sm:self-auto"
-               >
-                 View more templates
-               </button>
+          <div className="mt-48 pt-32 border-t border-slate-100">
+            <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-6 mb-20">
+              <h2 className="text-4xl md:text-5xl font-bold text-slate-900 tracking-[-0.03em]">Read next</h2>
+              <button 
+                onClick={navigateBack}
+                className="group flex items-center gap-2 text-[12px] font-bold text-slate-400 uppercase tracking-[0.2em]"
+              >
+                <span className="transition-colors group-hover:text-blue-600">Browse all</span>
+                <svg className="w-4 h-4 transition-all group-hover:translate-x-1 group-hover:text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.4" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </button>
             </div>
             
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-3 gap-12">
               {relatedPosts.slice(0, 3).map((related, index) => (
                 <BlogCard key={related.id} post={related} index={index} showMeta={false} />
               ))}
@@ -658,6 +667,8 @@ const BlogCard: React.FC<{ post: BlogPost; index?: number; showMeta?: boolean }>
         {showMeta && (
           <p className="text-[13px] font-medium text-slate-500 mb-3 flex items-center gap-2">
             <span className="font-bold uppercase tracking-wider text-blue-600/90">{post.category}</span>
+            <span className="w-1 h-1 rounded-full bg-slate-300"></span>
+            {post.date}
             <span className="w-1 h-1 rounded-full bg-slate-300"></span>
             {post.readTime}
           </p>
@@ -807,7 +818,18 @@ const BlogSeries: React.FC = () => {
 
   const goToPage = (page: number) => {
     setCurrentPage(page);
-    window.scrollTo({ top: document.getElementById('blog')?.offsetTop ?? 0, behavior: 'smooth' });
+    // Small timeout to let React update the DOM first, then scroll to the cards grid
+    setTimeout(() => {
+      const grid = document.getElementById('all-posts-grid');
+      if (grid) {
+        const top = grid.getBoundingClientRect().top + window.scrollY - 100;
+        if (window.__lenis) {
+          window.__lenis.scrollTo(top, { immediate: true });
+        } else {
+          window.scrollTo({ top, behavior: 'instant' });
+        }
+      }
+    }, 0);
   };
 
   const selectedPost = useMemo(() =>
@@ -968,7 +990,7 @@ const BlogSeries: React.FC = () => {
           );
         })()}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+        <div id="all-posts-grid" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
           {pagedPosts.map((post) => (
             <BlogCard key={post.id} post={post} />
           ))}

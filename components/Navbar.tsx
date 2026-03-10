@@ -21,13 +21,10 @@ const Navbar: React.FC = () => {
     };
     checkTheme();
     window.addEventListener('popstate', checkTheme);
-    // Also re-check when blog internal navigation happens (custom event, no full popstate)
-    window.addEventListener('blog-navigate', checkTheme);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('popstate', checkTheme);
-      window.removeEventListener('blog-navigate', checkTheme);
     };
   }, []);
 

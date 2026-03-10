@@ -194,7 +194,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
 
   const navigateBack = () => {
     window.history.pushState({}, '', '/blog');
-    window.dispatchEvent(new CustomEvent('blog-navigate', { detail: { postId: null } }));
+    window.dispatchEvent(new PopStateEvent('popstate'));
   };
 
   const scrollToHeading = (id: string) => {
@@ -213,7 +213,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
   };
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="bg-white min-h-screen font-sans selection:bg-indigo-100">
+    <div className="bg-white min-h-screen font-sans selection:bg-indigo-100">
       {/* Scroll Progress bar */}
       <motion.div className="fixed top-0 left-0 right-0 h-1.5 bg-brand-blue origin-left z-[200]" style={{ scaleX }} />
 
@@ -339,16 +339,16 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
                   const rawText = block.text || '';
                   const hasGradient = rawText.includes('[gradient]');
                   const cleanText = rawText.replace('[gradient]', '').trim();
-                  // Webflow H2: clamp(2rem, 3.5rem), weight 600, line-height 1.04, letter-spacing 0
-                  return <h2 key={i} id={id} className={`scroll-mt-32 ${hasGradient ? 'blog-gradient-heading tracking-[-0.02em]' : 'text-[#080808]'}`} style={{ fontSize: 'clamp(2rem, 1.143rem + 2.857vw, 3.5rem)', fontWeight: 600, lineHeight: '1.04', letterSpacing: '0em', marginTop: '1.5em', marginBottom: '0.5em' }}>{cleanText}</h2>;
+                  // Webflow H2: clamp(2rem, 3.5rem) -> text-[32px] md:text-[44px] lg:text-[56px]
+                  return <h2 key={i} id={id} className={`scroll-mt-32 font-semibold text-[32px] md:text-[44px] lg:text-[56px] leading-[1.04] tracking-[0em] mt-[1.5em] mb-[0.5em] ${hasGradient ? 'blog-gradient-heading tracking-[-0.02em]' : 'text-[#080808]'}`}>{cleanText}</h2>;
                 }
                 if (block.type === 'h3') {
                   const id = (block.text || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
                   const rawText = block.text || '';
                   const hasGradient = rawText.includes('[gradient]');
                   const cleanText = rawText.replace('[gradient]', '').trim();
-                  // Webflow H3: clamp(1.5rem, 2rem), weight 600, line-height 1.1
-                  return <h3 key={i} id={id} className={`scroll-mt-32 ${hasGradient ? 'blog-gradient-heading' : 'text-[#080808]'}`} style={{ fontSize: 'clamp(1.5rem, 1.214rem + 0.952vw, 2rem)', fontWeight: 600, lineHeight: '1.1', letterSpacing: '0em', marginTop: '1.25em', marginBottom: '0.4em' }}>{cleanText}</h3>;
+                  // Webflow H3: clamp(1.5rem, 2rem) -> text-[24px] lg:text-[32px]
+                  return <h3 key={i} id={id} className={`scroll-mt-32 font-semibold text-[24px] lg:text-[32px] leading-[1.1] tracking-[0em] mt-[1.25em] mb-[0.4em] ${hasGradient ? 'blog-gradient-heading' : 'text-[#080808]'}`}>{cleanText}</h3>;
                 }
                 if (block.type === 'h4') {
                   // Webflow H4: Assuming proportional spacing
@@ -623,89 +623,59 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
             </div>
             
             <div className="grid md:grid-cols-3 gap-8">
-              {relatedPosts.slice(0, 3).map(related => (
-                <motion.div
-                  key={related.id}
-                  whileHover={{ y: -4 }}
-                  transition={{ duration: 0.2 }}
-                  className="group cursor-pointer flex flex-col h-full bg-white border border-slate-200/60 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
-                  onClick={() => {
-                    window.history.pushState({}, '', `/blog/${related.id}`);
-                    window.dispatchEvent(new CustomEvent('blog-navigate', { detail: { postId: related.id } }));
-                  }}
-                >
-                  <div className="aspect-[16/10] bg-slate-100 border-b border-slate-200/60">
-                    <img
-                      src={related.image || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800'}
-                      alt={related.title}
-                      className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
-                      loading="lazy"
-                    />
-                  </div>
-                  <div className="p-6 flex flex-col flex-1">
-                    <h3 className="text-[20px] font-bold text-[#1a1b1f] group-hover:text-[#4f46e5] transition-colors leading-[1.3] mb-3 line-clamp-2">{related.title}</h3>
-                    <p className="text-[15px] text-slate-600 mb-6 flex-1 line-clamp-2">{related.excerpt}</p>
-                    <span className="text-[14px] font-semibold text-[#4f46e5] mt-auto flex items-center gap-1 group-hover:gap-2 transition-all">
-                      Read more <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                    </span>
-                  </div>
-                </motion.div>
+              {relatedPosts.slice(0, 3).map((related, index) => (
+                <BlogCard key={related.id} post={related} index={index} showMeta={false} />
               ))}
             </div>
           </div>
         )}
       </div>
-    </motion.div>
+    </div>
   );
 };
 
 // ─── Blog Card ─────────────────────────────────────────────────────────────────
 
-const BlogCard: React.FC<{ post: BlogPost; index: number }> = ({ post, index }) => {
+const BlogCard: React.FC<{ post: BlogPost; index?: number; showMeta?: boolean }> = ({ post, index = 0, showMeta = true }) => {
   return (
     <motion.article
       layout
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.02 }}
-      className="group cursor-pointer flex flex-col bg-transparent transition-all duration-300"
+      transition={{ delay: index * 0.02, duration: 0.3 }}
+      className="group cursor-pointer flex flex-col h-full bg-white border border-slate-200/60 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
       onClick={() => {
         const id = post.id;
         window.history.pushState({}, '', `/blog/${id}`);
-        window.dispatchEvent(new CustomEvent('blog-navigate', { detail: { postId: id } }));
+        window.dispatchEvent(new PopStateEvent('popstate'));
       }}
     >
-      {/* Image — fixed 240px height, 16px border-radius, Hostinger style */}
-      <div
-        className="w-full overflow-hidden bg-slate-100 mb-6"
-        style={{ height: '240px', borderRadius: '16px' }}
-      >
+      <div className="aspect-[16/10] bg-slate-100 border-b border-slate-200/60 overflow-hidden shrink-0">
         <img
           src={post.image || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800'}
           alt={post.title}
-          className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700 ease-out"
+          className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
           loading="lazy"
         />
       </div>
-
-      {/* Meta row — Date • CATEGORY • Read time */}
-      <p className="text-[14px] font-normal text-[#58585e] mb-3 leading-[33.6px]">
-        {post.date}
-        <span className="mx-1.5 text-slate-400">•</span>
-        <span className="font-[800] uppercase text-[#1a1b1f]">{post.category}</span>
-        <span className="mx-1.5 text-slate-400">•</span>
-        {post.readTime}
-      </p>
-
-      {/* Title */}
-      <h4 className="text-[20px] font-bold text-[#1a1b1f] group-hover:text-[#4F46E5] transition-colors leading-[20px] tracking-tight mb-3 line-clamp-2">
-        {post.title}
-      </h4>
-
-      {/* Excerpt */}
-      <p className="text-[14px] text-[#58585e] font-normal leading-[21px] line-clamp-3">
-        {post.excerpt}
-      </p>
+      <div className="p-6 flex flex-col flex-1">
+        {showMeta && (
+          <p className="text-[13px] font-medium text-slate-500 mb-3 flex items-center gap-2">
+            <span className="font-bold uppercase tracking-wider text-blue-600/90">{post.category}</span>
+            <span className="w-1 h-1 rounded-full bg-slate-300"></span>
+            {post.readTime}
+          </p>
+        )}
+        <h4 className="text-[20px] font-bold text-[#1a1b1f] group-hover:text-[#4F46E5] transition-colors leading-[1.3] mb-3 line-clamp-2">
+          {post.title}
+        </h4>
+        <p className="text-[15px] text-slate-600 mb-6 line-clamp-2">
+          {post.excerpt}
+        </p>
+        <span className="text-[14px] font-semibold text-[#4f46e5] mt-auto flex items-center gap-1 group-hover:gap-2 transition-all">
+          Read more <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </span>
+      </div>
     </motion.article>
   );
 };
@@ -796,7 +766,15 @@ const PremiumDropdown: React.FC<{
 
 const BlogSeries: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
+  const [selectedPostId, setSelectedPostId] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      const path = window.location.pathname;
+      if (path.startsWith('/blog/') && path !== '/blog/') {
+        return path.replace('/blog/', '');
+      }
+    }
+    return null;
+  });
   const [sortBy, setSortBy] = useState<'recent' | 'oldest'>('recent');
   const [selectedCategory, setSelectedCategory] = useState<string>('All categories');
   const [currentPage, setCurrentPage] = useState(1);
@@ -807,25 +785,7 @@ const BlogSeries: React.FC = () => {
     return ['All categories', ...cats];
   }, []);
 
-  // Force scroll to top whenever the view changes (opening the list OR opening a post)
   useEffect(() => {
-    if (window.__lenis) {
-      window.__lenis.scrollTo(0, { immediate: true });
-    } else {
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    }
-  }, [selectedPostId]);
-
-  useEffect(() => {
-    const handleBlogNav = (e: Event) => {
-      const postId = (e as CustomEvent).detail?.postId;
-      if (postId) {
-        setSelectedPostId(postId);
-      } else {
-        setSelectedPostId(null);
-      }
-    };
-
     const handlePopState = () => {
       const path = window.location.pathname;
       if (path.startsWith('/blog/') && path !== '/blog/') {
@@ -835,20 +795,12 @@ const BlogSeries: React.FC = () => {
       }
     };
 
-    // Initial load check
-    const path = window.location.pathname;
-    if (path.startsWith('/blog/') && path !== '/blog/') {
-      setSelectedPostId(path.replace('/blog/', ''));
-    }
-    
     // Always force scroll to top on mount
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 
-    window.addEventListener('blog-navigate', handleBlogNav);
     window.addEventListener('popstate', handlePopState);
     
     return () => {
-      window.removeEventListener('blog-navigate', handleBlogNav);
       window.removeEventListener('popstate', handlePopState);
     };
   }, []);
@@ -998,7 +950,7 @@ const BlogSeries: React.FC = () => {
                 onClick={() => {
                   const id = featured.id;
                   window.history.pushState({}, '', `/blog/${id}`);
-                  window.dispatchEvent(new CustomEvent('blog-navigate', { detail: { postId: id } }));
+                  window.dispatchEvent(new PopStateEvent('popstate'));
                 }}
               >
                 <div className="aspect-[4/3] md:aspect-auto overflow-hidden">
@@ -1020,40 +972,8 @@ const BlogSeries: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-                {recent.map((post) => (
-                  <div
-                    key={post.id}
-                    className="cursor-pointer group flex flex-col"
-                    onClick={() => {
-                      const id = post.id;
-                      window.history.pushState({}, '', `/blog/${id}`);
-                      window.dispatchEvent(new CustomEvent('blog-navigate', { detail: { postId: id } }));
-                    }}
-                  >
-                    {/* Card image */}
-                    <div
-                      className="w-full overflow-hidden bg-slate-100 mb-4"
-                      style={{ height: '180px', borderRadius: '16px' }}
-                    >
-                      <img
-                        src={post.image}
-                        alt={post.title}
-                        className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-500"
-                      />
-                    </div>
-                    {/* Meta */}
-                    <p className="text-[14px] font-normal text-[#58585e] mb-2 leading-[33.6px]">
-                      {post.date}
-                      <span className="mx-1 text-slate-400">•</span>
-                      <span className="font-[800] uppercase text-[#1a1b1f]">{post.category}</span>
-                      <span className="mx-1 text-slate-400">•</span>
-                      {post.readTime}
-                    </p>
-                    {/* Title */}
-                    <h4 className="text-[20px] font-bold text-[#1a1b1f] group-hover:text-[#4F46E5] transition-colors leading-[20px] line-clamp-2">
-                      {post.title}
-                    </h4>
-                  </div>
+                {recent.map((post, index) => (
+                  <BlogCard key={post.id} post={post} index={index} showMeta={true} />
                 ))}
               </div>
 

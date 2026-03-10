@@ -172,7 +172,10 @@ function App() {
 
     const renderContent = () => {
         if (currentPath.startsWith('/blog/')) {
-            return <ErrorBoundary><BlogSeries /></ErrorBoundary>;
+            // CRITICAL FIX: The unique key forces React to fully unmount and remount
+            // the component when transitioning between the list (/blog) and a post (/blog/id).
+            // Without this, React recycles the DOM nodes mid-animation, stripping all CSS context!
+            return <React.Fragment key={currentPath}><ErrorBoundary><BlogSeries /></ErrorBoundary></React.Fragment>;
         }
 
         if (currentPath.startsWith('/work/')) {
@@ -267,6 +270,9 @@ function App() {
                         <AnimatePresence 
                             mode="wait"
                             onExitComplete={() => {
+                                // Force hard scroll reset at the DOM level
+                                document.documentElement.scrollTop = 0;
+                                document.body.scrollTop = 0;
                                 if (window.__lenis) {
                                     window.__lenis.scrollTo(0, { immediate: true });
                                 } else {

@@ -643,7 +643,7 @@ const BlogCard: React.FC<{ post: BlogPost; index?: number; showMeta?: boolean }>
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.02, duration: 0.3 }}
-      className="group cursor-pointer flex flex-col h-full bg-white border border-slate-200/60 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
+      className="group cursor-pointer flex flex-col h-full bg-white border border-slate-200/60 rounded-xl overflow-hidden shadow-sm transition-all duration-300"
       onClick={() => {
         const id = post.id;
         window.history.pushState({}, '', `/blog/${id}`);

@@ -636,13 +636,9 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
 
 // ─── Blog Card ─────────────────────────────────────────────────────────────────
 
-const BlogCard: React.FC<{ post: BlogPost; index?: number; showMeta?: boolean }> = ({ post, index = 0, showMeta = true }) => {
+const BlogCard: React.FC<{ post: BlogPost; index?: number; showMeta?: boolean }> = ({ post, showMeta = true }) => {
   return (
-    <motion.article
-      layout
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.02, duration: 0.3 }}
+    <article
       className="group cursor-pointer flex flex-col h-full bg-white border border-slate-200/60 rounded-xl overflow-hidden shadow-sm transition-all duration-300"
       onClick={() => {
         const id = post.id;
@@ -676,7 +672,7 @@ const BlogCard: React.FC<{ post: BlogPost; index?: number; showMeta?: boolean }>
           Read more <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </span>
       </div>
-    </motion.article>
+    </article>
   );
 };
 
@@ -786,23 +782,12 @@ const BlogSeries: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const handlePopState = () => {
-      const path = window.location.pathname;
-      if (path.startsWith('/blog/') && path !== '/blog/') {
-        setSelectedPostId(path.replace('/blog/', ''));
-      } else {
-        setSelectedPostId(null);
-      }
-    };
-
     // Always force scroll to top on mount
+    // NOTE: We do NOT add a popstate listener here because App.tsx already handles
+    // routing by remounting this component entirely via key={currentPath}.
+    // A duplicate popstate listener here was causing a race condition that froze
+    // Framer Motion animations at opacity:0 (the blank page bug).
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-
-    window.addEventListener('popstate', handlePopState);
-    
-    return () => {
-      window.removeEventListener('popstate', handlePopState);
-    };
   }, []);
 
   const filteredPosts = useMemo(() => {
@@ -984,11 +969,9 @@ const BlogSeries: React.FC = () => {
         })()}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
-          <AnimatePresence mode="popLayout">
-            {pagedPosts.map((post, index) => (
-              <BlogCard key={post.id} post={post} index={index} />
-            ))}
-          </AnimatePresence>
+          {pagedPosts.map((post) => (
+            <BlogCard key={post.id} post={post} />
+          ))}
         </div>
 
         {pagedPosts.length === 0 && (

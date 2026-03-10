@@ -201,7 +201,7 @@ function App() {
                     </div>
                 );
             case '/blog':
-                return <div className="pt-20"><ErrorBoundary><BlogSeries /></ErrorBoundary></div>;
+                return <React.Fragment key={currentPath}><div className="pt-20"><ErrorBoundary><BlogSeries /></ErrorBoundary></div></React.Fragment>;
             case '/solutions':
                 return (
                     <div className="pt-20">

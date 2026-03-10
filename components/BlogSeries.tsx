@@ -153,17 +153,53 @@ const InlineText: React.FC<{ text: string }> = ({ text }) => {
 // ─── Blog Post Detail (100% Webflow Replica) ──────────────────────────────────
 
 const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
   const [activeToc, setActiveToc] = useState('');
+  const [copiedLink, setCopiedLink] = useState(false);
+  const [canShare, setCanShare] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const tocNavRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    // Check Web Share API support
+    setCanShare(typeof navigator.share === 'function');
+
     const originalTitle = document.title;
     document.title = `${post.title} | Thought Leadership`;
-    return () => { document.title = originalTitle; };
-  }, [post.title]);
+
+    // Inject OG + Twitter Card meta tags
+    const pageUrl = window.location.href;
+    const metaTags: { property?: string; name?: string; content: string }[] = [
+      { property: 'og:type',        content: 'article' },
+      { property: 'og:title',       content: post.title },
+      { property: 'og:description', content: post.excerpt },
+      { property: 'og:image',       content: post.image },
+      { property: 'og:url',         content: pageUrl },
+      { name: 'twitter:card',        content: 'summary_large_image' },
+      { name: 'twitter:title',       content: post.title },
+      { name: 'twitter:description', content: post.excerpt },
+      { name: 'twitter:image',       content: post.image },
+    ];
+
+    const injected: HTMLMetaElement[] = [];
+    metaTags.forEach(({ property, name, content }) => {
+      const meta = document.createElement('meta');
+      if (property) {
+        meta.setAttribute('property', property);
+        document.querySelector(`meta[property="${property}"]`)?.remove();
+      } else if (name) {
+        meta.setAttribute('name', name);
+        document.querySelector(`meta[name="${name}"]`)?.remove();
+      }
+      meta.setAttribute('content', content);
+      document.head.appendChild(meta);
+      injected.push(meta);
+    });
+
+    return () => {
+      document.title = originalTitle;
+      injected.forEach(m => m.remove());
+    };
+  }, [post]);
 
   const blocks = useMemo(() => parseContent(post.content), [post.content]);
   const headings = useMemo(() => extractHeadings(post.content), [post.content]);
@@ -214,9 +250,6 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
 
   return (
     <div className="bg-white min-h-screen font-sans selection:bg-indigo-100">
-      {/* Scroll Progress bar */}
-      <motion.div className="fixed top-0 left-0 right-0 h-1.5 bg-brand-blue origin-left z-[200]" style={{ scaleX }} />
-
       {/* ── HERO SECTION ── */}
       {/* Webflow exact: white base + fluted glass bars + blue bottom fade + diagonal white overlay */}
       <div className="relative overflow-hidden bg-white pt-32 pb-24 border-b border-[#e2e4e8]">
@@ -558,17 +591,33 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
               </div>
             )}
 
-            {/* Share — minimal bare-icon style matching deployed site */}
+            {/* Share — Web Share API + Social Icons fallback */}
             <div className="mt-2 mb-6">
               <p className="text-[11px] font-black uppercase tracking-[0.18em] text-slate-500 mb-3">Share</p>
+
+              {/* Mobile: Web Share API native sheet */}
+              {canShare && (
+                <button
+                  type="button"
+                  onClick={() => navigator.share({ title: post.title, text: post.excerpt, url: window.location.href }).catch(() => {})}
+                  className="mb-4 flex items-center gap-2 text-[12px] font-bold text-slate-600 hover:text-blue-600 transition-colors uppercase tracking-[0.15em] group"
+                >
+                  <svg className="w-4 h-4 group-hover:text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                  </svg>
+                  Share this post
+                </button>
+              )}
+
+              {/* Desktop: Social icon row */}
               <div className="flex items-center gap-4">
                 {/* X / Twitter */}
                 <a
-                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(window.location.href)}`}
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`${post.title}\n\n${post.excerpt}`)}&url=${encodeURIComponent(window.location.href)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Share on X"
-                  className="text-slate-700 hover:text-slate-950 transition-colors"
+                  className="text-slate-500 hover:text-black transition-colors"
                 >
                   <svg className="w-[18px] h-[18px] fill-current" viewBox="0 0 24 24">
                     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
@@ -576,11 +625,11 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
                 </a>
                 {/* Facebook */}
                 <a
-                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}
+                  href={`https://www.facebook.com/dialog/feed?app_id=145634995501895&link=${encodeURIComponent(window.location.href)}&name=${encodeURIComponent(post.title)}&description=${encodeURIComponent(post.excerpt)}&redirect_uri=${encodeURIComponent('https://www.facebook.com')}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Share on Facebook"
-                  className="text-slate-700 hover:text-slate-950 transition-colors"
+                  className="text-slate-500 hover:text-[#1877F2] transition-colors"
                 >
                   <svg className="w-[18px] h-[18px] fill-current" viewBox="0 0 24 24">
                     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
@@ -588,28 +637,46 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
                 </a>
                 {/* LinkedIn */}
                 <a
-                  href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(window.location.href)}&title=${encodeURIComponent(post.title)}`}
+                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}&title=${encodeURIComponent(post.title)}&summary=${encodeURIComponent(post.excerpt)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Share on LinkedIn"
-                  className="text-slate-700 hover:text-slate-950 transition-colors"
+                  className="text-slate-500 hover:text-[#0A66C2] transition-colors"
                 >
                   <svg className="w-[18px] h-[18px] fill-current" viewBox="0 0 24 24">
                     <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
                   </svg>
                 </a>
                 {/* Copy link */}
-                <button
-                  type="button"
-                  aria-label="Copy link"
-                  className="text-slate-700 hover:text-slate-950 transition-colors"
-                  onClick={() => { navigator.clipboard.writeText(window.location.href); }}
-                >
-                  <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-                  </svg>
-                </button>
+                <div className="relative">
+                  <button
+                    type="button"
+                    aria-label="Copy link"
+                    className={`transition-colors ${copiedLink ? 'text-green-600' : 'text-slate-500 hover:text-slate-900'}`}
+                    onClick={() => {
+                      navigator.clipboard.writeText(window.location.href).then(() => {
+                        setCopiedLink(true);
+                        setTimeout(() => setCopiedLink(false), 2000);
+                      });
+                    }}
+                  >
+                    {copiedLink ? (
+                      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                        <path d="M20 6L9 17l-5-5" />
+                      </svg>
+                    ) : (
+                      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                      </svg>
+                    )}
+                  </button>
+                  {copiedLink && (
+                    <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] font-bold px-2 py-1 rounded whitespace-nowrap">
+                      Copied!
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           </aside>

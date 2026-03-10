@@ -1,0 +1,41 @@
+{
+  "html": "<header class=\"section\"><div id=\"\" style=\"\" class=\"fluted-glass-component\"><div data-distortion=\"0.25\" data-shape-type-one=\"0\" class=\"fluted-glass-canvas\" data-size-two=\"1\" data-shininess=\"800\" data-use-blob-two=\"false\" data-gloss=\"0.3\" data-shape-type-two=\"0\" data-width-variation=\"1.8\" data-use-three-color=\"true\" data-sensitivity-three=\"0.15\" data-color-three=\"var(--colors--background)\" data-sensitivity-one=\"0.15\" data-size-three=\"1.3\" data-fluted-glass=\"true\" data-noise=\"0.40\" data-hover=\"true\" data-color-one=\"var(--colors--background)\" data-columns=\"6\" data-shape-type-three=\"0\" data-sensitivity-two=\"0.15\" data-size-one=\"0.85\" data-bg-color=\"\" data-hover-intensity=\"2.0\" data-color-two=\"#EEEEEE\" data-use-blob-one=\"true\" data-background-image=\"\"><img src=\"https://cdn.prod.website-files.com/687e8d1b96312cc631cafec7/69a9c2b20295866956be180f_MCP-BlogHeader.jpg\" loading=\"lazy\" alt=\"\" sizes=\"(max-width: 457px) 100vw, 457px, 100vw\" srcset=\"https://cdn.prod.website-files.com/687e8d1b96312cc631cafec7/69a9c2b20295866956be180f_MCP-BlogHeader-p-500.jpg 500w, https://cdn.prod.website-files.com/687e8d1b96312cc631cafec7/69a9c2b20295866956be180f_MCP-BlogHeader-p-800.jpg 800w, https://cdn.prod.website-files.com/687e8d1b96312cc631cafec7/69a9c2b20295866956be180f_MCP-BlogHeader-p-1080.jpg 1080w, https://cdn.prod.website-files.com/687e8d1b96312cc631cafec7/69a9c2b20295866956be180f_MCP-BlogHeader-p-1600.jpg 1600w, https://cdn.prod.website-files.com/687e8d1b96312cc631cafec7/69a9c2b20295866956be180f_MCP-BlogHeader-p-2000.jpg 2000w, https://cdn.prod.website-files.com/687e8d1b96312cc631cafec7/69a9c2b20295866956be180f_MCP-BlogHeader.jpg 2400w\" class=\"fluted-glass-image\"><canvas width=\"600\" height=\"607\" style=\"display: block; width: 100%; height: 100%; opacity: 1;\"></canvas></div></div><div class=\"fluted-glass-overlay\"></div><div class=\"container\"><div class=\"row row-align-center\"><div class=\"col\"><nav data-animation-css=\"small-2\" class=\"breadcrumb-nav u-mb-sm\"><ol itemtype=\"https://schema.org",
+  "styles": [
+    {
+      "tag": "DIV",
+      "className": "fluted-glass-component",
+      "position": "absolute",
+      "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+      "backgroundImage": "none",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "filter": "none",
+      "backdropFilter": "none",
+      "opacity": "1",
+      "mixBlendMode": "normal"
+    },
+    {
+      "tag": "DIV",
+      "className": "fluted-glass-canvas",
+      "position": "absolute",
+      "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+      "backgroundImage": "none",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "filter": "none",
+      "backdropFilter": "none",
+      "opacity": "1",
+      "mixBlendMode": "normal"
+    },
+    {
+      "tag": "DIV",
+      "className": "fluted-glass-overlay",
+      "position": "absolute",
+      "background": "rgba(0, 0, 0, 0) linear-gradient(165deg, rgb(8, 8, 8) 30%, rgba(0, 0, 0, 0)) repeat scroll 0% 0% / auto padding-box border-box",
+      "backgroundImage": "linear-gradient(165deg, rgb(8, 8, 8) 30%, rgba(0, 0, 0, 0))",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "filter": "none",
+      "backdropFilter": "none",
+      "opacity": "1",
+      "mixBlendMode": "normal"
+    }
+  ]
+}

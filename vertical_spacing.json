@@ -1,0 +1,25 @@
+{
+  "h1": {
+    "marginTop": "0px",
+    "marginBottom": "24px",
+    "paddingTop": "0px",
+    "paddingBottom": "0px"
+  },
+  "breadcrumb": null,
+  "excerpt": {
+    "marginTop": "0px",
+    "marginBottom": "0px"
+  },
+  "parentColumn": {
+    "display": "block",
+    "flexDirection": "row",
+    "gap": "normal",
+    "paddingTop": "0px",
+    "paddingBottom": "0px"
+  },
+  "heroSection": {
+    "paddingTop": "80px",
+    "paddingBottom": "80px",
+    "minHeight": "auto"
+  }
+}

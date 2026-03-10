@@ -1,0 +1,23 @@
+{
+  "width_375": {
+    "fontSize": "33.1786px",
+    "lineHeight": "34.5057px",
+    "letterSpacing": "normal",
+    "fontWeight": "600",
+    "fontFamily": "\"WF Visual Sans Variable\", Arial, sans-serif"
+  },
+  "width_768": {
+    "fontSize": "41.6px",
+    "lineHeight": "43.264px",
+    "letterSpacing": "normal",
+    "fontWeight": "600",
+    "fontFamily": "\"WF Visual Sans Variable\", Arial, sans-serif"
+  },
+  "width_1440": {
+    "fontSize": "56px",
+    "lineHeight": "58.24px",
+    "letterSpacing": "normal",
+    "fontWeight": "600",
+    "fontFamily": "\"WF Visual Sans Variable\", Arial, sans-serif"
+  }
+}

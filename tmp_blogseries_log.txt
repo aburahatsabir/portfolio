@@ -1,0 +1,7 @@
+﻿adaed5d Update hero section styling and theme configuration
+1338341 feat: blog page redesign, share links, avatar crop, and utf-8 fixes
+d33f3e0 Rebuild BlogPostDetail: Webflow-style split hero, left sticky sidebar with ToC/share/subscribe, prose content parser
+5e4a27e feat: add certifications section, new components, and content updates
+66417bc Deploy: Build production bundle and update portfolio
+9831267 fix: ISS-001 & ISS-002 - Rotate EmailJS credentials and fix base path for GitHub Pages
+dc28776 Add new portfolio

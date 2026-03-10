@@ -1,0 +1,26 @@
+{
+  "h1": {
+    "fontSize": "56px",
+    "lineHeight": "58.24px",
+    "letterSpacing": "normal",
+    "fontWeight": "600"
+  },
+  "card": {
+    "image": {
+      "width": "632px",
+      "height": "355.5px",
+      "aspectRatio": "auto",
+      "borderRadius": "0px",
+      "boxShadow": "none",
+      "objectFit": "cover"
+    },
+    "wrapper": {
+      "tagName": "DIV",
+      "width": "632px",
+      "height": "355.5px",
+      "borderRadius": "8px",
+      "boxShadow": "none",
+      "overflow": "hidden"
+    }
+  }
+}

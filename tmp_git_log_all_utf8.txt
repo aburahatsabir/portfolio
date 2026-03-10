@@ -1,0 +1,36 @@
+﻿adaed5d Update hero section styling and theme configuration
+d33f3e0 Rebuild BlogPostDetail: Webflow-style split hero, left sticky sidebar with ToC/share/subscribe, prose content parser
+5e4a27e feat: add certifications section, new components, and content updates
+66417bc Deploy: Build production bundle and update portfolio
+6cd6bbd fix: ISS-005 - Add width/height attributes to all images to prevent CLS
+fb2f9d4 fix: ISS-012 to ISS-015 - Complete final 4 low-priority issues (z-index, Firefox selection, duplicate footer link)
+9831267 fix: ISS-001 & ISS-002 - Rotate EmailJS credentials and fix base path for GitHub Pages
+236b935 fix: Added PDF file to docs folder and fixed path for GitHub Pages compatibility
+d05051d deploy: Updated GitHub Pages with enhanced resume download functionality
+d94ace8 Fix: use relative paths for images and add download attribute to resume
+8a43179 Fix: correctly set relative base path for assets
+fdb5de0 Deploy: add built files to docs folder for GH Pages
+dc28776 Add new portfolio
+03334bf Delete all files
+1b76c8c 31
+5c56d60 24
+c228cdb 23/12
+2291785 22.2
+d689565 Update testimonials layout and styling
+84beccc 22/22
+1b51fe3 12/12 Initial commit
+ec2b9c5 Delete assets directory
+0075b75 Update main.js
+76d52dc Update main.css
+6664528 Update fmt.Println message from 'Hello' to 'Goodbye'
+13946a0 Update main.css
+8cbcf21 Update main.css
+a942bdf Add files via upload
+cad2907 Update index.html
+5672e5c Update index.html
+ed52524 Update index.html
+f542b82 Update index.html
+2ad7233 Update index.html
+f3a7de1 Update index.html
+d50f5c3 Update index.html
+6deb6a6 Add files via upload

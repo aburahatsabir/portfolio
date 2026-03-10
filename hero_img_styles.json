@@ -1,0 +1,53 @@
+{
+  "image": {
+    "tagName": "IMG",
+    "className": "fluted-glass-image",
+    "width": "auto",
+    "height": "auto",
+    "maxWidth": "100%",
+    "maxHeight": "none",
+    "minHeight": "0px",
+    "aspectRatio": "auto",
+    "borderRadius": "0px",
+    "boxShadow": "none",
+    "border": "0px none rgb(255, 255, 255)",
+    "rect": {
+      "width": 0,
+      "height": 0
+    }
+  },
+  "wrapper": {
+    "tagName": "DIV",
+    "className": "fluted-glass-canvas",
+    "width": "1440px",
+    "height": "567.953px",
+    "maxWidth": "none",
+    "maxHeight": "none",
+    "minHeight": "0px",
+    "aspectRatio": "auto",
+    "borderRadius": "0px",
+    "boxShadow": "none",
+    "border": "0px none rgb(255, 255, 255)",
+    "rect": {
+      "width": 1440,
+      "height": 567.953125
+    }
+  },
+  "parentWrapper": {
+    "tagName": "DIV",
+    "className": "fluted-glass-component",
+    "width": "1440px",
+    "height": "567.953px",
+    "maxWidth": "none",
+    "maxHeight": "none",
+    "minHeight": "0px",
+    "aspectRatio": "auto",
+    "borderRadius": "0px",
+    "boxShadow": "none",
+    "border": "0px none rgb(255, 255, 255)",
+    "rect": {
+      "width": 1440,
+      "height": 567.953125
+    }
+  }
+}

@@ -164,12 +164,6 @@ function App() {
         const handlePopState = () => {
             const newPath = window.location.pathname || '/';
             setCurrentPath(newPath);
-            // Use Lenis if available for consistent scroll behavior
-            if (window.__lenis) {
-                window.__lenis.scrollTo(0, { immediate: true });
-            } else {
-                window.scrollTo(0, 0);
-            }
         };
 
         window.addEventListener('popstate', handlePopState);
@@ -270,7 +264,16 @@ function App() {
 
                 <ErrorBoundary>
                     <main id="main-content">
-                        <AnimatePresence mode="wait">
+                        <AnimatePresence 
+                            mode="wait"
+                            onExitComplete={() => {
+                                if (window.__lenis) {
+                                    window.__lenis.scrollTo(0, { immediate: true });
+                                } else {
+                                    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+                                }
+                            }}
+                        >
                             <motion.div
                                 key={currentPath}
                                 initial={{ opacity: 0, y: 10 }}

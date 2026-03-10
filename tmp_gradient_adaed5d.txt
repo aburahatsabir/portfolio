@@ -1,0 +1,198 @@
+﻿
+  +        {/* WEBFLOW 
+EXACT BACKGROUND SYSTEM 
+*/}
+  +        <div 
+className="absolute 
+inset-0 
+pointer-events-none">
+  +
+> +          {/* LAYER 1: 
+Base Subtle Blue Gradient 
+(pulls right and bottom) 
+*/}
+  +          <div 
+className="absolute 
+inset-0" style={{
+> +            
+background: 
+'linear-gradient(135deg, 
+rgba(255,255,255,1) 0%, 
+rgba(20,110,245,0.05) 
+50%, 
+rgba(20,110,245,0.15) 
+100%)',
+  +          }}></div>
+  +
+  +          {/* LAYER 2: 
+Right-side Radial Blue 
+Glow (Webflow's brand 
+blue #146ef5) - STRONG 
+vibrant pop */}
+  +          <div 
+className="absolute 
+inset-0" style={{
+> +            
+background: 
+'radial-gradient(circle 
+at 85% 60%, 
+rgba(20,110,245,0.45) 0%, 
+rgba(20,110,245,0.15) 
+45%, transparent 70%)',
+  +          }}></div>
+  +
+  +          {/* LAYER 3: 
+Fluted Glass Vertical 
+Ribs (repeating pattern 
+matching Webflow's canvas 
+texture) */}
+  +          <div 
+className="absolute 
+inset-0 
+mix-blend-multiply 
+opacity-[0.8]" style={{
+> +            
+backgroundImage: `repeatin
+g-linear-gradient(
+  +              90deg,
+  +              
+transparent 0px,
+  +              
+transparent 79px,
+  +
+  +          {/* LAYER 4: 
+The Fluted Glass Canvas 
+Overlay (Extremely subtle 
+wide columns) */}
+  +          <div 
+className="absolute 
+inset-0" style={{
+> +            
+backgroundImage: `repeatin
+g-linear-gradient(
+  +              90deg,
+  +              
+rgba(255,255,255,0.1) 0%,
+  +              
+rgba(255,255,255,0) 50%,
+  +          {/* LAYER 5: 
+.fluted-glass-overlay 
+(From exact Webflow CSS) 
+*/}
+  +          {/* This is 
+the critical layer that 
+makes the top-left 
+heading area pure white 
+*/}
+  +          <div 
+className="absolute 
+inset-0" style={{
+> +            
+backgroundImage: 
+'linear-gradient(165deg, 
+rgb(255,255,255) 30%, 
+rgba(255,255,255,0) 65%)',
+  +          }}></div>
+  +
+  +          {/* LAYER 6: 
+Subtle noise texture */}
+                     
+const id = (block.text || 
+'').toLowerCase().replace(
+/[^a-z0-9]+/g, 
+'-').replace(/(^-|-$)/g, 
+'');
+  -                  
+return <h2 key={i} 
+id={id} 
+className="text-[36px] 
+md:text-[40px] font-bold 
+text-[#1a1b1f] 
+tracking-[-0.01em] mt-16 
+mb-6 leading-[1.2] scroll-
+mt-32">{block.text}</h2>;
+  +                  
+const rawText = 
+block.text || '';
+> +                  
+const hasGradient = rawTex
+t.includes('[gradient]');
+> +                  
+const cleanText = rawText.
+replace('[gradient]', 
+'').trim();
+  +                  // 
+Webflow H2: clamp(2rem, 
+3.5rem), weight 600, 
+line-height 1.04, 
+letter-spacing 0
+> +                  
+return <h2 key={i} 
+id={id} 
+className={`scroll-mt-32 
+${hasGradient ? 
+'blog-gradient-heading 
+tracking-[-0.02em]' : 
+'text-[#080808]'}`} 
+style={{ fontSize: 
+'clamp(2rem, 1.143rem + 
+2.857vw, 3.5rem)', 
+fontWeight: 600, 
+lineHeight: '1.04', 
+letterSpacing: '0em', 
+marginTop: '1.5em', 
+marginBottom: '0.5em' 
+}}>{cleanText}</h2>;
+                   }
+                   if 
+(block.type === 'h3') {
+  -                  
+return <h3 key={i} 
+className="text-[28px] 
+font-bold text-[#1a1b1f] 
+mt-12 
+mb-4">{block.text}</h3>;
+  +                  
+const id = (block.text || 
+'').toLowerCase().replace(
+/[^a-z0-9]+/g, 
+'-').replace(/(^-|-$)/g, 
+'');
+  +                  
+const rawText = 
+block.text || '';
+> +                  
+const hasGradient = rawTex
+t.includes('[gradient]');
+> +                  
+const cleanText = rawText.
+replace('[gradient]', 
+'').trim();
+  +                  // 
+Webflow H3: clamp(1.5rem, 
+2rem), weight 600, 
+line-height 1.1
+> +                  
+return <h3 key={i} 
+id={id} 
+className={`scroll-mt-32 
+${hasGradient ? 
+'blog-gradient-heading' : 
+'text-[#080808]'}`} 
+style={{ fontSize: 
+'clamp(1.5rem, 1.214rem + 
+0.952vw, 2rem)', 
+fontWeight: 600, 
+lineHeight: '1.1', 
+letterSpacing: '0em', 
+marginTop: '1.25em', 
+marginBottom: '0.4em' 
+}}>{cleanText}</h3>;
+  +                }
+  +                if 
+(block.type === 'h4') {
+  +                  // 
+Webflow H4: Assuming 
+proportional spacing
+
+

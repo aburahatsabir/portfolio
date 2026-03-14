@@ -17,7 +17,8 @@ const Navbar: React.FC = () => {
 
     // Check if we are on a page with a dark hero (only /blog listing, not individual posts)
     const checkTheme = () => {
-      setIsDarkThemePage(window.location.pathname === '/blog');
+      const path = window.location.pathname;
+      setIsDarkThemePage(path === '/blog' || path === '/privacy' || path === '/cookies' || path === '/accessibility');
     };
     checkTheme();
     window.addEventListener('popstate', checkTheme);

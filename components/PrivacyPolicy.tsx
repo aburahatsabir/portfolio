@@ -1,149 +1,268 @@
-
 import React, { useEffect } from 'react';
-import { motion } from 'framer-motion';
 
 const PrivacyPolicy: React.FC = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const sections = [
-    {
-      id: "01",
-      title: "Information Sovereignty",
-      subtitle: "Data Ownership & Collection",
-      content: "As a Principal Systems Architect, I operate under the mandate of Least-Privilege. Any data collected—including corporate identity, operational friction reports, and system audit telemetry—is treated as institutional property. We do not sell, trade, or monetize your infrastructure data."
-    },
-    {
-      id: "02",
-      title: "Diagnostic Telemetry",
-      subtitle: "Usage & Audit Logs",
-      content: "Interaction with the Principal Diagnostic Core (AI Assistant) may generate logs to improve reasoning accuracy. These logs are de-identified at the source and encrypted in transit. We collect technical metadata (browser type, session duration) strictly for performance optimization."
-    },
-    {
-      id: "03",
-      title: "Security Protocols",
-      subtitle: "Zero-Trust Architecture",
-      content: "All communications are secured via TLS 1.3. We leverage HashiCorp Vault for secrets management and strictly adhere to SOC2 Type II administrative standards. Any PII (Personally Identifiable Information) shared during discovery is handled via isolated, encrypted storage buckets."
-    },
-    {
-      id: "04",
-      title: "Third-Party Governance",
-      subtitle: "Service Interoperability",
-      content: "We utilize Gemini 3 Pro (Google GenAI) for diagnostic reasoning. Data sent to the Diagnostic Core is subject to enterprise-grade privacy filters. We do not allow third-party trackers or advertising beacons to execute within the AdminPro environment."
-    },
-    {
-      id: "05",
-      title: "Institutional Rights",
-      subtitle: "Compliance & GDPR",
-      content: "Entities retain the absolute right to request an immediate 'System Purge' of all submitted diagnostic data. Under GDPR and CCPA mandates, you may request a copy of all stored telemetry by initiating a Formal Data Audit request via the contact protocol."
-    },
-    {
-      id: "06",
-      title: "Data Retention",
-      subtitle: "Storage Duration & Deletion",
-      content: "Contact form submissions are stored in EmailJS for 30 days, then automatically purged. Google Analytics data is retained for 14 months (Google's default retention period). You may request immediate deletion of all stored data at any time by contacting us. Upon request, we will permanently delete your data within 30 business days and provide written confirmation of the purge operation."
-    }
-  ];
-
   return (
-    <div className="bg-white min-h-screen pt-32 pb-24">
-      <div className="max-w-4xl mx-auto px-6">
-        {/* Navigation Breadcrumb */}
-        <div className="mb-16">
-          <a
-            href="/"
-            className="inline-flex items-center gap-3 text-slate-400 hover:text-blue-600 font-black text-[10px] uppercase tracking-[0.2em] transition-all group"
-          >
-            <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
-            </svg>
-            Return to Core Infrastructure
-          </a>
-        </div>
+    <div className="bg-white min-h-screen font-sans">
 
-        {/* Header Section */}
-        <header className="space-y-8 mb-20 border-b border-slate-100 pb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-slate-900 text-blue-400 rounded-full text-[10px] font-black uppercase tracking-[0.2em] border border-slate-800">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            Institutional Governance v1.4
+      {/* ══════════════════════════════════════
+          HERO HEADER — purple banner with H1
+          matching blog page heading style exactly
+          ══════════════════════════════════════ */}
+      <div className="bg-[#673DE6] pt-32 pb-16 px-6">
+        <div className="max-w-[1280px] mx-auto px-0 lg:px-4 text-center">
+          {/* Breadcrumb — centered, 16px normal */}
+          <div className="flex items-center justify-center gap-2 mb-[16px]" style={{
+            fontSize: '16px',
+            lineHeight: '22.4px',
+            fontWeight: 400,
+          }}>
+            <a href="/" className="text-white/60 hover:text-white transition-colors">Home</a>
+            <span className="text-white/40">›</span>
+            <span className="text-white/60">Legal</span>
+            <span className="text-white/40">›</span>
+            <span className="text-white/90">Privacy policy</span>
           </div>
-          <h1 className="text-5xl md:text-7xl font-[900] text-slate-900 tracking-tighter leading-none">
-            Privacy <span className="text-blue-600">Protocol.</span>
+
+          {/* H1 — blog page spec: font-semibold, 56px, leading-[1.04], centered */}
+          <h1 className="font-semibold text-white mb-[24px] text-[33px] md:text-[44px] lg:text-[56px] leading-[1.04] tracking-normal mx-auto">
+            Privacy policy
           </h1>
-          <div className="flex flex-col md:flex-row md:items-center gap-6 pt-4">
-            <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">Last Audit: October 14, 2024</p>
-            <div className="hidden md:block h-1 w-1 rounded-full bg-slate-200"></div>
-            <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">Effective Version: LOCKED_4.0</p>
-          </div>
-        </header>
 
-        {/* Policy Content */}
-        <div className="space-y-24">
-          {sections.map((section) => (
-            <motion.section
-              key={section.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="grid md:grid-cols-[100px_1fr] gap-8"
-            >
-              <div className="flex flex-col items-center">
-                <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-xs font-black text-slate-400 mb-4">
-                  {section.id}
-                </div>
-                <div className="flex-1 w-px bg-gradient-to-b from-slate-100 via-slate-100 to-transparent"></div>
-              </div>
-              <div className="space-y-6">
-                <div>
-                  <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600 mb-2">{section.subtitle}</h2>
-                  <h3 className="text-3xl font-black text-slate-900 tracking-tight">{section.title}</h3>
-                </div>
-                <p className="text-lg text-slate-600 leading-relaxed font-medium">
-                  {section.content}
-                </p>
-              </div>
-            </motion.section>
-          ))}
+          {/* Subtitle — 16px semibold, centered */}
+          <p className="text-white/80 max-w-[560px] mx-auto" style={{
+            fontSize: '16px',
+            lineHeight: '25.6px',
+            fontWeight: 600,
+          }}>
+            Please read this agreement carefully, as it contains important information regarding your legal rights and remedies.
+          </p>
         </div>
+      </div>
 
-        {/* Governance Footer Card */}
-        <div className="mt-32 p-12 bg-slate-50 rounded-[3.5rem] border border-slate-100 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/5 blur-[80px]"></div>
-          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
-            <div className="max-w-md">
-              <h4 className="text-2xl font-black text-slate-900 mb-4">Data Sovereignty Commitment.</h4>
-              <p className="text-slate-500 font-medium leading-relaxed">
-                I believe that security is not a compliance checkbox, but a foundational design principle. My systems are built to ensure your business remains the sole sovereign of its information.
+
+      {/* ══════════════════════════════════════
+          BODY — two-column: sidebar + content
+          ══════════════════════════════════════ */}
+      <div className="max-w-[1280px] mx-auto px-6 lg:px-10 py-[48px]">
+        <div className="flex flex-col lg:flex-row gap-[40px] items-start">
+
+          {/* ── LEFT SIDEBAR ── */}
+          <aside className="lg:w-[240px] shrink-0">
+            <div className="sticky top-[120px]">
+              {/* Top flat links (no category label) */}
+              <ul className="mb-[28px] space-y-[10px]">
+                <li>
+                  <a href="/accessibility" className="text-[14px] text-[#464646] hover:text-[#673DE6] transition-colors leading-[1.4]">
+                    Accessibility statement
+                  </a>
+                </li>
+                <li>
+                  {/* Active link — purple + bold */}
+                  <a href="/privacy" className="text-[14px] text-[#673DE6] font-semibold leading-[1.4]">
+                    Privacy policy
+                  </a>
+                </li>
+              </ul>
+
+              {/* Policies Category */}
+              <div className="mb-[24px]">
+                <p className="text-[14px] font-bold text-[#1d1d1d] mb-[10px]">Policies</p>
+                <ul className="space-y-[8px]">
+                  {[
+                    { label: "Cookie policy", href: "/cookies" },
+                    { label: "Data security standards", href: "/governance" },
+                  ].map((link) => (
+                    <li key={link.label}>
+                      <a href={link.href} className="text-[14px] text-[#464646] hover:text-[#673DE6] transition-colors leading-[1.4]">
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Company's policies Category */}
+              <div className="mb-[24px]">
+                <p className="text-[14px] font-bold text-[#1d1d1d] mb-[10px]">Professional standards</p>
+                <ul className="space-y-[8px]">
+                  {[
+                    { label: "Code of conduct", href: "#" },
+                    { label: "Confidentiality agreement (NDA)", href: "#" },
+                  ].map((link) => (
+                    <li key={link.label}>
+                      <a href={link.href} className="text-[14px] text-[#464646] hover:text-[#673DE6] transition-colors leading-[1.4]">
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </aside>
+
+          {/* ── MAIN CONTENT ── */}
+          <main className="flex-1 w-full max-w-[850px]">
+            {/* Info callout box (matches Hostinger) */}
+            <div className="bg-[#f7f7f7] border border-[#e5e5e5] rounded-[8px] p-[24px] mb-[40px]">
+              <p className="text-[14px] text-[#464646] leading-[1.6]">
+                Welcome. As an Executive Admin & Automation professional, I treat your data with the same uncompromising standard of strict confidentiality that I grant to my highest-level clients. This Privacy Policy details how data is handled when you interact with this portfolio.
               </p>
             </div>
-            <div className="shrink-0 flex gap-6">
-              <div className="text-center">
-                <div className="w-14 h-14 bg-white rounded-2xl border border-slate-200 flex items-center justify-center text-blue-600 mb-3 shadow-sm group-hover:scale-110 transition-transform">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.040L3 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622l-.382-3.016z" />
-                  </svg>
-                </div>
-                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">SOC2 Grade</p>
-              </div>
-              <div className="text-center">
-                <div className="w-14 h-14 bg-white rounded-2xl border border-slate-200 flex items-center justify-center text-blue-600 mb-3 shadow-sm group-hover:scale-110 transition-transform">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                </div>
-                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">AES-256</p>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        {/* Final Contact Link */}
-        <div className="mt-20 text-center">
-          <p className="text-slate-400 font-bold text-sm mb-6 uppercase tracking-widest">Questions regarding this protocol?</p>
-          <a href="/contact" className="px-10 py-5 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-600 transition-all shadow-xl shadow-slate-900/10">
-            Secure Legal Inquiry
-          </a>
+            <p className="text-[14px] text-[#464646] mb-[32px]">
+              Last revised: 2024-03-12 10:00:00
+            </p>
+
+            {/* Section 1 */}
+            <section className="mb-[40px]">
+              <h3 className="text-[18px] font-bold text-[#1d1d1d] mb-[16px]">
+                1. INTRODUCTION
+              </h3>
+              <p className="text-[16px] text-[#464646] leading-[1.6] mb-[12px]">
+                When you share your project details, business challenges, or contact information with me, you are trusting me with your data. This Privacy Policy explains what data I collect, why I collect it, how it is secured, and your rights concerning that information.
+              </p>
+              <p className="text-[16px] text-[#464646] leading-[1.6]">
+                Whether we are discussing a potential contract or you are simply reviewing my portfolio case studies, I apply enterprise-grade discretion to all interactions.
+              </p>
+            </section>
+
+            {/* Section 2 */}
+            <section className="mb-[40px]">
+              <h3 className="text-[18px] font-bold text-[#1d1d1d] mb-[16px]">
+                2. THE EXECUTIVE STANDARD OF CONFIDENTIALITY
+              </h3>
+              <p className="text-[16px] text-[#464646] leading-[1.6] mb-[12px]">
+                My business operates on a baseline of zero-trust security and complete confidentiality. As a standard operating procedure:
+              </p>
+              <ul className="list-disc list-outside ml-[28px] space-y-[8px] text-[16px] text-[#464646] leading-[1.6] mb-[12px]">
+                <li>Any business information disclosed during initial contact or consultation is treated as strictly classified.</li>
+                <li>I do not sell, rent, or trade your contact information to data brokers or third parties under any circumstances.</li>
+                <li>Data processed through automated workflows (if commissioned) is strictly siloed and never cross-pollinated between client environments.</li>
+              </ul>
+            </section>
+
+            {/* Section 3 */}
+            <section className="mb-[40px]">
+              <h3 className="text-[18px] font-bold text-[#1d1d1d] mb-[16px]">
+                3. INFORMATION I COLLECT
+              </h3>
+              <p className="text-[16px] text-[#464646] leading-[1.6] mb-[8px]">
+                3.1 Information You Provide Directly
+              </p>
+              <ul className="list-disc list-outside ml-[28px] space-y-[8px] text-[16px] text-[#464646] leading-[1.6] mb-[16px]">
+                <li><strong>Contact Information:</strong> When you utilize the contact form, I collect your name, email address, company name, and the contents of your message to accurately assess your needs and respond.</li>
+              </ul>
+              <p className="text-[16px] text-[#464646] leading-[1.6] mb-[8px]">
+                3.2 Information Collected Automatically
+              </p>
+              <ul className="list-disc list-outside ml-[28px] space-y-[8px] text-[16px] text-[#464646] leading-[1.6]">
+                <li><strong>Analytics Data:</strong> I utilize basic, anonymized analytics (such as Google Analytics) to understand which case studies and pages are most relevant to visitors. This includes general device types, browser information, and aggregated traffic patterns.</li>
+                <li><strong>Cookies:</strong> Essential cookies are used to manage site preferences (e.g., your choice in the Cookie Consent banner). Please review the Cookie Policy for detailed specifics.</li>
+              </ul>
+            </section>
+
+            {/* Section 4 */}
+            <section className="mb-[40px]">
+              <h3 className="text-[18px] font-bold text-[#1d1d1d] mb-[16px]">
+                4. HOW YOUR DATA IS USED
+              </h3>
+              <p className="text-[16px] text-[#464646] leading-[1.6] mb-[12px]">
+                The information collected is used strictly for the following professional purposes:
+              </p>
+              <ul className="list-disc list-outside ml-[28px] space-y-[8px] text-[16px] text-[#464646] leading-[1.6]">
+                <li>To respond promptly and professionally to your inquiries regarding Executive Admin or Automation services.</li>
+                <li>To schedule and facilitate consultations.</li>
+                <li>To analyze portfolio performance, ensuring the content remains relevant and highly optimized for prospective clients.</li>
+                <li>To secure the website against spam, abuse, or unauthorized access attempts.</li>
+              </ul>
+            </section>
+
+            {/* Section 5 */}
+            <section className="mb-[40px]">
+              <h3 className="text-[18px] font-bold text-[#1d1d1d] mb-[16px]">
+                5. THIRD-PARTY INFRASTRUCTURE
+              </h3>
+              <p className="text-[16px] text-[#464646] leading-[1.6] mb-[12px]">
+                To provide a seamless, modern web experience, this portfolio utilizes industry-leading infrastructure. These providers process data strictly on my behalf:
+              </p>
+              <ul className="list-disc list-outside ml-[28px] space-y-[8px] text-[16px] text-[#464646] leading-[1.6]">
+                <li><strong>EmailJS:</strong> securely routes your contact form submissions to my private inbox. They do not use your data for their own marketing.</li>
+                <li><strong>Vercel:</strong> securely hosts this portfolio and processes standard server edge logs globally to maintain uptime and speed.</li>
+                <li><strong>Google Analytics:</strong> aggregates visitor data to help me refine the user experience.</li>
+              </ul>
+            </section>
+
+            {/* Section 6 */}
+            <section className="mb-[40px]">
+              <h3 className="text-[18px] font-bold text-[#1d1d1d] mb-[16px]">
+                6. SECURITY MEASURES
+              </h3>
+              <p className="text-[16px] text-[#464646] leading-[1.6] mb-[12px]">
+                As an automation engineer specializing in operational efficiency, I understand that security is paramount. The site forces HTTPS encrypted connections globally. Contact form transmissions are secured via TLS.
+              </p>
+              <p className="text-[16px] text-[#464646] leading-[1.6]">
+                While no transmission over the internet is mathematically 100% secure, I deploy best-in-class security practices to safeguard your inquiries from the moment they are submitted.
+              </p>
+            </section>
+
+            {/* Section 7 */}
+            <section className="mb-[40px]">
+              <h3 className="text-[18px] font-bold text-[#1d1d1d] mb-[16px]">
+                7. RETENTION PERIODS
+              </h3>
+              <p className="text-[16px] text-[#464646] leading-[1.6] mb-[12px]">
+                I retain your data only as long as necessary to fulfill the purposes outlined above:
+              </p>
+              <ul className="list-disc list-outside ml-[28px] space-y-[8px] text-[16px] text-[#464646] leading-[1.6]">
+                <li><strong>Inquiries:</strong> If a business engagement is not pursued, communication records are purged within a reasonable timeframe, typically 90 days.</li>
+                <li><strong>Analytics:</strong> Aggregated Google Analytics data is set to strict data retention limits, automatically expiring older user data records.</li>
+              </ul>
+            </section>
+
+            {/* Section 8 */}
+            <section className="mb-[40px]">
+              <h3 className="text-[18px] font-bold text-[#1d1d1d] mb-[16px]">
+                8. YOUR RIGHTS AND CONTROL
+              </h3>
+              <p className="text-[16px] text-[#464646] leading-[1.6] mb-[12px]">
+                You possess full sovereign rights over your personal data. You have the right to:
+              </p>
+              <ul className="list-disc list-outside ml-[28px] space-y-[8px] text-[16px] text-[#464646] leading-[1.6] mb-[12px]">
+                <li>Request a copy of the direct information you have submitted to me.</li>
+                <li>Request that your communication records and contact data be permanently deleted.</li>
+                <li>Withdraw consent for non-essential cookies via the site's Cookie Consent banner.</li>
+              </ul>
+              <p className="text-[16px] text-[#464646] leading-[1.6]">
+                To exercise any of these rights, simply email <a href="mailto:hello@aburahatsabir.com" className="text-[#673DE6] hover:underline font-semibold">hello@aburahatsabir.com</a>.
+              </p>
+            </section>
+
+            {/* Section 9 */}
+            <section className="mb-[40px]">
+              <h3 className="text-[18px] font-bold text-[#1d1d1d] mb-[16px]">
+                9. POLICY UPDATES
+              </h3>
+              <p className="text-[16px] text-[#464646] leading-[1.6]">
+                This policy represents a living document, subject to refinements as technology and legal requirements evolve. Significant changes will be reflected by the "Last revised" date at the top of this document. Continued engagement with the portfolio indicates acceptance of the active policy.
+              </p>
+            </section>
+
+            {/* Section 10 */}
+            <section className="mb-[40px]">
+              <h3 className="text-[18px] font-bold text-[#1d1d1d] mb-[16px]">
+                10. CONTACT FOR INQUIRIES
+              </h3>
+              <p className="text-[16px] text-[#464646] leading-[1.6]">
+                For any questions regarding confidentiality, data practices, or to request a standard NDA prior to a consultation, please reach out directly at: <a href="mailto:hello@aburahatsabir.com" className="text-[#673DE6] hover:underline font-semibold">hello@aburahatsabir.com</a>.
+              </p>
+            </section>
+
+          </main>
+
         </div>
       </div>
     </div>

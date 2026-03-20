@@ -100,6 +100,29 @@ export interface Project {
     result: string;
     painPoints?: string[];
   };
+  completionDate?: string;
+
+  // New fields for rebuilt case study detail page
+  role?: string;
+  industry?: string;
+  timeline?: string;
+  stack?: string;
+  location?: string;
+  readTime?: string;
+  caseStudyNumber?: string;
+  whatBroke?: string[];
+  whatSystemDoes?: string[];
+  modules?: { number: string; title: string; subtitle: string; highlight?: boolean }[];
+  features?: { number: string; title: string; description: string; badge: string }[];
+  beforeAfterTitle?: string;
+  beforeAfterSubtitle?: string;
+  beforeAfter?: { task: string; before: string; after: string }[];
+  resultStats?: { value: string; label: string; description: string }[];
+  monthlyData?: { month: string; orders: number; payments: number }[];
+  highlightCards?: { indicator: string; title: string; description: string; color: 'red' | 'yellow' | 'blue' }[];
+  designPrinciples?: { title: string; subtitle: string; description: string; quote: string }[];
+  researchTimeline?: { stage: string; title: string; quote?: string; badges?: string[]; content?: string }[];
+  liveDemo?: { description: string; url?: string };
 }
 
 export interface Experience {

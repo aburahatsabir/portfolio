@@ -95,9 +95,8 @@ const Footer: React.FC = () => {
           </div>
 
           <div className="flex gap-8 items-center">
-            <a href="/accessibility" className="hover:text-blue-600 transition-colors">ACCESSIBILITY STATEMENT</a>
-            <a href="/privacy" className="hover:text-blue-600 transition-colors">PRIVACY</a>
-            <a href="/cookies" className="hover:text-blue-600 transition-colors">COOKIES</a>
+            <a href="/privacy" className="hover:text-blue-600 transition-colors">PRIVACY POLICY</a>
+            <a href="/cookies" className="hover:text-blue-600 transition-colors">COOKIE POLICY</a>
           </div>
         </div>
       </div>

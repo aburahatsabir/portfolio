@@ -178,5 +178,5 @@ Sent via Portfolio Contact Form (EmailJS Fallback)
 Timestamp: ${new Date().toISOString()}
   `.trim());
 
-    return `mailto:abu.rahat.sabir@gmail.com?subject=${subject}&body=${body}`;
+    return `mailto:aburahatsabir178@gmail.com?subject=${subject}&body=${body}`;
 };

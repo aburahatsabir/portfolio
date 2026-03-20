@@ -26,13 +26,13 @@ export default defineConfig({
       template: 'sunburst', // 'sunburst', 'treemap', 'network'
     }),
     // Sentry source map upload (only in production builds with auth token)
-    process.env.SENTRY_AUTH_TOKEN && sentryVitePlugin({
+    process.env.SENTRY_AUTH_TOKEN ? sentryVitePlugin({
       authToken: process.env.SENTRY_AUTH_TOKEN,
       org: process.env.SENTRY_ORG || 'abu-rahat-sabir',
       project: process.env.SENTRY_PROJECT || 'portfolio',
       telemetry: false,
-    }),
-  ].filter(Boolean), // Remove falsy plugins
+    }) : null,
+  ].filter(Boolean) as any, // Remove falsy plugins
 
   resolve: {
     alias: {
@@ -179,10 +179,8 @@ export default defineConfig({
       'framer-motion',
       '@emailjs/browser',
       'web-vitals',
+      'recharts'
     ],
-    exclude: [
-      // Exclude large dependencies that are better lazy-loaded
-      'recharts',
-    ],
+    exclude: [],
   },
 });

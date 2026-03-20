@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import { onCLS, onINP, onLCP, onFCP, onTTFB } from 'web-vitals';
 import { trackCustomEvent } from './utils/analytics';
+import { HelmetProvider } from 'react-helmet-async';
 import { initSentry, captureError } from './utils/sentry';
 import { scriptHealthMonitor } from './utils/script-health-monitor';
 
@@ -109,6 +110,8 @@ if (!rootElement) {
 const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
-    <App />
+    <HelmetProvider>
+      <App />
+    </HelmetProvider>
   </React.StrictMode>
 );

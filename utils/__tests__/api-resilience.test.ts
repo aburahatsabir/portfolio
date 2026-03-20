@@ -20,7 +20,7 @@ describe('api-resilience', () => {
             .mockRejectedValueOnce(new Error('Network error'))
             .mockResolvedValueOnce({ data: 'success' });
 
-        const result = await resilientApiCall(mockFn, { maxRetries: 2 });
+        const result = await resilientApiCall(mockFn, { retries: 2 });
 
         expect(result).toEqual({ data: 'success' });
         expect(mockFn).toHaveBeenCalledTimes(2);
@@ -30,7 +30,7 @@ describe('api-resilience', () => {
         const mockFn = vi.fn().mockRejectedValue(new Error('Persistent error'));
 
         await expect(
-            resilientApiCall(mockFn, { maxRetries: 3 })
+            resilientApiCall(mockFn, { retries: 3 })
         ).rejects.toThrow();
 
         expect(mockFn).toHaveBeenCalledTimes(3);
@@ -43,7 +43,7 @@ describe('api-resilience', () => {
             .mockResolvedValueOnce({ data: 'success' });
 
         const startTime = Date.now();
-        await resilientApiCall(mockFn, { maxRetries: 3, baseDelay: 100 });
+        await resilientApiCall(mockFn, { retries: 3,  });
         const endTime = Date.now();
 
         // Should have delays: 100ms + 200ms = 300ms minimum
@@ -54,7 +54,7 @@ describe('api-resilience', () => {
         const mockFn = vi.fn().mockRejectedValue(new Error('ECONNREFUSED'));
 
         try {
-            await resilientApiCall(mockFn, { maxRetries: 1 });
+            await resilientApiCall(mockFn, { retries: 1 });
             expect.fail('Should have thrown an error');
         } catch (error: any) {
             expect(error.userMessage || error.message).toBeTruthy();
@@ -65,7 +65,7 @@ describe('api-resilience', () => {
         const mockFn = vi.fn().mockRejectedValue(new Error('ETIMEDOUT'));
 
         await expect(
-            resilientApiCall(mockFn, { maxRetries: 2 })
+            resilientApiCall(mockFn, { retries: 2 })
         ).rejects.toThrow();
 
         expect(mockFn).toHaveBeenCalledTimes(2);

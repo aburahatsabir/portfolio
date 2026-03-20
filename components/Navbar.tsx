@@ -18,7 +18,7 @@ const Navbar: React.FC = () => {
     // Check if we are on a page with a dark hero (only /blog listing, not individual posts)
     const checkTheme = () => {
       const path = window.location.pathname;
-      setIsDarkThemePage(path === '/blog' || path === '/privacy' || path === '/cookies' || path === '/accessibility');
+      setIsDarkThemePage(path === '/blog' || path === '/privacy' || path === '/cookies' || path === '/accessibility' || path === '/conduct' || path === '/governance');
     };
     checkTheme();
     window.addEventListener('popstate', checkTheme);
@@ -205,7 +205,7 @@ const Navbar: React.FC = () => {
                 </div>
 
                 <div className="flex justify-between items-center text-[9px] font-black text-slate-400 uppercase tracking-widest">
-                  <span>© 2025 Abu Rahat Sabir</span>
+                  <span>© {new Date().getFullYear()} Abu Rahat Sabir</span>
                   <SocialLinks variant="text" platforms={['linkedin', 'github']} />
                 </div>
               </div>

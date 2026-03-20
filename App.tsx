@@ -15,13 +15,15 @@ import BottomCTA from './components/BottomCTA';
 import { lazyLoadPage, lazyLoad, PageLoadingFallback, LoadingFallback } from './utils/lazy-loading';
 
 // Route-based code splitting - lazy load page components
-const CaseStudyPage = lazyLoadPage(() => import('./components/CaseStudyPage'));
 const BlogSeries = lazyLoadPage(() => import('./components/BlogSeries'));
 const PersonaSpecificContent = lazyLoadPage(() => import('./components/PersonaSpecificContent'));
 const PersonaDirectory = lazyLoadPage(() => import('./components/PersonaDirectory'));
+const FMCGCaseStudy = lazyLoadPage(() => import('./components/FMCGCaseStudy'));
 const PrivacyPolicy = lazyLoadPage(() => import('./components/PrivacyPolicy'));
 const CookiePolicy = lazyLoadPage(() => import('./components/CookiePolicy'));
 const AccessibilityStatement = lazyLoadPage(() => import('./components/AccessibilityStatement'));
+const CodeOfConduct = lazyLoadPage(() => import('./components/CodeOfConduct'));
+const DataSecurityStandards = lazyLoadPage(() => import('./components/DataSecurityStandards'));
 const Certifications = lazyLoadPage(() => import('./components/Certifications'));
 
 // Below-the-fold components - lazy load for better initial load
@@ -178,9 +180,13 @@ function App() {
             return <React.Fragment key={currentPath}><ErrorBoundary><BlogSeries /></ErrorBoundary></React.Fragment>;
         }
 
+        if (currentPath === '/work/fmcg-erp') {
+            return <ErrorBoundary><FMCGCaseStudy /></ErrorBoundary>;
+        }
+
         if (currentPath.startsWith('/work/')) {
-            const projectId = currentPath.replace('/work/', '');
-            return <ErrorBoundary><CaseStudyPage projectId={projectId} /></ErrorBoundary>;
+            // Fallback for outdated links: Redirect to Work library
+            return <div className="pt-20"><ErrorBoundary><Work /></ErrorBoundary></div>;
         }
 
         if (currentPath.startsWith('/persona/')) {
@@ -195,11 +201,7 @@ function App() {
                 return <div className="pt-20"><ErrorBoundary><Work /></ErrorBoundary></div>;
 
             case '/governance':
-                return (
-                    <div className="pt-20">
-                        <ErrorBoundary><ReliabilityStandards /></ErrorBoundary>
-                    </div>
-                );
+                return <ErrorBoundary><DataSecurityStandards /></ErrorBoundary>;
             case '/blog':
                 return <React.Fragment key={currentPath}><div className="pt-20"><ErrorBoundary><BlogSeries /></ErrorBoundary></div></React.Fragment>;
             case '/solutions':
@@ -228,6 +230,8 @@ function App() {
                 return <ErrorBoundary><CookiePolicy /></ErrorBoundary>;
             case '/accessibility':
                 return <ErrorBoundary><AccessibilityStatement /></ErrorBoundary>;
+            case '/conduct':
+                return <ErrorBoundary><CodeOfConduct /></ErrorBoundary>;
             default:
                 return (
                     <>

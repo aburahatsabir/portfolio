@@ -90,10 +90,10 @@ const ContactFormFallback: React.FC<ContactFormFallbackProps> = ({
                     </summary>
                     <div className="mt-3 pl-4 space-y-2 text-sm border-l-2 border-blue-200">
                         <a
-                            href="mailto:abu.rahat.sabir@gmail.com"
-                            className="block text-blue-700 hover:underline"
+                            href="mailto:aburahatsabir178@gmail.com"
+                            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-50 text-blue-700 rounded-lg font-bold hover:bg-blue-100 transition-colors"
                         >
-                            ✉️ abu.rahat.sabir@gmail.com
+                            ✉️ aburahatsabir178@gmail.com
                         </a>
                         <a
                             href="https://linkedin.com/in/abu-rahat-sabir"

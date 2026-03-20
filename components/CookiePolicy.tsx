@@ -1,185 +1,287 @@
-
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
+
+const LAST_REVISED = 'March 14, 2026';
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 18 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.45, delay: i * 0.07, ease: 'easeOut' },
+  }),
+};
+
+const sections = [
+  { id: '1', title: '1. GENERAL INFORMATION OUT COOKIES' },
+  { id: '2', title: '2. COOKIES USED ON THIS PORTFOLIO' },
+  { id: '3', title: '3. THIRD-PARTY COOKIES' },
+  { id: '4', title: '4. REFUSAL OR BLOCKING OF COOKIES' },
+  { id: '5', title: '5. GENERAL OVERVIEW & UPDATES' },
+];
 
 const CookiePolicy: React.FC = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const cookieCategories = [
-    {
-      id: "ESS-01",
-      title: "Essential Infrastructure",
-      subtitle: "System Integrity & Security",
-      description: "These cookies are mandatory for the architectural stability of the site. They manage session state, CSRF protection, and load balancing across our global nodes.",
-      impact: "Critical",
-      expiry: "Session-based",
-      tags: ["Security", "Sovereignty"]
-    },
-    {
-      id: "ANA-02",
-      title: "Diagnostic Analytics",
-      subtitle: "Performance & Load Monitoring",
-      description: "Used to monitor system latency and traffic distribution. We utilize de-identified telemetry to ensure our Diagnostic Core maintains sub-second response times.",
-      impact: "Moderate",
-      expiry: "12 Months",
-      tags: ["Observability", "ROI"]
-    },
-    {
-      id: "FUN-03",
-      title: "Functional Preference",
-      subtitle: "User Experience Personalization",
-      description: "Stored parameters for UI preferences, such as selected industry blueprints or saved ROI calculations, to ensure persistence across sessions.",
-      impact: "Low",
-      expiry: "6 Months",
-      tags: ["Experience", "Sustenance"]
-    }
-  ];
-
   return (
-    <div className="bg-white min-h-screen pt-32 pb-24">
-      <div className="max-w-4xl mx-auto px-6">
-        {/* Navigation Breadcrumb */}
-        <div className="mb-16">
-          <a
-            href="/"
-            className="inline-flex items-center gap-3 text-slate-400 hover:text-blue-600 font-black text-[10px] uppercase tracking-[0.2em] transition-all group"
-          >
-            <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
-            </svg>
-            Return to Core Infrastructure
-          </a>
-        </div>
-
-        {/* Header Section */}
-        <header className="space-y-8 mb-20 border-b border-slate-100 pb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-slate-900 text-blue-400 rounded-full text-[10px] font-black uppercase tracking-[0.2em] border border-slate-800">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
-            Institutional Governance v1.4
+    <div className="bg-white min-h-screen font-sans">
+      {/* ══════════════════════════════════════
+          HERO HEADER — purple banner with H1
+          matching Privacy/Blog page heading style
+          ══════════════════════════════════════ */}
+      <div className="bg-[#673DE6] pt-32 pb-16 px-6">
+        <div className="max-w-[1280px] mx-auto px-0 lg:px-4 text-center">
+          {/* Breadcrumb */}
+          <div className="flex items-center justify-center gap-2 mb-[16px]" style={{
+            fontSize: '16px',
+            lineHeight: '22.4px',
+            fontWeight: 400,
+          }}>
+            <a href="/" className="text-white/60 hover:text-white transition-colors">Home</a>
+            <span className="text-white/40">›</span>
+            <span className="text-white/60">Legal</span>
+            <span className="text-white/40">›</span>
+            <span className="text-white/90">Cookie Policy</span>
           </div>
-          <h1 className="text-5xl md:text-7xl font-[900] text-slate-900 tracking-tighter leading-none">
-            Cookie <span className="text-blue-600">Audit.</span>
+
+          {/* H1 */}
+          <h1 className="font-semibold text-white mb-[24px] text-[33px] md:text-[44px] lg:text-[56px] leading-[1.04] tracking-normal mx-auto">
+            Cookie Policy
           </h1>
-          <div className="flex flex-col md:flex-row md:items-center gap-6 pt-4">
-            <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">Last Telemetry Audit: Nov 02, 2024</p>
-            <div className="hidden md:block h-1 w-1 rounded-full bg-slate-200"></div>
-            <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">Protocol: TELEMETRY_LOCKED_1.4</p>
-          </div>
-        </header>
 
-        {/* Introduction */}
-        <div className="prose prose-slate max-w-none mb-24">
-          <p className="text-xl text-slate-500 font-medium leading-relaxed">
-            AdminPro utilizes a clinical approach to data tracking. We believe in <span className="text-slate-900 font-bold underline decoration-blue-500 decoration-2">Telemetry Transparency</span>: every cookie served is a functional component of the system architecture, not a marketing byproduct.
+          {/* Subtitle */}
+          <p className="text-white/80 max-w-[560px] mx-auto" style={{
+            fontSize: '16px',
+            lineHeight: '25.6px',
+            fontWeight: 600,
+          }}>
+            Please review this policy carefully to understand how digital footprint data is managed regarding your rights to control it.
           </p>
         </div>
+      </div>
 
-        {/* Forensic Cookie Inventory */}
-        <div className="space-y-12 mb-24">
-          <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 mb-8">System Inventory & Risk Rating</h2>
-          {cookieCategories.map((category, idx) => (
+      {/* ══════════════════════════════════════
+          BODY — two-column: sidebar + content
+          ══════════════════════════════════════ */}
+      <div className="max-w-[1280px] mx-auto px-6 lg:px-10 py-[48px]">
+        <div className="flex flex-col lg:flex-row gap-[40px] items-start">
+
+          {/* ── LEFT SIDEBAR ── */}
+          <aside className="lg:w-[240px] shrink-0">
+            <div className="sticky top-[120px]">
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#1d1d1d] mb-[16px]">Legal &amp; Standards</p>
+              <ul className="space-y-[10px] mb-[28px]">
+                {[
+                  { label: 'Privacy policy', href: '/privacy' },
+                  { label: 'Cookie policy', href: '/cookies', active: true },
+                  { label: 'Accessibility statement', href: '/accessibility' },
+                  { label: 'Data security standards', href: '/governance' },
+                  { label: 'Code of conduct', href: '/conduct' },
+                ].map((link) => (
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      className={`text-[14px] leading-[1.4] block ${'active' in link && link.active ? 'text-[#673DE6] font-semibold' : 'text-[#464646] hover:text-[#673DE6] transition-colors'}`}
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <div className="border-t border-[#e5e5e5] pt-[20px]">
+                <a href="/contact" className="text-[14px] text-[#673DE6] font-semibold hover:underline flex items-center gap-1">
+                  <span>→</span> Start a consultation
+                </a>
+              </div>
+            </div>
+          </aside>
+
+          {/* ── MAIN CONTENT ── */}
+          <main className="flex-1 w-full max-w-[850px]">
+
+            {/* Info callout box */}
             <motion.div
-              key={category.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.1 }}
-              className="group p-10 bg-slate-50 border border-slate-100 rounded-[3rem] hover:bg-white hover:border-blue-200 hover:shadow-2xl transition-all duration-500"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="bg-[#f7f7f7] border border-[#e5e5e5] rounded-[8px] p-[24px] mb-[40px]"
             >
-              <div className="grid md:grid-cols-[120px_1fr] gap-8 items-start">
-                <div className="flex flex-col gap-4">
-                  <div className="w-16 h-16 rounded-2xl bg-white border border-slate-200 flex items-center justify-center font-mono text-xs font-black text-slate-400 group-hover:text-blue-600 transition-colors">
-                    {category.id}
-                  </div>
-                  <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest text-center ${category.impact === 'Critical' ? 'bg-red-50 text-red-500 border border-red-100' :
-                      category.impact === 'Moderate' ? 'bg-amber-50 text-amber-500 border border-amber-100' :
-                        'bg-emerald-50 text-emerald-500 border border-emerald-100'
-                    }`}>
-                    {category.impact} Risk
-                  </span>
-                </div>
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600 mb-2">{category.subtitle}</h3>
-                    <h4 className="text-2xl font-black text-slate-900 tracking-tight">{category.title}</h4>
-                  </div>
-                  <p className="text-slate-600 font-medium leading-relaxed">{category.description}</p>
-                  <div className="flex flex-wrap items-center gap-6 pt-6 border-t border-slate-200/60">
-                    <div>
-                      <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Persistence</p>
-                      <p className="text-xs font-bold text-slate-900">{category.expiry}</p>
-                    </div>
-                    <div className="h-8 w-px bg-slate-200"></div>
-                    <div className="flex gap-2">
-                      {category.tags.map(tag => (
-                        <span key={tag} className="px-3 py-1 bg-white border border-slate-100 rounded-md text-[9px] font-black uppercase text-slate-500">{tag}</span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <p className="text-[14px] text-[#464646] leading-[1.6]">
+                I believe in complete operational transparency. Every cookie served on this portfolio has a deliberate functional or analytical purpose designed to enhance your experience, without crossing the line into invasive marketing practices.
+              </p>
             </motion.div>
-          ))}
-        </div>
 
-        {/* AI Diagnostic Disclosure */}
-        <div className="p-12 bg-slate-900 text-white rounded-[4rem] relative overflow-hidden mb-24 shadow-3xl shadow-slate-900/40">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 blur-[100px] pointer-events-none"></div>
-          <div className="relative z-10 flex flex-col md:flex-row items-center gap-12">
-            <div className="w-24 h-24 bg-blue-600 rounded-[2rem] flex items-center justify-center text-white shadow-xl shrink-0">
-              <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </div>
-            <div className="space-y-6">
-              <h4 className="text-2xl font-black tracking-tight">AI Telemetry Notice</h4>
-              <p className="text-slate-400 font-medium leading-relaxed">
-                The Principal Diagnostic Core (powered by Gemini 3 Pro) uses localized session tokens to maintain context during system audits. This data is de-identified before transmission to the reasoning engine and is not used for institutional model training.
+            <p className="text-[14px] text-[#464646] mb-[32px]">
+              Last revised: <strong>{LAST_REVISED}</strong>
+            </p>
+
+            {/* ── Section 1 ── */}
+            <motion.section
+              id="section-1"
+              className="mb-[40px]"
+              custom={0} variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
+            >
+              <h3 className="text-[18px] font-bold text-[#1d1d1d] mb-[16px]">
+                1. GENERAL INFORMATION ABOUT COOKIES
+              </h3>
+              <p className="text-[16px] text-[#464646] leading-[1.6] mb-[12px]">
+                I utilize cookies on this portfolio site to customize its functioning, ensure structural security, and contribute to ease of use when navigating the various blueprints and case studies.
               </p>
-              <div className="flex items-center gap-4 pt-4">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span className="text-[10px] font-black uppercase tracking-widest text-blue-400">Gemini-Engine-Lock Verified</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Governance Control Section */}
-        <div className="space-y-12">
-          <div>
-            <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-blue-600 mb-6">User Autonomy</h2>
-            <h3 className="text-4xl font-black text-slate-900 tracking-tight">Sovereign Control.</h3>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="p-10 rounded-[3rem] border border-slate-100 bg-slate-50 space-y-6">
-              <h5 className="text-xl font-black">Browser-Level Control</h5>
-              <p className="text-slate-500 font-medium leading-relaxed">
-                Users can manage tracking via browser settings. Note that disabling "Essential" infrastructure may lead to system-wide failures in the ROI Calculator and Diagnostic Core.
+              
+              <p className="text-[16px] text-[#464646] leading-[1.6] mb-[8px] font-semibold mt-[24px]">
+                What is a cookie?
               </p>
-            </div>
-            <div className="p-10 rounded-[3rem] border border-slate-100 bg-slate-50 space-y-6">
-              <h5 className="text-xl font-black">Do Not Track (DNT)</h5>
-              <p className="text-slate-500 font-medium leading-relaxed">
-                We respect the "Do Not Track" (DNT) signal. When enabled, we automatically restrict telemetry to only those components required for site delivery.
+              <p className="text-[16px] text-[#464646] leading-[1.6] mb-[12px]">
+                A cookie is a small text file placed onto your device that enables the site's features and functionality. For example, cookies enable the portfolio to recall your consent preferences or measure system latency. They allow the storage of analytical data, such as:
               </p>
-            </div>
-          </div>
-        </div>
+              <ul className="list-disc list-outside ml-[28px] space-y-[8px] text-[16px] text-[#464646] leading-[1.6] mb-[16px]">
+                <li>Network data (IP address, connection speed);</li>
+                <li>Device metadata (Type of browser, operating system);</li>
+                <li>Interaction data (How you browse the site, which sections command your attention, and journey duration).</li>
+              </ul>
 
-        {/* Final CTA */}
-        <div className="mt-32 text-center space-y-8">
-          <p className="text-slate-400 font-bold text-sm uppercase tracking-widest">Require a deeper technical audit of our stack?</p>
-          <div className="flex flex-wrap justify-center gap-6">
-            <a href="/contact" className="px-12 py-6 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-600 transition-all shadow-xl">
-              Request Forensic Data Export
-            </a>
-            <a href="/" className="px-12 py-6 bg-slate-100 text-slate-600 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition-all">
-              Return to Dashboard
-            </a>
-          </div>
+              <p className="text-[16px] text-[#464646] leading-[1.6] mb-[8px] font-semibold mt-[24px]">
+                Core Objectives
+              </p>
+              <p className="text-[16px] text-[#464646] leading-[1.6] mb-[12px]">
+                I utilize cookies strictly to:
+              </p>
+              <ul className="list-disc list-outside ml-[28px] space-y-[8px] text-[16px] text-[#464646] leading-[1.6]">
+                <li><strong>Ensure System Integrity:</strong> To enable and support core infrastructural security and detect/neutralize malicious traffic requests globally.</li>
+                <li><strong>Research and Optimization:</strong> To understand, improve, and measure the performance of the portfolio content, ensuring high-value business insights are correctly positioned for returning executives.</li>
+                <li><strong>Persistent Experience:</strong> To recall returning visitors and avoid prompting repetitive actions (such as re-asking for consent).</li>
+              </ul>
+            </motion.section>
+
+            {/* ── Section 2 ── */}
+            <motion.section
+              id="section-2"
+              className="mb-[40px]"
+              custom={1} variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
+            >
+              <h3 className="text-[18px] font-bold text-[#1d1d1d] mb-[16px]">
+                2. COOKIES USED ON THIS PORTFOLIO
+              </h3>
+              <p className="text-[16px] text-[#464646] leading-[1.6] mb-[12px]">
+                Each time you visit the portfolio, both <strong>persistent cookies</strong> (which remain in your browser securely to be read upon your return) and <strong>session cookies</strong> (which expire the moment you close your browser) may be created.
+              </p>
+              <p className="text-[16px] text-[#464646] leading-[1.6] mb-[24px]">
+                Please note that blocking <em>Strictly Necessary</em> cookies will severely degrade the foundational operation of the website. Below are the classifications of cookies engaged on this architecture:
+              </p>
+
+              <h4 className="text-[16px] font-bold text-[#1d1d1d] mb-[8px]">
+                2.1 Strictly Necessary (Essential Infrastructure)
+              </h4>
+              <p className="text-[16px] text-[#464646] leading-[1.6] mb-[16px]">
+                These cookies are mandatory for the architectural stability of the site. They manage fundamental session state, cross-site request forgery (CSRF) protection, and load balancing across global edge nodes. Without these, secure operations are impossible.
+              </p>
+
+              <h4 className="text-[16px] font-bold text-[#1d1d1d] mb-[8px]">
+                2.2 Preference &amp; Functionality
+              </h4>
+              <p className="text-[16px] text-[#464646] leading-[1.6] mb-[16px]">
+                These improve the experiential performance of the portfolio. They recall the settings you selected (such as your decision on the Cookie Consent banner itself). This spares you from adjusting UI states on subsequent visits.
+              </p>
+
+              <h4 className="text-[16px] font-bold text-[#1d1d1d] mb-[8px]">
+                2.3 Statistical &amp; Analytics
+              </h4>
+              <p className="text-[16px] text-[#464646] leading-[1.6]">
+                These diagnostic cookies allow me to count the number of high-level users and analyze aggregated navigation pathways. This intelligence helps me consistently refine the content structure to better serve the expectations of operations leaders and founders. For instance, determining if certain case studies load too slowly or which blueprint methodologies garner the most attention.
+              </p>
+            </motion.section>
+
+            {/* ── Section 3 ── */}
+            <motion.section
+              id="section-3"
+              className="mb-[40px]"
+              custom={2} variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
+            >
+              <h3 className="text-[18px] font-bold text-[#1d1d1d] mb-[16px]">
+                3. THIRD-PARTY COOKIES
+              </h3>
+              
+              <h4 className="text-[16px] font-bold text-[#1d1d1d] mb-[8px]">
+                Analytics and Reporting
+              </h4>
+              <p className="text-[16px] text-[#464646] leading-[1.6] mb-[16px]">
+                Some analytics cookies are provided by secure third-party entities. Specifically, this site utilizes Google Analytics to process de-identified traffic patterns. Google applies their own strictly governed Privacy and Cookie Policies to these tools, and they determine the duration of such persistent cookies (typically up to 26 months).
+              </p>
+
+              <h4 className="text-[16px] font-bold text-[#1d1d1d] mb-[8px]">
+                Infrastructure Vendors
+              </h4>
+              <p className="text-[16px] text-[#464646] leading-[1.6]">
+                External entities, such as Vercel (my hosting and edge network provider), may set network-level cookies designed to verify a secure and reliable connection. Due to the cryptographic nature of these cookies, this portfolio does not have direct access to alter the local data stored by infrastructure partners, nor do they access the application's local preference cookies.
+              </p>
+            </motion.section>
+
+            {/* ── Section 4 ── */}
+            <motion.section
+              id="section-4"
+              className="mb-[40px]"
+              custom={3} variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
+            >
+              <h3 className="text-[18px] font-bold text-[#1d1d1d] mb-[16px]">
+                4. REFUSAL OR BLOCKING OF COOKIES
+              </h3>
+              <p className="text-[16px] text-[#464646] leading-[1.6] mb-[12px]">
+                You possess absolute sovereign control over your browser configuration. You may, at your discretion, configure your device settings to block or systematically delete cookies and similar unique identifiers.
+              </p>
+              <p className="text-[16px] text-[#464646] leading-[1.6] mb-[16px]">
+                I strongly respect Do Not Track (DNT) browser signals. However, as noted, stripping the browser of Strictly Necessary cookies may render certain interactive components of the portfolio inaccessible or dysfunctional.
+              </p>
+              <p className="text-[16px] text-[#464646] leading-[1.6] mb-[16px]">
+                <strong>Google Analytics Opt-Out:</strong> You can completely opt out of Google Analytics without affecting how you experience this site globally. For instructions on opting out permanently across all sites, visit the official Google page at:{' '}
+                <a
+                  href="https://tools.google.com/dlpage/gaoptout"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#673DE6] hover:underline font-semibold"
+                >
+                  https://tools.google.com/dlpage/gaoptout
+                </a>.
+              </p>
+              <p className="text-[16px] text-[#464646] leading-[1.6]">
+                For comprehensive technical guidance on scrubbing local storage from modern web browsers, please consult independent resources such as{' '}
+                <a
+                  href="https://www.allaboutcookies.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#673DE6] hover:underline font-semibold"
+                >
+                  allaboutcookies.org
+                </a>.
+              </p>
+            </motion.section>
+
+            {/* ── Section 5 ── */}
+            <motion.section
+              id="section-5"
+              className="mb-[40px]"
+              custom={4} variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
+            >
+              <h3 className="text-[18px] font-bold text-[#1d1d1d] mb-[16px]">
+                5. GENERAL OVERVIEW &amp; UPDATES
+              </h3>
+              <p className="text-[16px] text-[#464646] leading-[1.6] mb-[12px]">
+                This Cookie Policy operates in direct conjunction with the broader <a href="/privacy" className="text-[#673DE6] hover:underline font-semibold">Privacy Policy</a> governing all data practices on this portfolio. 
+              </p>
+              <p className="text-[16px] text-[#464646] leading-[1.6] mb-[16px]">
+                As web logic and tracking infrastructure evolve, I will update this document to maintain maximum transparency. I recommend that returning visitors verify the "Last Revised" date at the top of this document to remain informed of any modifications.
+              </p>
+              <p className="text-[16px] text-[#464646] leading-[1.6]">
+                For any direct inquiries regarding my application of cookie architecture or to discuss secure business operations, please do not hesitate to reach out directly at:{' '}
+                <a href="mailto:aburahatsabir178@gmail.com" className="text-[#673DE6] hover:underline font-semibold">
+                  aburahatsabir178@gmail.com
+                </a>.
+              </p>
+            </motion.section>
+
+          </main>
+
         </div>
       </div>
     </div>

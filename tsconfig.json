@@ -30,5 +30,11 @@
     "strictFunctionTypes": true,
     "strictBindCallApply": true,
     "alwaysStrict": true
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "fmcg-case-study-react",
+    "tmp"
+  ]
 }

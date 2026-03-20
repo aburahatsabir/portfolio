@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { saveFailedSubmission, getFailedSubmissions, cleanupOldSubmissions } from '../form-backup';
+import { saveFailedSubmission, getBackupSubmissions, cleanupOldSubmissions } from '../form-backup';
 
 describe('form-backup', () => {
     beforeEach(() => {
@@ -14,7 +14,7 @@ describe('form-backup', () => {
         const formData = {
             name: 'John Doe',
             email: 'john@example.com',
-            subject: 'Test',
+            role: 'Test', challenge: 'Test', timeline: 'Test',
             message: 'Test message'
         };
 
@@ -28,15 +28,14 @@ describe('form-backup', () => {
         const formData = {
             name: 'John Doe',
             email: 'john@example.com',
-            subject: 'Test',
+            role: 'Test', challenge: 'Test', timeline: 'Test',
             message: 'Test message'
         };
 
         saveFailedSubmission(formData);
-        const submissions = getFailedSubmissions();
-
+        const submissions = getBackupSubmissions();
         expect(submissions.length).toBeGreaterThan(0);
-        expect(submissions[0].data.name).toBe('John Doe');
+        expect(submissions[0].formData.name).toBe('John Doe');
     });
 
     it('cleans up old submissions', () => {
@@ -44,12 +43,12 @@ describe('form-backup', () => {
         const oldData = {
             name: 'Old',
             email: 'old@example.com',
-            subject: 'Old',
+            role: 'Old', challenge: 'Old', timeline: 'Old',
             message: 'Old message'
         };
         const oldTimestamp = Date.now() - (31 * 24 * 60 * 60 * 1000); // 31 days ago
         localStorage.setItem('form_backup_old', JSON.stringify({
-            data: oldData,
+            formData: oldData,
             timestamp: oldTimestamp
         }));
 
@@ -62,12 +61,12 @@ describe('form-backup', () => {
         const recentData = {
             name: 'Recent',
             email: 'recent@example.com',
-            subject: 'Recent',
+            role: 'Recent', challenge: 'Recent', timeline: 'Recent',
             message: 'Recent message'
         };
         const recentTimestamp = Date.now() - (5 * 24 * 60 * 60 * 1000); // 5 days ago
         localStorage.setItem('form_backup_recent', JSON.stringify({
-            data: recentData,
+            formData: recentData,
             timestamp: recentTimestamp
         }));
 
@@ -78,7 +77,7 @@ describe('form-backup', () => {
 
     it('handles empty localStorage gracefully', () => {
         expect(() => {
-            getFailedSubmissions();
+            getBackupSubmissions();
         }).not.toThrow();
 
         expect(() => {

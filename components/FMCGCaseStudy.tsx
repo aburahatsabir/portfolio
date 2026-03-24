@@ -252,9 +252,9 @@ const FMCGCaseStudy: React.FC = () => {
                 
                 .fmcg-case-study h1 {
                     font-family: var(--sans);
-                    font-size: clamp(44px,6.5vw,78px);
-                    line-height: 1.03;
-                    letter-spacing: -0.05em;
+                    font-size: clamp(42px, 5vw, 76px);
+                    line-height: 1.05;
+                    letter-spacing: -0.04em;
                     color: var(--ink);
                     margin-bottom: 24px;
                     font-weight: 800;
@@ -270,17 +270,17 @@ const FMCGCaseStudy: React.FC = () => {
                     line-height: 1.82;
                     font-weight: 300;
                     margin-top: 0;
-                    max-width: 580px;
-                    margin-bottom: 52px;
+                    max-width: 540px;
+                    margin-bottom: 40px;
                 }
                 
                 .fmcg-case-study #hero {
                     min-height: 100vh;
                     display: flex;
-                    flex-direction: column;
-                    justify-content: flex-end;
-                    padding: 0 0 80px;
+                    align-items: center;
+                    padding: 120px 0 80px;
                     position: relative;
+                    overflow: hidden;
                 }
                 .fmcg-case-study .hero-grid {
                     position: absolute;
@@ -289,38 +289,16 @@ const FMCGCaseStudy: React.FC = () => {
                     background-size: 64px 64px;
                     opacity: .4;
                     pointer-events: none;
-                    mask-image: linear-gradient(to bottom, transparent 5%, rgba(0,0,0,.5) 40%, rgba(0,0,0,.5) 80%, transparent);
-                    -webkit-mask-image: linear-gradient(to bottom, transparent 5%, rgba(0,0,0,.5) 40%, rgba(0,0,0,.5) 80%, transparent);
+                    mask-image: radial-gradient(circle at 75% 50%, rgba(0,0,0,0.6) 0%, transparent 50%);
+                    -webkit-mask-image: radial-gradient(circle at 75% 50%, rgba(0,0,0,0.6) 0%, transparent 50%);
                 }
                 .fmcg-case-study .hero-inner {
-                    max-width: 940px;
+                    display: grid;
+                    grid-template-columns: 1.15fr 0.85fr;
+                    gap: 60px;
+                    align-items: center;
                     position: relative;
                     z-index: 1;
-                }
-                .fmcg-case-study .hero-badge {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 9px;
-                    border: 1px solid var(--brand-border);
-                    border-radius: 999px;
-                    padding: 5px 16px;
-                    font-family: var(--mono);
-                    font-size: 11px;
-                    color: var(--brand);
-                    margin-bottom: 40px;
-                    background: var(--brand-light);
-                    letter-spacing: 0.02em;
-                }
-                .fmcg-case-study .badge-dot {
-                    width: 6px;
-                    height: 6px;
-                    border-radius: 50%;
-                    background: var(--gm);
-                    animation: blink 2.5s ease-in-out infinite;
-                }
-                @keyframes blink {
-                    0%, 100% { opacity: 1; }
-                    50% { opacity: .3; }
                 }
                 .fmcg-case-study .hero-meta {
                     display: grid;
@@ -343,7 +321,7 @@ const FMCGCaseStudy: React.FC = () => {
                 }
                 .fmcg-case-study .hm-label {
                     font-family: var(--mono);
-                    font-size: 9px;
+                    font-size: 10px;
                     color: var(--ink4);
                     letter-spacing: 1.5px;
                     text-transform: uppercase;
@@ -359,7 +337,7 @@ const FMCGCaseStudy: React.FC = () => {
                 .fmcg-case-study section.alt { background: var(--off); border-top: 1px solid var(--ln); border-bottom: 1px solid var(--ln); }
                 .fmcg-case-study .wide { width: 100%; }
                 
-                .fmcg-case-study .eyebrow { font-family: var(--mono); font-size: 10px; color: var(--brand); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+                .fmcg-case-study .eyebrow { font-family: var(--mono); font-size: 12px; color: var(--brand); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
                 .fmcg-case-study .eyebrow::after { content: ''; width: 24px; height: 1px; background: var(--brand-border); }
                 .fmcg-case-study .eyebrow.lt { color: rgba(255,255,255,.3); }
                 .fmcg-case-study .eyebrow.lt::after { background: rgba(255,255,255,.15); }
@@ -367,11 +345,11 @@ const FMCGCaseStudy: React.FC = () => {
                 .fmcg-case-study h2 em { font-style: italic; color: var(--ink4); font-weight: 600; }
                 .fmcg-case-study h2.lt { color: #FFFFFF; }
                 .fmcg-case-study h2.lt em { color: rgba(255,255,255,.4); }
-                .fmcg-case-study .body-copy { font-size: 15px; color: var(--ink2); line-height: 1.9; font-weight: 300; max-width: 600px; }
+                .fmcg-case-study .body-copy { font-size: 16px; color: var(--ink2); line-height: 1.9; font-weight: 300; max-width: 600px; }
 
                 .fmcg-case-study .prob-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 52px; margin-top: 48px; }
-                .fmcg-case-study .prob-col-head { font-family: var(--mono); font-size: 9px; color: var(--ink4); letter-spacing: 1.5px; text-transform: uppercase; padding-bottom: 14px; border-bottom: 1px solid var(--ln); }
-                .fmcg-case-study .prob-item { display: flex; gap: 13px; padding: 13px 0; border-bottom: 1px solid var(--ln); font-size: 13.5px; color: var(--ink2); line-height: 1.7; font-weight: 300; }
+                .fmcg-case-study .prob-col-head { font-family: var(--mono); font-size: 11px; color: var(--ink4); letter-spacing: 1.5px; text-transform: uppercase; padding-bottom: 14px; border-bottom: 1px solid var(--ln); }
+                .fmcg-case-study .prob-item { display: flex; gap: 13px; padding: 13px 0; border-bottom: 1px solid var(--ln); font-size: 15px; color: var(--ink2); line-height: 1.7; font-weight: 300; }
                 .fmcg-case-study .prob-item:last-child { border-bottom: none; }
                 .fmcg-case-study .prob-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-top: 8px; }
                 .fmcg-case-study .bad-col .prob-dot { background: var(--rm); }
@@ -382,10 +360,10 @@ const FMCGCaseStudy: React.FC = () => {
                 .fmcg-case-study .feat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--ln); border: 1px solid var(--ln); border-radius: 10px; overflow: hidden; margin-top: 48px; }
                 .fmcg-case-study .feat { background: var(--w); padding: 26px 24px; transition: background .2s; }
                 .fmcg-case-study .feat:hover { background: var(--off); }
-                .fmcg-case-study .feat-n { font-family: var(--mono); font-size: 9px; color: var(--brand); letter-spacing: 0.08em; margin-bottom: 12px; font-weight: 500; }
-                .fmcg-case-study .feat-t { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 8px; line-height: 1.35; }
-                .fmcg-case-study .feat-d { font-size: 12px; color: var(--ink3); line-height: 1.78; font-weight: 300; }
-                .fmcg-case-study .feat-tag { display: inline-block; margin-top: 14px; font-family: var(--mono); font-size: 9px; color: var(--brand); background: var(--brand-light); padding: 3px 9px; border-radius: 6px; font-weight: 500; }
+                .fmcg-case-study .feat-n { font-family: var(--mono); font-size: 11px; color: var(--brand); letter-spacing: 0.08em; margin-bottom: 12px; font-weight: 500; }
+                .fmcg-case-study .feat-t { font-size: 16px; font-weight: 500; color: var(--ink); margin-bottom: 8px; line-height: 1.35; }
+                .fmcg-case-study .feat-d { font-size: 14px; color: var(--ink3); line-height: 1.78; font-weight: 300; }
+                .fmcg-case-study .feat-tag { display: inline-block; margin-top: 14px; font-family: var(--mono); font-size: 11px; color: var(--brand); background: var(--brand-light); padding: 3px 9px; border-radius: 6px; font-weight: 500; }
                 
                 .fmcg-case-study .ba-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 48px; }
                 .fmcg-case-study .ba-card { border: 1px solid var(--ln); border-radius: 10px; overflow: hidden; }
@@ -395,12 +373,12 @@ const FMCGCaseStudy: React.FC = () => {
                 .fmcg-case-study .ba-dot { width: 7px; height: 7px; border-radius: 50%; }
                 .fmcg-case-study .ba-head.before .ba-dot { background: var(--rm); }
                 .fmcg-case-study .ba-head.after .ba-dot { background: var(--gm); }
-                .fmcg-case-study .ba-lbl { font-family: var(--mono); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; font-weight: 500; }
+                .fmcg-case-study .ba-lbl { font-family: var(--mono); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; font-weight: 500; }
                 .fmcg-case-study .ba-head.before .ba-lbl { color: var(--rm); }
                 .fmcg-case-study .ba-head.after .ba-lbl { color: var(--gdk); }
-                .fmcg-case-study .ba-row { display: flex; gap: 11px; padding: 12px 18px; border-bottom: 1px solid var(--ln); font-size: 13px; color: var(--ink2); line-height: 1.65; font-weight: 300; }
+                .fmcg-case-study .ba-row { display: flex; gap: 11px; padding: 12px 18px; border-bottom: 1px solid var(--ln); font-size: 14px; color: var(--ink2); line-height: 1.65; font-weight: 300; }
                 .fmcg-case-study .ba-row:last-child { border-bottom: none; }
-                .fmcg-case-study .ba-mark { font-family: var(--mono); font-size: 10px; flex-shrink: 0; margin-top: 2px; }
+                .fmcg-case-study .ba-mark { font-family: var(--mono); font-size: 12px; flex-shrink: 0; margin-top: 2px; }
                 .fmcg-case-study .bm-bad { color: var(--rm); }
                 .fmcg-case-study .bm-good { color: var(--gm); }
 
@@ -408,22 +386,22 @@ const FMCGCaseStudy: React.FC = () => {
 
                 .fmcg-case-study .alerts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 48px; }
                 .fmcg-case-study .alert { border-radius: 8px; padding: 16px 20px; display: flex; align-items: center; gap: 14px; background: var(--w); border: 1px solid var(--ln); }
-                .fmcg-case-study .al-icon { font-family: var(--mono); font-size: 13px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 6px; }
+                .fmcg-case-study .al-icon { font-family: var(--mono); font-size: 14px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 6px; }
                 .fmcg-case-study .alert.danger .al-icon { color: var(--rm); background: var(--rbg); border: 1px solid rgba(220, 38, 38, 0.1); }
                 .fmcg-case-study .alert.warn .al-icon { color: var(--am); background: var(--abg); border: 1px solid rgba(217, 119, 6, 0.1); }
                 .fmcg-case-study .alert.info .al-icon { color: var(--bm); background: var(--bbg); border: 1px solid rgba(37, 99, 235, 0.1); }
-                .fmcg-case-study .al-title { font-size: 13px; color: var(--ink2); font-weight: 500; line-height: 1.5; letter-spacing: -0.01em; }
+                .fmcg-case-study .al-title { font-size: 14px; color: var(--ink2); font-weight: 500; line-height: 1.5; letter-spacing: -0.01em; }
 
                 .fmcg-case-study .impact-stat { padding: 32px 26px; border-right: 1px solid var(--ln); }
                 .fmcg-case-study .impact-stat:last-child { border-right: none; }
                 .fmcg-case-study .stat-num { font-family: var(--sans); font-size: 46px; line-height: 1; color: var(--ink); margin-bottom: 5px; font-weight: 800; letter-spacing: -0.05em; }
-                .fmcg-case-study .stat-unit { font-family: var(--mono); font-size: 9px; color: var(--brand); letter-spacing: 0.08em; display: block; margin-bottom: 6px; font-weight: 500; }
-                .fmcg-case-study .stat-desc { font-size: 12px; color: var(--ink3); line-height: 1.65; font-weight: 300; }
+                .fmcg-case-study .stat-unit { font-family: var(--mono); font-size: 11px; color: var(--brand); letter-spacing: 0.08em; display: block; margin-bottom: 6px; font-weight: 500; }
+                .fmcg-case-study .stat-desc { font-size: 14px; color: var(--ink3); line-height: 1.65; font-weight: 300; }
 
                 .fmcg-case-study .chart-card { border: 1px solid var(--ln); border-radius: 10px; overflow: hidden; margin-top: 14px; }
                 .fmcg-case-study .cc-head { padding: 13px 18px; border-bottom: 1px solid var(--ln); display: flex; justify-content: space-between; align-items: center; }
-                .fmcg-case-study .cc-t { font-size: 12px; font-weight: 500; color: var(--ink); }
-                .fmcg-case-study .cc-s { font-family: var(--mono); font-size: 10px; color: var(--ink4); }
+                .fmcg-case-study .cc-t { font-size: 14px; font-weight: 500; color: var(--ink); }
+                .fmcg-case-study .cc-s { font-family: var(--mono); font-size: 12px; color: var(--ink4); }
                 .fmcg-case-study .cc-body { padding: 16px 18px; height: 196px; position: relative; }
                 
                 .fmcg-case-study .fade {
@@ -441,14 +419,56 @@ const FMCGCaseStudy: React.FC = () => {
                 .fmcg-case-study .d3 { transition-delay: .3s; }
                 .fmcg-case-study .d4 { transition-delay: .4s; }
                 
+                .fmcg-case-study .hero-visual {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    min-height: 520px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .fmcg-case-study .structure-container {
+                   position: relative;
+                   width: 100%;
+                   max-width: 580px;
+                   display: flex;
+                   align-items: center;
+                   justify-content: center;
+                   animation: float-arch 15s ease-in-out infinite;
+                }
+                @keyframes float-arch {
+                    0%, 100% { transform: translateY(0); }
+                    50% { transform: translateY(-15px); }
+                }
+                .fmcg-case-study .structure-svg {
+                    width: 100%;
+                    height: auto;
+                    display: block;
+                    overflow: visible;
+                }
+                @keyframes dispatch-anim {
+                    0%, 15% { transform: translateY(0) translateX(0) scale(1); opacity: 1; }
+                    40%, 60% { transform: translateY(-120px) translateX(40px) scale(0.9); opacity: 0; }
+                    70% { transform: translateY(-40px) translateX(0) scale(0.95); opacity: 0; }
+                    85%, 100% { transform: translateY(0) translateX(0) scale(1); opacity: 1; }
+                }
+                .fmcg-case-study .dispatched-cube {
+                    animation: dispatch-anim 6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+                }
+                
                 @media(max-width:900px){
                     .fmcg-case-study section { padding: 80px 0; }
                     .fmcg-case-study .prob-grid, .fmcg-case-study .feat-grid, .fmcg-case-study .ba-grid { grid-template-columns: 1fr; gap: 32px; }
                     .fmcg-case-study .alerts, .fmcg-case-study .g4 { grid-template-columns: 1fr; }
                     .fmcg-case-study .impact-stat { border-right: none; border-bottom: 1px solid var(--ln); }
                     .fmcg-case-study h1 { font-size: clamp(38px, 10vw, 60px); }
-                    .fmcg-case-study .hero-meta { grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; }
+                    .fmcg-case-study .hero-meta { grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; border-top: none; padding-top: 0; }
                     .fmcg-case-study .hm { border-right: none; margin-right: 0; padding-right: 0; border-bottom: 1px solid var(--ln); padding-bottom: 14px; }
+                    .fmcg-case-study .hero-inner { grid-template-columns: 1fr; gap: 48px; }
+                    .fmcg-case-study #hero { padding: 100px 0 60px; min-height: auto; }
+                    .fmcg-case-study .hero-visual { min-height: 400px; }
+                    .fmcg-case-study .topology-container { max-width: 440px; margin: 0 auto; }
                 }
             `}</style>
 
@@ -456,33 +476,153 @@ const FMCGCaseStudy: React.FC = () => {
                 <div className="hero-grid"></div>
                 <div className="max-w-7xl mx-auto px-6 w-full">
                     <div className="hero-inner">
+                        <div className="hero-content">
+                            <h1 className="fade d2">
+                                Integrated FMCG<br />Distribution <em>ERP</em>
+                            </h1>
+                            <p className="lead fade d3">
+                                A 106-column spreadsheet couldn't keep up with a business growing 66× in 14 months.
+                                I replaced it with a modular, field-ready operations system — purpose-built for R Group's DOHA Brand distribution across Sylhet Division.
+                            </p>
+                            
+                            <div className="hero-meta fade d4">
+                                <div className="hm">
+                                    <div className="hm-label">Role</div>
+                                    <div className="hm-val">Systems Builder</div>
+                                </div>
+                                <div className="hm">
+                                    <div className="hm-label">Industry</div>
+                                    <div className="hm-val">FMCG Distribution</div>
+                                </div>
+                                <div className="hm">
+                                    <div className="hm-label">Timeline</div>
+                                    <div className="hm-val">Sep 2022 – Oct 2023</div>
+                                </div>
+                                <div className="hm">
+                                    <div className="hm-label">Stack</div>
+                                    <div className="hm-val">Sheets → Custom ERP</div>
+                                </div>
+                            </div>
+                        </div>
 
-                    <h1 className="fade d2">
-                        Integrated FMCG<br />Distribution <em>ERP</em>
-                    </h1>
-                    <p className="lead fade d3">
-                        A 106-column spreadsheet couldn't keep up with a business growing 66× in 14 months.
-                        I replaced it with a modular, field-ready operations system — purpose-built for R Group's DOHA Brand distribution across Sylhet Division.
-                    </p>
-                    <div className="hero-meta fade d4">
-                        <div className="hm">
-                            <div className="hm-label">Role</div>
-                            <div className="hm-val">Systems Builder</div>
-                        </div>
-                        <div className="hm">
-                            <div className="hm-label">Industry</div>
-                            <div className="hm-val">FMCG Distribution</div>
-                        </div>
-                        <div className="hm">
-                            <div className="hm-label">Timeline</div>
-                            <div className="hm-val">Sep 2022 – Oct 2023</div>
-                        </div>
-                        <div className="hm">
-                            <div className="hm-label">Stack</div>
-                            <div className="hm-val">Sheets → Custom ERP</div>
+                        <div className="hero-visual fade d3">
+                            <div className="structure-container">
+                                {(() => {
+                                    const s = 40;
+                                    const dx = s * 0.866;
+                                    const dy = s * 0.5;
+                                    const iso = (c, r, h) => ({
+                                        x: c * dx - r * dx,
+                                        y: c * dy + r * dy - h * s
+                                    });
+
+                                    const cubes = [
+                                        // layer 0 (3x3)
+                                        {c:0,r:0,h:0}, {c:1,r:0,h:0}, {c:2,r:0,h:0},
+                                        {c:0,r:1,h:0}, {c:1,r:1,h:0}, {c:2,r:1,h:0},
+                                        {c:0,r:2,h:0}, {c:1,r:2,h:0}, {c:2,r:2,h:0},
+                                        // layer 1
+                                        {c:0,r:0,h:1}, {c:1,r:0,h:1}, {c:2,r:0,h:1},
+                                        {c:0,r:1,h:1}, {c:1,r:1,h:1},
+                                        {c:0,r:2,h:1},
+                                        // layer 2
+                                        {c:0,r:0,h:2}, {c:1,r:0,h:2},
+                                        {c:0,r:1,h:2}
+                                    ];
+                                    cubes.sort((a,b) => (a.h * 100 + a.r + a.c) - (b.h * 100 + b.r + b.c));
+
+                                    const m = 0.5;
+                                    const t = 12; // thickness
+                                    const p0 = iso(-m, -m, -0.2);
+                                    const p1 = iso(3+m, -m, -0.2);
+                                    const p2 = iso(3+m, 3+m, -0.2);
+                                    const p3 = iso(-m, 3+m, -0.2);
+
+                                    return (
+                                        <svg viewBox="0 0 500 440" className="structure-svg" aria-hidden="true">
+                                            <defs>
+                                                <linearGradient id="topGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                    <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.5" />
+                                                    <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
+                                                </linearGradient>
+                                                <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                                                    <feDropShadow dx="0" dy="4" stdDeviation="4" floodOpacity="0.08" />
+                                                </filter>
+                                            </defs>
+                                            
+                                            <g transform="translate(250, 260)">
+                                                {/* Base Platform */}
+                                                <polygon points={`${p0.x},${p0.y} ${p1.x},${p1.y} ${p2.x},${p2.y} ${p3.x},${p3.y}`} fill="#F8FAFC" stroke="#E2E8F0" strokeWidth="1.5" />
+                                                <polygon points={`${p3.x},${p3.y} ${p2.x},${p2.y} ${p2.x},${p2.y+t} ${p3.x},${p3.y+t}`} fill="#F1F5F9" stroke="#E2E8F0" strokeWidth="1.5" />
+                                                <polygon points={`${p2.x},${p2.y} ${p1.x},${p1.y} ${p1.x},${p1.y+t} ${p2.x},${p2.y+t}`} fill="#E2E8F0" stroke="#CBD5E1" strokeWidth="1.5" />
+
+                                                {/* Static Structure */}
+                                                {cubes.map((cube, i) => {
+                                                    const p = iso(cube.c, cube.r, cube.h);
+                                                    return (
+                                                        <g key={i} transform={`translate(${p.x}, ${p.y})`}>
+                                                            <polygon points={`0,${-s} ${dx},${-dy} 0,0 ${-dx},${-dy}`} fill="rgba(79, 70, 229, 0.25)" stroke="rgba(255, 255, 255, 0.5)" strokeWidth="0.8" />
+                                                            <polygon points={`${-dx},${-dy} 0,0 0,${s} ${-dx},${dy}`} fill="rgba(79, 70, 229, 0.45)" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="0.8" />
+                                                            <polygon points={`0,0 ${dx},${-dy} ${dx},${dy} 0,${s}`} fill="rgba(49, 46, 129, 0.65)" stroke="rgba(255, 255, 255, 0.2)" strokeWidth="0.8" />
+                                                            <polygon points={`0,${-s} ${dx},${-dy} 0,0 ${-dx},${-dy}`} fill="url(#topGlow)" opacity="0.6"/>
+                                                        </g>
+                                                    );
+                                                })}
+
+                                                {/* UI Tag 3: Database (Attached to front corner) */}
+                                                <g className="ui-overlay" transform={`translate(${p2.x}, ${p2.y})`}>
+                                                    <circle cx="0" cy="0" r="2" fill="var(--brand)" />
+                                                    <path d="M 0 0 L 0 30 L -20 30" fill="none" stroke="var(--brand)" strokeWidth="1" opacity="0.5" />
+                                                    <rect x="-116" y="21" width="92" height="18" rx="2" fill="rgba(255,255,255,0.9)" stroke="var(--ln)" filter="url(#shadow)" />
+                                                    <circle cx="-108" cy="30" r="3.5" fill="var(--brand)" />
+                                                    <text x="-98" y="33" fontSize="8" fontFamily="var(--mono)" letterSpacing="0.05em" fill="var(--ink2)" fontWeight="600">CENTRAL DATABASE</text>
+                                                </g>
+
+                                                {/* UI Tag 1: Inventory (Attached to top of static stack) */}
+                                                {(() => {
+                                                    const top = iso(0, 0, 2);
+                                                    return (
+                                                        <g className="ui-overlay" transform={`translate(${top.x}, ${top.y - s})`}>
+                                                            <circle cx="0" cy="0" r="2" fill="var(--brand)" />
+                                                            <path d="M 0 0 L 0 -30 L -20 -30" fill="none" stroke="var(--brand)" strokeWidth="1" opacity="0.5" />
+                                                            <rect x="-106" y="-39" width="82" height="18" rx="2" fill="rgba(255,255,255,0.9)" stroke="var(--ln)" filter="url(#shadow)" />
+                                                            <circle cx="-98" cy="-30" r="3.5" fill="var(--brand)" />
+                                                            <text x="-88" y="-27" fontSize="8" fontFamily="var(--mono)" letterSpacing="0.05em" fill="var(--ink2)" fontWeight="600">LIVE INVENTORY</text>
+                                                        </g>
+                                                    );
+                                                })()}
+
+                                                {/* Moving 'Dispatched' Cube at (2,2,2) */}
+                                                <g className="dispatched-cube">
+                                                    {(() => {
+                                                        const p = iso(2, 2, 2);
+                                                        return (
+                                                            <g transform={`translate(${p.x}, ${p.y})`}>
+                                                                {/* Cube Poly */}
+                                                                <polygon points={`0,${-s} ${dx},${-dy} 0,0 ${-dx},${-dy}`} fill="rgba(99, 102, 241, 0.4)" stroke="rgba(255, 255, 255, 0.8)" strokeWidth="0.8" />
+                                                                <polygon points={`${-dx},${-dy} 0,0 0,${s} ${-dx},${dy}`} fill="rgba(79, 70, 229, 0.6)" stroke="rgba(255, 255, 255, 0.5)" strokeWidth="0.8" />
+                                                                <polygon points={`0,0 ${dx},${-dy} ${dx},${dy} 0,${s}`} fill="rgba(49, 46, 129, 0.85)" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="0.8" />
+                                                                <polygon points={`0,${-s} ${dx},${-dy} 0,0 ${-dx},${-dy}`} fill="url(#topGlow)" opacity="0.9"/>
+                                                                
+                                                                {/* UI Tag 2: Dispatch */}
+                                                                <g className="ui-overlay">
+                                                                    <circle cx="0" cy={-s} r="2" fill="var(--brand)" />
+                                                                    <path d={`M 0 ${-s} L 0 ${-s - 30} L 20 ${-s - 30}`} fill="none" stroke="var(--brand)" strokeWidth="1" opacity="0.5" />
+                                                                    <rect x="24" y={-s - 39} width="84" height="18" rx="2" fill="rgba(255,255,255,0.9)" stroke="var(--ln)" filter="url(#shadow)" />
+                                                                    <circle cx="32" cy={-s - 30} r="3.5" fill="#10B981" />
+                                                                    <text x="40" y={-s - 27} fontSize="8" fontFamily="var(--mono)" letterSpacing="0.05em" fill="var(--ink2)" fontWeight="600">AUTO DISPATCH</text>
+                                                                </g>
+                                                            </g>
+                                                        );
+                                                    })()}
+                                                </g>
+                                            </g>
+                                        </svg>
+                                    );
+                                })()}
+                            </div>
                         </div>
                     </div>
-                </div>
                 </div>
             </section>
             
@@ -596,9 +736,9 @@ const FMCGCaseStudy: React.FC = () => {
                                 <line x1="710" y1="268" x2="710" y2="312" stroke="#E2E8F0" strokeWidth="1" strokeDasharray="3 3"/>
                                 
                                 <rect x="840" y="110" width="154" height="78" rx="7" fill="#fef3e2" stroke="#E2E8F0" strokeWidth="1"/>
-                                <text x="917" y="138" textAnchor="middle" fontSize="9" fill="#D97706" fontFamily="JetBrains Mono,monospace" letterSpacing="1">ALERT ENGINE</text>
+                                <text x="917" y="138" textAnchor="middle" fontSize="11" fill="#D97706" fontFamily="JetBrains Mono,monospace" letterSpacing="1">ALERT ENGINE</text>
                                 <text x="917" y="158" textAnchor="middle" fontSize="13" fill="#92570a" fontFamily="Plus Jakarta Sans,sans-serif" fontWeight="500">Notifications</text>
-                                <text x="917" y="175" textAnchor="middle" fontSize="11" fill="#D97706" fontFamily="Plus Jakarta Sans,sans-serif">Dues · stock · returns</text>
+                                <text x="917" y="175" textAnchor="middle" fontSize="12" fill="#D97706" fontFamily="Plus Jakarta Sans,sans-serif">Dues · stock · returns</text>
                                 <line x1="796" y1="82" x2="840" y2="130" stroke="#CBD5E1" strokeWidth="1" markerEnd="url(#a)"/>
                                 <line x1="796" y1="240" x2="840" y2="185" stroke="#CBD5E1" strokeWidth="1" markerEnd="url(#a)"/>
                             </svg>
@@ -1081,7 +1221,7 @@ const FMCGCaseStudy: React.FC = () => {
             {/* 14 CTA */}
             <section className="py-24 md:py-32 bg-white border-t border-slate-200">
                 <div className="max-w-[660px] mx-auto text-center fade">
-                    <div className="font-mono text-[10px] text-slate-400 tracking-[2px] uppercase mb-6 flex items-center justify-center gap-2.5">
+                    <div className="font-mono text-[12px] text-slate-400 tracking-[2px] uppercase mb-6 flex items-center justify-center gap-2.5">
                         Get in touch
                     </div>
                     <h2 className="font-sans text-[clamp(38px,5.5vw,62px)] text-slate-900 leading-[1.05] tracking-[-0.4px] mb-[18px] font-bold">

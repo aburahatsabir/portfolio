@@ -19,6 +19,7 @@ const BlogSeries = lazyLoadPage(() => import('./components/BlogSeries'));
 const PersonaSpecificContent = lazyLoadPage(() => import('./components/PersonaSpecificContent'));
 const PersonaDirectory = lazyLoadPage(() => import('./components/PersonaDirectory'));
 const FMCGCaseStudy = lazyLoadPage(() => import('./components/FMCGCaseStudy'));
+const MocsCaseStudy = lazyLoadPage(() => import('./components/MocsCaseStudy'));
 const PrivacyPolicy = lazyLoadPage(() => import('./components/PrivacyPolicy'));
 const CookiePolicy = lazyLoadPage(() => import('./components/CookiePolicy'));
 const AccessibilityStatement = lazyLoadPage(() => import('./components/AccessibilityStatement'));
@@ -182,6 +183,10 @@ function App() {
 
         if (currentPath === '/work/fmcg-erp') {
             return <ErrorBoundary><FMCGCaseStudy /></ErrorBoundary>;
+        }
+
+        if (currentPath === '/work/med-ops') {
+            return <ErrorBoundary><MocsCaseStudy /></ErrorBoundary>;
         }
 
         if (currentPath.startsWith('/work/')) {

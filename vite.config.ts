@@ -6,13 +6,15 @@ import { sentryVitePlugin } from '@sentry/vite-plugin';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // Bypass OneDrive lock issues
+  cacheDir: './.vite_cache',
+
   // Set base path for GitHub Pages deployment
   // GitHub Pages: /portfolio/ (subdirectory), Vercel: / (root)
   base: process.env.GITHUB_ACTIONS ? '/portfolio/' : '/',
 
   server: {
     port: 3001,
-    host: '0.0.0.0',
   },
 
   plugins: [

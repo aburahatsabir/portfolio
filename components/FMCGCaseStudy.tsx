@@ -384,6 +384,16 @@ const FMCGCaseStudy: React.FC = () => {
 
                 .fmcg-case-study .g4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: 1px solid var(--ln); border-radius: 10px; overflow: hidden; }
 
+                .fmcg-case-study .ta-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 52px; }
+                .fmcg-case-study .ta-card { background: var(--w); border: 1px solid var(--ln); border-radius: 10px; padding: 28px 24px; }
+                .fmcg-case-study .ta-cat { font-family: var(--mono); font-size: 10px; color: var(--brand); letter-spacing: 1.8px; text-transform: uppercase; margin-bottom: 14px; font-weight: 500; }
+                .fmcg-case-study .ta-title { font-size: 17px; font-weight: 600; color: var(--ink); margin-bottom: 18px; line-height: 1.35; letter-spacing: -0.02em; }
+                .fmcg-case-study .ta-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+                .fmcg-case-study .ta-item { display: flex; align-items: flex-start; gap: 9px; font-size: 14px; color: var(--ink2); line-height: 1.65; font-weight: 300; }
+                .fmcg-case-study .ta-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--brand); flex-shrink: 0; margin-top: 7px; }
+                @media(max-width:900px){ .fmcg-case-study .ta-grid { grid-template-columns: 1fr 1fr; gap: 16px; } }
+                @media(max-width:600px){ .fmcg-case-study .ta-grid { grid-template-columns: 1fr; } }
+
                 .fmcg-case-study .alerts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 48px; }
                 .fmcg-case-study .alert { border-radius: 8px; padding: 16px 20px; display: flex; align-items: center; gap: 14px; background: var(--w); border: 1px solid var(--ln); }
                 .fmcg-case-study .al-icon { font-family: var(--mono); font-size: 14px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 6px; }
@@ -942,64 +952,58 @@ const FMCGCaseStudy: React.FC = () => {
                 </div>
             </div>
 
-            {/* 09 DESIGN APPROACH */}
+            {/* 09 TECHNICAL APPROACH */}
             <div className="artifact-section fade">
                 <div className="max-w-7xl mx-auto px-6 w-full">
                     <div className="artifact-header">
-                        <div className="eyebrow">09 — Design Approach</div>
-                        <h2>Model the data.<br/><em>Then</em> the interface.</h2>
-                        <p className="body-copy">Most tools are built interface-first — screens before systems, features before data models. This project reversed that order deliberately. Here's what that changed.</p>
+                        <div className="eyebrow">09 · Technical Approach</div>
+                        <h2>Built for <em>operational simplicity</em>,<br/>not technical novelty.</h2>
+                        <p className="body-copy">Every tool was chosen to minimise maintenance burden on a small ops team — prioritising reliability, auditability, and field usability over sophistication.</p>
                     </div>
-                    <div className="artifact-content">
-                        <div className="da-principles" style={{ marginBottom: 10 }}>
-                            <div className="da-p">
-                                <div className="da-pn">Principle 01</div>
-                                <div className="da-pt">The current mess is the spec</div>
-                                <div className="da-pd">Start with what's actually happening, not what should happen. The 106-column sheet wasn't wrong to study — it was a complete map of every workflow the business had ever needed. Read the mess before writing a single line.</div>
-                            </div>
-                            <div className="da-p">
-                                <div className="da-pn">Principle 02</div>
-                                <div className="da-pt">Model entities before screens</div>
-                                <div className="da-pd">No wireframes until the data model is settled. A bad data model makes every screen wrong by definition. A good one makes the screens obvious — they're just views over the entities that already exist.</div>
-                            </div>
-                            <div className="da-p">
-                                <div className="da-pn">Principle 03</div>
-                                <div className="da-pt">One module, one concern</div>
-                                <div className="da-pd">Ledger handles finance. Returns handles stock. Commission handles payroll. Each module owns its slice of the data model and surfaces only what's relevant. The dashboard aggregates — it doesn't own anything.</div>
-                            </div>
-                            <div className="da-p">
-                                <div className="da-pn">Principle 04</div>
-                                <div className="da-pt">Every number must be traceable</div>
-                                <div className="da-pd">If a balance shows ৳1,26,988 advance, you must be able to click through to the exact memos that produced it. Numbers without provenance are guesses. The ledger shows prev_balance, order_total, paid, and net — all verifiable.</div>
-                            </div>
-                            <div className="da-p">
-                                <div className="da-pn">Principle 05</div>
-                                <div className="da-pt">Automate what repeats manually</div>
-                                <div className="da-pd">Commission math done by hand every month: automate it. Outstanding balance found by scrolling: surface it. These aren't feature requests — they're failure modes of the current system that have a real cost every time they happen.</div>
-                            </div>
-                            <div className="da-p">
-                                <div className="da-pn">Principle 06</div>
-                                <div className="da-pt">The system must survive without me</div>
-                                <div className="da-pd">Everything is documented inline. Every formula is visible. Every module can be understood by someone who didn't build it. A system that only makes sense to its builder is a liability, not an asset.</div>
-                            </div>
+                    <div className="ta-grid">
+                        <div className="ta-card">
+                            <div className="ta-cat">Data Layer</div>
+                            <div className="ta-title">Source of Truth</div>
+                            <ul className="ta-list">
+                                <li className="ta-item"><div className="ta-dot"></div>Google Sheets (109 rows × 106 columns, original source)</li>
+                                <li className="ta-item"><div className="ta-dot"></div>Python 3 extraction — all 14 months parsed with csv module</li>
+                                <li className="ta-item"><div className="ta-dot"></div>Inline JS constants — zero API, zero database, zero latency</li>
+                                <li className="ta-item"><div className="ta-dot"></div>5 core entities: Dealer · Order · Product · Payment · Staff</li>
+                                <li className="ta-item"><div className="ta-dot"></div>Works fully offline · Instant load on any connection</li>
+                            </ul>
                         </div>
-                        <div className="da-contrast">
-                            <div className="da-col">
-                                <div className="da-ch bad">What I didn't do</div>
-                                <div className="da-crow"><span className="da-cm x">✕</span><div>Start with a mockup and retrofit the data model around it</div></div>
-                                <div className="da-crow"><span className="da-cm x">✕</span><div>Ask what features they wanted and build a feature list</div></div>
-                                <div className="da-crow"><span className="da-cm x">✕</span><div>Adapt a generic ERP template to the workflow</div></div>
-                                <div className="da-crow"><span className="da-cm x">✕</span><div>Use a framework that added abstraction without value</div></div>
-                                <div className="da-crow"><span className="da-cm x">✕</span><div>Build for every possible future use case upfront</div></div>
-                            </div>
-                            <div className="da-col">
-                                <div className="da-ch good">What I did instead</div>
-                                <div className="da-crow"><span className="da-cm v">✓</span><div>Parsed the actual sheet — 109 rows, 106 columns, all data extracted</div></div>
-                                <div className="da-crow"><span className="da-cm v">✓</span><div>Mapped what the business actually does, then modelled it</div></div>
-                                <div className="da-crow"><span className="da-cm v">✓</span><div>Built from scratch around the exact workflow observed in the data</div></div>
-                                <div className="da-crow"><span className="da-cm v">✓</span><div>Chose the minimal stack that could do the job cleanly</div></div>
-                                <div className="da-crow"><span className="da-cm v">✓</span><div>Built exactly what the current process needs, nothing more</div></div>
-                            </div>
+                        <div className="ta-card">
+                            <div className="ta-cat">Frontend</div>
+                            <div className="ta-title">Interface Layer</div>
+                            <ul className="ta-list">
+                                <li className="ta-item"><div className="ta-dot"></div>Vanilla HTML / CSS / JavaScript — no framework, no bundler</li>
+                                <li className="ta-item"><div className="ta-dot"></div>Single deployable HTML file · 147 KB including all data</li>
+                                <li className="ta-item"><div className="ta-dot"></div>Chart.js 4.4 — 5 chart types, loaded via CDN UMD global</li>
+                                <li className="ta-item"><div className="ta-dot"></div>Mobile-first layout — every workflow operable in under 30 s</li>
+                                <li className="ta-item"><div className="ta-dot"></div>No build step · No dependency management required</li>
+                            </ul>
+                        </div>
+                        <div className="ta-card">
+                            <div className="ta-cat">Design System</div>
+                            <div className="ta-title">Hierarchy &amp; Tone</div>
+                            <ul className="ta-list">
+                                <li className="ta-item"><div className="ta-dot"></div>Plus Jakarta Sans — display, KPI numerics, body copy (400–800)</li>
+                                <li className="ta-item"><div className="ta-dot"></div>JetBrains Mono — all data fields, labels &amp; code values</li>
+                                <li className="ta-item"><div className="ta-dot"></div>14 CSS custom-property colour tokens · 3 radius values</li>
+                                <li className="ta-item"><div className="ta-dot"></div>Class-scoped ERP embed — no iframe, no cascade conflicts</li>
+                                <li className="ta-item"><div className="ta-dot"></div>Consistent ink hierarchy across all 8 modules</li>
+                            </ul>
+                        </div>
+                        <div className="ta-card">
+                            <div className="ta-cat">Deployment</div>
+                            <div className="ta-title">Constraint by Design</div>
+                            <ul className="ta-list">
+                                <li className="ta-item"><div className="ta-dot"></div>Single file constraint — forces every decision toward simplicity</li>
+                                <li className="ta-item"><div className="ta-dot"></div>No server infrastructure — runs on any static host or locally</li>
+                                <li className="ta-item"><div className="ta-dot"></div>Self-documenting modules — auditable by anyone in the business</li>
+                                <li className="ta-item"><div className="ta-dot"></div>Zero external dependencies beyond Chart.js CDN</li>
+                                <li className="ta-item"><div className="ta-dot"></div>Survives without the builder — fully operable on handover</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -1221,9 +1225,6 @@ const FMCGCaseStudy: React.FC = () => {
             {/* 14 CTA */}
             <section className="py-24 md:py-32 bg-white border-t border-slate-200">
                 <div className="max-w-[660px] mx-auto text-center fade">
-                    <div className="font-mono text-[12px] text-slate-400 tracking-[2px] uppercase mb-6 flex items-center justify-center gap-2.5">
-                        Get in touch
-                    </div>
                     <h2 className="font-sans text-[clamp(38px,5.5vw,62px)] text-slate-900 leading-[1.05] tracking-[-0.4px] mb-[18px] font-bold">
                         Running on spreadsheets<br/>and <em className="italic text-slate-400 font-semibold">workarounds?</em>
                     </h2>

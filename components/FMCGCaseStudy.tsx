@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import Chart from 'chart.js/auto';
 
 import ErpDemo from './ErpDemo';
@@ -8,6 +9,9 @@ const CS_MR = [57640,213170,231246,307205,397325,547170,1237775,1130650,2727150,
 const CS_MP = [59510,166200,182132,280342,515703,547475,1010680,1225595,3032364,3170390,1938850,4637350,3319535,4549324];
 
 const FMCGCaseStudy: React.FC = () => {
+    const { scrollY } = useScroll();
+    const heroY = useTransform(scrollY, [0, 1000], [0, 250]);
+
     const chartRef = useRef<HTMLCanvasElement>(null);
     const chartInstance = useRef<Chart | null>(null);
 
@@ -48,7 +52,6 @@ const FMCGCaseStudy: React.FC = () => {
     ];
 
     const [activeHowItWorks, setActiveHowItWorks] = useState(0);
-    const [activeLearning, setActiveLearning] = useState(0);
 
     const learningsData = [
         {
@@ -133,11 +136,19 @@ const FMCGCaseStudy: React.FC = () => {
     ];
 
     useEffect(() => {
-        // Trigger fade in animation after component mount
+        // IntersectionObserver for scroll-triggered staggered reveals
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in');
+                    // Stop observing once animated to avoid re-triggering repeatedly
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
         const elements = document.querySelectorAll('.fade');
-        setTimeout(() => {
-            elements.forEach(elt => elt.classList.add('in'));
-        }, 100);
+        elements.forEach(elt => observer.observe(elt));
 
         if (chartRef.current) {
             if (chartInstance.current) {
@@ -223,6 +234,7 @@ const FMCGCaseStudy: React.FC = () => {
             if (chartInstance.current) {
                 chartInstance.current.destroy();
             }
+            observer.disconnect();
         };
     }, []);
 
@@ -384,15 +396,16 @@ const FMCGCaseStudy: React.FC = () => {
 
                 .fmcg-case-study .g4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: 1px solid var(--ln); border-radius: 10px; overflow: hidden; }
 
-                .fmcg-case-study .ta-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 52px; }
-                .fmcg-case-study .ta-card { background: var(--w); border: 1px solid var(--ln); border-radius: 10px; padding: 28px 24px; }
-                .fmcg-case-study .ta-cat { font-family: var(--mono); font-size: 10px; color: var(--brand); letter-spacing: 1.8px; text-transform: uppercase; margin-bottom: 14px; font-weight: 500; }
-                .fmcg-case-study .ta-title { font-size: 17px; font-weight: 600; color: var(--ink); margin-bottom: 18px; line-height: 1.35; letter-spacing: -0.02em; }
-                .fmcg-case-study .ta-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
-                .fmcg-case-study .ta-item { display: flex; align-items: flex-start; gap: 9px; font-size: 14px; color: var(--ink2); line-height: 1.65; font-weight: 300; }
-                .fmcg-case-study .ta-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--brand); flex-shrink: 0; margin-top: 7px; }
-                @media(max-width:900px){ .fmcg-case-study .ta-grid { grid-template-columns: 1fr 1fr; gap: 16px; } }
-                @media(max-width:600px){ .fmcg-case-study .ta-grid { grid-template-columns: 1fr; } }
+                .fmcg-case-study .tech-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 40px; }
+                .fmcg-case-study .tech-card { background: var(--w); border: 1px solid var(--ln); border-radius: 10px; padding: 24px; transition: background .2s, border-color .2s; }
+                .fmcg-case-study .tech-card:hover { background: var(--off); border-color: var(--ln2); }
+                .fmcg-case-study .tech-layer { font-family: var(--mono); font-size: 10px; color: var(--brand); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px; font-weight: 500; }
+                .fmcg-case-study .tech-title { font-size: 15px; font-weight: 600; letter-spacing: -.01em; margin-bottom: 12px; color: var(--ink); }
+                .fmcg-case-study .tech-items { display: flex; flex-direction: column; gap: 8px; }
+                .fmcg-case-study .tech-item { font-size: 13px; font-weight: 300; color: var(--ink3); display: flex; align-items: flex-start; gap: 8px; line-height: 1.55; }
+                .fmcg-case-study .tech-item::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--brand); flex-shrink: 0; display: block; margin-top: 6px; }
+                @media(max-width:900px){ .fmcg-case-study .tech-grid { grid-template-columns: 1fr 1fr; gap: 16px; } }
+                @media(max-width:600px){ .fmcg-case-study .tech-grid { grid-template-columns: 1fr; } }
 
                 .fmcg-case-study .alerts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 48px; }
                 .fmcg-case-study .alert { border-radius: 8px; padding: 16px 20px; display: flex; align-items: center; gap: 14px; background: var(--w); border: 1px solid var(--ln); }
@@ -405,8 +418,19 @@ const FMCGCaseStudy: React.FC = () => {
                 .fmcg-case-study .impact-stat { padding: 32px 26px; border-right: 1px solid var(--ln); }
                 .fmcg-case-study .impact-stat:last-child { border-right: none; }
                 .fmcg-case-study .stat-num { font-family: var(--sans); font-size: 46px; line-height: 1; color: var(--ink); margin-bottom: 5px; font-weight: 800; letter-spacing: -0.05em; }
-                .fmcg-case-study .stat-unit { font-family: var(--mono); font-size: 11px; color: var(--brand); letter-spacing: 0.08em; display: block; margin-bottom: 6px; font-weight: 500; }
+                .fmcg-case-study .stat-unit { font-family: var(--mono); font-size: 11px; color: var(--brand); letter-spacing: 0.08em; display: block; margin-bottom: 6px; font-weight: 500; text-transform: uppercase; }
                 .fmcg-case-study .stat-desc { font-size: 14px; color: var(--ink3); line-height: 1.65; font-weight: 300; }
+
+                .fmcg-case-study .learning-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; }
+                .fmcg-case-study .learning-card { background: var(--w); border: 1px solid var(--ln); border-radius: 10px; padding: 28px; display: flex; gap: 18px; transition: all .2s; }
+                .fmcg-case-study .learning-card:hover { background: var(--off); border-color: var(--ln2); }
+                .fmcg-case-study .lc-num { font-size: 38px; font-weight: 800; color: var(--ln2); line-height: 1; flex-shrink: 0; min-width: 46px; letter-spacing: -.04em; }
+                .fmcg-case-study .lc-cat { font-family: var(--mono); font-size: 9px; color: var(--brand); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 6px; }
+                .fmcg-case-study .lc-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; letter-spacing: -.01em; }
+                .fmcg-case-study .lc-body { font-size: 13px; font-weight: 300; color: var(--ink3); line-height: 1.7; margin-bottom: 10px; }
+                .fmcg-case-study .lc-rule { font-family: var(--mono); font-size: 10px; color: var(--gm); background: var(--gbg); padding: 5px 10px; border-radius: 4px; letter-spacing: .04em; display: inline-block; }
+
+                .fmcg-case-study .sk-note { margin-top: 24px; padding: 18px 24px; border: 1px solid var(--ln); border-left: 3px solid var(--brand); border-radius: 0 8px 8px 0; background: var(--off); font-size: 14px; color: var(--ink2); line-height: 1.7; font-weight: 300; }
 
                 .fmcg-case-study .chart-card { border: 1px solid var(--ln); border-radius: 10px; overflow: hidden; margin-top: 14px; }
                 .fmcg-case-study .cc-head { padding: 13px 18px; border-bottom: 1px solid var(--ln); display: flex; justify-content: space-between; align-items: center; }
@@ -478,7 +502,14 @@ const FMCGCaseStudy: React.FC = () => {
                     .fmcg-case-study .hero-inner { grid-template-columns: 1fr; gap: 48px; }
                     .fmcg-case-study #hero { padding: 100px 0 60px; min-height: auto; }
                     .fmcg-case-study .hero-visual { min-height: 400px; }
-                    .fmcg-case-study .topology-container { max-width: 440px; margin: 0 auto; }
+                    .fmcg-case-study .tech-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+                    .fmcg-case-study .learning-grid { grid-template-columns: 1fr 1fr; }
+                }
+                @media(max-width:600px){
+                    .fmcg-case-study .tech-grid { grid-template-columns: 1fr; }
+                    .fmcg-case-study .learning-grid { grid-template-columns: 1fr; }
+                    .fmcg-case-study .g4 { grid-template-columns: 1fr; }
+                    .fmcg-case-study .alerts { grid-template-columns: 1fr; }
                 }
             `}</style>
 
@@ -516,7 +547,7 @@ const FMCGCaseStudy: React.FC = () => {
                         </div>
 
                         <div className="hero-visual fade d3">
-                            <div className="structure-container">
+                            <motion.div className="structure-container" style={{ y: heroY }}>
                                 {(() => {
                                     const s = 40;
                                     const dx = s * 0.866;
@@ -630,7 +661,7 @@ const FMCGCaseStudy: React.FC = () => {
                                         </svg>
                                     );
                                 })()}
-                            </div>
+                            </motion.div>
                         </div>
                     </div>
                 </div>
@@ -956,196 +987,92 @@ const FMCGCaseStudy: React.FC = () => {
             <div className="artifact-section fade">
                 <div className="max-w-7xl mx-auto px-6 w-full">
                     <div className="artifact-header">
-                        <div className="eyebrow">09 · Technical Approach</div>
+                        <div className="eyebrow">09 — Technical Approach</div>
                         <h2>Built for <em>operational simplicity</em>,<br/>not technical novelty.</h2>
                         <p className="body-copy">Every tool was chosen to minimise maintenance burden on a small ops team — prioritising reliability, auditability, and field usability over sophistication.</p>
                     </div>
-                    <div className="ta-grid">
-                        <div className="ta-card">
-                            <div className="ta-cat">Data Layer</div>
-                            <div className="ta-title">Source of Truth</div>
-                            <ul className="ta-list">
-                                <li className="ta-item"><div className="ta-dot"></div>Google Sheets (109 rows × 106 columns, original source)</li>
-                                <li className="ta-item"><div className="ta-dot"></div>Python 3 extraction — all 14 months parsed with csv module</li>
-                                <li className="ta-item"><div className="ta-dot"></div>Inline JS constants — zero API, zero database, zero latency</li>
-                                <li className="ta-item"><div className="ta-dot"></div>5 core entities: Dealer · Order · Product · Payment · Staff</li>
-                                <li className="ta-item"><div className="ta-dot"></div>Works fully offline · Instant load on any connection</li>
-                            </ul>
+                    <div className="tech-grid">
+                        <div className="tech-card">
+                            <div className="tech-layer">Data Layer</div>
+                            <div className="tech-title">Source of Truth</div>
+                            <div className="tech-items">
+                                <div className="tech-item">Google Sheets (109 rows × 106 columns, original source)</div>
+                                <div className="tech-item">Python 3 extraction — all 14 months parsed with csv module</div>
+                                <div className="tech-item">Inline JS constants — zero API, zero database, zero latency</div>
+                                <div className="tech-item">5 core entities: Dealer · Order · Product · Payment · Staff</div>
+                                <div className="tech-item">Works fully offline · Instant load on any connection</div>
+                            </div>
                         </div>
-                        <div className="ta-card">
-                            <div className="ta-cat">Frontend</div>
-                            <div className="ta-title">Interface Layer</div>
-                            <ul className="ta-list">
-                                <li className="ta-item"><div className="ta-dot"></div>Vanilla HTML / CSS / JavaScript — no framework, no bundler</li>
-                                <li className="ta-item"><div className="ta-dot"></div>Single deployable HTML file · 147 KB including all data</li>
-                                <li className="ta-item"><div className="ta-dot"></div>Chart.js 4.4 — 5 chart types, loaded via CDN UMD global</li>
-                                <li className="ta-item"><div className="ta-dot"></div>Mobile-first layout — every workflow operable in under 30 s</li>
-                                <li className="ta-item"><div className="ta-dot"></div>No build step · No dependency management required</li>
-                            </ul>
+                        <div className="tech-card">
+                            <div className="tech-layer">Frontend</div>
+                            <div className="tech-title">Interface Layer</div>
+                            <div className="tech-items">
+                                <div className="tech-item">Vanilla HTML / CSS / JavaScript — no framework, no bundler</div>
+                                <div className="tech-item">Single deployable HTML file · 147 KB including all data</div>
+                                <div className="tech-item">Chart.js 4.4 — 5 chart types, loaded via CDN UMD global</div>
+                                <div className="tech-item">Mobile-first layout — every workflow operable in under 30 s</div>
+                                <div className="tech-item">No build step · No dependency management required</div>
+                            </div>
                         </div>
-                        <div className="ta-card">
-                            <div className="ta-cat">Design System</div>
-                            <div className="ta-title">Hierarchy &amp; Tone</div>
-                            <ul className="ta-list">
-                                <li className="ta-item"><div className="ta-dot"></div>Plus Jakarta Sans — display, KPI numerics, body copy (400–800)</li>
-                                <li className="ta-item"><div className="ta-dot"></div>JetBrains Mono — all data fields, labels &amp; code values</li>
-                                <li className="ta-item"><div className="ta-dot"></div>14 CSS custom-property colour tokens · 3 radius values</li>
-                                <li className="ta-item"><div className="ta-dot"></div>Class-scoped ERP embed — no iframe, no cascade conflicts</li>
-                                <li className="ta-item"><div className="ta-dot"></div>Consistent ink hierarchy across all 8 modules</li>
-                            </ul>
+                        <div className="tech-card">
+                            <div className="tech-layer">Design System</div>
+                            <div className="tech-title">Hierarchy &amp; Tone</div>
+                            <div className="tech-items">
+                                <div className="tech-item">Plus Jakarta Sans — display, KPI numerics, body copy (400–800)</div>
+                                <div className="tech-item">JetBrains Mono — all data fields, labels &amp; code values</div>
+                                <div className="tech-item">14 CSS custom-property colour tokens · 3 radius values</div>
+                                <div className="tech-item">Class-scoped ERP embed — no iframe, no cascade conflicts</div>
+                                <div className="tech-item">Consistent ink hierarchy across all 8 modules</div>
+                            </div>
                         </div>
-                        <div className="ta-card">
-                            <div className="ta-cat">Deployment</div>
-                            <div className="ta-title">Constraint by Design</div>
-                            <ul className="ta-list">
-                                <li className="ta-item"><div className="ta-dot"></div>Single file constraint — forces every decision toward simplicity</li>
-                                <li className="ta-item"><div className="ta-dot"></div>No server infrastructure — runs on any static host or locally</li>
-                                <li className="ta-item"><div className="ta-dot"></div>Self-documenting modules — auditable by anyone in the business</li>
-                                <li className="ta-item"><div className="ta-dot"></div>Zero external dependencies beyond Chart.js CDN</li>
-                                <li className="ta-item"><div className="ta-dot"></div>Survives without the builder — fully operable on handover</li>
-                            </ul>
+                        <div className="tech-card">
+                            <div className="tech-layer">Deployment</div>
+                            <div className="tech-title">Constraint by Design</div>
+                            <div className="tech-items">
+                                <div className="tech-item">Single file constraint — forces every decision toward simplicity</div>
+                                <div className="tech-item">No server infrastructure — runs on any static host or locally</div>
+                                <div className="tech-item">Self-documenting modules — auditable by anyone in the business</div>
+                                <div className="tech-item">Zero external dependencies beyond Chart.js CDN</div>
+                                <div className="tech-item">Survives without the builder — fully operable on handover</div>
+                            </div>
                         </div>
+                    </div>
+                    <div className="sk-note">
+                        <strong style={{ fontWeight: 500, color: 'var(--ink)' }}>Why no framework?</strong> The system needed to run as a single deployable file — no server, no build process, no dependency management. A React or Next.js app would add 300KB of runtime for zero user-visible benefit. Vanilla JS handles all 14 modules, live filtering, chart rendering, and form state in under 50KB of code. The constraint produced a better architecture.
                     </div>
                 </div>
             </div>
 
-            {/* 10 STACK USED */}
-            <div className="artifact-section alt fade">
-                <div className="max-w-7xl mx-auto px-6 w-full">
-                    <div className="artifact-header">
-                        <div className="eyebrow">10 — Stack Used</div>
-                        <h2>No framework.<br/><em>No dependencies.</em></h2>
-                        <p className="body-copy">Every tool chosen because it was the right fit — not because it was fashionable. The core constraint: must run in a browser, deploy as a file, require zero backend infrastructure.</p>
-                    </div>
-                    <div className="artifact-content">
-                        <div className="sk-grid">
-                            <div className="sk-card">
-                                <div className="sk-ch"><span className="sk-cat">Data layer</span><span className="sk-why">Source of truth</span></div>
-                                <div className="sk-row">
-                                    <div className="sk-icon">GS</div>
-                                    <div>
-                                        <div className="sk-name">Google Sheets (source data)</div>
-                                        <div className="sk-desc">109 transactions, 14 dealers, 14 months of raw data. The original 106-column TSV exported and parsed with Python to extract every figure used in the system.</div>
-                                        <span className="sk-tag-sm">Python 3 · csv module</span>
-                                    </div>
-                                </div>
-                                <div className="sk-row">
-                                    <div className="sk-icon">JS</div>
-                                    <div>
-                                        <div className="sk-name">Inline JS data objects</div>
-                                        <div className="sk-desc">All 109 orders, 14 dealer ledgers, 22 commission events, 18 returns — embedded as structured JS constants. No API, no database, no server calls. Zero latency.</div>
-                                        <span className="sk-tag-sm">Works offline · Instant load</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="sk-card">
-                                <div className="sk-ch"><span className="sk-cat">Frontend</span><span className="sk-why">Render & interaction</span></div>
-                                <div className="sk-row">
-                                    <div className="sk-icon">H5</div>
-                                    <div>
-                                        <div className="sk-name">Vanilla HTML / CSS / JavaScript</div>
-                                        <div className="sk-desc">No React, no Vue, no bundler. One HTML file — the entire ERP is 147KB including all data, styles, and logic. Loads instantly on any connection.</div>
-                                        <span className="sk-tag-sm">Single file · No build step</span>
-                                    </div>
-                                </div>
-                                <div className="sk-row">
-                                    <div className="sk-icon">CJ</div>
-                                    <div>
-                                        <div className="sk-name">Chart.js 4.4</div>
-                                        <div className="sk-desc">All data visualisations — dual revenue/payment bar, stacked volume, outstanding dues, product donut, commission events. Loaded from CDN, UMD global.</div>
-                                        <span className="sk-tag-sm">cdnjs · 5 chart types</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="sk-card">
-                                <div className="sk-ch"><span className="sk-cat">Typography</span><span className="sk-why">Hierarchy & tone</span></div>
-                                <div className="sk-row">
-                                    <div className="sk-icon">IS</div>
-                                    <div>
-                                        <div className="sk-name">Plus Jakarta Sans</div>
-                                        <div className="sk-desc">Used for all display headings, KPI numerics, and body copy. The portfolio-consistent choice — geometric but warm, heavy weights provide authority without being sterile.</div>
-                                        <span className="sk-tag-sm">Google Fonts · 400–800 weight</span>
-                                    </div>
-                                </div>
-                                <div className="sk-row">
-                                    <div className="sk-icon">Ge</div>
-                                    <div>
-                                        <div className="sk-name">JetBrains Mono</div>
-                                        <div className="sk-desc">Every data field, label, code value, and metric uses JetBrains Mono — the same monospace used across the portfolio. Creates instant visual separation between prose and data.</div>
-                                        <span className="sk-tag-sm">JetBrains · Google Fonts · 400–700</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="sk-card">
-                                <div className="sk-ch"><span className="sk-cat">Design system</span><span className="sk-why">Consistency</span></div>
-                                <div className="sk-row">
-                                    <div className="sk-icon">CS</div>
-                                    <div>
-                                        <div className="sk-name">Custom CSS design tokens</div>
-                                        <div className="sk-desc">All colours, spacing, and radius values stored as CSS custom properties. Entire visual language — off-white background, ink hierarchy, line weights — defined in one :root block.</div>
-                                        <span className="sk-tag-sm">14 colour tokens · 3 radius values</span>
-                                    </div>
-                                </div>
-                                <div className="sk-row">
-                                    <div className="sk-icon">SC</div>
-                                    <div>
-                                        <div className="sk-name">Class-scoped ERP embedding</div>
-                                        <div className="sk-desc">The ERP is embedded inside this case study page without an iframe. All ERP styles are namespace-scoped under .erp-embed to prevent cascade conflicts with the outer page.</div>
-                                        <span className="sk-tag-sm">No iframe · Class scoping</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="sk-note">
-                            <strong style={{ fontWeight: 500, color: 'var(--ink)' }}>Why no framework?</strong> The system needed to run as a single deployable file — no server, no build process, no dependency management. A React or Next.js app would add 300KB of runtime for zero user-visible benefit. Vanilla JS handles all 14 modules, live filtering, chart rendering, and form state in under 50KB of code. The constraint produced a better architecture.
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* 11 KEY LEARNINGS */}
+            {/* 10 KEY LEARNINGS */}
             <div className="artifact-section fade">
                 <div className="max-w-7xl mx-auto px-6 w-full">
                     <div className="artifact-header">
-                        <div className="eyebrow">11 — Key Learnings</div>
+                        <div className="eyebrow">10 — Key Learnings</div>
                         <h2>Six things I know now<br/>I <em>didn't</em> before.</h2>
                         <p className="body-copy">Every project teaches something you can't learn from reading. These are the specific lessons that came from 14 months of real distribution data. Click each one.</p>
                     </div>
                     <div className="artifact-content">
-                        <div className="lrn-list" id="lrn-list">
+                        <div className="learning-grid fade d2">
                             {learningsData.map((item, index) => (
-                                <div 
-                                    key={index}
-                                    className={`lrn-item ${activeLearning === index ? 'on' : ''}`}
-                                    onClick={() => setActiveLearning(index)}
-                                    tabIndex={0}
-                                    role="button"
-                                    onKeyDown={(e) => { if(e.key === 'Enter' || e.key === ' ') setActiveLearning(index); }}
-                                >
-                                    <div className="lrn-num">0{index + 1}</div>
+                                <div key={index} className="learning-card">
+                                    <div className="lc-num">0{index + 1}</div>
                                     <div>
-                                        <div className="lrn-cat">{item.cat}</div>
-                                        <div className="lrn-title">{item.title}</div>
-                                        <div className="lrn-body">
-                                            {item.body}
-                                            <div className="lrn-verdict">{item.verdict}</div>
-                                        </div>
+                                        <div className="lc-cat">{item.cat}</div>
+                                        <div className="lc-title">{item.title}</div>
+                                        <div className="lc-body">{item.body}</div>
                                     </div>
                                 </div>
                             ))}
-                        </div>
-                        <div className="lrn-note">
-                            <strong style={{ fontWeight: 500, color: 'var(--ink)' }}>What I'd do differently:</strong> I'd instrument the system from day one — log every balance change, every commission calculation, every return approval with a timestamp and a user. The current system is accurate but not auditable in the forensic sense. That's the next version.
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* 12 BROADER CONTEXT */}
+            {/* 11 BROADER CONTEXT */}
             <div className="artifact-section alt fade">
                 <div className="max-w-7xl mx-auto px-6 w-full">
                     <div className="artifact-header">
-                        <div className="eyebrow">12 — Broader Context</div>
+                        <div className="eyebrow">11 — Broader Context</div>
                         <h2>One business.<br/>A model for <em>hundreds</em>.</h2>
                         <p className="body-copy">R Group is one FMCG distributor in Sylhet. But the problems it had — and the system that fixed them — describe hundreds of similar operations across Bangladesh.</p>
                     </div>
@@ -1192,11 +1119,11 @@ const FMCGCaseStudy: React.FC = () => {
                 </div>
             </div>
 
-            {/* 13 HOW I WORK */}
+            {/* 12 HOW I WORK */}
             <section style={{ padding: '80px 0', borderTop: '1px solid var(--ln)' }} className="bg-white fade">
                 <div className="max-w-7xl mx-auto px-6 w-full">
-                    <div className="eyebrow" style={{ marginBottom: 16 }}>13 — How I Work</div>
-                    <h2 style={{ fontSize: 'clamp(38px,5vw,56px)', fontFamily: 'var(--serif)', color: 'var(--ink)', lineHeight: 1.1 }}>From messy<br/>to <em style={{ fontStyle: 'italic', fontWeight: 500, color: 'var(--brand)' }}>maintainable</em>.</h2>
+                    <div className="eyebrow" style={{ marginBottom: 16 }}>12 — How I Work</div>
+                    <h2>From messy<br/>to <em>maintainable</em>.</h2>
                     <div className="process-row">
                         <div className="ps">
                             <div className="ps-num">01</div>
@@ -1222,7 +1149,7 @@ const FMCGCaseStudy: React.FC = () => {
                 </div>
             </section>
 
-            {/* 14 CTA */}
+            {/* 13 CTA */}
             <section className="py-24 md:py-32 bg-white border-t border-slate-200">
                 <div className="max-w-[660px] mx-auto text-center fade">
                     <h2 className="font-sans text-[clamp(38px,5.5vw,62px)] text-slate-900 leading-[1.05] tracking-[-0.4px] mb-[18px] font-bold">

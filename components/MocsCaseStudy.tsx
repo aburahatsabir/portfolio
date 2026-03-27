@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 // ─── DATA ─────────────────────────────────────────────────
 
 const MocsCaseStudy: React.FC = () => {
+    const { scrollY } = useScroll();
+    const heroY = useTransform(scrollY, [0, 1000], [0, 250]);
+
     const [activeHypothesis, setActiveHypothesis] = useState(0);
 
     const hypothesisData = [
@@ -79,17 +83,31 @@ const MocsCaseStudy: React.FC = () => {
     ];
 
     useEffect(() => {
-        // Trigger fade in animation after component mount
-        const elements = document.querySelectorAll('.fade');
-        setTimeout(() => {
-            elements.forEach(elt => elt.classList.add('in'));
-            
-            // Trigger metric ring animations
-            document.querySelectorAll('.metric-ring-fill').forEach(ring => {
-                const val = ring.getAttribute('data-val');
-                if (val) (ring as HTMLElement).style.strokeDasharray = `${val} 314`;
+        // IntersectionObserver for scroll-triggered staggered reveals
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in');
+                    
+                    // Trigger metric rings if this section contains them
+                    const rings = entry.target.querySelectorAll('.metric-ring-fill');
+                    if (rings.length > 0) {
+                        rings.forEach(ring => {
+                            const val = ring.getAttribute('data-val');
+                            if (val) (ring as HTMLElement).style.strokeDasharray = `${val} 314`;
+                        });
+                    }
+                    
+                    // Stop observing once animated to avoid re-triggering repeatedly
+                    observer.unobserve(entry.target);
+                }
             });
-        }, 100);
+        }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+        const elements = document.querySelectorAll('.fade');
+        elements.forEach(elt => observer.observe(elt));
+
+        return () => observer.disconnect();
     }, []);
 
 
@@ -211,29 +229,20 @@ const MocsCaseStudy: React.FC = () => {
                 .fmcg-case-study .body-copy { font-size: 16px; color: var(--ink2); line-height: 1.9; font-weight: 300; max-width: 600px; }
                 
                 /* EXACT PREMIUM MATCH FOR CONTEXT */
-                .fmcg-case-study .premium-kicker { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--brand); margin-bottom: 14px; display: flex; align-items: center; gap: 12px; }
-                .fmcg-case-study .premium-kicker::before { content: ''; display: inline-block; width: 24px; height: 1px; background: var(--brand); }
-                .fmcg-case-study .h2-premium { font-family: var(--serif); font-size: clamp(28px, 3.5vw, 44px); font-weight: 400; line-height: 1.12; letter-spacing: -0.01em; margin-bottom: 20px; color: var(--ink); }
-                .fmcg-case-study .p-premium { color: var(--ink2); margin-bottom: 16px; font-size: 15px; line-height: 1.7; }
-                .fmcg-case-study .context-quote-premium { border-left: 2px solid var(--brand); padding: 24px 28px; background: var(--w); border-radius: 0 12px 12px 0; font-family: var(--serif); font-size: 22px; color: var(--ink2); line-height: 1.5; margin: 32px 0; font-style: italic; }
-                .fmcg-case-study .context-quote-premium cite { display: block; font-family: var(--sans); font-size: 13px; font-style: normal; color: var(--ink4); margin-top: 12px; }
-                .fmcg-case-study .sh-card-premium { background: var(--w); border: 1px solid var(--ln); border-radius: 12px; padding: 20px; transition: all .2s; }
-                .fmcg-case-study .sh-card-premium:hover { box-shadow: 0 4px 16px rgba(0,0,0,.05); }
-                .fmcg-case-study .sh-role-premium { font-family: var(--mono); font-size: 10px; color: var(--brand); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px; }
-                .fmcg-case-study .sh-title-premium { font-size: 14px; font-weight: 500; margin-bottom: 4px; color: var(--ink); }
-                .fmcg-case-study .sh-desc-premium { font-size: 13px; color: var(--ink3); line-height: 1.5; }
+
+                .fmcg-case-study .context-quote { border-left: 2px solid var(--brand); padding: 24px 28px; background: var(--w); border-radius: 0 12px 12px 0; font-family: var(--serif); font-size: 22px; color: var(--ink2); line-height: 1.5; margin: 32px 0; font-style: italic; }
+                .fmcg-case-study .context-quote cite { display: block; font-family: var(--sans); font-size: 13px; font-style: normal; color: var(--ink4); margin-top: 12px; }
 
                 .fmcg-case-study .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
-                .fmcg-case-study .context-quote { border-left: 3px solid var(--brand); padding: 24px 28px; background: var(--off); border-radius: 0 12px 12px 0; font-family: var(--serif); font-size: 22px; color: var(--ink2); line-height: 1.5; margin: 32px 0; font-style: italic; }
-                .fmcg-case-study .context-quote cite { display: block; font-family: var(--sans); font-size: 13px; font-style: normal; color: var(--ink4); margin-top: 12px; }
+
                 .fmcg-case-study .stakeholders-list { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
-                .fmcg-case-study .stakeholder-card { background: var(--w); border: 1px solid var(--ln); border-radius: 12px; padding: 20px; transition: all .2s; }
+                .fmcg-case-study .stakeholder-card { background: var(--w); border: 1px solid var(--ln); border-radius: 10px; padding: 20px; transition: all .2s; }
                 .fmcg-case-study .stakeholder-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.05); border-color: var(--ln2); }
                 .fmcg-case-study .sh-role { font-family: var(--mono); font-size: 10px; color: var(--gm); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px; font-weight: 600; }
                 .fmcg-case-study .sh-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--ink); }
                 .fmcg-case-study .sh-desc { font-size: 13px; color: var(--ink3); line-height: 1.6; }
 
-                .fmcg-case-study .problem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--ln); border: 1px solid var(--ln); border-radius: 12px; overflow: hidden; margin-top: 40px; }
+                .fmcg-case-study .problem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--ln); border: 1px solid var(--ln); border-radius: 10px; overflow: hidden; margin-top: 40px; }
                 .fmcg-case-study .problem-cell { background: var(--w); padding: 28px; transition: background .2s; }
                 .fmcg-case-study .problem-cell:hover { background: var(--off); }
                 .fmcg-case-study .pc-number { font-family: var(--mono); font-size: 11px; color: var(--ink4); margin-bottom: 8px; letter-spacing: .06em; display: block; }
@@ -241,22 +250,27 @@ const MocsCaseStudy: React.FC = () => {
                 .fmcg-case-study .pc-title { font-size: 15px; font-weight: 600; margin-bottom: 8px; letter-spacing: -.01em; color: var(--ink); }
                 .fmcg-case-study .pc-desc { font-size: 13px; color: var(--ink3); line-height: 1.6; margin: 0; }
 
-                .fmcg-case-study .ba-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--ln); border-radius: 12px; overflow: hidden; margin-top: 48px; }
-                .fmcg-case-study .ba-side { padding: 32px 36px; }
-                .fmcg-case-study .ba-side.before { background: var(--off); border-right: 1px solid var(--ln); }
-                .fmcg-case-study .ba-side.after { background: var(--w); }
-                .fmcg-case-study .ba-head-tab { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 24px; display: flex; align-items: center; gap: 8px; font-family: var(--mono); }
-                .fmcg-case-study .ba-head-tab.bef { color: var(--rm); }
-                .fmcg-case-study .ba-head-tab.aft { color: var(--gm); }
-                .fmcg-case-study .ba-tab-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
-                .fmcg-case-study .ba-list-row { font-size: 14px; color: var(--ink2); padding: 10px 0; border-bottom: 1px solid var(--ln); display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; }
-                .fmcg-case-study .ba-list-row:last-child { border-bottom: none; }
-                .fmcg-case-study .bali-icon { flex-shrink: 0; margin-top: 1px; font-size: 13px; }
+                .fmcg-case-study .ba-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 48px; }
+                .fmcg-case-study .ba-card { border: 1px solid var(--ln); border-radius: 10px; overflow: hidden; }
+                .fmcg-case-study .ba-head { padding: 12px 18px; border-bottom: 1px solid var(--ln); display: flex; align-items: center; gap: 9px; }
+                .fmcg-case-study .ba-head.before { background: #fff7f7; }
+                .fmcg-case-study .ba-head.after { background: #f5fbf6; }
+                .fmcg-case-study .ba-dot { width: 7px; height: 7px; border-radius: 50%; }
+                .fmcg-case-study .ba-head.before .ba-dot { background: var(--rm); }
+                .fmcg-case-study .ba-head.after .ba-dot { background: var(--gm); }
+                .fmcg-case-study .ba-lbl { font-family: var(--mono); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; font-weight: 500; }
+                .fmcg-case-study .ba-head.before .ba-lbl { color: var(--rm); }
+                .fmcg-case-study .ba-head.after .ba-lbl { color: var(--gdk); }
+                .fmcg-case-study .ba-row { display: flex; gap: 11px; padding: 12px 18px; border-bottom: 1px solid var(--ln); font-size: 14px; color: var(--ink2); line-height: 1.65; font-weight: 300; }
+                .fmcg-case-study .ba-row:last-child { border-bottom: none; }
+                .fmcg-case-study .ba-mark { font-family: var(--mono); font-size: 12px; flex-shrink: 0; margin-top: 2px; }
+                .fmcg-case-study .bm-bad { color: var(--rm); }
+                .fmcg-case-study .bm-good { color: var(--gm); }
 
                 .fmcg-case-study .hl { background: var(--brand-light); color: var(--brand); padding: 1px 6px; border-radius: 4px; font-size: 0.92em; font-weight: 500; }
 
                 .fmcg-case-study .vis-impact { margin-top: 56px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
-                .fmcg-case-study .vis-chart-wrap { background: var(--w); border: 1px solid var(--ln); border-radius: 12px; padding: 32px; overflow: hidden; }
+                .fmcg-case-study .vis-chart-wrap { background: var(--w); border: 1px solid var(--ln); border-radius: 10px; padding: 32px; overflow: hidden; }
                 .fmcg-case-study .vis-chart-title { font-family: var(--mono); font-size: 10px; color: var(--ink4); letter-spacing: .14em; text-transform: uppercase; margin-bottom: 28px; }
                 .fmcg-case-study .vis-bars { display: flex; align-items: flex-end; gap: 16px; height: 140px; }
                 .fmcg-case-study .vis-bar-group { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; }
@@ -321,13 +335,13 @@ const MocsCaseStudy: React.FC = () => {
 
                 .fmcg-case-study .journey-wrap {
                     margin-top: 48px;
+                    padding: 0 20px;
                 }
                 .fmcg-case-study .journey-steps {
                     display: flex;
                     justify-content: space-between;
-                    gap: 16px;
+                    gap: 0;
                     position: relative;
-                    padding-bottom: 24px;
                 }
                 .fmcg-case-study .journey-step {
                     position: relative;
@@ -337,64 +351,66 @@ const MocsCaseStudy: React.FC = () => {
                     align-items: center;
                     text-align: center;
                     flex: 1;
-                    padding: 0 8px;
                 }
                 .fmcg-case-study .journey-step::after {
                     content: '';
                     position: absolute;
-                    top: 20px;
-                    left: 50%;
-                    width: 100%;
+                    top: 16px;
+                    left: calc(50% + 16px);
+                    width: calc(100% - 32px);
                     height: 1px;
-                    background: var(--ln2);
+                    background: var(--ln);
                     z-index: -1;
                 }
                 .fmcg-case-study .journey-step:last-child::after {
                     display: none;
                 }
                 .fmcg-case-study .step-circle {
-                    width: 40px;
-                    height: 40px;
+                    width: 32px;
+                    height: 32px;
                     border-radius: 50%;
                     background: var(--w);
-                    border: 1.5px solid var(--ln2);
+                    border: 1px solid var(--ln2);
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    font-size: 16px;
-                    font-family: var(--sans);
-                    font-weight: 400;
-                    color: var(--ink3);
+                    font-size: 13px;
+                    font-family: var(--mono);
+                    font-weight: 500;
+                    color: var(--ink4);
                     margin-bottom: 12px;
-                    transition: all .3s;
+                    transition: all .4s cubic-bezier(0.4, 0, 0.2, 1);
                     position: relative;
                     z-index: 1;
                     flex-shrink: 0;
                 }
                 .fmcg-case-study .step-circle.done {
-                    background: var(--gbg);
+                    background: var(--w);
                     border-color: var(--gm);
-                    color: var(--gdk);
+                    color: var(--gm);
                 }
                 .fmcg-case-study .step-circle.active {
                     background: var(--brand);
                     border-color: var(--brand);
                     color: var(--w);
                     box-shadow: 0 0 0 4px var(--brand-light);
+                    transform: scale(1.1);
                 }
                 .fmcg-case-study .step-label {
                     font-size: 11px;
-                    font-weight: 500;
-                    color: var(--ink3);
+                    font-weight: 600;
+                    color: var(--ink);
                     text-align: center;
                     line-height: 1.3;
-                    margin-bottom: 3px;
+                    margin-bottom: 4px;
+                    letter-spacing: -0.01em;
                 }
                 .fmcg-case-study .step-sub {
                     font-size: 10px;
                     color: var(--ink4);
                     text-align: center;
                     font-family: var(--mono);
+                    letter-spacing: 0.02em;
                 }
 
                 .fmcg-case-study .journey-services {
@@ -406,7 +422,7 @@ const MocsCaseStudy: React.FC = () => {
                 .fmcg-case-study .js-card {
                     background: var(--w);
                     border: 1px solid var(--ln);
-                    border-radius: 12px;
+                    border-radius: 10px;
                     padding: 24px;
                 }
                 .fmcg-case-study .js-card-title {
@@ -441,6 +457,7 @@ const MocsCaseStudy: React.FC = () => {
                     flex-shrink: 0;
                     margin-top: 5px;
                 }
+                
 
                 .fmcg-case-study .arch-diagram {
                     margin-top: 40px;
@@ -530,7 +547,7 @@ const MocsCaseStudy: React.FC = () => {
                 .fmcg-case-study .module-card {
                     background: var(--w);
                     border: 1px solid var(--ln);
-                    border-radius: 12px;
+                    border-radius: 10px;
                     padding: 28px;
                     transition: all .2s;
                     cursor: default;
@@ -586,7 +603,7 @@ const MocsCaseStudy: React.FC = () => {
                     letter-spacing: .04em;
                 }
 
-                .fmcg-case-study .service-matrix { margin-top: 40px; border: 1px solid var(--ln); border-radius: 12px; overflow: hidden; }
+                .fmcg-case-study .service-matrix { margin-top: 40px; border: 1px solid var(--ln); border-radius: 10px; overflow: hidden; }
                 .fmcg-case-study .sm-header { display: grid; grid-template-columns: 200px repeat(4, 1fr); background: var(--off); border-bottom: 1px solid var(--ln); }
                 .fmcg-case-study .sm-cell { padding: 14px 16px; font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink4); font-weight: 500; }
                 .fmcg-case-study .sm-row { display: grid; grid-template-columns: 200px repeat(4, 1fr); border-bottom: 1px solid var(--ln); }
@@ -611,23 +628,27 @@ const MocsCaseStudy: React.FC = () => {
                 .fmcg-case-study .metric-ring-desc { font-size: 12px; color: var(--ink4); text-align: center; line-height: 1.5; }
 
 
-                .fmcg-case-study .g4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--ln); border: 1px solid var(--ln); border-radius: 12px; overflow: hidden; margin-top: 40px; }
-                .fmcg-case-study .impact-cell { background: var(--w); padding: 28px; }
-                .fmcg-case-study .impact-num { font-size: 46px; font-weight: 800; color: var(--ink); line-height: 1; letter-spacing: -.05em; margin-bottom: 6px; }
-                .fmcg-case-study .impact-num span { color: var(--brand); }
-                .fmcg-case-study .impact-lbl { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
-                .fmcg-case-study .impact-desc { font-size: 13px; font-weight: 300; color: var(--ink3); line-height: 1.5; }
+                .fmcg-case-study .g4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; background: var(--w); border: 1px solid var(--ln); border-radius: 10px; overflow: hidden; margin-top: 40px; }
+                .fmcg-case-study .impact-stat { padding: 32px 26px; border-right: 1px solid var(--ln); }
+                .fmcg-case-study .impact-stat:last-child { border-right: none; }
+                .fmcg-case-study .stat-num { font-family: var(--sans); font-size: 46px; font-weight: 800; color: var(--ink); line-height: 1; letter-spacing: -.05em; margin-bottom: 5px; }
+                .fmcg-case-study .stat-unit { font-family: var(--mono); font-size: 11px; color: var(--brand); letter-spacing: 0.08em; display: block; margin-bottom: 6px; font-weight: 500; text-transform: uppercase; }
+                .fmcg-case-study .stat-desc { font-size: 14px; color: var(--ink3); line-height: 1.65; font-weight: 300; }
 
-                .fmcg-case-study .tech-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 40px; }
-                .fmcg-case-study .tech-card { background: var(--w); border: 1px solid var(--ln); border-radius: 12px; padding: 24px; }
-                .fmcg-case-study .tech-layer { font-family: var(--mono); font-size: 10px; color: var(--brand); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px; }
-                .fmcg-case-study .tech-title { font-size: 15px; font-weight: 600; letter-spacing: -.01em; margin-bottom: 10px; }
-                .fmcg-case-study .tech-items { display: flex; flex-direction: column; gap: 6px; }
-                .fmcg-case-study .tech-item { font-size: 13px; font-weight: 300; color: var(--ink3); display: flex; align-items: center; gap: 8px; }
-                .fmcg-case-study .tech-item::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--brand); flex-shrink: 0; display: block; }
+                .fmcg-case-study .tech-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 40px; }
+                .fmcg-case-study .tech-card { background: var(--w); border: 1px solid var(--ln); border-radius: 10px; padding: 24px; transition: background .2s, border-color .2s; }
+                .fmcg-case-study .tech-card:hover { background: var(--off); border-color: var(--ln2); }
+                .fmcg-case-study .tech-layer { font-family: var(--mono); font-size: 10px; color: var(--brand); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px; font-weight: 500; }
+                .fmcg-case-study .tech-title { font-size: 15px; font-weight: 600; letter-spacing: -.01em; margin-bottom: 12px; color: var(--ink); }
+                .fmcg-case-study .tech-items { display: flex; flex-direction: column; gap: 8px; }
+                .fmcg-case-study .tech-item { font-size: 13px; font-weight: 300; color: var(--ink3); display: flex; align-items: flex-start; gap: 8px; line-height: 1.55; }
+                .fmcg-case-study .tech-item::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--brand); flex-shrink: 0; display: block; margin-top: 6px; }
+                @media(max-width:900px){ .fmcg-case-study .tech-grid { grid-template-columns: 1fr 1fr; gap: 16px; } }
+                @media(max-width:600px){ .fmcg-case-study .tech-grid { grid-template-columns: 1fr; } }
 
                 .fmcg-case-study .learning-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; }
-                .fmcg-case-study .learning-card { background: var(--w); border: 1px solid var(--ln); border-radius: 12px; padding: 28px; display: flex; gap: 18px; }
+                .fmcg-case-study .learning-card { background: var(--w); border: 1px solid var(--ln); border-radius: 10px; padding: 28px; display: flex; gap: 18px; transition: all .2s; }
+                .fmcg-case-study .learning-card:hover { background: var(--off); border-color: var(--ln2); }
                 .fmcg-case-study .lc-num { font-size: 38px; font-weight: 800; color: var(--ln2); line-height: 1; flex-shrink: 0; min-width: 46px; letter-spacing: -.04em; }
                 .fmcg-case-study .lc-cat { font-family: var(--mono); font-size: 9px; color: var(--brand); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 6px; }
                 .fmcg-case-study .lc-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; letter-spacing: -.01em; }
@@ -637,7 +658,7 @@ const MocsCaseStudy: React.FC = () => {
                 /* RESULTS BAND CSS */
                 .fmcg-case-study .results-band { background: var(--w); color: var(--ink); padding: 100px 0; margin: 0; border-top: 1px solid var(--ln); border-bottom: 1px solid var(--ln); }
                 .fmcg-case-study .results-band h2 { color: var(--ink); }
-                .fmcg-case-study .results-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--ln); border: 1px solid var(--ln); border-radius: 16px; overflow: hidden; margin-top: 60px; }
+                .fmcg-case-study .results-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--ln); border: 1px solid var(--ln); border-radius: 10px; overflow: hidden; margin-top: 60px; }
                 .fmcg-case-study .result-cell { background: var(--w); padding: 32px 28px; transition: background .2s; position: relative; overflow: hidden; }
                 .fmcg-case-study .result-cell::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--brand), transparent); opacity: 0; transition: opacity .3s; }
                 .fmcg-case-study .result-cell:hover { background: var(--off); }
@@ -646,27 +667,10 @@ const MocsCaseStudy: React.FC = () => {
                 .fmcg-case-study .result-num span { color: var(--brand); font-weight: 400; }
                 .fmcg-case-study .result-label { font-size: 14px; color: var(--ink3); line-height: 1.4; font-weight: 500; }
                 .fmcg-case-study .result-note { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--brand); margin-top: 6px; letter-spacing: .08em; text-transform: uppercase; }
-                /* TECH STACK CSS */
-                .fmcg-case-study .tech-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 40px; }
-                .fmcg-case-study .tech-card { background: var(--w); border: 1px solid var(--ln); border-radius: 12px; padding: 24px; transition: all .2s; }
-                .fmcg-case-study .tech-card:hover { background: var(--off); border-color: var(--ln2); }
-                .fmcg-case-study .tc-layer { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--brand); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 12px; font-weight: 600; }
-                .fmcg-case-study .tc-title { font-size: 15px; font-weight: 600; margin-bottom: 12px; letter-spacing: -.01em; color: var(--ink); }
-                .fmcg-case-study .tc-items { display: flex; flex-direction: column; gap: 8px; }
-                .fmcg-case-study .tc-item { font-size: 13px; color: var(--ink3); display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; }
-                .fmcg-case-study .tc-item::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--brand); flex-shrink: 0; margin-top: 8px; }
-                
-                /* KEY LEARNINGS CSS */
-                .fmcg-case-study .learnings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; }
-                .fmcg-case-study .learning-card { background: var(--w); border: 1px solid var(--ln); border-radius: 12px; padding: 28px; display: flex; gap: 20px; transition: all .2s; }
-                .fmcg-case-study .learning-card:hover { background: var(--off); border-color: var(--ln2); }
-                .fmcg-case-study .lc-num { font-size: 48px; color: var(--ln2); line-height: 1; flex-shrink: 0; min-width: 48px; font-weight: 300; letter-spacing: -0.04em; }
-                .fmcg-case-study .lc-body h4 { font-size: 15px; font-weight: 600; margin-bottom: 8px; letter-spacing: -.01em; color: var(--ink); margin-top: 0; }
-                .fmcg-case-study .lc-body p { font-size: 13px; color: var(--ink3); margin: 0; line-height: 1.6; }
 
                 /* BROADER CONTEXT CSS */
                 .fmcg-case-study .context-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
-                .fmcg-case-study .ctx-card { background: var(--w); border: 1px solid var(--ln); border-radius: 12px; padding: 24px; transition: all .2s; }
+                .fmcg-case-study .ctx-card { background: var(--w); border: 1px solid var(--ln); border-radius: 10px; padding: 24px; transition: all .2s; }
                 .fmcg-case-study .ctx-card:hover { background: var(--off); border-color: var(--ln2); }
                 .fmcg-case-study .ctx-icon { font-size: 24px; margin-bottom: 12px; display: block; }
                 .fmcg-case-study .ctx-title { font-size: 15px; font-weight: 600; margin-bottom: 8px; letter-spacing: -.01em; color: var(--ink); }
@@ -674,7 +678,7 @@ const MocsCaseStudy: React.FC = () => {
 
                 /* ROADMAP CSS */
                 .fmcg-case-study .roadmap-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
-                .fmcg-case-study .rm-card { background: var(--w); border: 1px solid var(--ln); border-radius: 12px; padding: 28px; position: relative; transition: all .2s; }
+                .fmcg-case-study .rm-card { background: var(--w); border: 1px solid var(--ln); border-radius: 10px; padding: 28px; position: relative; transition: all .2s; }
                 .fmcg-case-study .rm-card:not(.current):hover { background: var(--off); border-color: var(--ln2); }
                 .fmcg-case-study .rm-card.current { border-color: var(--brand-border); background: var(--brand-light); }
                 .fmcg-case-study .rm-badge { position: absolute; top: 20px; right: 20px; font-family: 'JetBrains Mono', monospace; font-size: 9px; padding: 3px 9px; border-radius: 10px; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; }
@@ -691,7 +695,11 @@ const MocsCaseStudy: React.FC = () => {
                 @media(max-width:900px){
                     .fmcg-case-study section { padding: 80px 0; }
                     .fmcg-case-study .two-col { grid-template-columns: 1fr; gap: 40px; }
-                    .fmcg-case-study .problem-grid, .fmcg-case-study .ba-wrap, .fmcg-case-study .vis-impact, .fmcg-case-study .journey-services { grid-template-columns: 1fr; gap: 32px; }
+                    .fmcg-case-study .g4 { grid-template-columns: 1fr; }
+                    .fmcg-case-study .alerts { grid-template-columns: 1fr; }
+                    .fmcg-case-study .impact-stat { border-right: none; border-bottom: 1px solid var(--ln); }
+                    .fmcg-case-study .impact-stat:last-child { border-bottom: none; }
+                    .fmcg-case-study .problem-grid, .fmcg-case-study .ba-grid, .fmcg-case-study .vis-impact, .fmcg-case-study .journey-services { grid-template-columns: 1fr; gap: 32px; }
                     .fmcg-case-study .journey-steps { overflow-x: auto; padding-bottom: 32px; gap: 32px; justify-content: flex-start; }
                     .fmcg-case-study .journey-steps::before { right: -300px; }
                     .fmcg-case-study .journey-step { min-width: 100px; flex: none; }
@@ -700,7 +708,7 @@ const MocsCaseStudy: React.FC = () => {
                     .fmcg-case-study .metrics-row { grid-template-columns: 1fr 1fr; }
                     .fmcg-case-study .results-grid { grid-template-columns: 1fr 1fr; }
                     .fmcg-case-study .tech-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
-                    .fmcg-case-study .learning-grid { grid-template-columns: 1fr; }
+                    .fmcg-case-study .learning-grid { grid-template-columns: 1fr 1fr; }
                     .fmcg-case-study .roadmap-grid { grid-template-columns: 1fr; }
                     .fmcg-case-study .context-grid { grid-template-columns: 1fr; }
                     .fmcg-case-study h1 { font-size: clamp(38px, 10vw, 60px); }
@@ -709,6 +717,24 @@ const MocsCaseStudy: React.FC = () => {
                     .fmcg-case-study .hero-inner { grid-template-columns: 1fr; gap: 48px; }
                     .fmcg-case-study #hero { padding: 100px 0 60px; min-height: auto; }
                     .fmcg-case-study .hero-visual { min-height: 400px; }
+                }
+                @media(max-width:600px){
+                    .fmcg-case-study .tech-grid { grid-template-columns: 1fr; }
+                    .fmcg-case-study .learning-grid { grid-template-columns: 1fr; }
+                    .fmcg-case-study .module-grid { grid-template-columns: 1fr; }
+                    .fmcg-case-study .metrics-row { grid-template-columns: 1fr; }
+                    .fmcg-case-study .results-grid { grid-template-columns: 1fr; }
+                    .fmcg-case-study .sm-header, .fmcg-case-study .sm-row { grid-template-columns: 1fr; }
+                }
+                
+                @keyframes patient-anim {
+                    0%, 15% { transform: translateY(0) translateX(0) scale(1); opacity: 1; }
+                    40%, 60% { transform: translateY(-120px) translateX(40px) scale(0.9); opacity: 0; }
+                    70% { transform: translateY(-40px) translateX(0) scale(0.95); opacity: 0; }
+                    85%, 100% { transform: translateY(0) translateX(0) scale(1); opacity: 1; }
+                }
+                .fmcg-case-study .patient-cube {
+                    animation: patient-anim 6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
                 }
             `}</style>
 
@@ -745,7 +771,7 @@ const MocsCaseStudy: React.FC = () => {
                         </div>
 
                         <div className="hero-visual fade d3">
-                            <div className="structure-container">
+                            <motion.div className="structure-container" style={{ y: heroY }}>
                                 {(() => {
                                     const s = 40;
                                     const dx = s * 0.866;
@@ -774,7 +800,7 @@ const MocsCaseStudy: React.FC = () => {
                                     const p0 = iso(-m, -m, -0.2);
                                     const p1 = iso(3+m, -m, -0.2);
                                     const p2 = iso(3+m, 3+m, -0.2);
-                                    const p3 = iso(-m, 2+m, -0.2);
+                                    const p3 = iso(-m, 3+m, -0.2);
 
                                     return (
                                         <svg viewBox="0 0 500 440" className="structure-svg" aria-hidden="true">
@@ -791,38 +817,87 @@ const MocsCaseStudy: React.FC = () => {
                                             <g transform="translate(250, 260)">
                                                 {/* Base Platform */}
                                                 <polygon points={`${p0.x},${p0.y} ${p1.x},${p1.y} ${p2.x},${p2.y} ${p3.x},${p3.y}`} fill="#F8FAFC" stroke="#E2E8F0" strokeWidth="1.5" />
+                                                <polygon points={`${p3.x},${p3.y} ${p2.x},${p2.y} ${p2.x},${p2.y+t} ${p3.x},${p3.y+t}`} fill="#F1F5F9" stroke="#E2E8F0" strokeWidth="1.5" />
+                                                <polygon points={`${p2.x},${p2.y} ${p1.x},${p1.y} ${p1.x},${p1.y+t} ${p2.x},${p2.y+t}`} fill="#E2E8F0" stroke="#CBD5E1" strokeWidth="1.5" />
                                                 
                                                 {/* Static Structure */}
                                                 {cubes.map((cube, i) => {
                                                     const p = iso(cube.c, cube.r, cube.h);
                                                     return (
                                                         <g key={i} transform={`translate(${p.x}, ${p.y})`}>
-                                                            <polygon points={`0,${-s} ${dx},${-dy} 0,0 ${-dx},${-dy}`} fill="rgba(16, 185, 129, 0.25)" stroke="rgba(255, 255, 255, 0.5)" strokeWidth="0.8" />
-                                                            <polygon points={`${-dx},${-dy} 0,0 0,${s} ${-dx},${dy}`} fill="rgba(16, 185, 129, 0.45)" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="0.8" />
-                                                            <polygon points={`0,0 ${dx},${-dy} ${dx},${dy} 0,${s}`} fill="rgba(6, 95, 70, 0.65)" stroke="rgba(255, 255, 255, 0.2)" strokeWidth="0.8" />
+                                                            <polygon points={`0,${-s} ${dx},${-dy} 0,0 ${-dx},${-dy}`} fill="rgba(79, 70, 229, 0.25)" stroke="rgba(255, 255, 255, 0.5)" strokeWidth="0.8" />
+                                                            <polygon points={`${-dx},${-dy} 0,0 0,${s} ${-dx},${dy}`} fill="rgba(79, 70, 229, 0.45)" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="0.8" />
+                                                            <polygon points={`0,0 ${dx},${-dy} ${dx},${dy} 0,${s}`} fill="rgba(49, 46, 129, 0.65)" stroke="rgba(255, 255, 255, 0.2)" strokeWidth="0.8" />
                                                             <polygon points={`0,${-s} ${dx},${-dy} 0,0 ${-dx},${-dy}`} fill="url(#topGlowMocs)" opacity="0.6"/>
                                                         </g>
                                                     );
                                                 })}
 
-                                                {/* UI Tag */}
+                                                {/* UI Tag 3: Finance Engine */}
+                                                <g className="ui-overlay" transform={`translate(${p2.x}, ${p2.y})`}>
+                                                    <circle cx="0" cy="0" r="2" fill="var(--brand)" />
+                                                    <path d="M 0 0 L 0 30 L -20 30" fill="none" stroke="var(--brand)" strokeWidth="1" opacity="0.5" />
+                                                    <rect x="-116" y="21" width="92" height="18" rx="2" fill="rgba(255,255,255,0.9)" stroke="var(--ln)" filter="url(#shadowMocs)" />
+                                                    <circle cx="-108" cy="30" r="3.5" fill="var(--brand)" />
+                                                    <text x="-98" y="33" fontSize="8" fontFamily="var(--mono)" letterSpacing="0.05em" fill="var(--ink2)" fontWeight="600">FINANCE ENGINE</text>
+                                                </g>
+
+                                                {/* UI Tag 2: Visa Kanban */}
+                                                {(() => {
+                                                    const mid = iso(0, 1, 1);
+                                                    return (
+                                                        <g className="ui-overlay" transform={`translate(${mid.x}, ${mid.y - s})`}>
+                                                            <circle cx="0" cy="0" r="2" fill="var(--brand)" />
+                                                            <path d="M 0 0 L -30 0 L -30 20" fill="none" stroke="var(--brand)" strokeWidth="1" opacity="0.5" />
+                                                            <rect x="-82" y="20" width="82" height="18" rx="2" fill="rgba(255,255,255,0.9)" stroke="var(--ln)" filter="url(#shadowMocs)" />
+                                                            <circle cx="-74" cy="29" r="3.5" fill="var(--brand)" />
+                                                            <text x="-64" y="32" fontSize="8" fontFamily="var(--mono)" letterSpacing="0.05em" fill="var(--ink2)" fontWeight="600">VISA KANBAN</text>
+                                                        </g>
+                                                    );
+                                                })()}
+
+                                                {/* UI Tag 1: Live Ops Dashboard */}
                                                 {(() => {
                                                     const top = iso(0, 0, 2);
                                                     return (
                                                         <g className="ui-overlay" transform={`translate(${top.x}, ${top.y - s})`}>
-                                                            <circle cx="0" cy="0" r="2" fill="var(--gm)" />
-                                                            <path d="M 0 0 L 0 -30 L -20 -30" fill="none" stroke="var(--gm)" strokeWidth="1" opacity="0.5" />
-                                                            <rect x="-106" y="-39" width="82" height="18" rx="2" fill="rgba(255,255,255,0.9)" stroke="var(--ln)" filter="url(#shadowMocs)" />
-                                                            <circle cx="-98" cy="-30" r="3.5" fill="var(--gm)" />
-                                                            <text x="-88" y="-27" fontSize="8" fontFamily="var(--mono)" letterSpacing="0.05em" fill="var(--ink2)" fontWeight="600">MOCS KERNEL</text>
+                                                            <circle cx="0" cy="0" r="2" fill="var(--brand)" />
+                                                            <path d="M 0 0 L 0 -30 L -20 -30" fill="none" stroke="var(--brand)" strokeWidth="1" opacity="0.5" />
+                                                            <rect x="-136" y="-39" width="112" height="18" rx="2" fill="rgba(255,255,255,0.9)" stroke="var(--ln)" filter="url(#shadowMocs)" />
+                                                            <circle cx="-128" cy="-30" r="3.5" fill="var(--brand)" />
+                                                            <text x="-118" y="-27" fontSize="8" fontFamily="var(--mono)" letterSpacing="0.05em" fill="var(--ink2)" fontWeight="600">LIVE OPS DASHBOARD</text>
                                                         </g>
                                                     );
                                                 })()}
+
+                                                {/* Moving 'Patient Data' Cube */}
+                                                <g className="patient-cube">
+                                                    {(() => {
+                                                        const p = iso(2, 2, 0); // Start layer 0
+                                                        return (
+                                                            <g transform={`translate(${p.x}, ${p.y})`}>
+                                                                <polygon points={`0,${-s} ${dx},${-dy} 0,0 ${-dx},${-dy}`} fill="rgba(99, 102, 241, 0.4)" stroke="rgba(255, 255, 255, 0.8)" strokeWidth="0.8" />
+                                                                <polygon points={`${-dx},${-dy} 0,0 0,${s} ${-dx},${dy}`} fill="rgba(79, 70, 229, 0.6)" stroke="rgba(255, 255, 255, 0.5)" strokeWidth="0.8" />
+                                                                <polygon points={`0,0 ${dx},${-dy} ${dx},${dy} 0,${s}`} fill="rgba(49, 46, 129, 0.85)" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="0.8" />
+                                                                <polygon points={`0,${-s} ${dx},${-dy} 0,0 ${-dx},${-dy}`} fill="url(#topGlowMocs)" opacity="0.9"/>
+                                                                
+                                                                {/* UI Tag 4: Patient File */}
+                                                                <g className="ui-overlay">
+                                                                    <circle cx="0" cy={-s} r="2" fill="var(--brand)" />
+                                                                    <path d={`M 0 ${-s} L 0 ${-s - 30} L 20 ${-s - 30}`} fill="none" stroke="var(--brand)" strokeWidth="1" opacity="0.5" />
+                                                                    <rect x="24" y={-s - 39} width="92" height="18" rx="2" fill="rgba(255,255,255,0.9)" stroke="var(--ln)" filter="url(#shadowMocs)" />
+                                                                    <circle cx="32" cy={-s - 30} r="3.5" fill="#10B981" />
+                                                                    <text x="40" y={-s - 27} fontSize="8" fontFamily="var(--mono)" letterSpacing="0.05em" fill="var(--ink2)" fontWeight="600">PATIENT PIPELINE</text>
+                                                                </g>
+                                                            </g>
+                                                        );
+                                                    })()}
+                                                </g>
                                             </g>
                                         </svg>
                                     );
                                 })()}
-                            </div>
+                            </motion.div>
                         </div>
                     </div>
                 </div>
@@ -830,7 +905,7 @@ const MocsCaseStudy: React.FC = () => {
 
             <section id="context" className="alt">
                 <div className="max-w-7xl mx-auto px-6 w-full">
-                    <div className="eyebrow fade">01 — Context</div>
+                    <div className="eyebrow">01 — Context</div>
                     <div className="two-col">
                         <div className="fade d1">
                             <h2>Medical tourism from Bangladesh to India isn't just complex — it's a massive <em>coordination problem</em></h2>
@@ -838,7 +913,7 @@ const MocsCaseStudy: React.FC = () => {
                             <p className="body-copy">Cikitsa International acts as the patient-side operations bridge — not a hospital, not a travel agency, but a specialist coordination layer between Bangladeshi patients (and their local travel agents) and the Indian healthcare system.</p>
                             <p className="body-copy">By 2022, the operation was processing hundreds of patients annually with no unified system. Case data lived across personal WhatsApp threads, spreadsheet columns, and agent contacts' memories. Critical information — passport numbers, visa statuses, treatment stages — was routinely lost or duplicated.</p>
                             
-                            <div className="context-quote-premium">
+                            <div className="context-quote">
                                 "The follow-up notes were buried in a single cell. The finance team couldn't see commission rates. There was no way to know which visa was pending without scrolling through 2,000 rows."
                                 <cite>— Internal operational debrief, 2022</cite>
                             </div>
@@ -849,25 +924,25 @@ const MocsCaseStudy: React.FC = () => {
                         <div className="fade d2">
                             <div className="eyebrow" style={{ marginTop: 0 }}>Key Stakeholders</div>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '8px' }}>
-                                <div className="sh-card-premium">
-                                    <div className="sh-role-premium">Patients</div>
-                                    <div className="sh-title-premium">Bangladeshi Medical Travelers</div>
-                                    <div className="sh-desc-premium">Seeking treatment at Indian hospitals. Often unfamiliar with processes. Need visa, appointment, logistics, and translation support.</div>
+                                <div className="stakeholder-card">
+                                    <div className="sh-role">Patients</div>
+                                    <div className="sh-title">Bangladeshi Medical Travelers</div>
+                                    <div className="sh-desc">Seeking treatment at Indian hospitals. Often unfamiliar with processes. Need visa, appointment, logistics, and translation support.</div>
                                 </div>
-                                <div className="sh-card-premium">
-                                    <div className="sh-role-premium">Agents</div>
-                                    <div className="sh-title-premium">Travel & Medical Agents (BD-side)</div>
-                                    <div className="sh-desc-premium">Companies like SADIA TOURS, INDIA TOURS, KAMAL TRAVEL — intermediaries who bring patients to Cikitsa in exchange for commission on referred services.</div>
+                                <div className="stakeholder-card">
+                                    <div className="sh-role">Agents</div>
+                                    <div className="sh-title">Travel & Medical Agents (BD-side)</div>
+                                    <div className="sh-desc">Companies like SADIA TOURS, INDIA TOURS, KAMAL TRAVEL — intermediaries who bring patients to Cikitsa in exchange for commission on referred services.</div>
                                 </div>
-                                <div className="sh-card-premium">
-                                    <div className="sh-role-premium">Partners</div>
-                                    <div className="sh-title-premium">Indian Hospital Networks</div>
-                                    <div className="sh-desc-premium">Apollo, Manipal, Fortis, Max, Artemis, Aster, and others — pay Cikitsa OP/IP commissions ranging from 5% to 24% depending on hospital and service category.</div>
+                                <div className="stakeholder-card">
+                                    <div className="sh-role">Partners</div>
+                                    <div className="sh-title">Indian Hospital Networks</div>
+                                    <div className="sh-desc">Apollo, Manipal, Fortis, Max, Artemis, Aster, and others — pay Cikitsa OP/IP commissions ranging from 5% to 24% depending on hospital and service category.</div>
                                 </div>
-                                <div className="sh-card-premium">
-                                    <div className="sh-role-premium">Operations Team</div>
-                                    <div className="sh-title-premium">Cikitsa Coordinators</div>
-                                    <div className="sh-desc-premium">Sayem, Atiq, Jafor, Dihan, Shela — each handling patient sub-portfolios across hospitals, tracking visa pipeline, treatment status, and follow-ups.</div>
+                                <div className="stakeholder-card">
+                                    <div className="sh-role">Operations Team</div>
+                                    <div className="sh-title">Cikitsa Coordinators</div>
+                                    <div className="sh-desc">Sayem, Atiq, Jafor, Dihan, Shela — each handling patient sub-portfolios across hospitals, tracking visa pipeline, treatment status, and follow-ups.</div>
                                 </div>
                             </div>
                         </div>
@@ -880,7 +955,7 @@ const MocsCaseStudy: React.FC = () => {
                     <div className="wide fade">
                         <div className="eyebrow">02 — Problem Space</div>
                         <h2>Six operational failures<br/>happening <em>simultaneously</em></h2>
-                        <p className="body-copy" style={{ maxWidth: 600 }}>Before MOCS, the coordination failures weren't just inconveniences — they caused measurable patient harm, agent churn, and revenue leakage at every touchpoint of the journey.</p>
+                        <p className="body-copy">Before MOCS, the coordination failures weren't just inconveniences — they caused measurable patient harm, agent churn, and revenue leakage at every touchpoint of the journey.</p>
                         
                         <div className="problem-grid">
                             <div className="problem-cell">
@@ -915,26 +990,26 @@ const MocsCaseStudy: React.FC = () => {
                             </div>
                         </div>
 
-                        <div className="ba-wrap fade" style={{ marginTop: 48 }}>
-                            <div className="ba-side before">
-                                <div className="ba-head-tab bef"><span className="ba-tab-dot" style={{ background: 'var(--rm)' }}></span>Before MOCS</div>
-                                <div className="ba-list-row"><span className="bali-icon">✕</span>Patient status tracked in mixed-language WhatsApp notes</div>
-                                <div className="ba-list-row"><span className="bali-icon">✕</span>Visa pipeline invisible — discovered failures reactively</div>
-                                <div className="ba-list-row"><span className="bali-icon">✕</span>No standardized service pricing — coordinator-dependent quoting</div>
-                                <div className="ba-list-row"><span className="bali-icon">✕</span>Follow-ups written as free text with no reminders or dates</div>
-                                <div className="ba-list-row"><span className="bali-icon">✕</span>Agent commissions reconciled manually at month-end</div>
-                                <div className="ba-list-row"><span className="bali-icon">✕</span>New coordinator onboarding took 3–4 weeks to get up to speed</div>
-                                <div className="ba-list-row"><span className="bali-icon">✕</span>Hospital network coverage unknown — no comparative rate view</div>
+                        <div className="ba-grid fade" style={{ marginTop: 48 }}>
+                            <div className="ba-card">
+                                <div className="ba-head before"><div className="ba-dot"></div><div className="ba-lbl">Before — Spreadsheets</div></div>
+                                <div className="ba-row"><span className="ba-mark bm-bad">✕</span><div><strong style={{ fontWeight: 500 }}>Patient status</strong> — tracked in mixed-language WhatsApp notes. No unified record, no history.</div></div>
+                                <div className="ba-row"><span className="ba-mark bm-bad">✕</span><div><strong style={{ fontWeight: 500 }}>Visa pipeline</strong> — invisible. Failures discovered reactively after applications expired.</div></div>
+                                <div className="ba-row"><span className="ba-mark bm-bad">✕</span><div><strong style={{ fontWeight: 500 }}>Service pricing</strong> — coordinator-dependent quoting. No standard rate reference, disputes routine.</div></div>
+                                <div className="ba-row"><span className="ba-mark bm-bad">✕</span><div><strong style={{ fontWeight: 500 }}>Follow-ups</strong> — written as free text with no dates or reminders. Operationally dead.</div></div>
+                                <div className="ba-row"><span className="ba-mark bm-bad">✕</span><div><strong style={{ fontWeight: 500 }}>Agent commissions</strong> — reconciled manually at month-end. 4–6 disputes every month.</div></div>
+                                <div className="ba-row"><span className="ba-mark bm-bad">✕</span><div><strong style={{ fontWeight: 500 }}>Coordinator onboarding</strong> — 3–4 weeks to get up to speed, no documented system.</div></div>
+                                <div className="ba-row"><span className="ba-mark bm-bad">✕</span><div><strong style={{ fontWeight: 500 }}>Hospital rates</strong> — coverage unknown. No comparative rate view across chains or cities.</div></div>
                             </div>
-                            <div className="ba-side after">
-                                <div className="ba-head-tab aft"><span className="ba-tab-dot" style={{ background: 'var(--gm)' }}></span>After MOCS</div>
-                                <div className="ba-list-row"><span className="bali-icon" style={{ color: 'var(--gm)' }}>✓</span>Unified patient record with structured fields and status taxonomy</div>
-                                <div className="ba-list-row"><span className="bali-icon" style={{ color: 'var(--gm)' }}>✓</span>Kanban visa pipeline with stage tracking and date-stamped history</div>
-                                <div className="ba-list-row"><span className="bali-icon" style={{ color: 'var(--gm)' }}>✓</span>Centralized rate matrix for all 7 hospital chains across 30+ cities</div>
-                                <div className="ba-list-row"><span className="bali-icon" style={{ color: 'var(--gm)' }}>✓</span>Structured follow-up log with date, outcome, and next action</div>
-                                <div className="ba-list-row"><span className="bali-icon" style={{ color: 'var(--gm)' }}>✓</span>Agent attribution on every patient record — automatic reconciliation</div>
-                                <div className="ba-list-row"><span className="bali-icon" style={{ color: 'var(--gm)' }}>✓</span>New coordinator operational in &lt; 1 day with guided system</div>
-                                <div className="ba-list-row"><span className="bali-icon" style={{ color: 'var(--gm)' }}>✓</span>Cross-hospital rate comparison at a glance for accurate quoting</div>
+                            <div className="ba-card">
+                                <div className="ba-head after"><div className="ba-dot"></div><div className="ba-lbl">After — MOCS</div></div>
+                                <div className="ba-row"><span className="ba-mark bm-good">✓</span><div><strong style={{ fontWeight: 500 }}>Patient status</strong> — unified record with structured fields, status taxonomy, and full history.</div></div>
+                                <div className="ba-row"><span className="ba-mark bm-good">✓</span><div><strong style={{ fontWeight: 500 }}>Visa pipeline</strong> — Kanban view with stage tracking, date-stamped history, and proactive alerts.</div></div>
+                                <div className="ba-row"><span className="ba-mark bm-good">✓</span><div><strong style={{ fontWeight: 500 }}>Service pricing</strong> — centralized rate matrix for 7 hospital chains across 30+ cities.</div></div>
+                                <div className="ba-row"><span className="ba-mark bm-good">✓</span><div><strong style={{ fontWeight: 500 }}>Follow-ups</strong> — structured log with date, outcome, and next action. Queryable history.</div></div>
+                                <div className="ba-row"><span className="ba-mark bm-good">✓</span><div><strong style={{ fontWeight: 500 }}>Agent commissions</strong> — agent attribution on every record. Auto-reconciled. Zero disputes.</div></div>
+                                <div className="ba-row"><span className="ba-mark bm-good">✓</span><div><strong style={{ fontWeight: 500 }}>Coordinator onboarding</strong> — operational in under 1 day with a guided, documented system.</div></div>
+                                <div className="ba-row"><span className="ba-mark bm-good">✓</span><div><strong style={{ fontWeight: 500 }}>Hospital rates</strong> — cross-hospital rate comparison at a glance for accurate quoting.</div></div>
                             </div>
                         </div>
 
@@ -1014,42 +1089,42 @@ const MocsCaseStudy: React.FC = () => {
                     <div className="wide fade">
                         <div className="eyebrow">03 — Patient Journey</div>
                         <h2>Seven stages from <em>first contact</em><br/>to treatment completion</h2>
-                        <p className="body-copy" style={{ maxWidth: 580 }}>MOCS maps every patient interaction to a discrete, trackable stage. Understanding the full journey was the foundation of the system design — each stage became a data entity.</p>
+                        <p className="body-copy">MOCS maps every patient interaction to a discrete, trackable stage. Understanding the full journey was the foundation of the system design — each stage became a data entity.</p>
                         
                         <div className="journey-wrap fade d2">
                             <div className="journey-steps">
                                 <div className="journey-step">
-                                    <div className="step-circle done">①</div>
+                                    <div className="step-circle done">1</div>
                                     <div className="step-label">Lead Intake</div>
                                     <div className="step-sub">Agent/direct</div>
                                 </div>
                                 <div className="journey-step">
-                                    <div className="step-circle done">②</div>
+                                    <div className="step-circle done">2</div>
                                     <div className="step-label">Medical Review</div>
                                     <div className="step-sub">Report analysis</div>
                                 </div>
                                 <div className="journey-step">
-                                    <div className="step-circle done">③</div>
+                                    <div className="step-circle done">3</div>
                                     <div className="step-label">VIL Issuance</div>
                                     <div className="step-sub">৳149 service</div>
                                 </div>
                                 <div className="journey-step">
-                                    <div className="step-circle active">④</div>
+                                    <div className="step-circle active">4</div>
                                     <div className="step-label">Visa Applied</div>
                                     <div className="step-sub">IVAC tracking</div>
                                 </div>
                                 <div className="journey-step">
-                                    <div className="step-circle">⑤</div>
+                                    <div className="step-circle">5</div>
                                     <div className="step-label">Visa Approved</div>
                                     <div className="step-sub">→ travel ready</div>
                                 </div>
                                 <div className="journey-step">
-                                    <div className="step-circle">⑥</div>
+                                    <div className="step-circle">6</div>
                                     <div className="step-label">Under Treatment</div>
                                     <div className="step-sub">OPD / IPD</div>
                                 </div>
                                 <div className="journey-step">
-                                    <div className="step-circle">⑦</div>
+                                    <div className="step-circle">7</div>
                                     <div className="step-label">Treatment Done</div>
                                     <div className="step-sub">Commission filed</div>
                                 </div>
@@ -1100,7 +1175,7 @@ const MocsCaseStudy: React.FC = () => {
                     <div className="wide fade">
                         <div className="eyebrow">04 — System Architecture</div>
                         <h2>Three layers, <em>one coherent</em><br/>operational picture</h2>
-                        <p className="body-copy" style={{ maxWidth: 580 }}>MOCS is architected around the three distinct operational domains that define Cikitsa's business — Patient Lifecycle, Visa Operations, and Financial Engine — each feeding into a unified control dashboard.</p>
+                        <p className="body-copy">MOCS is architected around the three distinct operational domains that define Cikitsa's business — Patient Lifecycle, Visa Operations, and Financial Engine — each feeding into a unified control dashboard.</p>
                         
                         <div className="arch-diagram fade d2">
                             <div className="arch-layer">
@@ -1109,15 +1184,23 @@ const MocsCaseStudy: React.FC = () => {
                                     <div className="arch-modules">
                                         <div className="arch-mod hl">
                                             <div className="arch-mod-name">Ops Dashboard</div>
-                                            <div className="arch-mod-desc">Real-time KPIs · Alerts · Workload tracking</div>
+                                            <div className="arch-mod-desc">Real-time KPIs · Recent activity · Alerts · Team workload</div>
                                         </div>
                                         <div className="arch-mod hl">
                                             <div className="arch-mod-name">Patient Tracker</div>
-                                            <div className="arch-mod-desc">Full registry · Search · Actionable case views</div>
+                                            <div className="arch-mod-desc">Full patient registry · Search/filter · Status management · Follow-up log</div>
                                         </div>
                                         <div className="arch-mod hl">
-                                            <div className="arch-mod-name">Kanban Pipeline</div>
-                                            <div className="arch-mod-desc">Visual stage transitions · Visa expiry warnings</div>
+                                            <div className="arch-mod-name">Visa Pipeline</div>
+                                            <div className="arch-mod-desc">Kanban view · Stage transitions · Date tracking · IVAC status</div>
+                                        </div>
+                                        <div className="arch-mod hl">
+                                            <div className="arch-mod-name">Finance Engine</div>
+                                            <div className="arch-mod-desc">Rate matrix · Commission calc · Agent ledger · Revenue tracking</div>
+                                        </div>
+                                        <div className="arch-mod hl">
+                                            <div className="arch-mod-name">Hospital Network</div>
+                                            <div className="arch-mod-desc">Partner hospital profiles · City coverage · Service availability</div>
                                         </div>
                                     </div>
                                 </div>
@@ -1129,15 +1212,19 @@ const MocsCaseStudy: React.FC = () => {
                                     <div className="arch-modules">
                                         <div className="arch-mod">
                                             <div className="arch-mod-name">Patient State Machine</div>
-                                            <div className="arch-mod-desc">Lead → Applied → Travelling → Treatment → Done</div>
+                                            <div className="arch-mod-desc">Lead → VIL → Visa Applied → Approved → Travelling → Treatment → Done</div>
                                         </div>
                                         <div className="arch-mod">
-                                            <div className="arch-mod-name">Pricing Engine</div>
-                                            <div className="arch-mod-desc">Hospital quoting · OP/IP splits · AIT/VAT math</div>
+                                            <div className="arch-mod-name">Service Pricing Engine</div>
+                                            <div className="arch-mod-desc">Per-hospital rate rules · AIT/VAT/SSL layering · CI vs Agent split · MRP vs final</div>
                                         </div>
                                         <div className="arch-mod">
-                                            <div className="arch-mod-name">Follow-up Triggers</div>
-                                            <div className="arch-mod-desc">Date-stamped entries · Automated pipeline alerts</div>
+                                            <div className="arch-mod-name">Agent Attribution</div>
+                                            <div className="arch-mod-desc">Agent → patient linking · Company tracking · Commission entitlement</div>
+                                        </div>
+                                        <div className="arch-mod">
+                                            <div className="arch-mod-name">Follow-up Engine</div>
+                                            <div className="arch-mod-desc">Date-stamped log entries · Status change triggers · Coordinator assignment</div>
                                         </div>
                                     </div>
                                 </div>
@@ -1145,118 +1232,25 @@ const MocsCaseStudy: React.FC = () => {
                             <div className="arch-connector"><div className="arch-connector-line"></div></div>
                             <div className="arch-layer">
                                 <div className="arch-layer-row">
-                                    <div className="arch-layer-tag">Data Table</div>
+                                    <div className="arch-layer-tag">Data</div>
                                     <div className="arch-modules">
                                         <div className="arch-mod">
                                             <div className="arch-mod-name">Patient Registry</div>
-                                            <div className="arch-mod-desc">2,110+ records · Single source of truth</div>
+                                            <div className="arch-mod-desc">2,110+ records · Passport · Contact · Hospital · Dept · Type · Handler</div>
                                         </div>
                                         <div className="arch-mod">
-                                            <div className="arch-mod-name">Hospital Rate Matrix</div>
-                                            <div className="arch-mod-desc">7 chains · 30+ cities · Global service indexing</div>
+                                            <div className="arch-mod-name">Hospital Rate Table</div>
+                                            <div className="arch-mod-desc">7 chains · 30+ cities · 15+ service types · BDT/INR conversion</div>
+                                        </div>
+                                        <div className="arch-mod">
+                                            <div className="arch-mod-name">Visa Invitation List</div>
+                                            <div className="arch-mod-desc">Active VIL applications · Call log · Remarks · Responsible coordinator</div>
                                         </div>
                                         <div className="arch-mod">
                                             <div className="arch-mod-name">Agent Directory</div>
-                                            <div className="arch-mod-desc">30+ partners · Referral linking · Contact history</div>
+                                            <div className="arch-mod-desc">30+ agent companies · Contact linkage · Referral history</div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="modules" className="alt">
-                <div className="max-w-7xl mx-auto px-6 w-full">
-                    <div className="wide fade">
-                        <div className="eyebrow">05 — Core Modules</div>
-                        <h2>Five modules, <em>one system</em></h2>
-                        <p className="body-copy" style={{ maxWidth: 580 }}>Each module addresses a discrete operational domain with its own data model, workflows, and user interactions — all accessible from a single unified interface.</p>
-                        
-                        <div className="module-grid fade d2">
-                            <div className="module-card">
-                                <div className="mc-icon">
-                                    <svg viewBox="0 0 18 18"><rect x="2" y="2" width="14" height="14" rx="2" /><path d="M6 9h6M6 12h4" /><circle cx="9" cy="6" r="1.5" /></svg>
-                                </div>
-                                <div className="mc-title">Operations Dashboard</div>
-                                <p className="mc-desc">The nerve center — real-time KPIs showing total patients, active visa cases, patients under treatment, coordinator workload, and hospital distribution. Built around the 5 metrics operations managers check every morning.</p>
-                                <div className="mc-tags">
-                                    <span className="mc-tag">KPI Cards</span>
-                                    <span className="mc-tag">Recent Activity</span>
-                                    <span className="mc-tag">Hospital Dist.</span>
-                                    <span className="mc-tag">Visa Funnel</span>
-                                </div>
-                            </div>
-                            
-                            <div className="module-card">
-                                <div className="mc-icon">
-                                    <svg viewBox="0 0 18 18"><circle cx="9" cy="6" r="3" /><path d="M3 16c0-3.3 2.7-6 6-6s6 2.7 6 6" /><path d="M13 2l1.5 1.5L16 2" /></svg>
-                                </div>
-                                <div className="mc-title">Patient Tracker</div>
-                                <p className="mc-desc">The primary operational module — a full registry of all 2,110+ patient cases with multi-field search, hospital/status/type filtering, and complete case history including passport, contact, coordinator, agent, treatment type, and follow-up log.</p>
-                                <div className="mc-tags">
-                                    <span className="mc-tag">Registry</span>
-                                    <span className="mc-tag">Search</span>
-                                    <span className="mc-tag">Filters</span>
-                                    <span className="mc-tag">Case Add</span>
-                                    <span className="mc-tag">History</span>
-                                </div>
-                            </div>
-                            
-                            <div className="module-card">
-                                <div className="mc-icon">
-                                    <svg viewBox="0 0 18 18"><rect x="2" y="4" width="14" height="11" rx="1.5" /><path d="M6 2v4M12 2v4M2 8h14" /><path d="M6 11h2M10 11h2M6 14h2" /></svg>
-                                </div>
-                                <div className="mc-title">Visa Pipeline</div>
-                                <p className="mc-desc">A Kanban board reflecting every patient's visa journey — Applied → Under Review → Approved → Travelling. Cards show patient name, hospital, and department. Critical for proactive intervention when visas stall.</p>
-                                <div className="mc-tags">
-                                    <span className="mc-tag">Kanban</span>
-                                    <span className="mc-tag">4 Stages</span>
-                                    <span className="mc-tag">IVAC Status</span>
-                                    <span className="mc-tag">Date Tracking</span>
-                                </div>
-                            </div>
-                            
-                            <div className="module-card">
-                                <div className="mc-icon">
-                                    <svg viewBox="0 0 18 18"><path d="M3 12h12M3 8h8M6 16V4a2 2 0 0 1 2-2h4l4 4v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2z" /></svg>
-                                </div>
-                                <div className="mc-title">Finance Engine</div>
-                                <p className="mc-desc">The revenue layer — displays the complete hospital rate matrix across all 7 chains and 30+ city branches. Shows VIL fees, OP/IP commission percentages (CI vs. Agent split), telemedicine rates, pickup charges, and specialty package prices with BDT conversion.</p>
-                                <div className="mc-tags">
-                                    <span className="mc-tag">Rate Matrix</span>
-                                    <span className="mc-tag">OP/IP Split</span>
-                                    <span className="mc-tag">Agent Margin</span>
-                                    <span className="mc-tag">BDT Calc</span>
-                                </div>
-                            </div>
-                            
-                            <div className="module-card">
-                                <div className="mc-icon">
-                                    <svg viewBox="0 0 18 18"><path d="M9 2C5.1 2 2 5.1 2 9s3.1 7 7 7 7-3.1 7-7M9 2v7l4 2" /><path d="M14 2h4M16 0v4" /></svg>
-                                </div>
-                                <div className="mc-title">Hospital Network</div>
-                                <p className="mc-desc">A structured directory of all partner hospitals — Apollo (8 cities), Manipal (7 cities), Fortis, Max, Artemis, Aster, Woodland, GLEANEAGALE, MGM, Rainbow, and more. Each entry shows location, available services, and rate tier at a glance.</p>
-                                <div className="mc-tags">
-                                    <span className="mc-tag">14 Hospitals</span>
-                                    <span className="mc-tag">City Map</span>
-                                    <span className="mc-tag">Service Matrix</span>
-                                    <span className="mc-tag">Rate Tiers</span>
-                                </div>
-                            </div>
-                            
-                            <div className="module-card">
-                                <div className="mc-icon">
-                                    <svg viewBox="0 0 18 18"><path d="M9 2a7 7 0 1 0 0 14A7 7 0 0 0 9 2z" /><path d="M9 6v4l2 2" /><path d="M14 2l3 3M1 2l3 3" /></svg>
-                                </div>
-                                <div className="mc-title">Follow-up Engine</div>
-                                <p className="mc-desc">Every patient contact is logged with a date stamp and outcome. The system tracks "will go 5 May 2025", "visited hospital on IPD basis", "rejected the call", "treatment done" — creating a structured audit trail of all patient interactions over time.</p>
-                                <div className="mc-tags">
-                                    <span className="mc-tag">Date Stamps</span>
-                                    <span className="mc-tag">Outcomes</span>
-                                    <span className="mc-tag">Audit Log</span>
-                                    <span className="mc-tag">Coordinator Tag</span>
                                 </div>
                             </div>
                         </div>
@@ -1267,9 +1261,9 @@ const MocsCaseStudy: React.FC = () => {
             <section id="services">
                 <div className="max-w-7xl mx-auto px-6 w-full">
                     <div className="wide fade">
-                        <div className="eyebrow">06 — Service Model</div>
+                        <div className="eyebrow">05 — Service Model</div>
                         <h2>A <em>tiered service architecture</em><br/>across every touchpoint</h2>
-                        <p className="body-copy" style={{ maxWidth: 580 }}>Cikitsa's revenue model is built on service fees and hospital commissions. MOCS encodes the full pricing matrix — from ৳149 VIL letters to 24% IPD commissions — ensuring every coordinator quotes accurately.</p>
+                        <p className="body-copy">Cikitsa's revenue model is built on service fees and hospital commissions. MOCS encodes the full pricing matrix — from ৳149 VIL letters to 24% IPD commissions — ensuring every coordinator quotes accurately.</p>
                         
                         <div className="service-matrix fade d2">
                             <div className="sm-header">
@@ -1413,11 +1407,11 @@ const MocsCaseStudy: React.FC = () => {
             </section>
 
 
-            {/* 07 DESIGN HYPOTHESIS */}
+            {/* 06 DESIGN HYPOTHESIS */}
             <div id="artifacts" className="artifact-section fade">
                 <div className="max-w-7xl mx-auto px-6 w-full">
                     <div className="artifact-header">
-                        <div className="eyebrow">07 — Design Hypothesis</div>
+                        <div className="eyebrow">06 — Design Hypothesis</div>
                         <h2>From observation<br/>to <em>intentional system</em></h2>
                         <p className="body-copy">The system wasn't built from a specification document. It was reverse-engineered from the operational failures of the spreadsheet era. Every major design decision directly answered a structural breakdown.</p>
                     </div>
@@ -1456,11 +1450,11 @@ const MocsCaseStudy: React.FC = () => {
                 </div>
             </div>
 
-            {/* 08 HOW IT WORKS */}
+            {/* 07 HOW IT WORKS */}
             <div className="artifact-section alt fade">
                 <div className="max-w-7xl mx-auto px-6 w-full">
                     <div className="artifact-header">
-                        <div className="eyebrow">08 — How It Works</div>
+                        <div className="eyebrow">07 — How It Works</div>
                         <h2>A patient arrives.<br/><em>Watch the system respond.</em></h2>
                         <p className="body-copy">Trace a single patient case through the full operational stack — from intake to commission filed — and see how each system layer activates in sequence.</p>
                     </div>
@@ -1502,13 +1496,14 @@ const MocsCaseStudy: React.FC = () => {
             </div>
 
             {/* RESULTS SECTION */}
-            <section id="results" className="results-band">
+            <div id="results" className="artifact-section fade">
                 <div className="max-w-7xl mx-auto px-6 w-full">
-                    <div className="wide fade">
-                        <div className="eyebrow">09 — Results</div>
+                    <div className="artifact-header">
+                        <div className="eyebrow">08 — Results</div>
                         <h2>Operational impact<br/>across <em>every metric</em></h2>
-                        
-                        <div className="context-grid fade d2" style={{ marginTop: '32px' }}>
+                    </div>
+                    <div className="artifact-content">
+                        <div className="context-grid fade d2">
                             <div className="ctx-card">
                                 <div className="mc-icon">
                                     <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
@@ -1532,61 +1527,105 @@ const MocsCaseStudy: React.FC = () => {
                             </div>
                         </div>
 
-                    <div className="g4 fade d3">
-                        <div className="impact-cell"><div className="impact-num">2,110<span>+</span></div><div className="impact-lbl">Patients tracked</div><div className="impact-desc">Across all hospital chains, cities, and coordinators in the system.</div></div>
-                        <div className="impact-cell"><div className="impact-num">97<span>%</span></div><div className="impact-lbl">Visa success rate</div><div className="impact-desc">For patients with complete documentation submitted through MOCS.</div></div>
-                        <div className="impact-cell"><div className="impact-num">0</div><div className="impact-lbl">Commission disputes</div><div className="impact-desc">Down from 4–6/month before the system was deployed.</div></div>
-                        <div className="impact-cell"><div className="impact-num">&lt;1<span>d</span></div><div className="impact-lbl">Coordinator onboarding</div><div className="impact-desc">New team members operational in under one day vs. 3–4 weeks previously.</div></div>
+                        <div className="g4 fade d3" style={{ marginTop: '40px' }}>
+                            <div className="impact-stat"><div className="stat-num">2,110+</div><span className="stat-unit">Patients tracked</span><div className="stat-desc">Across all hospital chains, cities, and coordinators in the system.</div></div>
+                            <div className="impact-stat"><div className="stat-num">97%</div><span className="stat-unit">Visa success rate</span><div className="stat-desc">For patients with complete documentation submitted through MOCS.</div></div>
+                            <div className="impact-stat"><div className="stat-num">0</div><span className="stat-unit">Commission disputes</span><div className="stat-desc">Down from 4–6/month before the system was deployed.</div></div>
+                            <div className="impact-stat"><div className="stat-num">&lt;1d</div><span className="stat-unit">Coordinator onboarding</span><div className="stat-desc">New team members operational in under one day vs. 3–4 weeks previously.</div></div>
+                        </div>
                     </div>
                 </div>
-                </div>
-            </section>
+            </div>
 
             {/* TECHNICAL APPROACH */}
-            <section id="tech-approach">
+            <div id="tech-approach" className="artifact-section alt fade">
                 <div className="max-w-7xl mx-auto px-6 w-full">
-                    <div className="wide fade">
-                        <div className="eyebrow">10 — Stack Used</div>
+                    <div className="artifact-header">
+                        <div className="eyebrow">09 — Stack Used</div>
                         <h2>Designed for <em>operational longevity</em>,<br/>not technical novelty</h2>
-                        <p className="body-copy" style={{ maxWidth: 580 }}>The stack was chosen explicitly to minimize maintenance burden on a small ops team — prioritizing reliability and access over sophistication.</p>
-                        
+                        <p className="body-copy">The stack was chosen explicitly to minimize maintenance burden on a small ops team — prioritizing reliability and access over sophistication.</p>
+                    </div>
+                    <div className="artifact-content">
                         <div className="tech-grid fade d2">
-                          <div className="tech-card"><div className="tech-layer">Data</div><div className="tech-title">Data Layer</div><div className="tech-items"><div className="tech-item">Google Sheets (source of record)</div><div className="tech-item">TSV export → JSON ingestion</div><div className="tech-item">BDT/INR conversion engine</div><div className="tech-item">AIT/VAT/SSL fee computation</div><div className="tech-item">Structured schema migration</div></div></div>
-                          <div className="tech-card"><div className="tech-layer">Frontend</div><div className="tech-title">Interface</div><div className="tech-items"><div className="tech-item">Vanilla HTML / CSS / JS (v1)</div><div className="tech-item">React + Tailwind (v2 roadmap)</div><div className="tech-item">Responsive, mobile-first</div><div className="tech-item">Light-theme operations shell</div><div className="tech-item">Zero external dependencies</div></div></div>
-                          <div className="tech-card"><div className="tech-layer">Typography</div><div className="tech-title">Design System</div><div className="tech-items"><div className="tech-item">Plus Jakarta Sans — narrative</div><div className="tech-item">JetBrains Mono — data/meta</div><div className="tech-item">14 CSS design tokens</div><div className="tech-item">Semantic colour palette</div><div className="tech-item">Consistent pill/badge system</div></div></div>
-                          <div className="tech-card"><div className="tech-layer">Roadmap</div><div className="tech-title">Planned</div><div className="tech-items"><div className="tech-item">WhatsApp Business API</div><div className="tech-item">Automated follow-up reminders</div><div className="tech-item">Agent self-service portal</div><div className="tech-item">Commission invoice generation</div><div className="tech-item">Analytics &amp; trend dashboard</div></div></div>
+                            <div className="tech-card">
+                                <div className="tech-layer">Data Layer</div>
+                                <div className="tech-title">Source of Record</div>
+                                <div className="tech-items">
+                                    <div className="tech-item">Google Sheets — primary data store and patient registry</div>
+                                    <div className="tech-item">TSV export → structured JSON ingestion pipeline</div>
+                                    <div className="tech-item">BDT/INR dual-currency conversion engine</div>
+                                    <div className="tech-item">AIT/VAT/SSL fee computation layer</div>
+                                    <div className="tech-item">Structured schema migration from flat spreadsheet</div>
+                                </div>
+                            </div>
+                            <div className="tech-card">
+                                <div className="tech-layer">Frontend</div>
+                                <div className="tech-title">Interface Layer</div>
+                                <div className="tech-items">
+                                    <div className="tech-item">Vanilla HTML / CSS / JS (v1) — no framework, no bundler</div>
+                                    <div className="tech-item">React + Tailwind planned for v2 roadmap</div>
+                                    <div className="tech-item">Responsive, mobile-first layout</div>
+                                    <div className="tech-item">Light-theme operations shell</div>
+                                    <div className="tech-item">Zero external dependencies in v1</div>
+                                </div>
+                            </div>
+                            <div className="tech-card">
+                                <div className="tech-layer">Design System</div>
+                                <div className="tech-title">Hierarchy &amp; Tone</div>
+                                <div className="tech-items">
+                                    <div className="tech-item">Plus Jakarta Sans — narrative and display copy</div>
+                                    <div className="tech-item">JetBrains Mono — all data fields and labels</div>
+                                    <div className="tech-item">14 CSS design tokens across the system</div>
+                                    <div className="tech-item">Semantic colour palette with ink hierarchy</div>
+                                    <div className="tech-item">Consistent pill and badge system</div>
+                                </div>
+                            </div>
+                            <div className="tech-card">
+                                <div className="tech-layer">Roadmap</div>
+                                <div className="tech-title">Planned Features</div>
+                                <div className="tech-items">
+                                    <div className="tech-item">WhatsApp Business API integration</div>
+                                    <div className="tech-item">Automated follow-up reminders</div>
+                                    <div className="tech-item">Agent self-service portal</div>
+                                    <div className="tech-item">Commission invoice generation</div>
+                                    <div className="tech-item">Analytics &amp; trend dashboard</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
 
             {/* KEY LEARNINGS */}
-            <section id="learnings" className="alt">
+            <div id="learnings" className="artifact-section fade">
                 <div className="max-w-7xl mx-auto px-6 w-full">
-                    <div className="wide fade">
-                        <div className="eyebrow">11 — Key Learnings</div>
+                    <div className="artifact-header">
+                        <div className="eyebrow">10 — Key Learnings</div>
                         <h2>What MOCS taught us<br/>about <em>operational systems</em></h2>
-                        
+                    </div>
+                    <div className="artifact-content">
                         <div className="learning-grid fade d2">
-                          <div className="learning-card"><div className="lc-num">01</div><div><div className="lc-cat">Data Modeling</div><div className="lc-title">The spreadsheet is the requirements doc</div><div className="lc-body" style={{ marginBottom: 0 }}>Every column in the patient sheet became a system field. Every remark pattern became a status enum. The spreadsheets — messy as they were — contained the full operational logic of the business.</div></div></div>
-                          <div className="learning-card"><div className="lc-num">02</div><div><div className="lc-cat">Status Design</div><div className="lc-title">Status taxonomy is business-critical</div><div className="lc-body" style={{ marginBottom: 0 }}>The difference between "Under Treatment" and "Treatment Done" determines whether a coordinator follows up or files a commission. Getting the status set right was the single highest-impact design decision.</div></div></div>
-                          <div className="learning-card"><div className="lc-num">03</div><div><div className="lc-cat">Finance</div><div className="lc-title">Commission complexity needs explicit modeling</div><div className="lc-body" style={{ marginBottom: 0 }}>The hospital rate sheet had 80+ columns — AIT, VAT, SSL layering on base rates, different CI vs. agent splits, MRP vs. final. This isn't data entry. It's financial logic. Encoding it wrong produces silent errors.</div></div></div>
-                          <div className="learning-card"><div className="lc-num">04</div><div><div className="lc-cat">Follow-up Design</div><div className="lc-title">Structure is kindness to your future self</div><div className="lc-body" style={{ marginBottom: 0 }}>Unstructured notes like "will go some days later" are operationally dead. Date-stamped, outcome-typed follow-up entries transformed a narrative mess into queryable history.</div></div></div>
-                          <div className="learning-card"><div className="lc-num">05</div><div><div className="lc-cat">Stakeholders</div><div className="lc-title">Multi-stakeholder systems need clear ownership</div><div className="lc-body" style={{ marginBottom: 0 }}>Every patient record touches four stakeholders — patient, agent, hospital, coordinator. The data model must be built for the most complex relationship, then simplified for simpler views.</div></div></div>
-                          <div className="learning-card"><div className="lc-num">06</div><div><div className="lc-cat">Geography</div><div className="lc-title">City-branch granularity is non-negotiable</div><div className="lc-body" style={{ marginBottom: 0 }}>Apollo Chennai has different rates than Apollo Delhi. Manipal Varthur has different commissions than Manipal Kolkata. "Apollo" as a single entity is categorically wrong as a data model.</div></div></div>
+                          <div className="learning-card"><div className="lc-num">01</div><div><div className="lc-cat">Data Modeling</div><div className="lc-title">The spreadsheet is the requirements doc</div><div className="lc-body">Every column in the patient sheet became a system field. Every remark pattern became a status enum. The spreadsheets — messy as they were — contained the full operational logic of the business.</div></div></div>
+                          <div className="learning-card"><div className="lc-num">02</div><div><div className="lc-cat">Status Design</div><div className="lc-title">Status taxonomy is business-critical</div><div className="lc-body">The difference between “Under Treatment” and “Treatment Done” determines whether a coordinator follows up or files a commission. Getting the status set right was the single highest-impact design decision.</div></div></div>
+                          <div className="learning-card"><div className="lc-num">03</div><div><div className="lc-cat">Finance</div><div className="lc-title">Commission complexity needs explicit modeling</div><div className="lc-body">The hospital rate sheet had 80+ columns — AIT, VAT, SSL layering on base rates, different CI vs. agent splits, MRP vs. final. This isn’t data entry. It’s financial logic. Encoding it wrong produces silent errors.</div></div></div>
+                          <div className="learning-card"><div className="lc-num">04</div><div><div className="lc-cat">Follow-up Design</div><div className="lc-title">Structure is kindness to your future self</div><div className="lc-body">Unstructured notes like “will go some days later” are operationally dead. Date-stamped, outcome-typed follow-up entries transformed a narrative mess into queryable history.</div></div></div>
+                          <div className="learning-card"><div className="lc-num">05</div><div><div className="lc-cat">Stakeholders</div><div className="lc-title">Multi-stakeholder systems need clear ownership</div><div className="lc-body">Every patient record touches four stakeholders — patient, agent, hospital, coordinator. The data model must be built for the most complex relationship, then simplified for simpler views.</div></div></div>
+                          <div className="learning-card"><div className="lc-num">06</div><div><div className="lc-cat">Geography</div><div className="lc-title">City-branch granularity is non-negotiable</div><div className="lc-body">Apollo Chennai has different rates than Apollo Delhi. Manipal Varthur has different commissions than Manipal Kolkata. “Apollo” as a single entity is categorically wrong as a data model.</div></div></div>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
 
 
             {/* BROADER CONTEXT */}
-            <section id="broader-context">
+            <div id="broader-context" className="artifact-section alt fade">
                 <div className="max-w-7xl mx-auto px-6 w-full">
-                    <div className="wide fade">
-                        <div className="eyebrow">12 — Broader Context</div>
+                    <div className="artifact-header">
+                        <div className="eyebrow">11 — Broader Context</div>
                         <h2>A massive industry<br/>still running on <em>spreadsheets</em></h2>
-                        <p className="body-copy" style={{ maxWidth: 600 }}>Over 800,000 Bangladeshis travel overseas for medical care each year. Bangladesh is India's absolute largest source of medical tourists, accounting for over 50% of all inbound patients. Yet, the coordination infrastructure serving this massive volume is largely still informal.</p>
+                        <p className="body-copy">Over 800,000 Bangladeshis travel overseas for medical care each year. Bangladesh is India's absolute largest source of medical tourists, accounting for over 50% of all inbound patients. Yet, the coordination infrastructure serving this massive volume is largely still informal.</p>
+                    </div>
+                    <div className="artifact-content">
                         <div className="context-grid fade d2">
                             <div className="ctx-card">
                                 <div className="mc-icon">
@@ -1618,8 +1657,38 @@ const MocsCaseStudy: React.FC = () => {
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
 
+
+            {/* 12 HOW I WORK */}
+            <section style={{ padding: '80px 0', borderTop: '1px solid var(--ln)' }} className="bg-white fade">
+                <div className="max-w-7xl mx-auto px-6 w-full">
+                    <div className="eyebrow" style={{ marginBottom: 16 }}>12 — How I Work</div>
+                    <h2>From operational<br/>chaos to <em>structural clarity</em>.</h2>
+                    <div className="process-row">
+                        <div className="ps">
+                            <div className="ps-num">01</div>
+                            <div className="ps-title">Map the real workflow first</div>
+                            <div className="ps-desc">I begin by tracing the actual operations — every WhatsApp thread, every manual column, every coordinator workaround. The existing chaos is the complete specification. Nothing gets designed until the real process is understood.</div>
+                        </div>
+                        <div className="ps">
+                            <div className="ps-num">02</div>
+                            <div className="ps-title">Define the data model before screens</div>
+                            <div className="ps-desc">No interfaces until entities are settled. Patient, Agent, Hospital, Visa, Commission — each a distinct structured record, not a free-text column. A correct model makes every screen obvious. A wrong one makes every screen wrong by definition.</div>
+                        </div>
+                        <div className="ps">
+                            <div className="ps-num">03</div>
+                            <div className="ps-title">Encode the business logic explicitly</div>
+                            <div className="ps-desc">Pricing rules, commission splits, status transitions — these aren't configurations, they are the business. I encode them once, correctly, so that every coordinator quotes the same rate, every agent gets the right commission, and nothing depends on memory.</div>
+                        </div>
+                        <div className="ps">
+                            <div className="ps-num">04</div>
+                            <div className="ps-title">Build for the team, not the builder</div>
+                            <div className="ps-desc">Every system I build is trainable without my presence. MOCS brought onboarding from 3–4 weeks to under one day because the system documents itself through structure. A system only I can run is a liability — not an asset.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             {/* CTA */}
             <section className="py-24 md:py-32 bg-white border-t border-slate-200">

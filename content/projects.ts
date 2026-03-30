@@ -20,8 +20,8 @@ export const PROJECTS: Project[] = [
     // Hero metadata
     role: 'Systems Builder',
     industry: 'FMCG Distribution',
-    timeline: 'Sep 2022 – Oct 2023',
-    stack: 'Sheets → Custom ERP',
+    timeline: 'Sep \'22 – Oct \'23',
+    stack: 'Sheets → ERP',
     location: 'Sylhet, Bangladesh',
     readTime: '~8 min',
     caseStudyNumber: '01',

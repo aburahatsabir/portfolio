@@ -337,7 +337,9 @@ img {
 }
 
 /* ── ERP DEMO EMBED ── */
-#demo{padding:0;background:var(--off);border-top:1px solid var(--ln)}
+#demo{padding:0;border-top:1px solid var(--ln)}
+:not(.mocs-root) > #demo{background:var(--off)}
+.mocs-root #demo{background:transparent !important;border:none !important}
 .demo-top{padding:80px 0 48px;display:flex;align-items:flex-end;justify-content:space-between;gap:40px}
 .demo-right{font-size:13px;color:var(--ink3);max-width:340px;line-height:1.78;font-weight:300;text-align:right;flex-shrink:0}
 .browser-bar{background:var(--w);border:1px solid var(--ln);border-bottom:none;border-radius:10px 10px 0 0;padding:10px 14px;display:flex;align-items:center;gap:12px}

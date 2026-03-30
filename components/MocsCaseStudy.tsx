@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import MocsLiveDemo from './MocsLiveDemo';
 
 // ─── DATA ─────────────────────────────────────────────────
 
@@ -1450,11 +1451,27 @@ const MocsCaseStudy: React.FC = () => {
                 </div>
             </div>
 
-            {/* 07 HOW IT WORKS */}
+
+            {/* 07 LIVE SYSTEM DEMO */}
+            <div id="live-demo" className="artifact-section" style={{ padding: '100px 0', background: '#fff', borderTop: '1px solid var(--ln)', borderBottom: '1px solid var(--ln)' }}>
+                <div className="max-w-7xl mx-auto px-6 w-full">
+                    <div className="artifact-header">
+                        <div className="eyebrow">07 — Live System Demo</div>
+                        <h2>The MOCS interface,<br/><em>interactive</em></h2>
+                        <p className="body-copy">Fully functional simulation with real Cikitsa International data — patient tracking, visa pipeline, finance engine, hospital network, agent management, and analytics. All interactive, all connected.</p>
+                    </div>
+                    <div className="artifact-content" style={{ marginTop: '48px' }}>
+                        <MocsLiveDemo />
+                    </div>
+                </div>
+            </div>
+
+
+            {/* 08 HOW IT WORKS */}
             <div className="artifact-section alt fade">
                 <div className="max-w-7xl mx-auto px-6 w-full">
                     <div className="artifact-header">
-                        <div className="eyebrow">07 — How It Works</div>
+                        <div className="eyebrow">08 — How It Works</div>
                         <h2>A patient arrives.<br/><em>Watch the system respond.</em></h2>
                         <p className="body-copy">Trace a single patient case through the full operational stack — from intake to commission filed — and see how each system layer activates in sequence.</p>
                     </div>
@@ -1499,7 +1516,7 @@ const MocsCaseStudy: React.FC = () => {
             <div id="results" className="artifact-section fade">
                 <div className="max-w-7xl mx-auto px-6 w-full">
                     <div className="artifact-header">
-                        <div className="eyebrow">08 — Results</div>
+                        <div className="eyebrow">09 — Results</div>
                         <h2>Operational impact<br/>across <em>every metric</em></h2>
                     </div>
                     <div className="artifact-content">
@@ -1541,7 +1558,7 @@ const MocsCaseStudy: React.FC = () => {
             <div id="tech-approach" className="artifact-section alt fade">
                 <div className="max-w-7xl mx-auto px-6 w-full">
                     <div className="artifact-header">
-                        <div className="eyebrow">09 — Stack Used</div>
+                        <div className="eyebrow">10 — Stack Used</div>
                         <h2>Designed for <em>operational longevity</em>,<br/>not technical novelty</h2>
                         <p className="body-copy">The stack was chosen explicitly to minimize maintenance burden on a small ops team — prioritizing reliability and access over sophistication.</p>
                     </div>
@@ -1600,7 +1617,7 @@ const MocsCaseStudy: React.FC = () => {
             <div id="learnings" className="artifact-section fade">
                 <div className="max-w-7xl mx-auto px-6 w-full">
                     <div className="artifact-header">
-                        <div className="eyebrow">10 — Key Learnings</div>
+                        <div className="eyebrow">11 — Key Learnings</div>
                         <h2>What MOCS taught us<br/>about <em>operational systems</em></h2>
                     </div>
                     <div className="artifact-content">
@@ -1621,7 +1638,7 @@ const MocsCaseStudy: React.FC = () => {
             <div id="broader-context" className="artifact-section alt fade">
                 <div className="max-w-7xl mx-auto px-6 w-full">
                     <div className="artifact-header">
-                        <div className="eyebrow">11 — Broader Context</div>
+                        <div className="eyebrow">12 — Broader Context</div>
                         <h2>A massive industry<br/>still running on <em>spreadsheets</em></h2>
                         <p className="body-copy">Over 800,000 Bangladeshis travel overseas for medical care each year. Bangladesh is India's absolute largest source of medical tourists, accounting for over 50% of all inbound patients. Yet, the coordination infrastructure serving this massive volume is largely still informal.</p>
                     </div>
@@ -1663,7 +1680,7 @@ const MocsCaseStudy: React.FC = () => {
             {/* 12 HOW I WORK */}
             <section style={{ padding: '80px 0', borderTop: '1px solid var(--ln)' }} className="bg-white fade">
                 <div className="max-w-7xl mx-auto px-6 w-full">
-                    <div className="eyebrow" style={{ marginBottom: 16 }}>12 — How I Work</div>
+                    <div className="eyebrow" style={{ marginBottom: 16 }}>13 — How I Work</div>
                     <h2>From operational<br/>chaos to <em>structural clarity</em>.</h2>
                     <div className="process-row">
                         <div className="ps">

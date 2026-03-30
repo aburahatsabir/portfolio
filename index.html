@@ -117,7 +117,7 @@
         CSP (Content-Security-Policy) remains as meta tag for client-side policies.
     -->
     <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.googletagmanager.com https://api.emailjs.com https://www.google-analytics.com https://generativelanguage.googleapis.com https://*.sentry.io https://*.ingest.us.sentry.io https://*.ingest.sentry.io ws://localhost:* ws://192.168.*:*; frame-ancestors 'none';">
+        content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://www.googletagmanager.com https://api.emailjs.com https://www.google-analytics.com https://generativelanguage.googleapis.com https://*.sentry.io https://*.ingest.us.sentry.io https://*.ingest.sentry.io ws://localhost:* ws://192.168.*:*; frame-ancestors 'none';">
 
     <!-- Theme Colors -->
     <meta name="theme-color" content="#2563eb">

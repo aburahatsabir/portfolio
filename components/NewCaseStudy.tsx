@@ -1,18 +1,49 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
 import Chart from 'chart.js/auto';
 
 import ErpDemo from './ErpDemo';
+import { motion, AnimatePresence } from 'framer-motion';
+import { trackContactCTA } from '../utils/analytics';
+import SectionLabel from './shared/SectionLabel';
+
+interface HeroContent {
+  index: string;
+  image: string;
+  title: React.JSX.Element;
+  subhead?: string;
+  description: string;
+  statLabel: string;
+  statValue: string;
+  statUnit: string;
+}
 
 const CS_MK = ['Sep 22','Oct 22','Nov 22','Dec 22','Jan 23','Feb 23','Mar 23','Apr 23','May 23','Jun 23','Jul 23','Aug 23','Sep 23','Oct 23'];
 const CS_MR = [57640,213170,231246,307205,397325,547170,1237775,1130650,2727150,3064550,2142300,4451500,3324056,3870740];
 const CS_MP = [59510,166200,182132,280342,515703,547475,1010680,1225595,3032364,3170390,1938850,4637350,3319535,4549324];
 
-const FMCGCaseStudy: React.FC = () => {
-    const { scrollY } = useScroll();
-    const heroY = useTransform(scrollY, [0, 1000], [0, 250]);
+const NewCaseStudy: React.FC = () => {
+  const [activeMandate, setActiveMandate] = useState<'sovereignty' | 'efficiency'>('sovereignty');
+const content: Record<'sovereignty' | 'efficiency', HeroContent> = {
+    sovereignty: {
+      index: "01",
+      image: "./images/hero/Abu Rahat Hero 01.webp",
+      title: <>Engineering <br /><span className="text-blue-700">Institutional</span> <br />Sovereignty.</>,
+      description: "I design self-governing operations infrastructure for organizations that refuse to hire their way out of inefficiency—eliminating the 'Human-Bridge' debt between silos.",
+      statLabel: "Tenure in Operations",
+      statValue: "6+",
+      statUnit: "Years"
+    },
+    efficiency: {
+      index: "02",
+      image: "./images/hero/Abu Rahat Hero 02.webp",
+      title: <>Reclaiming <br /><span className="text-blue-700">Operational</span> <br />Capital.</>,
+      description: "I architect operational systems that eliminate administrative overhead—reclaiming executive time while your processes run flawlessly without constant supervision.",
+      statLabel: "Average Efficiency",
+      statValue: "90%",
+      statUnit: "Gain"
+    }
+  };
 
-    const containerRef = useRef<HTMLDivElement>(null);
     const chartRef = useRef<HTMLCanvasElement>(null);
     const chartInstance = useRef<Chart | null>(null);
 
@@ -53,6 +84,7 @@ const FMCGCaseStudy: React.FC = () => {
     ];
 
     const [activeHowItWorks, setActiveHowItWorks] = useState(0);
+    const [activeLearning, setActiveLearning] = useState(0);
 
     const learningsData = [
         {
@@ -137,62 +169,11 @@ const FMCGCaseStudy: React.FC = () => {
     ];
 
     useEffect(() => {
-        const container = containerRef.current;
-        if (!container) return;
-
-        const elements = Array.from(container.querySelectorAll<HTMLElement>('.fade'));
-
-        // Helper to apply !important inline styles (beats all CSS specificity)
-        const hide = (el: HTMLElement) => {
-            el.style.setProperty('opacity', '0', 'important');
-            el.style.setProperty('transform', 'translateY(28px)', 'important');
-            el.style.setProperty('transition', 'opacity 0.85s cubic-bezier(0.16,1,0.3,1), transform 0.85s cubic-bezier(0.16,1,0.3,1)', 'important');
-            el.style.setProperty('will-change', 'opacity, transform', 'important');
-            if (el.classList.contains('d1'))      el.style.setProperty('transition-delay', '0.12s', 'important');
-            else if (el.classList.contains('d2')) el.style.setProperty('transition-delay', '0.24s', 'important');
-            else if (el.classList.contains('d3')) el.style.setProperty('transition-delay', '0.36s', 'important');
-            else if (el.classList.contains('d4')) el.style.setProperty('transition-delay', '0.48s', 'important');
-        };
-        const reveal = (el: HTMLElement) => {
-            el.style.setProperty('opacity', '1', 'important');
-            el.style.setProperty('transform', 'none', 'important');
-            el.classList.add('in');
-        };
-
-        // Step 1: Set up the observer FIRST so it can fire immediately for in-viewport elements
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const target = entry.target as HTMLElement;
-                    reveal(target);
-
-                    // Trigger metric rings
-                    target.querySelectorAll('.metric-ring-fill').forEach(ring => {
-                        const val = ring.getAttribute('data-val');
-                        if (val) (ring as HTMLElement).style.strokeDasharray = `${val} 314`;
-                    });
-
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
-
-        // Step 2: Observe all elements (observer fires immediately for those in viewport,
-        // marking them with .in BEFORE we hide anything)
-        elements.forEach(el => observer.observe(el));
-
-        // Step 3: After observer's first synchronous sweep, hide only elements
-        // that are NOT yet marked .in (these are the below-fold ones)
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                // Double rAF ensures the observer's initial callback has completed
-                elements.forEach(el => {
-                    if (!el.classList.contains('in')) {
-                        hide(el);
-                    }
-                });
-            });
-        });
+        // Trigger fade in animation after component mount
+        const elements = document.querySelectorAll('.fade');
+        setTimeout(() => {
+            elements.forEach(elt => elt.classList.add('in'));
+        }, 100);
 
         if (chartRef.current) {
             if (chartInstance.current) {
@@ -278,12 +259,11 @@ const FMCGCaseStudy: React.FC = () => {
             if (chartInstance.current) {
                 chartInstance.current.destroy();
             }
-            observer.disconnect();
         };
     }, []);
 
     return (
-        <div className="fmcg-case-study" ref={containerRef}>
+        <div className="fmcg-case-study">
             <style>{`
                 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
@@ -403,32 +383,13 @@ const FMCGCaseStudy: React.FC = () => {
                 .fmcg-case-study h2.lt em { color: rgba(255,255,255,.4); }
                 .fmcg-case-study .body-copy { font-size: 16px; color: var(--ink2); line-height: 1.9; font-weight: 300; max-width: 600px; }
 
-                /* PREMIUM LAYOUT UTILITIES */
-                .fmcg-case-study .two-col { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 64px; align-items: start; margin-top: 40px; }
-                .fmcg-case-study .context-quote { border-left: 2px solid var(--brand); padding: 24px 28px; background: var(--w); border-radius: 0 12px 12px 0; font-family: var(--serif); font-size: 20px; color: var(--ink2); line-height: 1.62; margin: 32px 0; font-style: italic; }
-                .fmcg-case-study .context-quote cite { display: block; font-family: var(--sans); font-size: 13px; font-style: normal; color: var(--ink4); margin-top: 12px; }
-
-                .fmcg-case-study .stakeholders-list { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
-                .fmcg-case-study .stakeholder-card { background: var(--w); border: 1px solid var(--ln); border-radius: 10px; padding: 20px; transition: all .2s; }
-                .fmcg-case-study .stakeholder-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.05); border-color: var(--ln2); }
-                .fmcg-case-study .sh-role { font-family: var(--mono); font-size: 10px; color: var(--gm); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px; font-weight: 600; }
-                .fmcg-case-study .sh-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--ink); }
-                .fmcg-case-study .sh-desc { font-size: 13px; color: var(--ink3); line-height: 1.6; }
-
-                .fmcg-case-study .problem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--ln); border: 1px solid var(--ln); border-radius: 10px; overflow: hidden; margin-top: 48px; }
-                .fmcg-case-study .problem-cell { background: var(--w); padding: 28px; transition: background .2s; }
-                .fmcg-case-study .problem-cell:hover { background: var(--off); }
-                .fmcg-case-study .pc-number { font-family: var(--mono); font-size: 11px; color: var(--ink4); margin-bottom: 8px; letter-spacing: .06em; display: block; }
-                .fmcg-case-study .pc-title { font-size: 15px; font-weight: 600; margin-bottom: 8px; letter-spacing: -.01em; color: var(--ink); }
-                .fmcg-case-study .pc-desc { font-size: 13px; color: var(--ink3); line-height: 1.6; margin: 0; }
-
-                @media(max-width:1000px) {
-                    .fmcg-case-study .two-col { grid-template-columns: 1fr; gap: 40px; }
-                    .fmcg-case-study .problem-grid { grid-template-columns: 1fr 1fr; }
-                }
-                @media(max-width:600px) {
-                    .fmcg-case-study .problem-grid { grid-template-columns: 1fr; }
-                }
+                .fmcg-case-study .prob-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 52px; margin-top: 48px; }
+                .fmcg-case-study .prob-col-head { font-family: var(--mono); font-size: 11px; color: var(--ink4); letter-spacing: 1.5px; text-transform: uppercase; padding-bottom: 14px; border-bottom: 1px solid var(--ln); }
+                .fmcg-case-study .prob-item { display: flex; gap: 13px; padding: 13px 0; border-bottom: 1px solid var(--ln); font-size: 15px; color: var(--ink2); line-height: 1.7; font-weight: 300; }
+                .fmcg-case-study .prob-item:last-child { border-bottom: none; }
+                .fmcg-case-study .prob-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-top: 8px; }
+                .fmcg-case-study .bad-col .prob-dot { background: var(--rm); }
+                .fmcg-case-study .good-col .prob-dot { background: var(--brand); }
                 
                 .fmcg-case-study .arch-wrap { border: 1px solid var(--ln); border-radius: 10px; overflow: hidden; background: var(--off); margin-top: 0; }
                 
@@ -459,17 +420,6 @@ const FMCGCaseStudy: React.FC = () => {
 
                 .fmcg-case-study .g4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: 1px solid var(--ln); border-radius: 10px; overflow: hidden; }
 
-                .fmcg-case-study .tech-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 40px; }
-                .fmcg-case-study .tech-card { background: var(--w); border: 1px solid var(--ln); border-radius: 10px; padding: 24px; transition: background .2s, border-color .2s; }
-                .fmcg-case-study .tech-card:hover { background: var(--off); border-color: var(--ln2); }
-                .fmcg-case-study .tech-layer { font-family: var(--mono); font-size: 10px; color: var(--brand); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px; font-weight: 500; }
-                .fmcg-case-study .tech-title { font-size: 15px; font-weight: 600; letter-spacing: -.01em; margin-bottom: 12px; color: var(--ink); }
-                .fmcg-case-study .tech-items { display: flex; flex-direction: column; gap: 8px; }
-                .fmcg-case-study .tech-item { font-size: 13px; font-weight: 300; color: var(--ink3); display: flex; align-items: flex-start; gap: 8px; line-height: 1.55; }
-                .fmcg-case-study .tech-item::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--brand); flex-shrink: 0; display: block; margin-top: 6px; }
-                @media(max-width:900px){ .fmcg-case-study .tech-grid { grid-template-columns: 1fr 1fr; gap: 16px; } }
-                @media(max-width:600px){ .fmcg-case-study .tech-grid { grid-template-columns: 1fr; } }
-
                 .fmcg-case-study .alerts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 48px; }
                 .fmcg-case-study .alert { border-radius: 8px; padding: 16px 20px; display: flex; align-items: center; gap: 14px; background: var(--w); border: 1px solid var(--ln); }
                 .fmcg-case-study .al-icon { font-family: var(--mono); font-size: 14px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 6px; }
@@ -481,19 +431,8 @@ const FMCGCaseStudy: React.FC = () => {
                 .fmcg-case-study .impact-stat { padding: 32px 26px; border-right: 1px solid var(--ln); }
                 .fmcg-case-study .impact-stat:last-child { border-right: none; }
                 .fmcg-case-study .stat-num { font-family: var(--sans); font-size: 46px; line-height: 1; color: var(--ink); margin-bottom: 5px; font-weight: 800; letter-spacing: -0.05em; }
-                .fmcg-case-study .stat-unit { font-family: var(--mono); font-size: 11px; color: var(--brand); letter-spacing: 0.08em; display: block; margin-bottom: 6px; font-weight: 500; text-transform: uppercase; }
+                .fmcg-case-study .stat-unit { font-family: var(--mono); font-size: 11px; color: var(--brand); letter-spacing: 0.08em; display: block; margin-bottom: 6px; font-weight: 500; }
                 .fmcg-case-study .stat-desc { font-size: 14px; color: var(--ink3); line-height: 1.65; font-weight: 300; }
-
-                .fmcg-case-study .learning-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; }
-                .fmcg-case-study .learning-card { background: var(--w); border: 1px solid var(--ln); border-radius: 10px; padding: 28px; display: flex; gap: 18px; transition: all .2s; }
-                .fmcg-case-study .learning-card:hover { background: var(--off); border-color: var(--ln2); }
-                .fmcg-case-study .lc-num { font-size: 38px; font-weight: 800; color: var(--ln2); line-height: 1; flex-shrink: 0; min-width: 46px; letter-spacing: -.04em; }
-                .fmcg-case-study .lc-cat { font-family: var(--mono); font-size: 9px; color: var(--brand); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 6px; }
-                .fmcg-case-study .lc-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; letter-spacing: -.01em; }
-                .fmcg-case-study .lc-body { font-size: 13px; font-weight: 300; color: var(--ink3); line-height: 1.7; margin-bottom: 10px; }
-                .fmcg-case-study .lc-rule { font-family: var(--mono); font-size: 10px; color: var(--gm); background: var(--gbg); padding: 5px 10px; border-radius: 4px; letter-spacing: .04em; display: inline-block; }
-
-                .fmcg-case-study .sk-note { margin-top: 24px; padding: 18px 24px; border: 1px solid var(--ln); border-left: 3px solid var(--brand); border-radius: 0 8px 8px 0; background: var(--off); font-size: 14px; color: var(--ink2); line-height: 1.7; font-weight: 300; }
 
                 .fmcg-case-study .chart-card { border: 1px solid var(--ln); border-radius: 10px; overflow: hidden; margin-top: 14px; }
                 .fmcg-case-study .cc-head { padding: 13px 18px; border-bottom: 1px solid var(--ln); display: flex; justify-content: space-between; align-items: center; }
@@ -565,249 +504,250 @@ const FMCGCaseStudy: React.FC = () => {
                     .fmcg-case-study .hero-inner { grid-template-columns: 1fr; gap: 48px; }
                     .fmcg-case-study #hero { padding: 100px 0 60px; min-height: auto; }
                     .fmcg-case-study .hero-visual { min-height: 400px; }
-                    .fmcg-case-study .tech-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
-                    .fmcg-case-study .learning-grid { grid-template-columns: 1fr 1fr; }
-                }
-                @media(max-width:600px){
-                    .fmcg-case-study .tech-grid { grid-template-columns: 1fr; }
-                    .fmcg-case-study .learning-grid { grid-template-columns: 1fr; }
-                    .fmcg-case-study .g4 { grid-template-columns: 1fr; }
-                    .fmcg-case-study .alerts { grid-template-columns: 1fr; }
+                    .fmcg-case-study .topology-container { max-width: 440px; margin: 0 auto; }
                 }
             `}</style>
 
-            <section id="hero">
-                <div className="hero-grid"></div>
-                <div className="max-w-7xl mx-auto px-6 w-full">
-                    <div className="hero-inner">
-                        <div className="hero-content">
-                            <h1 className="fade d2">
-                                Integrated FMCG<br />Distribution <em>ERP</em>
-                            </h1>
-                            <p className="lead fade d3">
-                                A 106-column spreadsheet couldn't keep up with a business growing 66× in 14 months.
-                                I replaced it with a modular, field-ready operations system — purpose-built for R Group's DOHA Brand distribution across Sylhet Division.
-                            </p>
-                            
-                            <div className="hero-meta fade d4">
-                                <div className="hm">
-                                    <div className="hm-label">Role</div>
-                                    <div className="hm-val">Systems Builder</div>
-                                </div>
-                                <div className="hm">
-                                    <div className="hm-label">Industry</div>
-                                    <div className="hm-val">FMCG Distribution</div>
-                                </div>
-                                <div className="hm">
-                                    <div className="hm-label">Timeline</div>
-                                    <div className="hm-val">Sep '22 – Oct '23</div>
-                                </div>
-                                <div className="hm">
-                                    <div className="hm-label">Stack</div>
-                                    <div className="hm-val">Sheets → ERP</div>
-                                </div>
-                            </div>
-                        </div>
+            <section className="relative min-h-[90vh] lg:min-h-screen flex items-center pt-40 pb-20 overflow-hidden bg-white selection:bg-blue-700 selection:text-white">
+      {/* Sophisticated Background Architecture */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:32px_32px] opacity-[0.3]"></div>
+        <div className="absolute top-0 right-0 w-[45%] h-full bg-slate-50/50 border-l border-slate-100 hidden lg:block"></div>
+        <div className="absolute top-1/4 -right-20 w-96 h-96 bg-blue-50/50 blur-[120px] rounded-full pointer-events-none"></div>
+      </div>
 
-                        <div className="hero-visual fade d3">
-                            <motion.div className="structure-container" style={{ y: heroY }}>
-                                {(() => {
-                                    const s = 40;
-                                    const dx = s * 0.866;
-                                    const dy = s * 0.5;
-                                    const iso = (c, r, h) => ({
-                                        x: c * dx - r * dx,
-                                        y: c * dy + r * dy - h * s
-                                    });
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="max-w-7xl mx-auto px-6 w-full"
+      >
+        <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 lg:gap-20 items-start">
+          <div className="relative z-10 space-y-8 lg:space-y-10">
+            <div className="space-y-6">
+              <motion.div
+                variants={itemVariants}
+                className="flex flex-col gap-4"
+              >
+                <div className="inline-flex p-1 bg-white/50 backdrop-blur-xl border border-slate-100 rounded-xl relative overflow-hidden group/toggle max-w-fit">
+                  {/* High-Precision Indicator */}
+                  <div className="absolute inset-1 w-[calc(50%-4px)] h-[calc(100%-8px)] pointer-events-none">
+                    <motion.div
+                      layoutId="mandate-active"
+                      initial={false}
+                      animate={{
+                        x: activeMandate === 'sovereignty' ? 0 : '100%',
+                        marginLeft: activeMandate === 'sovereignty' ? 0 : '8px'
+                      }}
+                      transition={{ type: "spring", stiffness: 400, damping: 40, mass: 0.8 }}
+                      className="absolute inset-0 bg-slate-900 rounded-lg shadow-2xl shadow-slate-900/20"
+                    />
+                  </div>
 
-                                    const cubes = [
-                                        // layer 0 (3x3)
-                                        {c:0,r:0,h:0}, {c:1,r:0,h:0}, {c:2,r:0,h:0},
-                                        {c:0,r:1,h:0}, {c:1,r:1,h:0}, {c:2,r:1,h:0},
-                                        {c:0,r:2,h:0}, {c:1,r:2,h:0}, {c:2,r:2,h:0},
-                                        // layer 1
-                                        {c:0,r:0,h:1}, {c:1,r:0,h:1}, {c:2,r:0,h:1},
-                                        {c:0,r:1,h:1}, {c:1,r:1,h:1},
-                                        {c:0,r:2,h:1},
-                                        // layer 2
-                                        {c:0,r:0,h:2}, {c:1,r:0,h:2},
-                                        {c:0,r:1,h:2}
-                                    ];
-                                    cubes.sort((a,b) => (a.h * 100 + a.r + a.c) - (b.h * 100 + b.r + b.c));
+                  <button
+                    onClick={() => setActiveMandate('sovereignty')}
+                    className="relative px-6 py-2 transition-all duration-300 z-10"
+                  >
+                    <span className={`text-[10px] font-black uppercase tracking-[0.3em] font-mono transition-colors duration-500 ${activeMandate === 'sovereignty' ? 'text-white' : 'text-slate-400 hover:text-slate-600'}`}>
+                      Sovereignty
+                    </span>
+                  </button>
 
-                                    const m = 0.5;
-                                    const t = 12; // thickness
-                                    const p0 = iso(-m, -m, -0.2);
-                                    const p1 = iso(3+m, -m, -0.2);
-                                    const p2 = iso(3+m, 3+m, -0.2);
-                                    const p3 = iso(-m, 3+m, -0.2);
-
-                                    return (
-                                        <svg viewBox="0 0 500 440" className="structure-svg" aria-hidden="true">
-                                            <defs>
-                                                <linearGradient id="topGlow" x1="0%" y1="0%" x2="100%" y2="100%">
-                                                    <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.5" />
-                                                    <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
-                                                </linearGradient>
-                                                <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-                                                    <feDropShadow dx="0" dy="4" stdDeviation="4" floodOpacity="0.08" />
-                                                </filter>
-                                            </defs>
-                                            
-                                            <g transform="translate(250, 260)">
-                                                {/* Base Platform */}
-                                                <polygon points={`${p0.x},${p0.y} ${p1.x},${p1.y} ${p2.x},${p2.y} ${p3.x},${p3.y}`} fill="#F8FAFC" stroke="#E2E8F0" strokeWidth="1.5" />
-                                                <polygon points={`${p3.x},${p3.y} ${p2.x},${p2.y} ${p2.x},${p2.y+t} ${p3.x},${p3.y+t}`} fill="#F1F5F9" stroke="#E2E8F0" strokeWidth="1.5" />
-                                                <polygon points={`${p2.x},${p2.y} ${p1.x},${p1.y} ${p1.x},${p1.y+t} ${p2.x},${p2.y+t}`} fill="#E2E8F0" stroke="#CBD5E1" strokeWidth="1.5" />
-
-                                                {/* Static Structure */}
-                                                {cubes.map((cube, i) => {
-                                                    const p = iso(cube.c, cube.r, cube.h);
-                                                    return (
-                                                        <g key={i} transform={`translate(${p.x}, ${p.y})`}>
-                                                            <polygon points={`0,${-s} ${dx},${-dy} 0,0 ${-dx},${-dy}`} fill="rgba(79, 70, 229, 0.25)" stroke="rgba(255, 255, 255, 0.5)" strokeWidth="0.8" />
-                                                            <polygon points={`${-dx},${-dy} 0,0 0,${s} ${-dx},${dy}`} fill="rgba(79, 70, 229, 0.45)" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="0.8" />
-                                                            <polygon points={`0,0 ${dx},${-dy} ${dx},${dy} 0,${s}`} fill="rgba(49, 46, 129, 0.65)" stroke="rgba(255, 255, 255, 0.2)" strokeWidth="0.8" />
-                                                            <polygon points={`0,${-s} ${dx},${-dy} 0,0 ${-dx},${-dy}`} fill="url(#topGlow)" opacity="0.6"/>
-                                                        </g>
-                                                    );
-                                                })}
-
-                                                {/* UI Tag 3: Database (Attached to front corner) */}
-                                                <g className="ui-overlay" transform={`translate(${p2.x}, ${p2.y})`}>
-                                                    <circle cx="0" cy="0" r="2" fill="var(--brand)" />
-                                                    <path d="M 0 0 L 0 30 L -20 30" fill="none" stroke="var(--brand)" strokeWidth="1" opacity="0.5" />
-                                                    <rect x="-116" y="21" width="92" height="18" rx="2" fill="rgba(255,255,255,0.9)" stroke="var(--ln)" filter="url(#shadow)" />
-                                                    <circle cx="-108" cy="30" r="3.5" fill="var(--brand)" />
-                                                    <text x="-98" y="33" fontSize="8" fontFamily="var(--mono)" letterSpacing="0.05em" fill="var(--ink2)" fontWeight="600">CENTRAL DATABASE</text>
-                                                </g>
-
-                                                {/* UI Tag 1: Inventory (Attached to top of static stack) */}
-                                                {(() => {
-                                                    const top = iso(0, 0, 2);
-                                                    return (
-                                                        <g className="ui-overlay" transform={`translate(${top.x}, ${top.y - s})`}>
-                                                            <circle cx="0" cy="0" r="2" fill="var(--brand)" />
-                                                            <path d="M 0 0 L 0 -30 L -20 -30" fill="none" stroke="var(--brand)" strokeWidth="1" opacity="0.5" />
-                                                            <rect x="-106" y="-39" width="82" height="18" rx="2" fill="rgba(255,255,255,0.9)" stroke="var(--ln)" filter="url(#shadow)" />
-                                                            <circle cx="-98" cy="-30" r="3.5" fill="var(--brand)" />
-                                                            <text x="-88" y="-27" fontSize="8" fontFamily="var(--mono)" letterSpacing="0.05em" fill="var(--ink2)" fontWeight="600">LIVE INVENTORY</text>
-                                                        </g>
-                                                    );
-                                                })()}
-
-                                                {/* Moving 'Dispatched' Cube at (2,2,2) */}
-                                                <g className="dispatched-cube">
-                                                    {(() => {
-                                                        const p = iso(2, 2, 2);
-                                                        return (
-                                                            <g transform={`translate(${p.x}, ${p.y})`}>
-                                                                {/* Cube Poly */}
-                                                                <polygon points={`0,${-s} ${dx},${-dy} 0,0 ${-dx},${-dy}`} fill="rgba(99, 102, 241, 0.4)" stroke="rgba(255, 255, 255, 0.8)" strokeWidth="0.8" />
-                                                                <polygon points={`${-dx},${-dy} 0,0 0,${s} ${-dx},${dy}`} fill="rgba(79, 70, 229, 0.6)" stroke="rgba(255, 255, 255, 0.5)" strokeWidth="0.8" />
-                                                                <polygon points={`0,0 ${dx},${-dy} ${dx},${dy} 0,${s}`} fill="rgba(49, 46, 129, 0.85)" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="0.8" />
-                                                                <polygon points={`0,${-s} ${dx},${-dy} 0,0 ${-dx},${-dy}`} fill="url(#topGlow)" opacity="0.9"/>
-                                                                
-                                                                {/* UI Tag 2: Dispatch */}
-                                                                <g className="ui-overlay">
-                                                                    <circle cx="0" cy={-s} r="2" fill="var(--brand)" />
-                                                                    <path d={`M 0 ${-s} L 0 ${-s - 30} L 20 ${-s - 30}`} fill="none" stroke="var(--brand)" strokeWidth="1" opacity="0.5" />
-                                                                    <rect x="24" y={-s - 39} width="84" height="18" rx="2" fill="rgba(255,255,255,0.9)" stroke="var(--ln)" filter="url(#shadow)" />
-                                                                    <circle cx="32" cy={-s - 30} r="3.5" fill="#10B981" />
-                                                                    <text x="40" y={-s - 27} fontSize="8" fontFamily="var(--mono)" letterSpacing="0.05em" fill="var(--ink2)" fontWeight="600">AUTO DISPATCH</text>
-                                                                </g>
-                                                            </g>
-                                                        );
-                                                    })()}
-                                                </g>
-                                            </g>
-                                        </svg>
-                                    );
-                                })()}
-                            </motion.div>
-                        </div>
-                    </div>
+                  <button
+                    onClick={() => setActiveMandate('efficiency')}
+                    className="relative px-6 py-2 transition-all duration-300 z-10"
+                  >
+                    <span className={`text-[10px] font-black uppercase tracking-[0.3em] font-mono transition-colors duration-500 ${activeMandate === 'efficiency' ? 'text-white' : 'text-slate-400 hover:text-slate-600'}`}>
+                      Efficiency
+                    </span>
+                  </button>
                 </div>
-            </section>
+              </motion.div>
+
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeMandate}
+                  initial={{ opacity: 0, x: -15, filter: 'blur(8px)' }}
+                  animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+                  exit={{ opacity: 0, x: 15, filter: 'blur(8px)' }}
+                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                  className="space-y-4"
+                >
+                  <h1 className="text-6xl md:text-8xl lg:text-[105px] font-[900] tracking-[-0.04em] leading-[0.88] text-slate-900">
+                    {content[activeMandate].title}
+                  </h1>
+                  <p className="text-lg md:text-xl lg:text-2xl text-slate-500 font-medium leading-relaxed max-w-xl">
+                    {content[activeMandate].description}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center gap-8">
+              <a
+                href="/contact"
+                onClick={() => trackContactCTA({
+                  location: 'hero_section',
+                  conversionType: 'contact_form',
+                  label: 'free_audit_cta'
+                })}
+                className="w-full sm:w-auto relative group active:scale-[0.97] transition-transform duration-200"
+              >
+                {/* Sophisticated Glow Layer */}
+                <div className="absolute -inset-[1px] bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                <div className="relative px-14 py-6 bg-slate-950 text-white rounded-xl font-black text-[11px] uppercase tracking-[0.4em] flex items-center justify-center gap-4 transition-all duration-300 border border-white/5 overflow-hidden">
+                  {/* Shine Effect */}
+                  <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
+
+                  <span className="relative z-10">Start Discussion</span>
+                  <motion.div
+                    animate={{ x: [0, 4, 0] }}
+                    transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+                    className="relative z-10"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </motion.div>
+                </div>
+              </a>
+
+              <a
+                href="/work"
+                className="w-full sm:w-auto group relative flex items-center justify-center active:scale-[0.98] transition-transform"
+              >
+                <div className="relative px-12 py-6 bg-white border border-slate-100 rounded-xl font-black text-[11px] uppercase tracking-[0.4em] text-slate-400 hover:text-slate-900 flex items-center justify-center transition-all duration-500 hover:shadow-xl hover:shadow-slate-200/50 hover:border-slate-200">
+                  <span className="relative z-10">Case Studies</span>
+                </div>
+              </a>
+            </motion.div>
+
+            <motion.div variants={itemVariants} className="pt-12 border-t border-slate-100 flex flex-wrap items-center gap-x-10 gap-y-6">
+              <SectionLabel variant="muted">Core Expertise</SectionLabel>
+              <div className="flex gap-8">
+                {['Automation', 'Optimization', 'Integration'].map(name => (
+                  <div key={name} className="flex items-center gap-2">
+                    <span className="w-1 h-1 rounded-full bg-slate-200"></span>
+                    <span className="text-[11px] font-black text-slate-900 tracking-tight">{name}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.98, x: 20 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            className="relative hidden lg:block"
+          >
+            {/* Architectural Frame */}
+            <div className="absolute -inset-10 bg-blue-500/5 blur-[100px] rounded-full pointer-events-none"></div>
+
+            <motion.div
+              className="relative z-10 p-2 bg-white rounded-[3rem] shadow-[0_40px_80px_-20px_rgba(15,23,42,0.08)] border border-slate-100 group"
+            >
+              <div className="relative aspect-[4/5] overflow-hidden rounded-[2.5rem] bg-slate-50">
+                <AnimatePresence mode="wait">
+                  <motion.img
+                    key={content[activeMandate].image}
+                    initial={{ opacity: 0, scale: 1.05 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 1.02 }}
+                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                    src={content[activeMandate].image}
+                    alt={`Abu Rahat Sabir - ${activeMandate}`}
+                    width={800}
+                    height={1000}
+                    fetchPriority="high"
+                    loading="eager"
+                    className="w-full h-full object-cover grayscale brightness-[1.05] group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.02]"
+                  />
+                </AnimatePresence>
+
+                {/* Overlay Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent pointer-events-none"></div>
+              </div>
+
+              {/* Telemetry Node - Premium Card */}
+              <motion.div
+                initial={{ opacity: 0, x: -15 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.8 }}
+                className="absolute -bottom-4 -left-4 z-20"
+              >
+                <div className="px-4 py-3 rounded-xl bg-slate-900 border border-slate-800 shadow-xl">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                    <AnimatePresence mode="wait">
+                      <motion.p
+                        key={content[activeMandate].statLabel}
+                        initial={{ opacity: 0, y: 5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -5 }}
+                        className="text-[8px] font-semibold uppercase tracking-[0.12em] text-slate-400"
+                      >
+                        {content[activeMandate].statLabel}
+                      </motion.p>
+                    </AnimatePresence>
+                  </div>
+                  <div className="flex items-baseline gap-2">
+                    <AnimatePresence mode="wait">
+                      <motion.p
+                        key={content[activeMandate].statValue}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="text-2xl font-black text-white tracking-tight"
+                      >
+                        {content[activeMandate].statValue}
+                      </motion.p>
+                    </AnimatePresence>
+                    <AnimatePresence mode="wait">
+                      <motion.p
+                        key={content[activeMandate].statUnit}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="text-[9px] font-semibold uppercase text-blue-400 tracking-[0.108em]"
+                      >
+                        {content[activeMandate].statUnit}
+                      </motion.p>
+                    </AnimatePresence>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </motion.div>
+    </section>
             
             <section id="problem" className="alt">
                 <div className="max-w-7xl mx-auto px-6 w-full">
                     <div className="wide fade">
-                        <div className="eyebrow">01 — Context</div>
-                        <div className="two-col">
-                            <div className="fade d1">
-                                <h2>One sheet.<br/>Too many <em>moving parts</em>.</h2>
-                                <p className="body-copy">R Group managed ৳2.37 Crore in annual sales through a single Google Sheet with 106 columns. It was a masterpiece of spreadsheet engineering that had reached its breaking point.</p>
-                                <p className="body-copy">By late 2022, the business was scaling at an unprecedented rate. What began as a simple ledger for a few dealers had mutated into a fractured ecosystem of personal notes, manual calculations, and invisible financial risks.</p>
-                                
-                                <div className="context-quote">
-                                    "We knew the numbers were right because we double-checked them by hand. What we didn't know was how much work that 'checking' was costing us in missed growth."
-                                    <cite>— R Group operational debrief, 2022</cite>
-                                </div>
-                                
-                                <p className="body-copy">The ERP was conceived not to replace the ledger, but to <span className="hl">stabilise the business logic</span> that was currently living in the coordinators' heads.</p>
+                        <div className="eyebrow">01 — Problem</div>
+                        <h2>One sheet.<br/>Too many moving parts.</h2>
+                        <p className="body-copy">R Group managed ৳2,37,02,478 in annual sales through a single Google Sheet with 106 columns. It worked — until it didn't. SR commissions by hand. Returns in free-text notes. Dues hidden 200 rows deep. The sheet wasn't the problem. The absent data model underneath it was.</p>
+                        
+                        <div className="prob-grid">
+                            <div className="bad-col">
+                                <div className="prob-col-head">What broke</div>
+                                <div className="prob-item"><div className="prob-dot"></div><div>Returns, commissions, transport costs, and salaries crammed into one notes column — unsearchable, unstructured, unauditable</div></div>
+                                <div className="prob-item"><div className="prob-dot"></div><div>No inventory layer — stock availability unknown without physically counting the warehouse</div></div>
+                                <div className="prob-item"><div className="prob-dot"></div><div>SR commission: "983×15=14,745" typed by hand into a memo field every month. No verification possible.</div></div>
+                                <div className="prob-item"><div className="prob-dot"></div><div>৳15,46,032 outstanding across 9 accounts — visible only to someone who knew to scroll to the right row</div></div>
+                                <div className="prob-item"><div className="prob-dot"></div><div>Same 5 kg chili at ৳320, ৳335, ৳345, ৳385 across four consecutive orders — no price catalog</div></div>
+                                <div className="prob-item"><div className="prob-dot"></div><div>No cross-dealer view — the full business picture required reading 14 separate blocks manually</div></div>
                             </div>
                             
-                            <div className="fade d2">
-                                <div className="eyebrow" style={{ marginTop: 0 }}>Core Stakeholders</div>
-                                <div className="stakeholders-list">
-                                    <div className="stakeholder-card">
-                                        <div className="sh-role">Management</div>
-                                        <div className="sh-title">Executives & Owners</div>
-                                        <div className="sh-desc">Needs divisional visibility, real-time revenue KPIs, and outstanding dues tracking to manage rapid regional expansion.</div>
-                                    </div>
-                                    <div className="stakeholder-card">
-                                        <div className="sh-role">Sales Team</div>
-                                        <div className="sh-title">Sales Representatives (SRs)</div>
-                                        <div className="sh-desc">Field agents managing dealer deliveries. Needs undeniable, automated commission calculation and live account ledgers.</div>
-                                    </div>
-                                    <div className="stakeholder-card">
-                                        <div className="sh-role">Dealers</div>
-                                        <div className="sh-title">14 Regional Accounts</div>
-                                        <div className="sh-desc">The lifeblood of distribution. Needs transparent credit statements, structured returns, and consistent SKU pricing.</div>
-                                    </div>
-                                    <div className="stakeholder-card">
-                                        <div className="sh-role">Ops Team</div>
-                                        <div className="sh-title">Warehouse & Inventory</div>
-                                        <div className="sh-desc">Needs automated stock adjustment on every delivery/return to eliminate the need for physical daily audits.</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div style={{ marginTop: 80 }}>
-                            <div className="eyebrow">Operational Failures</div>
-                            <div className="problem-grid fade d3">
-                                <div className="problem-cell">
-                                    <span className="pc-number">01</span>
-                                    <div className="pc-title">Fragmented Source of Truth</div>
-                                    <p className="pc-desc">Returns, commissions, and salaries were crammed into a single "Notes" column—unstructured, unsearchable, and unauditable.</p>
-                                </div>
-                                <div className="problem-cell">
-                                    <span className="pc-number">02</span>
-                                    <div className="pc-title">Inventory Blindness</div>
-                                    <p className="pc-desc">No dedicated inventory layer existed. Real-time stock availability was unknown without physically counting the warehouse.</p>
-                                </div>
-                                <div className="problem-cell">
-                                    <span className="pc-number">03</span>
-                                    <div className="pc-title">Manual Commission Engine</div>
-                                    <p className="pc-desc">SR commissions (৳15/kg) were manually calculated and typed into cells. One wrong row destroyed the month's financial accuracy.</p>
-                                </div>
-                                <div className="problem-cell">
-                                    <span className="pc-number">04</span>
-                                    <div className="pc-title">Invisible Financial Risk</div>
-                                    <p className="pc-desc">৳15.46L in outstanding dues were hidden deep within dealer blocks. Risk management was reactive, not proactive.</p>
-                                </div>
-                                <div className="problem-cell">
-                                    <span className="pc-number">05</span>
-                                    <div className="pc-title">Pricing Fragmentation</div>
-                                    <p className="pc-desc">No versioned catalog. The same 5kg SKU was often sold at different rates across different orders within the same week.</p>
-                                </div>
-                                <div className="problem-cell">
-                                    <span className="pc-number">06</span>
-                                    <div className="pc-title">Executive Analytics Gap</div>
-                                    <p className="pc-desc">Cross-dealer business health was impossible to see. Understanding monthly trends required hours of manual spreadsheet aggregation.</p>
-                                </div>
+                            <div className="good-col">
+                                <div className="prob-col-head">What the system now does</div>
+                                <div className="prob-item"><div className="prob-dot"></div><div>Single source of truth for all 14 dealer accounts — balances, payment history, and running dues in one view</div></div>
+                                <div className="prob-item"><div className="prob-dot"></div><div>Live inventory updated on every dispatch and return, linked to each delivery memo by order ID</div></div>
+                                <div className="prob-item"><div className="prob-dot"></div><div>Commission engine: monthly kg × ৳15 per SR, auto-calculated on save — with advance deductions and multi-SR territories</div></div>
+                                <div className="prob-item"><div className="prob-dot"></div><div>Dashboard shows every dealer's current due, advance credit, and last payment date in a single screen</div></div>
+                                <div className="prob-item"><div className="prob-dot"></div><div>Versioned price catalog — one rate change applies forward to all dealers automatically</div></div>
+                                <div className="prob-item"><div className="prob-dot"></div><div>Structured returns register with reason codes, credit status, and inventory linkage on every event</div></div>
                             </div>
                         </div>
                     </div>
@@ -816,12 +756,12 @@ const FMCGCaseStudy: React.FC = () => {
 
             <section id="system">
                 <div className="max-w-7xl mx-auto px-6 w-full">
-                    <div className="wide">
-                        <div className="eyebrow fade">02 — System Design</div>
-                        <h2 className="fade d1">Eight modules.<br/><em>One data layer.</em></h2>
-                        <p className="body-copy fade d2">Each module operates independently but shares a single data model. Creating an order triggers a ledger entry, adjusts inventory, and queues an SR commission calculation — automatically. No manual steps, no double-entry.</p>
+                    <div className="wide fade">
+                        <div className="eyebrow">02 — System Design</div>
+                        <h2>Eight modules.<br/>One data layer.</h2>
+                        <p className="body-copy">Each module operates independently but shares a single data model. Creating an order triggers a ledger entry, adjusts inventory, and queues an SR commission calculation — automatically. No manual steps, no double-entry.</p>
                         
-                        <div className="arch-wrap fade d3" style={{ marginTop: 48 }}>
+                        <div className="arch-wrap" style={{ marginTop: 48 }}>
                             <svg viewBox="0 0 1040 380" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block', width: '100%' }}>
                                 <defs>
                                     <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
@@ -905,12 +845,12 @@ const FMCGCaseStudy: React.FC = () => {
             
             <section id="features" className="alt">
                 <div className="max-w-7xl mx-auto px-6 w-full">
-                    <div className="wide">
-                        <div className="eyebrow fade">03 — Key Features</div>
-                        <h2 className="fade d1">Built for how FMCG<br/>distribution <em>actually works</em>.</h2>
-                        <p className="body-copy fade d2">Every feature maps directly to a real workflow from the field — not a generic ERP template adapted from enterprise software.</p>
+                    <div className="wide fade">
+                        <div className="eyebrow">03 — Key Features</div>
+                        <h2>Built for how FMCG<br/>distribution actually works.</h2>
+                        <p className="body-copy">Every feature maps directly to a real workflow from the field — not a generic ERP template adapted from enterprise software.</p>
                         
-                        <div className="feat-grid fade d3">
+                        <div className="feat-grid">
                             <div className="feat"><div className="feat-n">01</div><div className="feat-t">Multi-SKU order entry with live invoice</div><div className="feat-d">Select dealer, add any combination of product × size × quantity. Auto-calculates line totals, applies previous balance, generates a printed-quality memo. 7 product lines × 6 size variants, real-time total.</div><span className="feat-tag">Order management</span></div>
                             <div className="feat"><div className="feat-n">02</div><div className="feat-t">Rolling dealer ledger</div><div className="feat-d">Every dealer has a live account — 11 columns including prev balance, grand total, paid, running due, advance credit, and bank split. Payments via bank/bKash/cash reconciled. ৳2,49,24,450 total tracked.</div><span className="feat-tag">Finance</span></div>
                             <div className="feat"><div className="feat-n">03</div><div className="feat-t">Automated commission engine</div><div className="feat-d">SR commissions at ৳15/kg calculated automatically from monthly lifting volume. Handles partial months, advance deductions, and multi-SR territories. 22 commission events structured from raw notes.</div><span className="feat-tag">HR / Payroll</span></div>
@@ -924,12 +864,12 @@ const FMCGCaseStudy: React.FC = () => {
             
             <section>
                 <div className="max-w-7xl mx-auto px-6 w-full">
-                    <div className="wide">
-                        <div className="eyebrow fade">04 — Before & After</div>
-                        <h2 className="fade d1">Same workflows.<br/>Completely different <em>outcomes</em>.</h2>
-                        <p className="body-copy fade d2">The business didn't change. The structure around it did. Here's what the same daily tasks looked like before and after — in time, accuracy, and visibility.</p>
+                    <div className="wide fade">
+                        <div className="eyebrow">04 — Before & After</div>
+                        <h2>Same workflows.<br/>Completely different <em>outcomes</em>.</h2>
+                        <p className="body-copy">The business didn't change. The structure around it did. Here's what the same daily tasks looked like before and after — in time, accuracy, and visibility.</p>
                         
-                        <div className="ba-grid fade d3">
+                        <div className="ba-grid">
                             <div className="ba-card">
                                 <div className="ba-head before"><div className="ba-dot"></div><div className="ba-lbl">Before — Google Sheet</div></div>
                                 <div className="ba-row"><span className="ba-mark bm-bad">✕</span><div><strong style={{ fontWeight: 500 }}>Checking a dealer's balance</strong> — scroll to their section, find the last row, add columns manually. 3–5 minutes per dealer.</div></div>
@@ -955,12 +895,12 @@ const FMCGCaseStudy: React.FC = () => {
             {/* IMPACT SECTION */}
             <section id="impact" className="alt">
                 <div className="max-w-7xl mx-auto px-6 w-full">
-                    <div className="wide">
-                        <div className="eyebrow fade">05 — Results</div>
-                        <h2 className="fade d1">Numbers from the system.<br/><em>Not</em> projections.</h2>
-                        <p className="body-copy fade d2">109 transactions. 14 dealers. 14 months. All figures below are pulled directly from live operation — nothing estimated, nothing modelled.</p>
+                    <div className="wide fade">
+                        <div className="eyebrow">05 — Results</div>
+                        <h2>Numbers from the system.<br/><em>Not</em> projections.</h2>
+                        <p className="body-copy">109 transactions. 14 dealers. 14 months. All figures below are pulled directly from live operation — nothing estimated, nothing modelled.</p>
                         
-                        <div className="alerts fade d3">
+                        <div className="alerts">
                             <div className="alert danger">
                                 <div className="al-icon">!</div>
                                 <div className="al-title">Outstanding Dues — ৳15,46,032 across 9 accounts</div>
@@ -975,14 +915,14 @@ const FMCGCaseStudy: React.FC = () => {
                             </div>
                         </div>
                         
-                        <div className="g4 fade d4" style={{ marginBottom: 14 }}>
+                        <div className="g4" style={{ marginBottom: 14 }}>
                             <div className="impact-stat"><div className="stat-num">2.37</div><span className="stat-unit">Crore BDT · Total order value</span><div className="stat-desc">109 delivery memos fully reconciled with bank, bKash, and cash across 14 dealer accounts</div></div>
                             <div className="impact-stat"><div className="stat-num">88,699</div><span className="stat-unit">KG · Total dispatched</span><div className="stat-desc">Chili 52% · Turmeric 28% · Coriander 19% · Tea & others 2% — tracked per SKU per delivery</div></div>
                             <div className="impact-stat"><div className="stat-num">66×</div><span className="stat-unit">Revenue growth</span><div className="stat-desc">Monthly value from ৳57,640 (Sep 2022) to ৳38,70,740 (Oct 2023) — largest month on record</div></div>
                             <div className="impact-stat"><div className="stat-num">14</div><span className="stat-unit">Dealer accounts</span><div className="stat-desc">9 new accounts onboarded in one quarter (Feb–Apr 2023) without losing any balance history</div></div>
                         </div>
                         
-                        <div className="chart-card fade d5">
+                        <div className="chart-card">
                             <div className="cc-head"><div className="cc-t">Monthly order value vs payments received — Sep 2022 to Oct 2023</div><div className="cc-s">৳ actual · 14 months</div></div>
                             <div className="cc-body"><canvas ref={chartRef} id="impact-chart" role="img" aria-label="Monthly order value vs payments received, Sep 2022 to Oct 2023"></canvas></div>
                         </div>
@@ -1014,12 +954,12 @@ const FMCGCaseStudy: React.FC = () => {
             <div id="artifacts" className="artifact-section fade">
                 <div className="max-w-7xl mx-auto px-6 w-full">
                     <div className="artifact-header">
-                        <div className="eyebrow fade">07 — Design Hypothesis</div>
-                        <h2 className="fade d1">From a hunch to a<br/>working <em>system</em>.</h2>
-                        <p className="body-copy fade d2">Five stages of real thinking — from noticing the problem to finding a pattern nobody saw before. Click each stage to read the actual reasoning.</p>
+                        <div className="eyebrow">07 — Design Hypothesis</div>
+                        <h2>From a hunch to a<br/>working <em>system</em>.</h2>
+                        <p className="body-copy">Five stages of real thinking — from noticing the problem to finding a pattern nobody saw before. Click each stage to read the actual reasoning.</p>
                     </div>
                     <div className="artifact-content">
-                        <div className="hs-tl fade d3" id="hs-tl">
+                        <div className="hs-tl" id="hs-tl">
                             {hypothesisData.map((item, index) => (
                                 <div 
                                     key={index} 
@@ -1057,12 +997,12 @@ const FMCGCaseStudy: React.FC = () => {
             <div className="artifact-section alt fade">
                 <div className="max-w-7xl mx-auto px-6 w-full">
                     <div className="artifact-header">
-                        <div className="eyebrow fade">08 — How It Works</div>
-                        <h2 className="fade d1">One delivery.<br/><em>Eight system events.</em></h2>
-                        <p className="body-copy fade d2">Creating a delivery memo isn't a single action — it cascades through eight modules automatically. Click each stage to see exactly what happens behind the interface.</p>
+                        <div className="eyebrow">08 — How It Works</div>
+                        <h2>One delivery.<br/><em>Eight system events.</em></h2>
+                        <p className="body-copy">Creating a delivery memo isn't a single action — it cascades through eight modules automatically. Click each stage to see exactly what happens behind the interface.</p>
                     </div>
                     <div className="artifact-content">
-                        <div className="hw-steps-grid fade d3" id="hw-steps">
+                        <div className="hw-steps-grid" id="hw-steps">
                             {hwData.map((item, index) => (
                                 <div 
                                     key={index}
@@ -1077,7 +1017,7 @@ const FMCGCaseStudy: React.FC = () => {
                                 </div>
                             ))}
                         </div>
-                        <div className="hw-detail fade d4" id="hw-detail">
+                        <div className="hw-detail" id="hw-detail">
                             <div>
                                 <div className="hw-dtag">What happens</div>
                                 <div className="hw-dl">{hwData[activeHowItWorks].desc}</div>
@@ -1098,101 +1038,211 @@ const FMCGCaseStudy: React.FC = () => {
                 </div>
             </div>
 
-            {/* 09 TECHNICAL APPROACH */}
+            {/* 09 DESIGN APPROACH */}
             <div className="artifact-section fade">
                 <div className="max-w-7xl mx-auto px-6 w-full">
                     <div className="artifact-header">
-                        <div className="eyebrow fade">09 — Technical Approach</div>
-                        <h2 className="fade d1">Built for <em>operational simplicity</em>,<br/>not technical novelty.</h2>
-                        <p className="body-copy fade d2">Every tool was chosen to minimise maintenance burden on a small ops team — prioritising reliability, auditability, and field usability over sophistication.</p>
+                        <div className="eyebrow">09 — Design Approach</div>
+                        <h2>Model the data.<br/><em>Then</em> the interface.</h2>
+                        <p className="body-copy">Most tools are built interface-first — screens before systems, features before data models. This project reversed that order deliberately. Here's what that changed.</p>
                     </div>
-                    <div className="tech-grid fade d3">
-                        <div className="tech-card">
-                            <div className="tech-layer">Data Layer</div>
-                            <div className="tech-title">Source of Truth</div>
-                            <div className="tech-items">
-                                <div className="tech-item">Google Sheets (109 rows × 106 columns, original source)</div>
-                                <div className="tech-item">Python 3 extraction — all 14 months parsed with csv module</div>
-                                <div className="tech-item">Inline JS constants — zero API, zero database, zero latency</div>
-                                <div className="tech-item">5 core entities: Dealer · Order · Product · Payment · Staff</div>
-                                <div className="tech-item">Works fully offline · Instant load on any connection</div>
+                    <div className="artifact-content">
+                        <div className="da-principles" style={{ marginBottom: 10 }}>
+                            <div className="da-p">
+                                <div className="da-pn">Principle 01</div>
+                                <div className="da-pt">The current mess is the spec</div>
+                                <div className="da-pd">Start with what's actually happening, not what should happen. The 106-column sheet wasn't wrong to study — it was a complete map of every workflow the business had ever needed. Read the mess before writing a single line.</div>
+                            </div>
+                            <div className="da-p">
+                                <div className="da-pn">Principle 02</div>
+                                <div className="da-pt">Model entities before screens</div>
+                                <div className="da-pd">No wireframes until the data model is settled. A bad data model makes every screen wrong by definition. A good one makes the screens obvious — they're just views over the entities that already exist.</div>
+                            </div>
+                            <div className="da-p">
+                                <div className="da-pn">Principle 03</div>
+                                <div className="da-pt">One module, one concern</div>
+                                <div className="da-pd">Ledger handles finance. Returns handles stock. Commission handles payroll. Each module owns its slice of the data model and surfaces only what's relevant. The dashboard aggregates — it doesn't own anything.</div>
+                            </div>
+                            <div className="da-p">
+                                <div className="da-pn">Principle 04</div>
+                                <div className="da-pt">Every number must be traceable</div>
+                                <div className="da-pd">If a balance shows ৳1,26,988 advance, you must be able to click through to the exact memos that produced it. Numbers without provenance are guesses. The ledger shows prev_balance, order_total, paid, and net — all verifiable.</div>
+                            </div>
+                            <div className="da-p">
+                                <div className="da-pn">Principle 05</div>
+                                <div className="da-pt">Automate what repeats manually</div>
+                                <div className="da-pd">Commission math done by hand every month: automate it. Outstanding balance found by scrolling: surface it. These aren't feature requests — they're failure modes of the current system that have a real cost every time they happen.</div>
+                            </div>
+                            <div className="da-p">
+                                <div className="da-pn">Principle 06</div>
+                                <div className="da-pt">The system must survive without me</div>
+                                <div className="da-pd">Everything is documented inline. Every formula is visible. Every module can be understood by someone who didn't build it. A system that only makes sense to its builder is a liability, not an asset.</div>
                             </div>
                         </div>
-                        <div className="tech-card">
-                            <div className="tech-layer">Frontend</div>
-                            <div className="tech-title">Interface Layer</div>
-                            <div className="tech-items">
-                                <div className="tech-item">Vanilla HTML / CSS / JavaScript — no framework, no bundler</div>
-                                <div className="tech-item">Single deployable HTML file · 147 KB including all data</div>
-                                <div className="tech-item">Chart.js 4.4 — 5 chart types, loaded via CDN UMD global</div>
-                                <div className="tech-item">Mobile-first layout — every workflow operable in under 30 s</div>
-                                <div className="tech-item">No build step · No dependency management required</div>
+                        <div className="da-contrast">
+                            <div className="da-col">
+                                <div className="da-ch bad">What I didn't do</div>
+                                <div className="da-crow"><span className="da-cm x">✕</span><div>Start with a mockup and retrofit the data model around it</div></div>
+                                <div className="da-crow"><span className="da-cm x">✕</span><div>Ask what features they wanted and build a feature list</div></div>
+                                <div className="da-crow"><span className="da-cm x">✕</span><div>Adapt a generic ERP template to the workflow</div></div>
+                                <div className="da-crow"><span className="da-cm x">✕</span><div>Use a framework that added abstraction without value</div></div>
+                                <div className="da-crow"><span className="da-cm x">✕</span><div>Build for every possible future use case upfront</div></div>
+                            </div>
+                            <div className="da-col">
+                                <div className="da-ch good">What I did instead</div>
+                                <div className="da-crow"><span className="da-cm v">✓</span><div>Parsed the actual sheet — 109 rows, 106 columns, all data extracted</div></div>
+                                <div className="da-crow"><span className="da-cm v">✓</span><div>Mapped what the business actually does, then modelled it</div></div>
+                                <div className="da-crow"><span className="da-cm v">✓</span><div>Built from scratch around the exact workflow observed in the data</div></div>
+                                <div className="da-crow"><span className="da-cm v">✓</span><div>Chose the minimal stack that could do the job cleanly</div></div>
+                                <div className="da-crow"><span className="da-cm v">✓</span><div>Built exactly what the current process needs, nothing more</div></div>
                             </div>
                         </div>
-                        <div className="tech-card">
-                            <div className="tech-layer">Design System</div>
-                            <div className="tech-title">Hierarchy &amp; Tone</div>
-                            <div className="tech-items">
-                                <div className="tech-item">Plus Jakarta Sans — display, KPI numerics, body copy (400–800)</div>
-                                <div className="tech-item">JetBrains Mono — all data fields, labels &amp; code values</div>
-                                <div className="tech-item">14 CSS custom-property colour tokens · 3 radius values</div>
-                                <div className="tech-item">Class-scoped ERP embed — no iframe, no cascade conflicts</div>
-                                <div className="tech-item">Consistent ink hierarchy across all 8 modules</div>
-                            </div>
-                        </div>
-                        <div className="tech-card">
-                            <div className="tech-layer">Deployment</div>
-                            <div className="tech-title">Constraint by Design</div>
-                            <div className="tech-items">
-                                <div className="tech-item">Single file constraint — forces every decision toward simplicity</div>
-                                <div className="tech-item">No server infrastructure — runs on any static host or locally</div>
-                                <div className="tech-item">Self-documenting modules — auditable by anyone in the business</div>
-                                <div className="tech-item">Zero external dependencies beyond Chart.js CDN</div>
-                                <div className="tech-item">Survives without the builder — fully operable on handover</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="sk-note fade d4">
-                        <strong style={{ fontWeight: 500, color: 'var(--ink)' }}>Why no framework?</strong> The system needed to run as a single deployable file — no server, no build process, no dependency management. A React or Next.js app would add 300KB of runtime for zero user-visible benefit. Vanilla JS handles all 14 modules, live filtering, chart rendering, and form state in under 50KB of code. The constraint produced a better architecture.
                     </div>
                 </div>
             </div>
 
-            {/* 10 KEY LEARNINGS */}
+            {/* 10 STACK USED */}
+            <div className="artifact-section alt fade">
+                <div className="max-w-7xl mx-auto px-6 w-full">
+                    <div className="artifact-header">
+                        <div className="eyebrow">10 — Stack Used</div>
+                        <h2>No framework.<br/><em>No dependencies.</em></h2>
+                        <p className="body-copy">Every tool chosen because it was the right fit — not because it was fashionable. The core constraint: must run in a browser, deploy as a file, require zero backend infrastructure.</p>
+                    </div>
+                    <div className="artifact-content">
+                        <div className="sk-grid">
+                            <div className="sk-card">
+                                <div className="sk-ch"><span className="sk-cat">Data layer</span><span className="sk-why">Source of truth</span></div>
+                                <div className="sk-row">
+                                    <div className="sk-icon">GS</div>
+                                    <div>
+                                        <div className="sk-name">Google Sheets (source data)</div>
+                                        <div className="sk-desc">109 transactions, 14 dealers, 14 months of raw data. The original 106-column TSV exported and parsed with Python to extract every figure used in the system.</div>
+                                        <span className="sk-tag-sm">Python 3 · csv module</span>
+                                    </div>
+                                </div>
+                                <div className="sk-row">
+                                    <div className="sk-icon">JS</div>
+                                    <div>
+                                        <div className="sk-name">Inline JS data objects</div>
+                                        <div className="sk-desc">All 109 orders, 14 dealer ledgers, 22 commission events, 18 returns — embedded as structured JS constants. No API, no database, no server calls. Zero latency.</div>
+                                        <span className="sk-tag-sm">Works offline · Instant load</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="sk-card">
+                                <div className="sk-ch"><span className="sk-cat">Frontend</span><span className="sk-why">Render & interaction</span></div>
+                                <div className="sk-row">
+                                    <div className="sk-icon">H5</div>
+                                    <div>
+                                        <div className="sk-name">Vanilla HTML / CSS / JavaScript</div>
+                                        <div className="sk-desc">No React, no Vue, no bundler. One HTML file — the entire ERP is 147KB including all data, styles, and logic. Loads instantly on any connection.</div>
+                                        <span className="sk-tag-sm">Single file · No build step</span>
+                                    </div>
+                                </div>
+                                <div className="sk-row">
+                                    <div className="sk-icon">CJ</div>
+                                    <div>
+                                        <div className="sk-name">Chart.js 4.4</div>
+                                        <div className="sk-desc">All data visualisations — dual revenue/payment bar, stacked volume, outstanding dues, product donut, commission events. Loaded from CDN, UMD global.</div>
+                                        <span className="sk-tag-sm">cdnjs · 5 chart types</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="sk-card">
+                                <div className="sk-ch"><span className="sk-cat">Typography</span><span className="sk-why">Hierarchy & tone</span></div>
+                                <div className="sk-row">
+                                    <div className="sk-icon">IS</div>
+                                    <div>
+                                        <div className="sk-name">Plus Jakarta Sans</div>
+                                        <div className="sk-desc">Used for all display headings, KPI numerics, and body copy. The portfolio-consistent choice — geometric but warm, heavy weights provide authority without being sterile.</div>
+                                        <span className="sk-tag-sm">Google Fonts · 400–800 weight</span>
+                                    </div>
+                                </div>
+                                <div className="sk-row">
+                                    <div className="sk-icon">Ge</div>
+                                    <div>
+                                        <div className="sk-name">JetBrains Mono</div>
+                                        <div className="sk-desc">Every data field, label, code value, and metric uses JetBrains Mono — the same monospace used across the portfolio. Creates instant visual separation between prose and data.</div>
+                                        <span className="sk-tag-sm">JetBrains · Google Fonts · 400–700</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="sk-card">
+                                <div className="sk-ch"><span className="sk-cat">Design system</span><span className="sk-why">Consistency</span></div>
+                                <div className="sk-row">
+                                    <div className="sk-icon">CS</div>
+                                    <div>
+                                        <div className="sk-name">Custom CSS design tokens</div>
+                                        <div className="sk-desc">All colours, spacing, and radius values stored as CSS custom properties. Entire visual language — off-white background, ink hierarchy, line weights — defined in one :root block.</div>
+                                        <span className="sk-tag-sm">14 colour tokens · 3 radius values</span>
+                                    </div>
+                                </div>
+                                <div className="sk-row">
+                                    <div className="sk-icon">SC</div>
+                                    <div>
+                                        <div className="sk-name">Class-scoped ERP embedding</div>
+                                        <div className="sk-desc">The ERP is embedded inside this case study page without an iframe. All ERP styles are namespace-scoped under .erp-embed to prevent cascade conflicts with the outer page.</div>
+                                        <span className="sk-tag-sm">No iframe · Class scoping</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="sk-note">
+                            <strong style={{ fontWeight: 500, color: 'var(--ink)' }}>Why no framework?</strong> The system needed to run as a single deployable file — no server, no build process, no dependency management. A React or Next.js app would add 300KB of runtime for zero user-visible benefit. Vanilla JS handles all 14 modules, live filtering, chart rendering, and form state in under 50KB of code. The constraint produced a better architecture.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* 11 KEY LEARNINGS */}
             <div className="artifact-section fade">
                 <div className="max-w-7xl mx-auto px-6 w-full">
                     <div className="artifact-header">
-                        <div className="eyebrow fade">10 — Key Learnings</div>
-                        <h2 className="fade d1">Six things I know now<br/>I <em>didn't</em> before.</h2>
-                        <p className="body-copy fade d2">Every project teaches something you can't learn from reading. These are the specific lessons that came from 14 months of real distribution data. Click each one.</p>
+                        <div className="eyebrow">11 — Key Learnings</div>
+                        <h2>Six things I know now<br/>I <em>didn't</em> before.</h2>
+                        <p className="body-copy">Every project teaches something you can't learn from reading. These are the specific lessons that came from 14 months of real distribution data. Click each one.</p>
                     </div>
                     <div className="artifact-content">
-                        <div className="learning-grid fade d2">
+                        <div className="lrn-list" id="lrn-list">
                             {learningsData.map((item, index) => (
-                                <div key={index} className="learning-card">
-                                    <div className="lc-num">0{index + 1}</div>
+                                <div 
+                                    key={index}
+                                    className={`lrn-item ${activeLearning === index ? 'on' : ''}`}
+                                    onClick={() => setActiveLearning(index)}
+                                    tabIndex={0}
+                                    role="button"
+                                    onKeyDown={(e) => { if(e.key === 'Enter' || e.key === ' ') setActiveLearning(index); }}
+                                >
+                                    <div className="lrn-num">0{index + 1}</div>
                                     <div>
-                                        <div className="lc-cat">{item.cat}</div>
-                                        <div className="lc-title">{item.title}</div>
-                                        <div className="lc-body">{item.body}</div>
+                                        <div className="lrn-cat">{item.cat}</div>
+                                        <div className="lrn-title">{item.title}</div>
+                                        <div className="lrn-body">
+                                            {item.body}
+                                            <div className="lrn-verdict">{item.verdict}</div>
+                                        </div>
                                     </div>
                                 </div>
                             ))}
                         </div>
+                        <div className="lrn-note">
+                            <strong style={{ fontWeight: 500, color: 'var(--ink)' }}>What I'd do differently:</strong> I'd instrument the system from day one — log every balance change, every commission calculation, every return approval with a timestamp and a user. The current system is accurate but not auditable in the forensic sense. That's the next version.
+                        </div>
                     </div>
                 </div>
             </div>
 
-            {/* 11 BROADER CONTEXT */}
+            {/* 12 BROADER CONTEXT */}
             <div className="artifact-section alt fade">
                 <div className="max-w-7xl mx-auto px-6 w-full">
                     <div className="artifact-header">
-                        <div className="eyebrow fade">11 — Broader Context</div>
-                        <h2 className="fade d1">One business.<br/>A model for <em>hundreds</em>.</h2>
-                        <p className="body-copy fade d2">R Group is one FMCG distributor in Sylhet. But the problems it had — and the system that fixed them — describe hundreds of similar operations across Bangladesh.</p>
+                        <div className="eyebrow">12 — Broader Context</div>
+                        <h2>One business.<br/>A model for <em>hundreds</em>.</h2>
+                        <p className="body-copy">R Group is one FMCG distributor in Sylhet. But the problems it had — and the system that fixed them — describe hundreds of similar operations across Bangladesh.</p>
                     </div>
                     <div className="artifact-content">
-                        <div className="wb-two fade d3">
+                        <div className="wb-two">
                             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                                 <div className="wb-quote">
                                     <div className="wb-q">"We know the number is wrong. We just don't know which one, or by how much."</div>
@@ -1234,11 +1284,11 @@ const FMCGCaseStudy: React.FC = () => {
                 </div>
             </div>
 
-            {/* 12 HOW I WORK */}
+            {/* 13 HOW I WORK */}
             <section style={{ padding: '80px 0', borderTop: '1px solid var(--ln)' }} className="bg-white fade">
                 <div className="max-w-7xl mx-auto px-6 w-full">
-                    <div className="eyebrow" style={{ marginBottom: 16 }}>12 — How I Work</div>
-                    <h2>From messy<br/>to <em>maintainable</em>.</h2>
+                    <div className="eyebrow" style={{ marginBottom: 16 }}>13 — How I Work</div>
+                    <h2 style={{ fontSize: 'clamp(38px,5vw,56px)', fontFamily: 'var(--serif)', color: 'var(--ink)', lineHeight: 1.1 }}>From messy<br/>to <em style={{ fontStyle: 'italic', fontWeight: 500, color: 'var(--brand)' }}>maintainable</em>.</h2>
                     <div className="process-row">
                         <div className="ps">
                             <div className="ps-num">01</div>
@@ -1264,9 +1314,12 @@ const FMCGCaseStudy: React.FC = () => {
                 </div>
             </section>
 
-            {/* 13 CTA */}
+            {/* 14 CTA */}
             <section className="py-24 md:py-32 bg-white border-t border-slate-200">
                 <div className="max-w-[660px] mx-auto text-center fade">
+                    <div className="font-mono text-[12px] text-slate-400 tracking-[2px] uppercase mb-6 flex items-center justify-center gap-2.5">
+                        Get in touch
+                    </div>
                     <h2 className="font-sans text-[clamp(38px,5.5vw,62px)] text-slate-900 leading-[1.05] tracking-[-0.4px] mb-[18px] font-bold">
                         Running on spreadsheets<br/>and <em className="italic text-slate-400 font-semibold">workarounds?</em>
                     </h2>
@@ -1288,4 +1341,4 @@ const FMCGCaseStudy: React.FC = () => {
     );
 };
 
-export default FMCGCaseStudy;
+export default NewCaseStudy;

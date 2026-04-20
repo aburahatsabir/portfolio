@@ -404,6 +404,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
     };
   }, [post]);
 
+  /*
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const syncScheme = (event?: MediaQueryListEvent) => {
@@ -420,6 +421,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
     mediaQuery.addListener(syncScheme);
     return () => mediaQuery.removeListener(syncScheme);
   }, []);
+  */
 
   const blocks = useMemo(() => parseContent(post.content), [post.content]);
   const headings = useMemo(() => extractHeadings(post.content), [post.content]);
@@ -516,7 +518,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
   };
 
   return (
-    <div className={`blog-post-detail-page bg-white min-h-screen font-sans selection:bg-indigo-100 ${prefersDarkHero ? 'is-dark' : 'is-light'}`}>
+    <div className={`blog-post-detail-page bg-white min-h-screen font-sans selection-blue ${prefersDarkHero ? 'is-dark' : 'is-light'}`}>
       {/* ── HERO SECTION ── */}
       {/* Webflow exact: white base + fluted glass bars + blue bottom fade + diagonal white overlay */}
       <div key={prefersDarkHero ? 'dark-hero' : 'light-hero'} className={`blog-post-hero relative overflow-hidden border-b border-[#d9e4f3] ${heroReady ? 'is-ready' : ''}`}>

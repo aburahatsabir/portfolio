@@ -7,6 +7,7 @@
 # Build output
 dist/
 dist-ssr/
+.vite_cache/
 
 # Dependencies
 node_modules/
@@ -33,3 +34,6 @@ lerna-debug.log*
 
 # OS
 Thumbs.db
+
+# Local temp artifacts
+tmp/localhost-root.html

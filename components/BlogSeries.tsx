@@ -1034,6 +1034,303 @@ const BLOG_02_SECTION_SEVEN_LENGTH_CARDS = [
   },
 ] as const;
 
+const BLOG_02_SECTION_EIGHT_ATS_ITEMS = [
+  {
+    title: 'Standard section headings',
+    body: `Work Experience, Education, Skills, Certifications. Parsers look for these by name. "Where I've Been" is creative but won't parse reliably.`,
+  },
+  {
+    title: 'Single column for most applications',
+    body: 'Multi-column layouts often read in the wrong order when parsed. For corporate and government roles: one column, left-aligned, standard reading flow.',
+  },
+  {
+    title: 'Real text only — no image text',
+    body: 'Content in images, text boxes, headers/footers, or graphics is frequently skipped entirely. Contact info in a designed header may disappear in the parsed version.',
+  },
+  {
+    title: 'Standard fonts at readable sizes',
+    body: 'Garamond, Calibri, Aptos, Times New Roman, Georgia. 10–12pt body. Nothing below 10pt. No decorative fonts for content.',
+  },
+  {
+    title: 'Tables and text boxes — risky',
+    body: 'Many parsers cannot read content inside tables or text boxes. Popular two-column templates often use text boxes for the sidebar — all that content may be invisible to ATS.',
+    isBad: true,
+  },
+  {
+    title: 'Skill bars, icons, and graphics — eliminate',
+    body: 'Progress bars and star ratings provide no information to a parser (or a human). Images are skipped entirely. Use text. Always text.',
+    isBad: true,
+  },
+] as const;
+
+const BLOG_02_SECTION_EIGHT_FILE_ROWS: React.ReactNode[][] = [
+  ['Employer specifies a format', 'Whatever they asked for', 'Follow instructions first, always'],
+  [
+    'Uploading to ATS portal yourself',
+    <code key="ats-docx-self" className="rounded bg-slate-100 px-1 py-[1px] font-mono text-[0.74rem] text-slate-700">.docx</code>,
+    'Parses more reliably in most ATS systems',
+  ],
+  [
+    'Agency or recruiter requests .docx',
+    <code key="ats-docx-agency" className="rounded bg-slate-100 px-1 py-[1px] font-mono text-[0.74rem] text-slate-700">.docx</code>,
+    'Many recruiters reformat before submission',
+  ],
+  [
+    'Emailing directly to a human',
+    <code key="ats-pdf-email" className="rounded bg-slate-100 px-1 py-[1px] font-mono text-[0.74rem] text-slate-700">.pdf</code>,
+    'Preserves formatting; won&apos;t drift in different Word versions',
+  ],
+  [
+    'ATS and human reading both plausible',
+    <code key="ats-docx-both" className="rounded bg-slate-100 px-1 py-[1px] font-mono text-[0.74rem] text-slate-700">.docx</code>,
+    'ATS risk outweighs formatting preference',
+  ],
+  ['Creative / portfolio submissions', 'Regional / employer norm', 'Some creative roles expect designed PDFs; confirm before submitting'],
+] as const;
+
+const BLOG_02_SECTION_NINE_WORKFLOW = [
+  {
+    step: '1',
+    title: 'Read the posting as a human, not a keyword scanner',
+    body: 'What are the three most important responsibilities? Which skills are required vs. nice-to-have? What level of seniority and autonomy? What tools and methods are named? This reading shapes all your decisions.',
+  },
+  {
+    step: '2',
+    title: 'Build and maintain a master resume',
+    body: "Keep a complete master resume with everything. Tailor copies from it. Never edit your only document in place — you'll lose evidence you might need for a different application.",
+  },
+  {
+    step: '3',
+    title: 'Re-order and re-weight based on what this role needs most',
+    body: 'Move your most relevant experience higher. Give it more bullets. Give less relevant experience fewer bullets or cut it. Reframe bullets to surface matching skills — truthfully.',
+  },
+  {
+    step: '4',
+    title: 'Mirror language from the posting — naturally',
+    body: `If the posting says "lifecycle marketing" and you've been writing "retention campaigns," update where accurate. Use their exact tool names. Match their seniority language. Don't use vocabulary you can't defend.`,
+  },
+  {
+    step: '5',
+    title: 'Run the 10-second skim test before sending',
+    body: "Step back and skim in 10 seconds. Does the top of page one immediately communicate your target role and strongest evidence? If a recruiter read nothing else, would they know what you do and why you're credible?",
+  },
+] as const;
+
+const BLOG_02_SECTION_TEN_LINKEDIN_ITEMS = [
+  {
+    title: 'Headline carries disproportionate weight',
+    body: 'Your LinkedIn headline appears in search results and recruiter inboxes. "Engineer at Acme" is weak. "Senior Platform Engineer · Kubernetes · Distributed Systems · Open to roles" is specific and searchable.',
+  },
+  {
+    title: 'Dates and titles must match your resume',
+    body: 'Inconsistencies between your resume and LinkedIn create immediate credibility concerns. The dates, titles, and company names must align. The descriptions can vary in length, but the facts must match.',
+  },
+  {
+    title: 'Customize your URL',
+    body: 'linkedin.com/in/firstname-lastname instead of the default string. Put the clean URL on your resume. It signals attention to detail and makes it easy to type.',
+  },
+  {
+    title: 'LinkedIn can expand — it can&apos;t contradict',
+    body: 'Your profile can include more context, longer descriptions, testimonials, and media that wouldn&apos;t fit on a resume. Use this. But never let it tell a different story than your resume tells.',
+  },
+  {
+    title: 'Profile completeness affects recruiter search ranking',
+    body: 'Incomplete profiles rank lower in LinkedIn recruiter search. Fill in all sections: summary, experience (even brief entries), education, skills, and at least one recommendation per major role.',
+  },
+  {
+    title: 'Open To Work signal — use strategically',
+    body: 'The "Open to Work" frame is visible to recruiters even when hidden from your network. If you&apos;re actively searching, enable it. If you&apos;re passively browsing, the specific "recruiters only" setting protects you from current employer visibility.',
+  },
+] as const;
+
+const BLOG_02_SECTION_ELEVEN_CASES = [
+  {
+    label: 'Early career / student',
+    title: 'Lead with your strongest available evidence',
+    variant: 'early',
+    items: [
+      'One page, always',
+      "Put education first if it's your strongest credential",
+      'GPA only if 3.5+ and relevant to your market',
+      'Coursework, student projects, extracurriculars pass the four tests the same as work experience',
+      'Internships and part-time work go under experience with full bullets',
+      'Use projects to prove skills when formal work history is thin',
+      'Volunteer roles with relevant skills go under work experience',
+      'Omit high school once college has started',
+    ],
+  },
+  {
+    label: 'Experienced (10+ years)',
+    title: 'Prioritize ruthlessly, not comprehensively',
+    variant: 'experienced',
+    items: [
+      'Education moves to the bottom — after experience',
+      'Older jobs no longer central to fit can be condensed or cut entirely',
+      "The resume isn't a work history — it's a case for this role",
+      'Second page is legitimate when cutting would lose strong directly relevant evidence',
+      'Senior roles need to show leadership scale, scope, major decisions — give those room',
+      'Consider omitting graduation date if age bias is a concern in your market',
+      'Outdated certifications or methods no longer reflecting the field: cut them',
+    ],
+  },
+  {
+    label: 'Career changer',
+    title: 'Close the fit gap before the reader has to',
+    variant: 'changer',
+    items: [
+      'Summary earns its place here — name the transition and map transferable skills explicitly',
+      'Build a portfolio — proof of skill in the new direction beats any summary',
+      'Reframe work experience bullets around transferable skills, not previous industry jargon',
+      'Projects, side work, freelance, and relevant volunteer work can go near the top',
+      'Relevant certifications or courses in the new field appear prominently',
+      'One-page default still applies unless you have substantial relevant evidence',
+      'Be explicit about the pivot — ambiguity reads as confusion, not versatility',
+    ],
+  },
+] as const;
+
+const BLOG_02_SECTION_TWELVE_MISTAKES = [
+  {
+    number: 'Mistake 01',
+    title: 'ATS-invisible content',
+    body: 'Putting contact info, key skills, or role titles inside headers, footers, text boxes, or graphics. The parsed version may be missing entire sections of your resume.',
+  },
+  {
+    number: 'Mistake 02',
+    title: 'Generic, untailored copy',
+    body: 'Sending the same resume to every role. 82% of companies use ATS that score keyword match. An unoptimized resume is eliminated before a human ever sees it.',
+  },
+  {
+    number: 'Mistake 03',
+    title: 'Responsibility framing',
+    body: 'Every bullet describes what the role required rather than what you delivered. Job descriptions already say what the role requires. Your bullets must say what you made happen.',
+  },
+  {
+    number: 'Mistake 04',
+    title: 'Broken or missing links',
+    body: 'Non-functioning LinkedIn, portfolio, or GitHub links. Testing links before every send takes 60 seconds. Broken links signal carelessness to people who are already triaging fast.',
+  },
+  {
+    number: 'Mistake 05',
+    title: 'Inconsistent formatting',
+    body: 'Mixed tenses, inconsistent date formats, varying bullet styles, spacing inconsistencies. Formatting inconsistency is the fastest proxy for carelessness in document work.',
+  },
+  {
+    number: 'Mistake 06',
+    title: 'LinkedIn contradicts resume',
+    body: '92.6% of HR professionals check LinkedIn. Different titles, dates, or responsibilities between your resume and profile create immediate credibility questions — at the worst possible moment.',
+  },
+  {
+    number: 'Mistake 07',
+    title: 'Unprofessional contact info',
+    body: 'Amateur email addresses, no voicemail, sloppy filenames. These signal a lack of professional self-awareness. The contact section requires no creativity — just reliability.',
+  },
+  {
+    number: 'Mistake 08',
+    title: "Listing skills you can't defend",
+    body: "Every skill listed implies competency. Listing tools you've barely touched creates risk in screening calls and interviews. List only what you can use at a level you could defend under questioning.",
+  },
+  {
+    number: 'Mistake 09',
+    title: "The top doesn't communicate fit",
+    body: "When a recruiter skims in 7 seconds, they're looking for fit signals. If the top of page one doesn't immediately tell them your target role and strongest evidence, they move on. The fit argument must be visible before a single bullet is read.",
+  },
+] as const;
+
+const BLOG_02_SECTION_THIRTEEN_WORKFLOW = [
+  {
+    icon: '→',
+    title: 'Cover letters: when they matter',
+    body: "Many cover letters are never read (66% of recruiters spend under 30 seconds). But when competition is tight or your story is unusual, a sharp letter can matter. 3–4 short paragraphs: why this company, why this role, what unique value you bring. Don't summarize your resume — add context it can't carry.",
+  },
+  {
+    icon: '→',
+    title: 'LinkedIn alignment (see Section 10)',
+    body: "Your profile must tell the same story as your resume. It can expand — never contradict. 92.6% of HR will check.",
+  },
+  {
+    icon: '→',
+    title: 'Application timing',
+    body: 'Networking, referrals, and fast application timing matter independently of resume quality. A strong resume submitted on day 14 after a role goes live often loses to a weaker resume submitted day 1 via a referral. Apply early. Build relationships continuously — not only when searching.',
+  },
+  {
+    icon: '→',
+    title: 'Follow-up',
+    body: 'One polite, concise follow-up after 7–14 days of silence is usually acceptable. Name, role, one-line reiteration of fit, a clear ask. No more than one follow-up unless invited to reach out again.',
+  },
+  {
+    icon: '→',
+    title: 'Tracking',
+    body: "Track in a simple spreadsheet: company, role, job link, date applied, resume version used, status, follow-up date. This prevents duplicate applications, makes follow-up timely, and surfaces patterns in what's landing.",
+  },
+] as const;
+
+const BLOG_02_SECTION_FOURTEEN_GROUPS = [
+  {
+    title: 'Strategy & targeting',
+    items: [
+      { text: 'The top of page one immediately communicates my target role and strongest evidence', priority: 'always' },
+      { text: 'This resume is tailored to this specific posting — not a generic copy', priority: 'always' },
+      { text: 'Every element passes all four tests: role match, evidence strength, recency, space efficiency', priority: 'always' },
+      { text: 'Keywords from the job description appear naturally in summary, skills, and bullets where truthful', priority: 'ats' },
+      { text: 'I ran the 10-second skim test — a quick reader knows who I am, what I do, and my top wins', priority: 'always' },
+      { text: 'My headline / title sets the right frame for the entire read (confirmation bias working for me)', priority: 'default' },
+    ],
+  },
+  {
+    title: 'Content quality',
+    items: [
+      { text: 'Every bullet leads with a strong, specific action verb — no "Responsible for" or "Helped with"', priority: 'always' },
+      { text: 'Bullets focus on achievements and outcomes, not just responsibilities', priority: 'always' },
+      { text: 'Every quantified claim is real and I can defend it in an interview', priority: 'always' },
+      { text: 'Language uses ownership framing — "I led / built / owned" not "we / team" without clarity on my role', priority: 'default' },
+      { text: 'No vague filler phrases ("results-driven," "team player," "great communicator")', priority: 'always' },
+      { text: 'Skills section contains only hard skills I can use and defend — no self-ratings', priority: 'always' },
+      { text: 'Company context line added under each employer (what the company does + scale)', priority: 'default' },
+      { text: 'Summary (if included) is factual and supported by work experience below it', priority: 'default' },
+      { text: 'Everything on this resume is true — no fabricated experience, titles, or metrics', priority: 'always' },
+    ],
+  },
+  {
+    title: 'Formatting & ATS compliance',
+    items: [
+      { text: 'Font, size, bullet style, spacing, and tense usage are consistent throughout', priority: 'always' },
+      { text: 'Date format is consistent throughout (e.g., MMM YYYY or YYYY-MM, not mixed)', priority: 'default' },
+      { text: 'Current roles use present tense; past roles use past tense', priority: 'always' },
+      { text: 'No tables, text boxes, or complex columns for ATS-heavy submissions', priority: 'ats' },
+      { text: 'No essential content in headers, footers, or graphics where ATS may skip it', priority: 'ats' },
+      { text: 'Resume tested on mobile — legible and readable on a phone screen', priority: 'default' },
+      { text: 'No personal pronouns (I, my, me) throughout', priority: 'default' },
+      { text: 'No references section anywhere on the document', priority: 'default' },
+    ],
+  },
+  {
+    title: 'Contact, file & LinkedIn',
+    items: [
+      { text: 'Contact details at top: name, headline, city/state, phone, professional email, LinkedIn', priority: 'always' },
+      { text: 'All links tested and working (LinkedIn URL, portfolio, GitHub)', priority: 'always' },
+      { text: 'Professional email address — name-based, easy to read and type', priority: 'always' },
+      { text: 'Clean file name: FirstName LastName Resume.pdf (never Final_v3_UPDATED)', priority: 'default' },
+      { text: 'File format matches submission context (employer request first, then .docx for ATS, PDF for email)', priority: 'default' },
+      { text: 'File opens correctly, is not password-protected, and is not a shared Google Docs link', priority: 'always' },
+      { text: 'LinkedIn dates, titles, and companies match the resume exactly', priority: 'always' },
+      { text: 'No street address, photo (US/CA), or unnecessary personal information', priority: 'default' },
+    ],
+  },
+  {
+    title: 'Final review',
+    items: [
+      { text: 'Proofread carefully — contact info errors are fatal and embarrassingly common', priority: 'always' },
+      { text: 'A human reviewer has read the final version and checked for obvious flaws', priority: 'always' },
+    ],
+  },
+] as const;
+
+const BLOG_02_SECTION_FOURTEEN_TOTAL_ITEMS = BLOG_02_SECTION_FOURTEEN_GROUPS.reduce(
+  (sum, group) => sum + group.items.length,
+  0
+);
+
 const Blog02SectionTwo: React.FC = () => {
   return (
     <section className="mb-16 w-full">
@@ -1888,6 +2185,512 @@ const Blog02SectionSeven: React.FC = () => {
   );
 };
 
+const Blog02SectionEight: React.FC = () => {
+  return (
+    <section className="mb-16 w-full">
+      <h2
+        id="ats"
+        className="mb-[1.2rem] border-t-2 border-slate-900 pt-12 text-slate-900"
+        style={{ fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.02em' }}
+      >
+        <span className="mb-2 block font-mono text-[0.65rem] uppercase tracking-[0.12em] text-blue-600">Section 08</span>
+        ATS and formatting rules that actually matter
+      </h2>
+
+      <div className="space-y-0">
+        <p
+          className="text-slate-600 font-normal tracking-normal"
+          style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+        >
+          With 82% of companies using ATS and 99% using AI in some part of hiring, optimizing for machine parsing is
+          not optional {'\u2014'} it&apos;s table stakes. The practical guidance is straightforward: use a format
+          parsers can read, and don&apos;t put content in places parsers skip.
+        </p>
+      </div>
+
+      <div className="my-10 overflow-hidden border border-slate-300 bg-slate-300">
+        <div className="flex items-center gap-3 border-b border-slate-300 bg-slate-100 px-[1.4rem] py-4">
+          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[3px] bg-slate-900 font-mono text-[0.55rem] text-blue-500">
+            ATS
+          </div>
+          <div>
+            <div className="font-sans text-[0.85rem] font-semibold text-slate-900">
+              ATS-safe formatting: what it actually means
+            </div>
+            <div className="font-sans text-[0.72rem] text-slate-500">
+              Structural decisions that determine whether your resume is parsed correctly
+            </div>
+          </div>
+        </div>
+
+        <div className="grid gap-px bg-slate-300 md:grid-cols-2">
+          {BLOG_02_SECTION_EIGHT_ATS_ITEMS.map((item) => (
+            <div
+              key={item.title}
+              className={`px-[1.4rem] py-4 font-sans text-[0.82rem] leading-[1.45] ${
+                item.isBad ? 'bg-rose-50 text-slate-700' : 'bg-slate-50 text-slate-700'
+              }`}
+            >
+              <strong className={`mb-[0.2rem] block font-semibold ${item.isBad ? 'text-rose-700' : 'text-slate-900'}`}>
+                {item.title}
+              </strong>
+              {item.body}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Blog02SectionSixSubheading>File format decision tree</Blog02SectionSixSubheading>
+      <Blog02DecisionTable
+        headers={['Situation', 'Format', 'Why']}
+        rows={BLOG_02_SECTION_EIGHT_FILE_ROWS as React.ReactNode[][]}
+      />
+
+      <div className="my-9 border-l-[3px] border-indigo-600 bg-indigo-50 px-7 py-6">
+        <div className="mb-3 text-[10px] font-black uppercase tracking-[0.12em] text-indigo-700">
+          Mobile screening {'\u2014'} an overlooked factor
+        </div>
+        <p className="text-[0.92rem] leading-[1.65] text-slate-700">
+          Over 50% of resumes are first opened on a smartphone in 2025. This affects formatting: tiny fonts, dense
+          text blocks, and complex layouts that look clean on a desktop screen become illegible on mobile. Test your
+          resume on your phone before sending. If you can&apos;t read it comfortably in one scroll, it needs work.
+        </p>
+      </div>
+
+      <div className="my-9 border-l-[3px] border-blue-600 bg-blue-50 px-7 py-6">
+        <div className="mb-3 text-[10px] font-black uppercase tracking-[0.12em] text-blue-600">
+          Regional formatting exceptions
+        </div>
+        <p className="text-[0.92rem] leading-[1.65] text-slate-700">
+          <strong className="font-semibold text-slate-900">US and Canada:</strong> No photo (default). No street
+          address. No Social Insurance Number (Canada: never).
+        </p>
+        <p className="mt-2 text-[0.92rem] leading-[1.65] text-slate-700">
+          <strong className="font-semibold text-slate-900">Parts of Europe, Japan:</strong> Photos may be expected.
+          Research local norms before applying internationally.
+        </p>
+        <p className="mt-2 text-[0.92rem] leading-[1.65] text-slate-700">
+          <strong className="font-semibold text-slate-900">Creative roles:</strong> More formatting flexibility. A
+          designed PDF is usually fine for portfolio submissions {'\u2014'} but keep a plain ATS version ready for
+          upload fields.
+        </p>
+      </div>
+    </section>
+  );
+};
+
+const Blog02SectionNine: React.FC = () => {
+  return (
+    <section className="mb-16 w-full">
+      <h2
+        id="tailoring"
+        className="mb-[1.2rem] border-t-2 border-slate-900 pt-12 text-slate-900"
+        style={{ fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.02em' }}
+      >
+        <span className="mb-2 block font-mono text-[0.65rem] uppercase tracking-[0.12em] text-blue-600">Section 09</span>
+        Tailoring without keyword stuffing
+      </h2>
+
+      <div className="space-y-0">
+        <p
+          className="text-slate-600 font-normal tracking-normal"
+          style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+        >
+          Tailoring advice {'\u2014'} &quot;customize every resume!&quot; {'\u2014'} gets repeated so often it becomes
+          noise. Most people either ignore it or keyword-stuff blindly. Neither works. Real tailoring means aligning
+          your language and priorities truthfully to the posting, so your strongest relevant evidence appears at the
+          top and your vocabulary matches the role&apos;s vocabulary.
+        </p>
+      </div>
+
+      <div className="my-10">
+        {BLOG_02_SECTION_NINE_WORKFLOW.map((item) => (
+          <div
+            key={item.step}
+            className="mb-px flex gap-[1.2rem] border border-slate-300 bg-white px-[1.4rem] py-[1.2rem] transition-colors duration-150 hover:bg-slate-50"
+          >
+            <div className="mt-px flex h-7 w-7 shrink-0 items-center justify-center rounded-[2px] bg-slate-900 font-mono text-[0.7rem] text-white">
+              {item.step}
+            </div>
+            <div className="flex-1">
+              <div className="mb-[0.3rem] font-sans text-[0.88rem] font-semibold text-slate-900">{item.title}</div>
+              <div className="font-sans text-[0.8rem] leading-[1.55] text-slate-600">{item.body}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="my-8 border-l-[3px] border-slate-300 pl-[1.4rem]">
+        <p className="font-sans text-[0.88rem] italic leading-[1.6] text-slate-500">
+          For candidates targeting meaningfully different role families or industries, create 2–3 base resume variants.
+          Tailor each serious application from the appropriate base. This is not spray-and-pray {'\u2014'} it&apos;s
+          efficient targeting. Broad application volume only works if each serious target is properly tailored.
+        </p>
+      </div>
+    </section>
+  );
+};
+
+const Blog02SectionTen: React.FC = () => {
+  return (
+    <section className="mb-16 w-full">
+      <h2
+        id="linkedin"
+        className="mb-[1.2rem] border-t-2 border-slate-900 pt-12 text-slate-900"
+        style={{ fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.02em' }}
+      >
+        <span className="mb-2 block font-mono text-[0.65rem] uppercase tracking-[0.12em] text-blue-600">Section 10</span>
+        LinkedIn as a strategic layer
+      </h2>
+
+      <div className="space-y-0">
+        <p
+          className="text-slate-600 font-normal tracking-normal"
+          style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+        >
+          With 92.6% of HR professionals saying LinkedIn is critical or useful to their recruitment decisions, your
+          LinkedIn profile is effectively a second resume {'\u2014'} one that&apos;s checked independently of your
+          application. The implication: it needs to tell the same story as your resume, or inconsistencies will create
+          doubt at exactly the wrong moment.
+        </p>
+      </div>
+
+      <div className="my-10 overflow-hidden border border-slate-300">
+        <div className="flex items-center gap-[0.8rem] bg-[#0a66c2] px-6 py-4">
+          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-[3px] bg-white font-sans text-[0.75rem] font-bold text-[#0a66c2]">
+            in
+          </div>
+          <div>
+            <div className="font-sans text-[0.88rem] font-semibold text-white">
+              LinkedIn optimization {'\u2014'} what 92.6% of HR will check
+            </div>
+            <div className="font-sans text-[0.72rem] text-white/60">
+              Your profile should support your resume, not contradict it
+            </div>
+          </div>
+        </div>
+
+        <div className="grid gap-px bg-slate-300 md:grid-cols-2">
+          {BLOG_02_SECTION_TEN_LINKEDIN_ITEMS.map((item) => (
+            <div key={item.title} className="bg-slate-50 px-[1.4rem] py-4 font-sans text-[0.82rem] leading-[1.45] text-slate-600">
+              <strong className="mb-[0.2rem] block font-semibold text-slate-900">{item.title}</strong>
+              <span dangerouslySetInnerHTML={{ __html: item.body }} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const Blog02SectionEleven: React.FC = () => {
+  return (
+    <section className="mb-16 w-full">
+      <h2
+        id="special-cases"
+        className="mb-[1.2rem] border-t-2 border-slate-900 pt-12 text-slate-900"
+        style={{ fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.02em' }}
+      >
+        <span className="mb-2 block font-mono text-[0.65rem] uppercase tracking-[0.12em] text-blue-600">Section 11</span>
+        Special cases: when the standard rules change
+      </h2>
+
+      <div className="space-y-0">
+        <p
+          className="text-slate-600 font-normal tracking-normal"
+          style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+        >
+          The four-test system applies universally. But career stage and situation change how you apply it.
+        </p>
+      </div>
+
+      <div className="my-10 grid gap-px overflow-hidden border border-slate-300 bg-slate-300 xl:grid-cols-3">
+        {BLOG_02_SECTION_ELEVEN_CASES.map((item) => (
+          <div
+            key={item.label}
+            className={`px-6 py-7 ${
+              item.variant === 'early'
+                ? 'bg-[#faf8ee]'
+                : item.variant === 'experienced'
+                  ? 'bg-[#f0faf7]'
+                  : 'bg-[#fdf4f0]'
+            }`}
+          >
+            <div
+              className={`mb-[0.8rem] font-mono text-[0.6rem] uppercase tracking-[0.1em] ${
+                item.variant === 'early'
+                  ? 'text-amber-700'
+                  : item.variant === 'experienced'
+                    ? 'text-emerald-700'
+                    : 'text-[#c8420a]'
+              }`}
+            >
+              {item.label}
+            </div>
+            <div className="mb-4 text-[1.05rem] font-bold leading-[1.25] text-slate-900">{item.title}</div>
+            <ul className="list-none">
+              {item.items.map((point, index) => (
+                <li
+                  key={point}
+                  className={`relative py-[0.45rem] pl-[1.2rem] font-sans text-[0.8rem] leading-[1.4] text-slate-600 ${
+                    index < item.items.length - 1 ? 'border-b border-slate-300/70' : ''
+                  }`}
+                >
+                  <span
+                    className={`absolute left-0 top-[0.42rem] text-[1rem] ${
+                      item.variant === 'early'
+                        ? 'text-amber-700'
+                        : item.variant === 'experienced'
+                          ? 'text-emerald-700'
+                          : 'text-[#c8420a]'
+                    }`}
+                    aria-hidden="true"
+                  >
+                    ·
+                  </span>
+                  {point}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      <Blog02SectionSixSubheading>Employment gaps</Blog02SectionSixSubheading>
+      <div className="space-y-0">
+        <p
+          className="text-slate-600 font-normal tracking-normal"
+          style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+        >
+          Gaps are less stigmatized than they were five years ago. The practical guidance: be honest, be brief, and
+          prepare to discuss it constructively. Use a factual entry when the gap is material, recent, or could confuse
+          the timeline. &quot;Personal leave of absence&quot; or &quot;Family caregiving&quot; with dates is enough. No
+          reasons for leaving on the resume — that&apos;s for the interview.
+        </p>
+        <p
+          className="text-slate-600 font-normal tracking-normal"
+          style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+        >
+          On date formats: using year-only dates reduces attention on small gaps between roles. Other guidance says
+          obvious gaps look worse when you try to obscure them. Both positions have merit depending on context. The
+          safest approach: be consistent in whatever format you choose, and be ready to address any visible gap in a
+          conversation.
+        </p>
+      </div>
+    </section>
+  );
+};
+
+const Blog02SectionTwelve: React.FC = () => {
+  return (
+    <section className="mb-16 w-full">
+      <h2
+        id="mistakes"
+        className="mb-[1.2rem] border-t-2 border-slate-900 pt-12 text-slate-900"
+        style={{ fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.02em' }}
+      >
+        <span className="mb-2 block font-mono text-[0.65rem] uppercase tracking-[0.12em] text-blue-600">Section 12</span>
+        Nine fatal mistakes that eliminate otherwise-qualified candidates
+      </h2>
+
+      <div className="space-y-0">
+        <p
+          className="text-slate-600 font-normal tracking-normal"
+          style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+        >
+          These aren&apos;t stylistic preferences. Each of these is a common, documentable reason for qualified
+          candidates to be screened out before their experience is evaluated.
+        </p>
+      </div>
+
+      <div className="my-10 grid gap-px overflow-hidden border border-slate-300 bg-slate-300 md:grid-cols-2 xl:grid-cols-3">
+        {BLOG_02_SECTION_TWELVE_MISTAKES.map((item) => (
+          <div key={item.number} className="bg-white px-5 py-6">
+            <div className="mb-[0.5rem] font-mono text-[0.58rem] uppercase tracking-[0.1em] text-[#c8420a]">
+              {item.number}
+            </div>
+            <div className="mb-[0.5rem] text-[0.92rem] font-bold leading-[1.2] text-slate-900">{item.title}</div>
+            <div className="font-sans text-[0.78rem] leading-[1.5] text-slate-500">{item.body}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
+
+const Blog02SectionThirteen: React.FC = () => {
+  return (
+    <section className="mb-16 w-full">
+      <h2
+        id="workflow"
+        className="mb-[1.2rem] border-t-2 border-slate-900 pt-12 text-slate-900"
+        style={{ fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.02em' }}
+      >
+        <span className="mb-2 block font-mono text-[0.65rem] uppercase tracking-[0.12em] text-blue-600">Section 13</span>
+        Application workflow beyond the resume
+      </h2>
+
+      <div className="space-y-0">
+        <p
+          className="text-slate-600 font-normal tracking-normal"
+          style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+        >
+          The resume is one component of a system. Here&apos;s how the surrounding workflow affects outcomes.
+        </p>
+      </div>
+
+      <div className="my-10">
+        {BLOG_02_SECTION_THIRTEEN_WORKFLOW.map((item) => (
+          <div
+            key={item.title}
+            className="mb-px flex gap-[1.2rem] border border-slate-300 bg-white px-[1.4rem] py-[1.2rem] transition-colors duration-150 hover:bg-slate-50"
+          >
+            <div className="mt-px flex h-7 w-7 shrink-0 items-center justify-center rounded-[2px] bg-slate-900 font-mono text-[0.7rem] text-white">
+              {item.icon}
+            </div>
+            <div className="flex-1">
+              <div className="mb-[0.3rem] font-sans text-[0.88rem] font-semibold text-slate-900">{item.title}</div>
+              <div className="font-sans text-[0.8rem] leading-[1.55] text-slate-600">{item.body}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
+
+const Blog02SectionFourteen: React.FC = () => {
+  const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
+
+  const completedCount = Object.values(checkedItems).filter(Boolean).length;
+
+  const toggleChecklistItem = (id: string) => {
+    setCheckedItems((current) => ({
+      ...current,
+      [id]: !current[id],
+    }));
+  };
+
+  return (
+    <section className="mb-16 w-full">
+      <h2
+        id="checklist"
+        className="mb-[1.2rem] border-t-2 border-slate-900 pt-12 text-slate-900"
+        style={{ fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.02em' }}
+      >
+        <span className="mb-2 block font-mono text-[0.65rem] uppercase tracking-[0.12em] text-blue-600">Section 14</span>
+        The complete pre-submit checklist
+      </h2>
+
+      <div className="space-y-0">
+        <p
+          className="text-slate-600 font-normal tracking-normal"
+          style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+        >
+          Run through this before every serious application. Click each item to mark it complete. Organized by category
+          and tagged by importance level.
+        </p>
+      </div>
+
+      <div className="my-10 overflow-hidden border border-slate-300">
+        <div className="flex items-center justify-between gap-4 bg-slate-950 px-[1.4rem] py-[0.9rem] font-mono text-[0.65rem] uppercase tracking-[0.1em] text-white/55">
+          <span>Pre-submit checklist — 33 items</span>
+          <span className="text-[0.6rem] text-white/35">{completedCount} of {BLOG_02_SECTION_FOURTEEN_TOTAL_ITEMS} complete</span>
+        </div>
+
+        {BLOG_02_SECTION_FOURTEEN_GROUPS.map((group, groupIndex) => (
+          <div key={group.title} className={groupIndex < BLOG_02_SECTION_FOURTEEN_GROUPS.length - 1 ? 'border-b border-slate-300' : ''}>
+            <div className="bg-slate-100 px-[1.4rem] py-[0.6rem] font-mono text-[0.6rem] uppercase tracking-[0.1em] text-slate-500">
+              {group.title}
+            </div>
+            {group.items.map((item, itemIndex) => {
+              const itemId = `${groupIndex}-${itemIndex}`;
+              const isChecked = Boolean(checkedItems[itemId]);
+              const badgeClassName =
+                item.priority === 'always'
+                  ? 'bg-rose-100 text-rose-700'
+                  : item.priority === 'ats'
+                    ? 'bg-blue-100 text-blue-700'
+                    : 'bg-slate-200 text-slate-500';
+
+              const badgeLabel =
+                item.priority === 'always'
+                  ? 'Always'
+                  : item.priority === 'ats'
+                    ? 'ATS'
+                    : 'Default';
+
+              return (
+                <button
+                  key={item.text}
+                  type="button"
+                  onClick={() => toggleChecklistItem(itemId)}
+                  className={`flex w-full items-start gap-[0.9rem] border-b border-slate-200 px-[1.4rem] py-3 text-left transition-colors duration-150 last:border-b-0 hover:bg-slate-50 ${
+                    isChecked ? 'bg-slate-50/70' : 'bg-white'
+                  }`}
+                >
+                  <span
+                    className={`mt-[2px] flex h-4 w-4 shrink-0 items-center justify-center rounded-[2px] border-[1.5px] ${
+                      isChecked ? 'border-blue-600 bg-blue-600' : 'border-slate-300 bg-transparent'
+                    }`}
+                    aria-hidden="true"
+                  >
+                    {isChecked && (
+                      <svg className="h-3 w-3 text-white" viewBox="0 0 12 12" fill="none">
+                        <path d="M2 6.5L4.5 9L10 3.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    )}
+                  </span>
+                  <span
+                    className={`font-sans text-[0.85rem] leading-[1.5] ${
+                      isChecked ? 'text-slate-400 line-through decoration-slate-400' : 'text-slate-600'
+                    }`}
+                  >
+                    {item.text}
+                  </span>
+                  <span className={`ml-auto shrink-0 rounded-[2px] px-[6px] py-[2px] font-mono text-[0.55rem] uppercase tracking-[0.06em] ${badgeClassName}`}>
+                    {badgeLabel}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
+
+const Blog02FinalBlock: React.FC = () => {
+  return (
+    <div className="relative mt-16 overflow-hidden bg-slate-950 px-8 py-16 md:px-10">
+      <div className="pointer-events-none absolute -bottom-20 right-[-2rem] text-[14rem] font-bold leading-none text-white/[0.03] md:text-[22rem]">
+        ?
+      </div>
+      <h2 className="mb-3 text-[clamp(1.5rem,3vw,2.2rem)] font-bold leading-[1.2] text-white">
+        One question before you send
+      </h2>
+      <p className="mb-4 max-w-[560px] font-sans text-[0.95rem] leading-[1.7] text-white/55">
+        Before every application, ask this once:
+      </p>
+      <div className="relative z-10 my-8 max-w-[640px] border-l-[3px] border-blue-500 px-7 py-6 font-serif text-[clamp(1.1rem,2vw,1.4rem)] italic leading-[1.5] text-white">
+        &quot;If a recruiter reads only the first ten seconds of this resume, do they know what role I&apos;m
+        targeting, and why I&apos;m credible for it?&quot;
+      </div>
+      <p className="mb-4 max-w-[560px] font-sans text-[0.95rem] leading-[1.7] text-white/55">
+        If the answer is &quot;not really,&quot; that&apos;s your revision target. Not the font, not the margins, not
+        whether to use a summary. Start with what the resume communicates in ten seconds, and work backward from
+        there.
+      </p>
+      <p className="max-w-[560px] font-sans text-[0.95rem] leading-[1.7] text-white/55">
+        A resume that survives that test is built on decision logic, not rules. The rules will sometimes conflict.
+        The decisions won&apos;t — because they&apos;re grounded in the same four tests, informed by the same recruiter
+        reality, and pointed at the same goal: earning the conversation, not describing the past.
+      </p>
+    </div>
+  );
+};
+
 const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
   const [activeToc, setActiveToc] = useState('');
   const [copiedLink, setCopiedLink] = useState(false);
@@ -2152,6 +2955,14 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
             {showResumeLeadBlocks && <Blog02SectionFive />}
             {showResumeLeadBlocks && <Blog02SectionSix />}
             {showResumeLeadBlocks && <Blog02SectionSeven />}
+            {showResumeLeadBlocks && <Blog02SectionEight />}
+            {showResumeLeadBlocks && <Blog02SectionNine />}
+            {showResumeLeadBlocks && <Blog02SectionTen />}
+            {showResumeLeadBlocks && <Blog02SectionEleven />}
+            {showResumeLeadBlocks && <Blog02SectionTwelve />}
+            {showResumeLeadBlocks && <Blog02SectionThirteen />}
+            {showResumeLeadBlocks && <Blog02SectionFourteen />}
+            {showResumeLeadBlocks && <Blog02FinalBlock />}
 
             {!showResumeLeadBlocks && (
               <div className="prose prose-lg max-w-none text-slate-600 tracking-normal leading-[1.5]">
@@ -2280,26 +3091,30 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
               })}
               </div>
             )}
-            {/* Post Tags & Bottom Meta — Webflow-Inspired Premium Minimal */}
-            <div className="mt-16 pt-8 border-t border-slate-100">
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-12 sm:gap-16">
-                <div className="col-span-1 sm:col-span-3 flex flex-col gap-2 justify-center">
-                  <div className="flex flex-wrap gap-x-6 gap-y-2">
-                    {postTags.map((tag, i) => (
-                      <span 
-                        key={i} 
-                        className="text-[16px] font-medium text-slate-900 hover:text-blue-600 transition-colors cursor-pointer"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+            {!showResumeLeadBlocks && (
+              <>
+                {/* Post Tags & Bottom Meta — Webflow-Inspired Premium Minimal */}
+                <div className="mt-16 pt-8 border-t border-slate-100">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-12 sm:gap-16">
+                    <div className="col-span-1 sm:col-span-3 flex flex-col gap-2 justify-center">
+                      <div className="flex flex-wrap gap-x-6 gap-y-2">
+                        {postTags.map((tag, i) => (
+                          <span 
+                            key={i} 
+                            className="text-[16px] font-medium text-slate-900 hover:text-blue-600 transition-colors cursor-pointer"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="flex flex-col gap-2 justify-center sm:text-right">
+                      <span className="text-[16px] font-medium text-slate-900 whitespace-nowrap">{post.date}</span>
+                    </div>
                   </div>
                 </div>
-                <div className="flex flex-col gap-2 justify-center sm:text-right">
-                  <span className="text-[16px] font-medium text-slate-900 whitespace-nowrap">{post.date}</span>
-                </div>
-              </div>
-            </div>
+              </>
+            )}
           </article>
 
           {/* ── RIGHT SIDEBAR (Sticky — non-scrollable, only TOC nav scrolls) ── */}

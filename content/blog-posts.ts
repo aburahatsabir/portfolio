@@ -52,12 +52,12 @@ Feature:
   },
   {
     id: 'blog-02',
-    title: 'Idempotent Operations: Building Self-Healing Administrative Loops',
+    title: 'The Science of Getting Shortlisted',
     date: 'February 2024',
     readTime: '6 min read',
-    category: 'Governance',
+    category: 'Career',
     tags: ['Product', 'Research', 'Frameworks'],
-    excerpt: 'Why generic productivity tools fail without the enforcement of deterministic state logic and recovery protocols.',
+    excerpt: 'Most resume advice gives you rules. This gives you the reasoning behind them. Every section. Every judgment call. Built from recruiter research, eye-tracking studies, and ATS data.',
     author: { 
       name: 'Abu Rahat Sabir', 
       role: 'Executive – Administration',

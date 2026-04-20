@@ -4,6 +4,11 @@ import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 import { BLOG_POSTS } from '../content/blog-posts';
 import { BlogPost } from '../types';
 
+const WEBFLOW_SHARED_CSS_URL = 'https://cdn.prod.website-files.com/686294e263eb7e215bd232f7/css/marketing-main.webflow.shared.156580216.min.css';
+const WEBFLOW_PAGE_CSS_URL = 'https://cdn.prod.website-files.com/686294e263eb7e215bd232f7/css/marketing-main.webflow.68813d0b2e88b04dedeb9769.706f17bf7.opt.min.css';
+const THREE_JS_URL = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+const FLUTED_GLASS_URL = 'https://cdn.jsdelivr.net/gh/webflow/brand_studio@ae18482/global-brand-code/custom-components/fluted-glass-op.min.js';
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 type ContentBlock = 
@@ -11,6 +16,200 @@ type ContentBlock =
   | { type: 'image'; url: string; caption?: string; }
   | { type: 'table'; headers: string[]; rows: string[][]; }
   | { type: 'buttons'; buttons: Array<{ label: string; url: string; variant: 'download' | 'demo' }>; };
+
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function buildExactWebflowHeroBackgroundSrcDoc(
+  image: string,
+  imageAlt: string,
+  prefersDark: boolean
+) {
+  const fallbackBackground = prefersDark ? '#080808' : '#ffffff';
+  const fallbackText = prefersDark ? '#f5f5f5' : '#080808';
+  const safeImage = escapeHtml(image);
+  const safeAlt = escapeHtml(imageAlt);
+
+  return `<!doctype html>
+<html lang="en"${prefersDark ? ' class="u-mode-dark"' : ''}>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#146EF5">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script>
+    (function () {
+      var isDark = ${prefersDark ? 'true' : 'false'};
+      document.documentElement.classList.toggle('u-mode-dark', isDark);
+      try {
+        localStorage.setItem('darkMode', String(isDark));
+      } catch (error) {}
+    })();
+  </script>
+  <link href="${WEBFLOW_SHARED_CSS_URL}" rel="stylesheet" type="text/css">
+  <link href="${WEBFLOW_PAGE_CSS_URL}" rel="stylesheet" type="text/css">
+  <style>
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+      overflow: hidden;
+      background: var(--colors--background, ${fallbackBackground});
+      color: var(--colors--text, ${fallbackText});
+    }
+
+    body {
+      position: relative;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .hero-bg {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--colors--background, ${fallbackBackground});
+    }
+
+    .fluted-glass-component,
+    .fluted-glass-canvas,
+    .fluted-glass-overlay {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .fluted-glass-image,
+    .fluted-glass-canvas canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 160ms ease;
+    }
+
+    .fluted-glass-image {
+      object-fit: cover;
+      object-position: center;
+      opacity: 0 !important;
+    }
+
+    html.hero-mounted .fluted-glass-canvas canvas {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="hero-bg">
+    <div class="fluted-glass-component">
+      <div
+        data-distortion="0.25"
+        data-shape-type-one="0"
+        class="fluted-glass-canvas"
+        data-size-two="1"
+        data-shininess="800"
+        data-use-blob-two="false"
+        data-gloss="0.3"
+        data-shape-type-two="0"
+        data-width-variation="1.8"
+        data-use-three-color="true"
+        data-sensitivity-three="0.15"
+        data-color-three="var(--colors--background)"
+        data-sensitivity-one="0.15"
+        data-size-three="1.3"
+        data-fluted-glass="true"
+        data-noise="0.40"
+        data-hover="true"
+        data-color-one="var(--colors--background)"
+        data-columns="6"
+        data-shape-type-three="0"
+        data-sensitivity-two="0.15"
+        data-size-one="0.85"
+        data-bg-color=""
+        data-hover-intensity="2.0"
+        data-color-two="#EEEEEE"
+        data-use-blob-one="true"
+        data-background-image="">
+        <img
+          src="${safeImage}"
+          loading="eager"
+          alt="${safeAlt}"
+          sizes="100vw"
+          class="fluted-glass-image">
+      </div>
+    </div>
+    <div class="fluted-glass-overlay"></div>
+  </div>
+
+  <script>
+    document.documentElement.classList.add('w-mod-js');
+    (function () {
+      var posted = false;
+      function notifyReady() {
+        if (posted) return;
+        posted = true;
+        document.documentElement.classList.add('hero-mounted');
+        window.requestAnimationFrame(function () {
+          window.requestAnimationFrame(function () {
+            try {
+              window.parent.postMessage({ type: 'webflow-hero-ready' }, '*');
+            } catch (error) {}
+          });
+        });
+      }
+
+      function watchCanvas() {
+        var host = document.querySelector('.fluted-glass-canvas');
+        if (!host) return;
+        if (host.querySelector('canvas')) {
+          notifyReady();
+          return;
+        }
+
+        var observer = new MutationObserver(function () {
+          if (host.querySelector('canvas')) {
+            observer.disconnect();
+            notifyReady();
+          }
+        });
+
+        observer.observe(host, { childList: true, subtree: true });
+
+        window.setTimeout(function () {
+          if (host.querySelector('canvas')) {
+            observer.disconnect();
+            notifyReady();
+          }
+        }, 1800);
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', watchCanvas, { once: true });
+      } else {
+        watchCanvas();
+      }
+
+      window.addEventListener('load', function () {
+        window.setTimeout(watchCanvas, 120);
+      }, { once: true });
+    })();
+  </script>
+  <script src="${THREE_JS_URL}"></script>
+  <script src="${FLUTED_GLASS_URL}"></script>
+</body>
+</html>`;
+}
 
 function parseContent(content: string): Array<ContentBlock> {
   const lines = content.split('\n');
@@ -156,8 +355,12 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
   const [activeToc, setActiveToc] = useState('');
   const [copiedLink, setCopiedLink] = useState(false);
   const [canShare, setCanShare] = useState(false);
+  const [heroReady, setHeroReady] = useState(false);
+  const [prefersDarkHero, setPrefersDarkHero] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const tocNavRef = useRef<HTMLElement>(null);
+  const heroFrameRef = useRef<HTMLIFrameElement>(null);
+  const heroReadyTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     // Check Web Share API support
@@ -201,8 +404,33 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
     };
   }, [post]);
 
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const syncScheme = (event?: MediaQueryListEvent) => {
+      setPrefersDarkHero(event ? event.matches : mediaQuery.matches);
+    };
+
+    syncScheme();
+
+    if (typeof mediaQuery.addEventListener === 'function') {
+      mediaQuery.addEventListener('change', syncScheme);
+      return () => mediaQuery.removeEventListener('change', syncScheme);
+    }
+
+    mediaQuery.addListener(syncScheme);
+    return () => mediaQuery.removeListener(syncScheme);
+  }, []);
+
   const blocks = useMemo(() => parseContent(post.content), [post.content]);
   const headings = useMemo(() => extractHeadings(post.content), [post.content]);
+  const heroBackgroundSrcDoc = useMemo(
+    () => buildExactWebflowHeroBackgroundSrcDoc(
+      post.image || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2000',
+      post.title,
+      prefersDarkHero
+    ),
+    [post.image, post.title, prefersDarkHero]
+  );
 
   // For the "Keep Reading" / Related Posts section
   const relatedPosts = useMemo(() => {
@@ -228,7 +456,46 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
     }
   }, [activeToc]);
 
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.source !== heroFrameRef.current?.contentWindow) return;
+      if (event.data?.type !== 'webflow-hero-ready') return;
+
+      if (heroReadyTimeoutRef.current !== null) {
+        window.clearTimeout(heroReadyTimeoutRef.current);
+        heroReadyTimeoutRef.current = null;
+      }
+
+      setHeroReady(true);
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
+  useEffect(() => {
+    setHeroReady(false);
+
+    if (heroReadyTimeoutRef.current !== null) {
+      window.clearTimeout(heroReadyTimeoutRef.current);
+      heroReadyTimeoutRef.current = null;
+    }
+
+    return () => {
+      if (heroReadyTimeoutRef.current !== null) {
+        window.clearTimeout(heroReadyTimeoutRef.current);
+        heroReadyTimeoutRef.current = null;
+      }
+    };
+  }, [post.id, prefersDarkHero]);
+
   const navigateBack = () => {
+    // Reset scroll BEFORE navigating so the blog list opens at the top
+    if (window.__lenis) {
+      window.__lenis.scrollTo(0, { immediate: true });
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }
     window.history.pushState({}, '', '/blog');
     window.dispatchEvent(new PopStateEvent('popstate'));
   };
@@ -249,109 +516,79 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
   };
 
   return (
-    <div className="bg-white min-h-screen font-sans selection:bg-indigo-100">
+    <div className={`blog-post-detail-page bg-white min-h-screen font-sans selection:bg-indigo-100 ${prefersDarkHero ? 'is-dark' : 'is-light'}`}>
       {/* ── HERO SECTION ── */}
       {/* Webflow exact: white base + fluted glass bars + blue bottom fade + diagonal white overlay */}
-      <div className="relative overflow-hidden bg-white pt-32 pb-24 border-b border-[#e2e4e8]">
+      <div key={prefersDarkHero ? 'dark-hero' : 'light-hero'} className={`blog-post-hero relative overflow-hidden border-b border-[#d9e4f3] ${heroReady ? 'is-ready' : ''}`}>
         
         {/* EXACT WEBFLOW BACKGROUND REPLICATION (REFINED SHADER MATCH) */}
-        <div className="absolute inset-0 pointer-events-none bg-white overflow-hidden">
-          
-          {/* Base Environment */}
-          <div className="absolute inset-0 bg-[#fbfcff]"></div>
+        <div className="blog-post-hero__bg absolute inset-0 overflow-hidden">
+          <div className="blog-post-hero__fallback absolute inset-0"></div>
+          <iframe
+            ref={heroFrameRef}
+            title="Webflow hero background"
+            aria-hidden="true"
+            tabIndex={-1}
+            scrolling="no"
+            sandbox="allow-scripts allow-same-origin"
+            srcDoc={heroBackgroundSrcDoc}
+            className="blog-post-hero__frame absolute inset-0"
+            onLoad={() => {
+              if (heroReadyTimeoutRef.current !== null) {
+                window.clearTimeout(heroReadyTimeoutRef.current);
+              }
 
-          {/* LAYER 1: The exact image Webflow uses, heavily blurred & scaled to mimic WebGL diffusion.
-              Scaling past 100% hides the harsh photographic dark edges of the original image. */}
-          <div className="absolute inset-0 opacity-[0.8] scale-[1.3] origin-center transform-gpu" style={{
-            backgroundImage: "url('https://cdn.prod.website-files.com/687e8d1b96312cc631cafec7/69a9c2b20295866956be180f_MCP-BlogHeader.jpg')",
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            filter: 'blur(90px) saturate(1.2)'
-          }}></div>
-
-          {/* LAYER 2: Simulated WebGL Fluted Glass Refraction Map */}
-          <div className="absolute inset-0 backdrop-blur-[16px] transform-gpu" style={{
-            backgroundImage: `repeating-linear-gradient(
-              90deg,
-              rgba(255,255,255,0.05) 0%,
-              rgba(255,255,255,0) 50%,
-              rgba(255,255,255,0.25) 100%
-            )`,
-            backgroundSize: '160px 100%'
-          }}></div>
-
-          {/* LAYER 3: Softened fluted indentations (Removed harsh black overlays) */}
-          <div className="absolute inset-0 mix-blend-multiply opacity-[0.3]" style={{
-            backgroundImage: `repeating-linear-gradient(
-              90deg,
-              transparent 0px,
-              transparent 159px,
-              rgba(20,110,245,0.08) 159.5px,
-              rgba(20,110,245,0.02) 160px
-            )`
-          }}></div>
-
-          {/* LAYER 4: Webflow's exact overlay masking gradient for perfect text contrast */}
-          <div className="absolute inset-0" style={{
-            backgroundImage: 'linear-gradient(165deg, rgba(255,255,255,1) 35%, rgba(255,255,255,0) 80%)',
-          }}></div>
-
-          {/* LAYER 5: Webflow's exact noise overlay mapping (Shader noise simulation) */}
-          <div className="absolute inset-0 opacity-[0.035] mix-blend-multiply pointer-events-none" style={{
-            backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=%220 0 256 256%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%221.5%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E')",
-          }}></div>
-
-          {/* Content Integration Fades (Top and Bottom edges) */}
-          <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-white via-white/80 to-transparent"></div>
-          <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-white to-transparent"></div>
-
+              // Hard fallback only if the iframe never posts readiness.
+              heroReadyTimeoutRef.current = window.setTimeout(() => {
+                setHeroReady(true);
+                heroReadyTimeoutRef.current = null;
+              }, 5000);
+            }}
+          />
         </div>
 
-        <div className="relative z-10 max-w-[1280px] mx-auto px-6 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div className="blog-post-hero__content relative z-10 max-w-[1280px] mx-auto px-6 grid lg:grid-cols-2 gap-10 lg:gap-20 items-center">
           
           {/* Hero Content (Left) */}
-          <div className="max-w-[600px]">
-            {/* Breadcrumb - Exact Webflow URL Match: 16px, normal tracking, normal casing, 16px margin bottom */}
-            <div className="flex items-center gap-2 mb-[16px]" style={{
-                fontSize: '16px',
-                lineHeight: '22.4px',
-                letterSpacing: 'normal',
-                fontWeight: 400
-            }}>
-               <button type="button" onClick={navigateBack} className="text-slate-500 hover:text-slate-900 transition-colors">Blog</button>
-               <span className="text-slate-500">›</span>
-               <span className="text-slate-500">{post.category}</span>
+          <div className="blog-post-hero__copy max-w-[600px]">
+            {/* Breadcrumb - Exact Webflow URL Match: 16px, semibold, clean color */}
+            <div className="blog-post-hero__breadcrumb flex items-center gap-2 mb-[16px] font-semibold text-[#1a1a1a]">
+               <button type="button" onClick={navigateBack} className="blog-post-hero__breadcrumb-link hover:text-brand-blue transition-colors">Blog</button>
+               <span className="blog-post-hero__breadcrumb-sep text-slate-400" aria-hidden="true">
+                 <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4">
+                   <path d="M9.29297 7.707L13.586 12L9.29297 16.293L10.707 17.707L16.414 12L10.707 6.293L9.29297 7.707Z" fill="currentColor" />
+                 </svg>
+               </span>
+               <span className="blog-post-hero__breadcrumb-current text-slate-500">{post.category}</span>
             </div>
 
-            {/* Typography Exact Ref Match: Core theme font with Webflow's rigorous breakpoint math, Semibold (600) */}
-            <h1 className="font-semibold text-[#111111] mb-[24px] text-[33.17px] md:text-[41.6px] lg:text-[56px] leading-[1.04] tracking-normal">
+            {/* H1: Webflow-exact — extrabold 800, tight -0.03em tracking, scaled to 56px lg */}
+            <h1 className="blog-post-hero__title font-extrabold mb-[20px] text-[32px] md:text-[44px] lg:text-[56px] leading-[1.08] tracking-[-0.03em] text-slate-900">
               {post.title}
             </h1>
             
-            {/* Subtitle / Excerpt - Exact Webflow URL Match: 16px, 1.6 line height, semibold */}
+            {/* Excerpt: 16px, medium weight, core theme color */}
             {post.excerpt && (
-              <p className="text-[#333333] mb-10" style={{
-                  fontSize: '16px',
-                  lineHeight: '25.6px',
-                  letterSpacing: 'normal',
-                  fontWeight: 600
-              }}>
+              <p className="text-[16px] text-slate-500 font-medium leading-[1.6] max-w-[80ch] mb-7">
                 {post.excerpt}
               </p>
             )}
+
+
           </div>
 
-          {/* Hero Image (Right) - EXACT Webflow Card Styling */}
-          <div className="w-full relative group">
+          {/* Hero Image (Right) */}
+          <div className="blog-post-hero__image-wrap w-full relative group">
 
-            {/* Exactly 8px rounded corners, perfect 16:9 layout, NO drop shadows, NO hover effects */}
-            <div className="w-full rounded-[8px] overflow-hidden bg-slate-50 aspect-[16/9] relative">
-              <img
-                src={post.image || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2000'}
-                alt={post.title}
-                className="w-full h-full object-cover"
-                loading="eager"
-              />
+            <div className="blog-post-hero__image-shell w-full aspect-[16/9] relative">
+              <div className="w-full h-full rounded-[8px] overflow-hidden bg-slate-50 aspect-[16/9] relative">
+                <img
+                  src={post.image || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2000'}
+                  alt={post.title}
+                  className="w-full h-full object-cover"
+                  loading="eager"
+                />
+              </div>
             </div>
           </div>
           
@@ -365,7 +602,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
           {/* ── MAIN CONTENT ── */}
           <article ref={contentRef} className="flex-1 min-w-0 max-w-[850px] pb-12">
             
-            <div className="prose prose-lg max-w-none text-slate-800 tracking-normal leading-[1.5]">
+            <div className="prose prose-lg max-w-none text-slate-600 tracking-normal leading-[1.5]">
               {blocks.map((block, i) => {
                 if (block.type === 'h2') {
                   const id = (block.text || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -391,7 +628,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
                   return (
                     <ul key={i} className="mb-5 pl-[25px] list-disc" style={{ marginBottom: '10px' }}>
                       {(block.items || []).map((item, j) => (
-                        <li key={j} className="text-slate-800 text-[16px] leading-[1.5] mb-[6px]">
+                        <li key={j} className="text-slate-600 text-[16px] leading-[1.5] mb-[6px]">
                           <InlineText text={item} />
                         </li>
                       ))}
@@ -484,7 +721,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
                 }
                 return (
                   // Webflow P: font-size: 16px, line-height: 25.6px, mb: 12.5714px
-                  <p key={i} className="text-slate-800 font-normal" style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}>
+                  <p key={i} className="text-slate-600 font-normal" style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}>
                     <InlineText text={block.text || ''} />
                   </p>
                 );
@@ -522,14 +759,14 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
               <button
                 type="button"
                 onClick={navigateBack}
-                className="group flex items-center gap-2 text-[13px] font-bold text-slate-500 hover:text-[#4F46E5] uppercase tracking-wider transition-colors"
+                className="group flex items-center gap-2 text-[14px] font-semibold text-slate-600 hover:text-blue-600 transition-colors"
               >
-                <div className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center group-hover:border-[#4F46E5] bg-white group-hover:bg-slate-50 transition-all">
+                <div className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center group-hover:border-blue-600 bg-white group-hover:bg-slate-50 transition-all">
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                   </svg>
                 </div>
-                Back to Blog
+                Back to blog
               </button>
             </div>
 

@@ -433,6 +433,15 @@ const BLOG_02_INTRO = {
   cite: 'The core shift that changes every decision',
 } as const;
 
+const BLOG_02_INTRO_COPY = {
+  lead:
+    "Most resume advice is a list of things someone did wrong. Don't use tables. Don't put your address. Don't go two pages if you have less than ten years. These rules float around without context, get passed between people, and become gospel \u2014 even when they contradict each other depending on who you ask.",
+  paragraphs: [
+    "The problem isn't that the rules are wrong. It's that rules without decision logic are nearly useless when you actually sit down to write. When you're staring at a draft that doesn't feel right, what you need isn't another rule. You need a framework for thinking.",
+    'This guide gives you that. A complete system covering every resume element \u2014 plus the science of how resumes are actually screened, recruiter psychology, ATS intelligence, and the fatal mistakes that eliminate otherwise-qualified candidates before a human ever sees them.',
+  ],
+} as const;
+
 const Blog02LeadBlocks: React.FC = () => {
   return (
     <>
@@ -496,36 +505,1384 @@ const Blog02LeadBlocks: React.FC = () => {
 
 const Blog02Intro: React.FC = () => {
   return (
-    <section className="mb-14">
+    <section className="mb-14 w-full">
       <p
-        className="text-slate-700 font-normal first-letter:float-left first-letter:mr-[0.09em] first-letter:mt-[0.08em] first-letter:text-[4.2rem] first-letter:font-semibold first-letter:leading-[0.82] first-letter:text-blue-600"
+        className="text-slate-600 font-normal tracking-normal first-letter:float-left first-letter:mr-[0.1em] first-letter:mt-[0.08em] first-letter:text-[4.15rem] first-letter:font-black first-letter:leading-[0.82] first-letter:text-[#4f46e5]"
         style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
       >
-        {BLOG_02_INTRO.lead}
+        {BLOG_02_INTRO_COPY.lead}
       </p>
 
-      <div className="mt-6 space-y-4">
-        {BLOG_02_INTRO.paragraphs.map((paragraph) => (
+      <div className="space-y-0">
+        {BLOG_02_INTRO_COPY.paragraphs.map((paragraph) => (
           <p
             key={paragraph}
-            className="text-slate-600 font-normal"
+            className="text-slate-600 font-normal tracking-normal"
             style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
           >
             {paragraph}
           </p>
         ))}
       </div>
+    </section>
+  );
+};
 
-      <div className="relative mt-10 overflow-hidden rounded-[2.5rem] border border-slate-100 bg-slate-50 px-8 py-10 md:px-10 md:py-12">
-        <div className="pointer-events-none absolute left-6 top-4 text-[88px] leading-none text-blue-100 md:left-8 md:top-5">
+const Blog02QuoteSeparator: React.FC = () => {
+  return (
+    <section className="mb-16 w-full">
+      <div className="relative my-12 overflow-hidden bg-slate-950 px-6 py-8 md:px-8 md:py-10">
+        <div className="pointer-events-none absolute left-6 top-[0.6rem] text-[7rem] leading-none text-blue-500/45 md:left-8">
           &ldquo;
         </div>
-        <p className="relative z-10 pr-2 text-[22px] italic leading-[1.5] tracking-[-0.02em] text-slate-900 md:text-[28px]">
+        <p className="relative z-10 pl-[0.8rem] text-[clamp(1.1rem,2.5vw,1.5rem)] italic leading-[1.5] text-white">
           {BLOG_02_INTRO.quote}
         </p>
-        <cite className="relative z-10 mt-5 block text-[11px] font-black uppercase tracking-[0.24em] text-blue-600 not-italic">
+        <cite className="relative z-10 mt-[0.9rem] block pl-[0.8rem] text-[0.72rem] uppercase not-italic tracking-[0.07em] text-white/40">
           {BLOG_02_INTRO.cite}
         </cite>
+      </div>
+
+      <div className="mt-12 border-t-2 border-slate-900" aria-hidden="true"></div>
+    </section>
+  );
+};
+
+const Blog02SectionOne: React.FC = () => {
+  return (
+    <section className="mb-16 w-full">
+      <div className="mb-6 text-[11px] font-black uppercase tracking-[0.24em] text-blue-600">
+        Section 01
+      </div>
+      <h2
+        className="mb-6 text-slate-900"
+        style={{ fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.02em' }}
+      >
+        What most resume advice gets wrong
+      </h2>
+
+      <div className="space-y-0">
+        <p
+          className="text-slate-600 font-normal tracking-normal"
+          style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+        >
+          Generic guides spend most of their time on aesthetics. Fonts, margins, whether to use a summary. These
+          details matter at the edges, but they aren&apos;t why resumes succeed or fail. Resumes fail because they
+          answer the wrong question.
+        </p>
+
+        <p
+          className="text-slate-600 font-normal tracking-normal"
+          style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+        >
+          Most candidates write a resume that answers <em>What have I done?</em> A strong resume answers{' '}
+          <em>Why am I the right fit for this specific role?</em> That shift changes almost every decision{' '}
+          {'\u2014'} what to include, what to cut, how many bullets to write, which jobs to even mention.
+        </p>
+
+        <p
+          className="text-slate-600 font-normal tracking-normal"
+          style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+        >
+          The other failure mode: treating resume advice as universal when it isn&apos;t. Advice that&apos;s correct for
+          a recent grad applying to a startup will give the wrong answer for a 20-year executive applying to a
+          government agency. Good judgment requires knowing which rule applies to your situation {'\u2014'} and
+          that&apos;s what this guide is built around.
+        </p>
+      </div>
+
+      <div className="my-9 border-l-[3px] border-blue-600 bg-blue-50 px-7 py-6">
+        <div className="mb-3 text-[10px] font-black uppercase tracking-[0.12em] text-blue-600">
+          Working definitions used throughout this guide
+        </div>
+        <p className="text-[0.92rem] leading-[1.65] text-slate-700">
+          <strong className="font-semibold text-slate-900">Relevant</strong> {'\u2014'} useful for evaluating fit for
+          the target role. <strong className="font-semibold text-slate-900">Directly related</strong> {'\u2014'} uses
+          the same or closely adjacent skills, tools, or responsibilities.{' '}
+          <strong className="font-semibold text-slate-900">Fit</strong> {'\u2014'} the overall match between your
+          background and the role&apos;s requirements. When this guide says &quot;include if it helps,&quot; the standard
+          is: does it add relevant evidence for the target role, judged by the four tests above?
+        </p>
+      </div>
+
+      <div className="mt-12 border-t-2 border-slate-900" aria-hidden="true"></div>
+    </section>
+  );
+};
+
+const BLOG_02_SECTION_TWO_PIPELINE = [
+  {
+    stage: 'Stage 01',
+    icon: '⚙',
+    title: 'ATS / AI filter',
+    body: "82% of companies run every resume through an ATS. It scans for keywords, qualifications, and structure. No human sees it at this stage. Fail here and you're eliminated before a recruiter ever opens the file.",
+    footer: 'Eliminates: ~60–70% of applicants',
+  },
+  {
+    stage: 'Stage 02',
+    icon: '⚡',
+    title: 'Recruiter skim',
+    body: "42% of HR professionals spend under 10 seconds on initial review. They're scanning for fit signals, not reading. They use an F-pattern: top horizontal, second horizontal, then down the left edge. Top-left is everything.",
+    footer: 'Eliminates: ~70–80% of remaining pool',
+  },
+  {
+    stage: 'Stage 03',
+    icon: '🔍',
+    title: 'Hiring manager deep read',
+    body: "Only the shortlisted few get here. Now they're reading carefully — validating the signals from stage two. Every claim in your bullets will be tested against what the role requires and what they'd probe in interviews.",
+    footer: 'Results in: interview offers for ~2–5%',
+  },
+] as const;
+
+const BLOG_02_SECTION_TWO_HEATMAP_ZONES = [
+  { text: 'YOUR NAME · Title / Headline', level: 'hot', badge: '🔥 Hottest' },
+  { text: 'Contact info · Location · LinkedIn', level: 'hot', badge: '🔥 Hottest' },
+  { text: 'Current / Most recent job title + Company', level: 'warm', badge: 'Hot' },
+  { text: 'Date range of current role', level: 'warm', badge: 'Hot' },
+  { text: 'Most recent bullet (first words only)', level: 'warm', badge: 'Hot' },
+  { text: 'Previous role title + Company', level: 'mild' },
+  { text: 'Previous role bullet — scanned briefly', level: 'mild' },
+  { text: 'Earlier roles — largely skipped', level: 'cold' },
+  { text: 'Education — checked late if at all', level: 'cold' },
+  { text: 'Skills / Certifications — bottom-right blind spot', level: 'cold' },
+] as const;
+
+const BLOG_02_SECTION_TWO_FIXATIONS = [
+  'Your name — first thing seen, every time',
+  'Current or most recent job title',
+  'Current or most recent company name',
+  'Start and end date of current role',
+  'Previous job title (if visible)',
+  'Education level and institution',
+] as const;
+
+const BLOG_02_SECTION_FOUR_COMPARISONS = [
+  {
+    badLabel: 'Responsibility framing',
+    badText:
+      'Responsible for managing various projects and coordinating with stakeholders to ensure timely delivery of team outcomes.',
+    badNote: 'Tells the reader nothing specific. Every PM could claim this. Zero evidence.',
+    goodLabel: 'Evidence framing',
+    goodText:
+      'Managed 6 concurrent product launches across 4 teams; delivered all on schedule with 0 scope creep incidents over 18 months.',
+    goodNote: 'Specific. Countable. Defensible in an interview. The claim is proven, not asserted.',
+  },
+  {
+    badLabel: 'Skills claim without proof',
+    badText:
+      'Proficient in Python. Strong analytical mindset. Great communicator with excellent cross-functional collaboration skills.',
+    badNote: 'Every candidate says this. It is not evidence. The skills section is not the place for this.',
+    goodLabel: 'Skills shown through work',
+    goodText:
+      'Built Python ETL pipeline processing 2M+ daily records; reduced data latency from 4 hrs to 8 min for 3 downstream analytics teams.',
+    goodNote: 'Python is named once as context. The proof is the outcome â€” specific, measurable, scoped.',
+  },
+] as const;
+
+const BLOG_02_SECTION_FOUR_EVIDENCE_TIERS = [
+  {
+    label: 'Weak',
+    text: '"Contributed to team success and helped improve overall outcomes"',
+    className: 'bg-slate-50 text-slate-700',
+    badgeClassName: 'bg-slate-200 text-slate-700',
+  },
+  {
+    label: 'Better',
+    text: '"Led internal tooling project used by 200+ employees daily"',
+    className: 'bg-blue-50 text-slate-700',
+    badgeClassName: 'bg-blue-100 text-blue-700',
+  },
+  {
+    label: 'Strong',
+    text: '"Built data pipeline reducing manual reporting from 8 hrs/week to 20 min"',
+    className: 'bg-blue-100/80 text-slate-800',
+    badgeClassName: 'bg-blue-600/10 text-blue-700',
+  },
+  {
+    label: 'Strongest',
+    text: '"Sole engineer on CMS migration; launched on schedule, zero downtime, eliminated 3 weekly manual tasks for 12-person team"',
+    className: 'bg-slate-900 text-white',
+    badgeClassName: 'bg-white/10 text-white',
+  },
+] as const;
+
+const BLOG_02_SECTION_FOUR_DO = [
+  'Start with a strong, specific action verb (Led, Rebuilt, Reduced, Shipped, Negotiated)',
+  'Vary the opening verb â€” no repeated starts across bullets',
+  'Lead with the outcome when it&apos;s compelling',
+  'Use the before/after mindset: what changed because of your work?',
+  'Keep bullets to 1&ndash;2 lines; 3 maximum',
+  'Have a full STAR story ready for every bullet for interview prep',
+  'Show scope, standards, or ownership when exact numbers aren&apos;t available',
+  'Use present tense for current roles, past for previous',
+  'Vary structure: PAR, STAR, result-first, action-first',
+] as const;
+
+const BLOG_02_SECTION_FOUR_DONT = [
+  'Start with &quot;Responsible for,&quot; &quot;Assisted with,&quot; or &quot;Helped to&quot;',
+  'Use long paragraphs instead of focused bullets',
+  'List daily tasks without outcomes or proof of value',
+  'Use buzzword filler: &quot;team player,&quot; &quot;results-oriented,&quot; &quot;passionate about&quot;',
+  'Include fake or inflated metrics you can&apos;t defend in an interview',
+  'Overload with 10+ bullets â€” 4&ndash;6 is usually right for a strong recent role',
+  'Write bullets that could appear on any resume for any company',
+  'Use first-person pronouns (I, my, me)',
+] as const;
+
+const BLOG_02_SECTION_FOUR_COMPARISONS_EXACT = [
+  {
+    badLabel: 'Responsibility framing',
+    badText:
+      'Responsible for managing various projects and coordinating with stakeholders to ensure timely delivery of team outcomes.',
+    badNote: 'Tells the reader nothing specific. Every PM could claim this. Zero evidence.',
+    goodLabel: 'Evidence framing',
+    goodText:
+      'Managed 6 concurrent product launches across 4 teams; delivered all on schedule with 0 scope creep incidents over 18 months.',
+    goodNote: 'Specific. Countable. Defensible in an interview. The claim is proven, not asserted.',
+  },
+  {
+    badLabel: 'Skills claim without proof',
+    badText:
+      'Proficient in Python. Strong analytical mindset. Great communicator with excellent cross-functional collaboration skills.',
+    badNote: 'Every candidate says this. It is not evidence. The skills section is not the place for this.',
+    goodLabel: 'Skills shown through work',
+    goodText:
+      'Built Python ETL pipeline processing 2M+ daily records; reduced data latency from 4 hrs to 8 min for 3 downstream analytics teams.',
+    goodNote: 'Python is named once as context. The proof is the outcome — specific, measurable, scoped.',
+  },
+] as const;
+
+const BLOG_02_SECTION_FOUR_EVIDENCE_TIERS_EXACT = [
+  {
+    label: 'Weak',
+    text: '"Contributed to team success and helped improve overall outcomes"',
+    className: 'bg-[#fdf0ec] text-[#7a2d1a]',
+    badgeClassName: 'text-[#7a2d1a]/70',
+  },
+  {
+    label: 'Better',
+    text: '"Led internal tooling project used by 200+ employees daily"',
+    className: 'bg-slate-100 text-slate-700',
+    badgeClassName: 'text-slate-500',
+  },
+  {
+    label: 'Strong',
+    text: '"Built data pipeline reducing manual reporting from 8 hrs/week to 20 min"',
+    className: 'bg-blue-50 text-blue-900',
+    badgeClassName: 'text-blue-700/80',
+  },
+  {
+    label: 'Strongest',
+    text: '"Sole engineer on CMS migration; launched on schedule, zero downtime, eliminated 3 weekly manual tasks for 12-person team"',
+    className: 'bg-blue-100 text-blue-950 font-medium',
+    badgeClassName: 'text-blue-800/80',
+  },
+] as const;
+
+const BLOG_02_SECTION_FOUR_DO_EXACT = [
+  'Start with a strong, specific action verb (Led, Rebuilt, Reduced, Shipped, Negotiated)',
+  'Vary the opening verb &mdash; no repeated starts across bullets',
+  'Lead with the outcome when it&apos;s compelling',
+  'Use the before/after mindset: what changed because of your work?',
+  'Keep bullets to 1&ndash;2 lines; 3 maximum',
+  'Have a full STAR story ready for every bullet for interview prep',
+  'Show scope, standards, or ownership when exact numbers aren&apos;t available',
+  'Use present tense for current roles, past for previous',
+  'Vary structure: PAR, STAR, result-first, action-first',
+] as const;
+
+const BLOG_02_SECTION_FOUR_DONT_EXACT = [
+  'Start with &quot;Responsible for,&quot; &quot;Assisted with,&quot; or &quot;Helped to&quot;',
+  'Use long paragraphs instead of focused bullets',
+  'List daily tasks without outcomes or proof of value',
+  'Use buzzword filler: &quot;team player,&quot; &quot;results-oriented,&quot; &quot;passionate about&quot;',
+  'Include fake or inflated metrics you can&apos;t defend in an interview',
+  'Overload with 10+ bullets &mdash; 4&ndash;6 is usually right for a strong recent role',
+  'Write bullets that could appear on any resume for any company',
+  'Use first-person pronouns (I, my, me)',
+] as const;
+
+const BLOG_02_SECTION_FIVE_WEAK = [
+  {
+    label: 'hides your contribution',
+    text: 'We delivered the project on time despite significant complexity.',
+  },
+  {
+    label: 'no ownership',
+    text: 'Collaborated with cross-functional teams to improve the process.',
+  },
+  {
+    label: 'passive framing',
+    text: 'Was involved in building the new onboarding system.',
+  },
+  {
+    label: 'no scope',
+    text: 'Helped the company scale its operations significantly.',
+  },
+  {
+    label: 'undefendable',
+    text: 'Contributed to a successful product launch.',
+  },
+] as const;
+
+const BLOG_02_SECTION_FIVE_STRONG = [
+  {
+    label: 'clear contribution',
+    text: 'Owned end-to-end delivery of a 6-month platform rebuild; launched 2 weeks early with no critical bugs.',
+  },
+  {
+    label: 'specific role',
+    text: 'Led process redesign across 3 teams, reducing approval time from 14 days to 3.',
+  },
+  {
+    label: 'agency shown',
+    text: 'Architected and built the onboarding system from scratch; used by 400+ new employees annually.',
+  },
+  {
+    label: 'scoped claim',
+    text: 'Scaled ops from 3 to 22 markets in 18 months; built the playbook used by every new market team.',
+  },
+  {
+    label: 'defensible',
+    text: 'Drove launch strategy for flagship product; 12,000 users in 30 days, exceeding target by 40%.',
+  },
+] as const;
+
+const BLOG_02_SECTION_SIX_CONTACT_INCLUDE: React.ReactNode[] = [
+  'Full name (largest element on the page)',
+  <>One-line headline: role title + domain + years (e.g., Senior PM &middot; B2B SaaS &middot; 8 yrs)</>,
+  'City and state or city/country (metro area is fine)',
+  <>Professional email &mdash; name-based, easy to type</>,
+  'Phone with professional voicemail set',
+  'LinkedIn URL: linkedin.com/in/firstname-lastname',
+  <>Portfolio, GitHub, or work samples &mdash; if directly relevant</>,
+  <>
+    Clean file name:{' '}
+    <code className="rounded bg-slate-100 px-1 py-[1px] font-mono text-[0.74rem] text-slate-700">
+      FirstName LastName Resume.pdf
+    </code>
+  </>,
+];
+
+const BLOG_02_SECTION_SIX_CONTACT_EXCLUDE: React.ReactNode[] = [
+  'Street address (city/metro is sufficient everywhere)',
+  <>Photo (US/Canada default &mdash; see regional notes)</>,
+  'Age, date of birth, marital status, religion, nationality',
+  'Government ID or Social Insurance Number (Canada: never)',
+  'Personal social accounts unless professionally relevant',
+  <>Labels like &quot;Phone:&quot; or &quot;Email:&quot; before contact details</>,
+  <>
+    File names like{' '}
+    <code className="rounded bg-white/80 px-1 py-[1px] font-mono text-[0.74rem] text-[#702515]">
+      Resume_FINAL_v3_UPDATED.docx
+    </code>
+  </>,
+  <>Salary requirements &mdash; never on a resume</>,
+];
+
+const BLOG_02_SECTION_SIX_WORK_ROWS: React.ReactNode[][] = [
+  [
+    'Strong, recent, directly related',
+    <>4&ndash;6 achievement-first bullets, full date range, clear title, company context line</>,
+  ],
+  [
+    <>Related but older (5&ndash;10 yrs)</>,
+    <>2&ndash;3 bullets focused on strongest evidence only</>,
+  ],
+  [
+    'Older, not directly related',
+    <>1&ndash;2 lines or consider removing; run through Tests 1 and 4</>,
+  ],
+  [
+    'Multiple roles at one employer',
+    'Group under one employer, list each title and date range, bullets under relevant roles only',
+  ],
+  [
+    'Freelance / contract work',
+    <>Group as &quot;Freelance [Role]&quot; or &quot;Independent Consultant&quot; with dates and bullets</>,
+  ],
+  [
+    'Employment gap',
+    'Brief factual entry only if material, recent, or timeline-confusing. No reasons for leaving on the resume.',
+  ],
+];
+
+const BLOG_02_SECTION_SIX_EDUCATION_ROWS: React.ReactNode[][] = [
+  [
+    <>
+      Student / recent grad{' '}
+      <span className="ml-1 inline-flex rounded-full bg-amber-100 px-2 py-[2px] font-mono text-[0.58rem] uppercase tracking-[0.08em] text-amber-700">
+        early
+      </span>
+    </>,
+    'Top of resume',
+    'Degree, institution, date, GPA if 3.5+ and relevant, relevant coursework, honors',
+  ],
+  [
+    <>
+      5+ years experience{' '}
+      <span className="ml-1 inline-flex rounded-full bg-sky-100 px-2 py-[2px] font-mono text-[0.58rem] uppercase tracking-[0.08em] text-sky-700">
+        exp
+      </span>
+    </>,
+    'After work experience',
+    'Degree, institution, date. May omit date with strategic reason.',
+  ],
+  [
+    <>
+      Career changer{' '}
+      <span className="ml-1 inline-flex rounded-full bg-indigo-100 px-2 py-[2px] font-mono text-[0.58rem] uppercase tracking-[0.08em] text-indigo-700">
+        pivot
+      </span>
+    </>,
+    'After experience unless new-field credential',
+    'Include new-field certifications or courses prominently',
+  ],
+  [
+    <>
+      All candidates{' '}
+      <span className="ml-1 inline-flex rounded-full bg-slate-200 px-2 py-[2px] font-mono text-[0.58rem] uppercase tracking-[0.08em] text-slate-600">
+        all
+      </span>
+    </>,
+    <>&mdash;</>,
+    <>Omit high school once college started. Never self-rate degrees. Mark in-progress as &quot;Expected [Month YYYY]&quot;.</>,
+  ],
+];
+
+const BLOG_02_SECTION_SIX_SKILLS_INCLUDE: React.ReactNode[] = [
+  'Exact tool and software names (Salesforce, Figma, dbt, Kubernetes)',
+  'Programming languages and frameworks',
+  'Platforms and technical systems',
+  'Named methodologies (Agile, Six Sigma, JTBD)',
+  'Certifications relevant and formally recognized in the field',
+  'Spoken languages with objective labels: Native, Fluent, Professional Working Proficiency, Conversational',
+];
+
+const BLOG_02_SECTION_SIX_SKILLS_EXCLUDE: React.ReactNode[] = [
+  <>Soft skills: &quot;teamwork,&quot; &quot;communication,&quot; &quot;leadership&quot; &mdash; they prove nothing</>,
+  'Self-ratings: stars, percentages, progress bars, skill scales',
+  <>Tools you barely used or can&apos;t discuss credibly</>,
+  <>Generic software everyone uses (Word, email, &quot;Microsoft Office&quot;)</>,
+  <>Skills you&apos;re learning but can&apos;t yet defend on the job</>,
+  'Buzzword lists that carry no information (innovative, driven, agile)',
+];
+
+const BLOG_02_SECTION_SIX_OPTIONAL_SECTIONS = [
+  {
+    badge: 'Projects',
+    title: 'Treat like work experience',
+    body: 'Outcome-focused bullets. Real tech stack. Link to live work or GitHub when clean. Essential for students and career changers.',
+    badgeClassName: 'bg-blue-100 text-blue-700',
+  },
+  {
+    badge: 'Volunteer work',
+    title: 'Structure like paid experience',
+    body: 'If it involves directly relevant skills, give it full bullets. If dates overlap paid work, separate the section to avoid timeline confusion.',
+    badgeClassName: 'bg-cyan-100 text-cyan-700',
+  },
+  {
+    badge: 'Certifications',
+    title: 'Only if relevant and recognized',
+    body: 'Formally recognized in the field and directly relevant to the target role. Mark in-progress credentials clearly.',
+    badgeClassName: 'bg-indigo-100 text-indigo-700',
+  },
+  {
+    badge: 'Interests',
+    title: 'Specific only, if space allows',
+    body: '&quot;Avid reader&quot; wastes space. &quot;Maintain open-source CLI tool with 800+ GitHub stars&quot; or &quot;National wheelchair basketball competitor&quot; might not.',
+    badgeClassName: 'bg-amber-100 text-amber-700',
+  },
+  {
+    badge: 'Publications / Speaking',
+    title: 'Include if role-adjacent',
+    body: 'Strong signal for thought leadership, research, or senior positions. Use full citations or link to accessible versions.',
+    badgeClassName: 'bg-sky-100 text-sky-700',
+  },
+  {
+    badge: 'References',
+    title: 'Never on the resume',
+    body: 'Don&apos;t include. Don&apos;t write &quot;References available upon request.&quot; Hiring teams know they can ask. The line wastes space and signals outdated practice.',
+    badgeClassName: 'bg-slate-200 text-slate-600',
+  },
+] as const;
+
+const BLOG_02_SECTION_SEVEN_LENGTH_CARDS = [
+  {
+    label: 'Students / early career',
+    title: 'One page, always',
+    body: 'No justification for two pages when experience is limited. Fill it with the strongest relevant evidence \u2014 projects, coursework, internships, relevant extracurriculars.',
+    value: '1 page',
+  },
+  {
+    label: 'Mid-career (5\u201312 yrs)',
+    title: 'One page, usually',
+    body: 'Two pages only if cutting to one would force removal of strong, directly relevant evidence for this role. Not because you have a lot of experience \u2014 because it matters here.',
+    value: '1\u20132 pages',
+  },
+  {
+    label: 'Senior / experienced (12+ yrs)',
+    title: 'Two pages, justified',
+    body: 'A second page is legitimate when you have substantial directly related experience and cutting it would lose strong evidence. Show leadership scale, scope, and major decisions \u2014 they need room.',
+    value: '2 pages max',
+  },
+  {
+    label: 'Technical / gov / academia',
+    title: 'Different rules apply',
+    body: 'Technical roles and government applications may need more detail. Academia uses a multi-page CV, not a resume \u2014 treat it as a different document type entirely.',
+    value: 'Context-dependent',
+  },
+] as const;
+
+const Blog02SectionTwo: React.FC = () => {
+  return (
+    <section className="mb-16 w-full">
+      <div className="mb-6 text-[11px] font-black uppercase tracking-[0.24em] text-blue-600">
+        Section 02
+      </div>
+      <h2
+        className="mb-6 text-slate-900"
+        style={{ fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.02em' }}
+      >
+        The science of how resumes are screened
+      </h2>
+
+      <div className="space-y-0">
+        <p
+          className="text-slate-600 font-normal tracking-normal"
+          style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+        >
+          Before writing a single word, you need to understand how resumes are actually read — because it changes every
+          layout and prioritization decision you make.
+        </p>
+        <p
+          className="text-slate-600 font-normal tracking-normal"
+          style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+        >
+          Your resume doesn&apos;t travel a single path from submission to interview. It travels three distinct stages,
+          each with completely different logic.
+        </p>
+      </div>
+
+      <div className="my-10 flex flex-col items-stretch gap-0 lg:flex-row">
+        {BLOG_02_SECTION_TWO_PIPELINE.map((item, index) => (
+          <React.Fragment key={item.stage}>
+            <div className="flex-1 border border-slate-200 bg-white px-[1.4rem] py-[1.5rem]">
+              <div className="mono mb-[0.6rem] text-[0.6rem] uppercase tracking-[0.1em] text-slate-400">
+                {item.stage}
+              </div>
+              <div className="mb-[0.6rem] text-[1.4rem] leading-none">{item.icon}</div>
+              <div className="mb-[0.5rem] text-[1rem] font-bold leading-[1.2] text-slate-900">{item.title}</div>
+              <div className="text-[0.78rem] leading-[1.55] text-slate-600">{item.body}</div>
+              <div className="mono mt-[0.6rem] border-t border-slate-200 pt-[0.5rem] text-[0.62rem] text-slate-500">
+                {item.footer}
+              </div>
+            </div>
+            {index < BLOG_02_SECTION_TWO_PIPELINE.length - 1 && (
+              <div className="flex items-center justify-center px-2 py-2 text-[1.2rem] text-slate-400 lg:py-0">
+                →
+              </div>
+            )}
+          </React.Fragment>
+        ))}
+      </div>
+
+      <p
+        className="text-slate-600 font-normal tracking-normal"
+        style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+      >
+        This three-stage reality means your resume needs to be three things simultaneously:{' '}
+        <strong className="font-semibold text-slate-900">machine-readable</strong> (ATS),{' '}
+        <strong className="font-semibold text-slate-900">skim-optimized</strong> (recruiter), and{' '}
+        <strong className="font-semibold text-slate-900">evidence-rich</strong> (hiring manager). These constraints
+        don&apos;t contradict — they layer. Get the structure right for stage one, lead with fit signals for stage
+        two, and back everything with evidence for stage three.
+      </p>
+
+      <h3
+        className="mt-10 mb-3 text-slate-900"
+        style={{ fontSize: '1.15rem', fontWeight: 700, fontStyle: 'italic', lineHeight: 1.2 }}
+      >
+        <span className="mr-1 text-blue-600">—</span>
+        The F-pattern and six fixation points
+      </h3>
+      <p
+        className="text-slate-600 font-normal tracking-normal"
+        style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+      >
+        Eye-tracking studies — including TheLadders&apos; studies (2012, 2018) and a 2025 Wonsulting experiment using
+        recruiters with tracking equipment — show consistent patterns in how trained screeners read resumes. The
+        findings have been replicated multiple times:
+      </p>
+
+      <div className="my-10 overflow-hidden border border-slate-200">
+        <div className="flex flex-col justify-between gap-3 border-b border-white/10 bg-slate-950 px-6 py-4 md:flex-row md:items-center">
+          <span className="mono text-[0.65rem] uppercase tracking-[0.12em] text-white/50">
+            Eye-tracking research — where recruiters actually look
+          </span>
+          <span className="text-[0.75rem] italic text-white/40">
+            Based on TheLadders, Wonsulting & Nielsen Norman Group research
+          </span>
+        </div>
+
+        <div className="grid gap-px bg-slate-200 md:grid-cols-2">
+          <div className="bg-white p-6">
+            <div className="mb-4 text-[0.78rem] font-semibold text-slate-900">Attention heat map — simulated</div>
+            <div className="min-h-[200px] border border-slate-200 bg-white p-4 font-mono text-[0.62rem] leading-[1.6]">
+              {BLOG_02_SECTION_TWO_HEATMAP_ZONES.map((zone) => {
+                const zoneClass =
+                  zone.level === 'hot'
+                    ? 'border-l-[3px] border-blue-600 bg-blue-200/60'
+                    : zone.level === 'warm'
+                      ? 'border-l-[2px] border-blue-400 bg-blue-100/70'
+                      : zone.level === 'mild'
+                        ? 'bg-blue-50'
+                        : 'opacity-50';
+                const badgeClass =
+                  zone.level === 'hot'
+                    ? 'bg-blue-600 text-white'
+                    : zone.level === 'warm'
+                      ? 'bg-blue-500/80 text-white'
+                      : 'bg-blue-100 text-blue-700';
+
+                return (
+                  <div key={zone.text} className={`relative my-[0.15rem] rounded-[2px] px-2 py-1 ${zoneClass}`}>
+                    {zone.text}
+                    {zone.badge && (
+                      <span
+                        className={`absolute right-[-1px] top-1/2 -translate-y-1/2 rounded-[1px] px-1 py-[2px] text-[0.55rem] uppercase tracking-[0.08em] ${badgeClass}`}
+                      >
+                        {zone.badge}
+                      </span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="mt-4 space-y-2">
+              <div className="flex items-center gap-2 text-[0.75rem] text-slate-600">
+                <span className="h-3 w-3 rounded-[2px] bg-blue-600/45"></span>
+                Highest attention (name, contact, current role)
+              </div>
+              <div className="flex items-center gap-2 text-[0.75rem] text-slate-600">
+                <span className="h-3 w-3 rounded-[2px] bg-blue-400/35"></span>
+                Medium attention (previous roles)
+              </div>
+              <div className="flex items-center gap-2 text-[0.75rem] text-slate-600">
+                <span className="h-3 w-3 rounded-[2px] bg-blue-200/60"></span>
+                Low attention (older experience)
+              </div>
+              <div className="flex items-center gap-2 text-[0.75rem] text-slate-600">
+                <span className="h-3 w-3 rounded-[2px] bg-slate-200"></span>
+                Rarely seen (bottom-right content)
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-slate-50 p-6">
+            <div className="mb-4 text-[0.78rem] font-semibold text-slate-900">
+              6 fixation points — 80% of recruiter attention
+            </div>
+            <ul className="list-none">
+              {BLOG_02_SECTION_TWO_FIXATIONS.map((item, index) => (
+                <li
+                  key={item}
+                  className="flex items-start gap-3 border-b border-slate-200 py-[0.55rem] text-[0.8rem] leading-[1.4] text-slate-600 last:border-b-0"
+                >
+                  <span className="mono mt-[1px] flex h-5 w-5 shrink-0 items-center justify-center rounded-[2px] bg-slate-900 text-[0.6rem] text-white">
+                    {index + 1}
+                  </span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <p
+        className="text-slate-600 font-normal tracking-normal"
+        style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+      >
+        The implication:{' '}
+        <strong className="font-semibold text-slate-900">the top-left quadrant of your resume receives the most attention</strong>.
+        Content in the bottom-right — skills lists, older certifications, interests — is essentially invisible during
+        initial screening. Design for where eyes go, not where you think they should go.
+      </p>
+
+      <h3
+        className="mt-10 mb-3 text-slate-900"
+        style={{ fontSize: '1.15rem', fontWeight: 700, fontStyle: 'italic', lineHeight: 1.2 }}
+      >
+        <span className="mr-1 text-blue-600">—</span>
+        The confirmation bias mechanism
+      </h3>
+      <div className="space-y-0">
+        <p
+          className="text-slate-600 font-normal tracking-normal"
+          style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+        >
+          One powerful insight from screening research: your resume title or headline creates a confirmation bias that
+          shapes how the entire resume is read. When a recruiter sees &quot;Senior Product Manager — B2B SaaS&quot;
+          before reading anything else, they start unconsciously looking for evidence that confirms that frame. They
+          become predisposed to interpret ambiguous experiences positively.
+        </p>
+        <p
+          className="text-slate-600 font-normal tracking-normal"
+          style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+        >
+          This means your headline is doing psychological work, not just descriptive work. Set the right frame at the
+          top, and everything below it reads more favorably. Set the wrong frame (or no frame at all), and the
+          recruiter has to construct their own interpretation — which is almost never as favorable as the one you&apos;d
+          construct yourself.
+        </p>
+      </div>
+
+      <div className="my-9 border-l-[3px] border-blue-600 bg-blue-50 px-7 py-6">
+        <div className="mb-3 text-[10px] font-black uppercase tracking-[0.12em] text-blue-600">
+          What this means for your resume layout
+        </div>
+        <p className="text-[0.92rem] leading-[1.65] text-slate-700">
+          Put your name, target role title, and your single most credible fit signal in the top 20% of page one.
+          Don&apos;t bury your strongest credential in the middle of a job from 2019. Don&apos;t leave the recruiter to
+          infer your target role. Make the fit argument visible in the first horizontal sweep — before a single bullet
+          is read.
+        </p>
+        <p className="mt-2 text-[0.92rem] leading-[1.65] text-slate-700">
+          A short, specific headline under your name (e.g., <em>Senior Product Manager · B2B SaaS · 8 years</em>)
+          costs one line and earns disproportionate returns in the skim stage.
+        </p>
+      </div>
+
+      <div className="mt-12 border-t-2 border-slate-900" aria-hidden="true"></div>
+    </section>
+  );
+};
+
+const Blog02SectionThree: React.FC = () => {
+  return (
+    <section className="mb-16 w-full">
+      <div className="mb-6 text-[11px] font-black uppercase tracking-[0.24em] text-blue-600">
+        Section 03
+      </div>
+      <h2
+        className="mb-6 text-slate-900"
+        style={{ fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.02em' }}
+      >
+        The four-test decision system
+      </h2>
+
+      <p
+        className="text-slate-600 font-normal tracking-normal"
+        style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+      >
+        Before anything lands on your resume {'\u2014'} a job, a bullet, a skill, a certification, a project {'\u2014'} it
+        passes four tests. Run them in sequence. When something fails one test clearly, stop there.
+      </p>
+
+      <h3
+        className="mt-10 mb-3 text-slate-900"
+        style={{ fontSize: '1.15rem', fontWeight: 700, fontStyle: 'italic', lineHeight: 1.2 }}
+      >
+        <span className="mr-1 text-blue-600">{'\u2014'}</span>
+        Test 1 {'\u2014'} Target-role match
+      </h3>
+      <p
+        className="text-slate-600 font-normal tracking-normal"
+        style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+      >
+        Does this item help a reader evaluate whether you&apos;re right for <em>this</em> role? Not every role, not
+        your career in general. This specific role, at this company, right now. Two candidates with identical
+        histories will have different answers depending on where they&apos;re applying. Target-role match is the first
+        filter because everything else is secondary to fit.
+      </p>
+
+      <h3
+        className="mt-10 mb-3 text-slate-900"
+        style={{ fontSize: '1.15rem', fontWeight: 700, fontStyle: 'italic', lineHeight: 1.2 }}
+      >
+        <span className="mr-1 text-blue-600">{'\u2014'}</span>
+        Test 2 {'\u2014'} Strength of evidence
+      </h3>
+      <div className="space-y-0">
+        <p
+          className="text-slate-600 font-normal tracking-normal"
+          style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+        >
+          A resume is an evidence document, not a self-description. The question isn&apos;t whether a claim sounds
+          impressive {'\u2014'} it&apos;s whether the sentence actually proves it. &quot;Results-driven professional&quot; proves
+          nothing. &quot;Rebuilt the onboarding process, cutting time-to-productivity from 90 to 45 days across a
+          40-person team&quot; proves something specific.
+        </p>
+        <p
+          className="text-slate-600 font-normal tracking-normal"
+          style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+        >
+          Quantify when you have credible numbers. When exact metrics aren&apos;t available, show scope (team size,
+          budget, customer base), standards (compliance bar, SLA, editorial quality), automation (what did you
+          eliminate?), or level of ownership (did you lead this or support it?).
+        </p>
+      </div>
+
+      <h3
+        className="mt-10 mb-3 text-slate-900"
+        style={{ fontSize: '1.15rem', fontWeight: 700, fontStyle: 'italic', lineHeight: 1.2 }}
+      >
+        <span className="mr-1 text-blue-600">{'\u2014'}</span>
+        Test 3 {'\u2014'} Recency
+      </h3>
+      <p
+        className="text-slate-600 font-normal tracking-normal"
+        style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+      >
+        Evidence decays. A strong project from twelve years ago in a different field isn&apos;t strong evidence for a
+        role today {'\u2014'} even if it was impressive at the time. Give more room to recent and directly related roles.
+        A job from fifteen years ago might warrant one line; a job from last year might warrant six bullets.
+      </p>
+
+      <h3
+        className="mt-10 mb-3 text-slate-900"
+        style={{ fontSize: '1.15rem', fontWeight: 700, fontStyle: 'italic', lineHeight: 1.2 }}
+      >
+        <span className="mr-1 text-blue-600">{'\u2014'}</span>
+        Test 4 {'\u2014'} Space efficiency
+      </h3>
+      <p
+        className="text-slate-600 font-normal tracking-normal"
+        style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+      >
+        Every line displaces something else. It&apos;s not enough for something to be technically relevant {'\u2014'} it
+        has to be relevant <em>enough given what it displaces</em>. When something passes the first three tests
+        marginally, test four often tips toward cutting or condensing to one line.
+      </p>
+
+      <div className="mt-12 border-t-2 border-slate-900" aria-hidden="true"></div>
+    </section>
+  );
+};
+
+const Blog02SectionFour: React.FC = () => {
+  return (
+    <section className="mb-16 w-full">
+      <div className="mb-6 text-[11px] font-black uppercase tracking-[0.24em] text-blue-600">
+        Section 04
+      </div>
+      <h2
+        className="mb-6 text-slate-900"
+        style={{ fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.02em' }}
+      >
+        Writing bullets that actually prove things
+      </h2>
+
+      <p
+        className="text-slate-600 font-normal tracking-normal"
+        style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+      >
+        The biggest gap between a mediocre and a strong resume isn&apos;t formatting â€” it&apos;s the bullets.
+        Specifically: whether bullets show what you <em>made happen</em> versus what you were <em>supposed to do</em>.
+        The job description already tells a reader what the role requires. Your bullets should tell them what you
+        specifically delivered.
+      </p>
+
+      <div className="my-10 overflow-hidden border border-slate-200">
+        <div className="grid gap-px bg-slate-200 md:grid-cols-[1fr_auto_1fr_auto_1.2fr]">
+          <div className="bg-white px-5 py-5 text-center text-[0.9rem] font-semibold text-slate-900">Action verb</div>
+          <div className="flex items-center justify-center bg-slate-50 px-4 py-5 text-xl font-semibold text-blue-600">+</div>
+          <div className="bg-white px-5 py-5 text-center text-[0.9rem] font-semibold text-slate-900">What you did</div>
+          <div className="flex items-center justify-center bg-slate-50 px-4 py-5 text-xl font-semibold text-blue-600">+</div>
+          <div className="bg-white px-5 py-5 text-center text-[0.9rem] font-semibold text-slate-900">
+            Result / scope / proof
+          </div>
+        </div>
+        <div className="border-t border-slate-200 bg-slate-50 px-6 py-4 text-[0.84rem] leading-[1.7] text-slate-600">
+          The golden formula. Leading with the outcome is stronger when you have a compelling one. Every bullet should
+          have a full STAR story behind it in case you&apos;re interviewed on it.
+        </div>
+      </div>
+
+      {BLOG_02_SECTION_FOUR_COMPARISONS.map((comparison) => (
+        <div key={comparison.badLabel} className="my-8 grid gap-px overflow-hidden border border-slate-200 bg-slate-200 md:grid-cols-2">
+          <div className="bg-slate-50 px-6 py-6">
+            <div className="mb-3 text-[10px] font-black uppercase tracking-[0.12em] text-slate-500">
+              {comparison.badLabel}
+            </div>
+            <div className="text-[0.95rem] leading-[1.75] text-slate-900">{comparison.badText}</div>
+            <div className="mt-4 text-[0.8rem] leading-[1.65] text-slate-500">{comparison.badNote}</div>
+          </div>
+          <div className="bg-blue-50 px-6 py-6">
+            <div className="mb-3 text-[10px] font-black uppercase tracking-[0.12em] text-blue-600">
+              {comparison.goodLabel}
+            </div>
+            <div className="text-[0.95rem] leading-[1.75] text-slate-900">{comparison.goodText}</div>
+            <div className="mt-4 text-[0.8rem] leading-[1.65] text-slate-600">{comparison.goodNote}</div>
+          </div>
+        </div>
+      ))}
+
+      <div className="my-10 overflow-hidden border border-slate-200">
+        <div className="border-b border-white/10 bg-slate-950 px-6 py-4 text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-white/65">
+          Evidence quality spectrum â€” weakest to strongest
+        </div>
+        <div className="grid gap-px bg-slate-200 md:grid-cols-4">
+          {BLOG_02_SECTION_FOUR_EVIDENCE_TIERS.map((tier) => (
+            <div key={tier.label} className={`px-5 py-5 ${tier.className}`}>
+              <div
+                className={`mb-4 inline-flex rounded-sm px-2 py-1 text-[0.64rem] font-semibold uppercase tracking-[0.12em] ${tier.badgeClassName}`}
+              >
+                {tier.label}
+              </div>
+              <div className="text-[0.88rem] leading-[1.7]">{tier.text}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="my-10 grid gap-px overflow-hidden border border-slate-200 bg-slate-200 md:grid-cols-2">
+        <div className="bg-blue-50 px-6 py-6">
+          <div className="mb-4 text-[11px] font-black uppercase tracking-[0.12em] text-blue-600">Do</div>
+          <ul className="space-y-3">
+            {BLOG_02_SECTION_FOUR_DO.map((item) => (
+              <li key={item} className="flex items-start gap-3 text-[0.9rem] leading-[1.65] text-slate-700">
+                <span className="mt-[0.45rem] h-1.5 w-1.5 shrink-0 rounded-full bg-blue-600"></span>
+                <span dangerouslySetInnerHTML={{ __html: item }} />
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="bg-slate-50 px-6 py-6">
+          <div className="mb-4 text-[11px] font-black uppercase tracking-[0.12em] text-slate-500">Don&apos;t</div>
+          <ul className="space-y-3">
+            {BLOG_02_SECTION_FOUR_DONT.map((item) => (
+              <li key={item} className="flex items-start gap-3 text-[0.9rem] leading-[1.65] text-slate-700">
+                <span className="mt-[0.45rem] h-1.5 w-1.5 shrink-0 rounded-full bg-slate-400"></span>
+                <span dangerouslySetInnerHTML={{ __html: item }} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div className="my-9 border-l-[3px] border-blue-600 bg-blue-50 px-7 py-6">
+        <div className="mb-3 text-[10px] font-black uppercase tracking-[0.12em] text-blue-600">
+          When you can&apos;t quantify
+        </div>
+        <p className="text-[0.92rem] leading-[1.65] text-slate-700">
+          Not every role produces clean metrics. When numbers aren&apos;t available or would mislead, show:{' '}
+          <strong className="font-semibold text-slate-900">scale</strong> (team size, customer count, system
+          throughput), <strong className="font-semibold text-slate-900">standards</strong> (compliance, SLA, editorial
+          bar), <strong className="font-semibold text-slate-900">automation</strong> you created, or{' '}
+          <strong className="font-semibold text-slate-900">level of ownership</strong> you held. Any concrete detail
+          beats a vague assertion.
+        </p>
+      </div>
+
+      <div className="mt-12 border-t-2 border-slate-900" aria-hidden="true"></div>
+    </section>
+  );
+};
+
+const Blog02SectionFive: React.FC = () => {
+  return (
+    <section className="w-full">
+      <h2
+        id="ownership"
+        className="mb-[1.2rem] text-slate-900"
+        style={{ fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.02em' }}
+      >
+        <span className="mb-2 block font-mono text-[0.65rem] uppercase tracking-[0.12em] text-blue-600">Section 05</span>
+        The ownership language principle
+      </h2>
+
+      <div className="space-y-0">
+        <p
+          className="text-slate-600 font-normal tracking-normal"
+          style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+        >
+          One of the most consistent signals recruiters use in 2025 {'\u2014'} particularly for senior roles {'\u2014'} is
+          how candidates describe their work. Do you speak in terms of personal ownership and outcomes, or do you hide
+          behind collective language?
+        </p>
+        <p
+          className="text-slate-600 font-normal tracking-normal"
+          style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+        >
+          &quot;We launched the product&quot; tells a hiring manager nothing about what <em>you</em> contributed.
+          &quot;Led a 4-person team that launched the product to 10,000 users in week one&quot; is evidence. The
+          distinction between collective diffusion and individual ownership shows up in language choices that are easy
+          to make and rarely made consciously.
+        </p>
+      </div>
+
+      <div className="my-8 grid overflow-hidden border border-slate-300 bg-slate-300 md:grid-cols-2">
+        <div className="bg-[#fdf4f1] px-[1.4rem] py-[1.2rem]">
+          <div className="mb-[0.7rem] font-mono text-[0.6rem] uppercase tracking-[0.1em] text-[#a83920]">
+            Collective diffusion {'\u2014'} weak
+          </div>
+          {BLOG_02_SECTION_FIVE_WEAK.map((item, index) => (
+            <div
+              key={item.label}
+              className={`py-[0.4rem] font-sans text-[0.83rem] leading-[1.5] text-[#702515] ${
+                index < BLOG_02_SECTION_FIVE_WEAK.length - 1 ? 'border-b border-slate-200' : ''
+              }`}
+            >
+              <strong className="mb-[0.1rem] block font-mono text-[0.7rem] uppercase tracking-[0.06em] opacity-60">
+                {item.label}
+              </strong>
+              {item.text}
+            </div>
+          ))}
+        </div>
+
+        <div className="bg-[#eef6ff] px-[1.4rem] py-[1.2rem]">
+          <div className="mb-[0.7rem] font-mono text-[0.6rem] uppercase tracking-[0.1em] text-blue-700">
+            Personal ownership {'\u2014'} strong
+          </div>
+          {BLOG_02_SECTION_FIVE_STRONG.map((item, index) => (
+            <div
+              key={item.label}
+              className={`py-[0.4rem] font-sans text-[0.83rem] leading-[1.5] text-blue-950 ${
+                index < BLOG_02_SECTION_FIVE_STRONG.length - 1 ? 'border-b border-slate-200' : ''
+              }`}
+            >
+              <strong className="mb-[0.1rem] block font-mono text-[0.7rem] uppercase tracking-[0.06em] opacity-60">
+                {item.label}
+              </strong>
+              {item.text}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const Blog02SectionSixSubheading: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <h3
+      className="mt-10 mb-3 text-slate-900"
+      style={{ fontSize: '1.15rem', fontWeight: 700, fontStyle: 'italic', lineHeight: 1.2 }}
+    >
+      <span className="mr-1 text-blue-600">&mdash;</span>
+      {children}
+    </h3>
+  );
+};
+
+const Blog02RuleColumn: React.FC<{
+  title: string;
+  items: React.ReactNode[];
+  variant: 'include' | 'exclude';
+}> = ({ title, items, variant }) => {
+  const isInclude = variant === 'include';
+
+  return (
+    <div className={isInclude ? 'bg-blue-50/60 px-6 py-6' : 'bg-[#fdf4f1] px-6 py-6'}>
+      <div
+        className={`mb-4 border-b-2 pb-2 font-mono text-[0.68rem] uppercase tracking-[0.1em] ${
+          isInclude ? 'border-blue-600 text-blue-600' : 'border-[#a83920]/80 text-[#a83920]'
+        }`}
+      >
+        {title}
+      </div>
+
+      <ul className="space-y-0">
+        {items.map((item, index) => (
+          <li
+            key={`${title}-${index}`}
+            className="relative border-b border-slate-200 py-3 pl-6 text-[0.84rem] leading-[1.55] text-slate-700 last:border-b-0"
+          >
+            <span
+              className={`absolute left-0 top-[0.86rem] font-mono text-[0.78rem] font-semibold ${
+                isInclude ? 'text-blue-600' : 'text-[#a83920]'
+              }`}
+              aria-hidden="true"
+            >
+              {isInclude ? <>&rarr;</> : <>&times;</>}
+            </span>
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+const Blog02CompareBlock: React.FC<{
+  badLabel: string;
+  badContent: React.ReactNode;
+  badNote: React.ReactNode;
+  goodLabel: string;
+  goodContent: React.ReactNode;
+  goodNote: React.ReactNode;
+}> = ({ badLabel, badContent, badNote, goodLabel, goodContent, goodNote }) => {
+  return (
+    <div className="my-8 grid gap-px overflow-hidden border border-slate-200 bg-slate-200 md:grid-cols-2">
+      <div className="bg-[#fdf4f1] px-6 py-6">
+        <div className="mb-3 font-mono text-[0.62rem] uppercase tracking-[0.1em] text-[#a83920]">{badLabel}</div>
+        <div className="text-[0.92rem] leading-[1.7] text-[#702515]">{badContent}</div>
+        <div className="mt-4 text-[0.8rem] leading-[1.65] text-[#a83920]/80">{badNote}</div>
+      </div>
+
+      <div className="bg-[#eef6ff] px-6 py-6">
+        <div className="mb-3 font-mono text-[0.62rem] uppercase tracking-[0.1em] text-blue-700">{goodLabel}</div>
+        <div className="text-[0.92rem] leading-[1.7] text-blue-950">{goodContent}</div>
+        <div className="mt-4 text-[0.8rem] leading-[1.65] text-blue-800/75">{goodNote}</div>
+      </div>
+    </div>
+  );
+};
+
+const Blog02DecisionTable: React.FC<{
+  headers: string[];
+  rows: React.ReactNode[][];
+}> = ({ headers, rows }) => {
+  return (
+    <div className="my-8 overflow-x-auto border border-slate-200">
+      <table className="w-full border-collapse bg-white text-left">
+        <thead className="bg-slate-50">
+          <tr>
+            {headers.map((header) => (
+              <th
+                key={header}
+                className="border-b-2 border-slate-900 px-4 py-3 font-mono text-[0.65rem] font-medium uppercase tracking-[0.1em] text-slate-500"
+              >
+                {header}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, rowIndex) => (
+            <tr key={`row-${rowIndex}`} className="border-t border-slate-200 align-top transition-colors hover:bg-slate-50/60">
+              {row.map((cell, cellIndex) => (
+                <td
+                  key={`cell-${rowIndex}-${cellIndex}`}
+                  className={`px-4 py-3 text-[0.84rem] leading-[1.6] ${
+                    cellIndex === 0 ? 'font-medium text-slate-900' : 'text-slate-600'
+                  }`}
+                >
+                  {cell}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+const Blog02SectionSix: React.FC = () => {
+  return (
+    <section className="mb-16 w-full">
+      <h2
+        id="sections"
+        className="mb-[1.2rem] border-t-2 border-slate-900 pt-12 text-slate-900"
+        style={{ fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.02em' }}
+      >
+        <span className="mb-2 block font-mono text-[0.65rem] uppercase tracking-[0.12em] text-blue-600">Section 06</span>
+        Every section, decided
+      </h2>
+
+      <Blog02SectionSixSubheading>Contact information</Blog02SectionSixSubheading>
+      <p
+        className="text-slate-600 font-normal tracking-normal"
+        style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+      >
+        Top of the page. Plain text only &mdash; no embedded headers or graphic elements where ATS may skip it. Include:
+        full name, a one-line headline or target title, city and state/metro, professional phone, professional email,
+        LinkedIn URL (customized), and portfolio if directly relevant to the target role.
+      </p>
+
+      <div className="my-10 grid gap-px overflow-hidden border border-slate-200 bg-slate-200 md:grid-cols-2">
+        <Blog02RuleColumn title="Include" items={BLOG_02_SECTION_SIX_CONTACT_INCLUDE} variant="include" />
+        <Blog02RuleColumn title="Exclude" items={BLOG_02_SECTION_SIX_CONTACT_EXCLUDE} variant="exclude" />
+      </div>
+
+      <Blog02SectionSixSubheading>Profile summary</Blog02SectionSixSubheading>
+      <p
+        className="text-slate-600 font-normal tracking-normal"
+        style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+      >
+        A summary earns its place only when it meaningfully improves fit perception at the top of the page. For most
+        mid-career candidates applying to clearly-matching roles, it&apos;s optional. For career changers, senior
+        candidates, or anyone whose background needs framing &mdash; include it. Never use a vague paragraph. Make it
+        factual, specific, and supportable by everything below it.
+      </p>
+
+      <Blog02CompareBlock
+        badLabel="Bland paragraph"
+        badContent="Results-driven marketing professional with a passion for innovation and a proven track record of driving business growth through strategic thinking and excellent collaboration."
+        badNote="No specific claims. No evidence. Could be on any resume."
+        goodLabel="Factual, specific summary"
+        goodContent="Performance marketing manager with 8 years in B2B SaaS. Led paid acquisition at two Series B companies; managed $4M annual ad budget with consistent 3.2x ROAS. Specializes in lifecycle marketing using HubSpot, Segment, and Looker."
+        goodNote="Target title, years, domain, tools, scale — every claim supported by the experience below."
+      />
+
+      <div className="my-9 border-l-[3px] border-blue-600 bg-blue-50 px-7 py-6">
+        <div className="mb-3 text-[10px] font-black uppercase tracking-[0.12em] text-blue-600">
+          Summary elements &mdash; include only what applies and is true
+        </div>
+        <p className="text-[0.92rem] leading-[1.65] text-slate-700">
+          Target role title or domain &middot; Years of experience &middot; Relevant industries or company types &middot;
+          {' '}2&ndash;3 specific tools or methodologies &middot; One measurable highlight &middot; Certifications or
+          languages if role-relevant &middot; Keep to 3&ndash;5 lines maximum
+        </p>
+        <p className="mt-2 text-[0.92rem] leading-[1.65] text-slate-700">
+          Critical rule: everything in the summary must be substantiated by your work experience below. If it&apos;s in
+          the summary and doesn&apos;t appear in the bullets, cut it from the summary.
+        </p>
+      </div>
+
+      <Blog02SectionSixSubheading>The company context line</Blog02SectionSixSubheading>
+      <p
+        className="text-slate-600 font-normal tracking-normal"
+        style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+      >
+        One underused tactic: under each company name, add a single line of context &mdash; what the company does and
+        its scale. Not every recruiter knows every employer. &quot;Acme Corp&quot; tells them nothing. &quot;Acme Corp
+        &mdash; B2B logistics SaaS, $200M ARR, 800 employees&quot; gives the entire experience section more weight.
+        Keep it one line. Keep it factual.
+      </p>
+
+      <Blog02CompareBlock
+        badLabel="No company context"
+        badContent={
+          <>
+            <strong className="font-semibold">Nexbridge Solutions</strong> &middot; 2021&ndash;2024
+            <br />
+            Senior Engineer
+            <br />
+            &bull; Built infrastructure for core product...
+          </>
+        }
+        badNote="Recruiter doesn't know if Nexbridge is a 5-person startup or a Fortune 500."
+        goodLabel="With company context"
+        goodContent={
+          <>
+            <strong className="font-semibold">Nexbridge Solutions</strong> &middot; 2021&ndash;2024
+            <br />
+            <em className="text-[0.82rem] text-blue-900">Series B cloud infrastructure company &middot; $40M ARR &middot; 120 employees</em>
+            <br />
+            Senior Engineer
+            <br />
+            &bull; Built infrastructure for core product...
+          </>
+        }
+        goodNote="One line gives the recruiter the scale and context to interpret every bullet that follows."
+      />
+
+      <Blog02SectionSixSubheading>Work experience</Blog02SectionSixSubheading>
+      <p
+        className="text-slate-600 font-normal tracking-normal"
+        style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+      >
+        Reverse chronological order. More bullets for recent, directly related roles; fewer for older or lower-relevance
+        ones. Group multiple roles at one employer under a single employer header to show career progression.
+      </p>
+
+      <Blog02DecisionTable
+        headers={['Role situation', 'What to do']}
+        rows={BLOG_02_SECTION_SIX_WORK_ROWS}
+      />
+
+      <Blog02SectionSixSubheading>Education</Blog02SectionSixSubheading>
+      <Blog02DecisionTable
+        headers={['Situation', 'Placement', 'What to include']}
+        rows={BLOG_02_SECTION_SIX_EDUCATION_ROWS}
+      />
+
+      <Blog02SectionSixSubheading>Skills section</Blog02SectionSixSubheading>
+      <p
+        className="text-slate-600 font-normal tracking-normal"
+        style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+      >
+        Hard skills only. This means specific tools, software, programming languages, frameworks, platforms, technical
+        systems, certifications, and named methodologies. If you list it, you&apos;re implying you can defend it in a
+        screening call. Don&apos;t list what you can&apos;t back up.
+      </p>
+
+      <div className="my-10 grid gap-px overflow-hidden border border-slate-200 bg-slate-200 md:grid-cols-2">
+        <Blog02RuleColumn title="Include in skills" items={BLOG_02_SECTION_SIX_SKILLS_INCLUDE} variant="include" />
+        <Blog02RuleColumn title="Never include" items={BLOG_02_SECTION_SIX_SKILLS_EXCLUDE} variant="exclude" />
+      </div>
+
+      <Blog02SectionSixSubheading>Optional sections</Blog02SectionSixSubheading>
+      <div className="my-8 grid gap-px overflow-hidden border border-slate-200 bg-slate-200 md:grid-cols-2 xl:grid-cols-3">
+        {BLOG_02_SECTION_SIX_OPTIONAL_SECTIONS.map((item) => (
+            <div key={item.badge} className="bg-white px-5 py-5 transition-colors duration-200 hover:bg-slate-50">
+            <span
+              className={`mb-[0.6rem] block font-mono text-[0.58rem] uppercase tracking-[0.1em] ${item.badgeClassName}`}
+            >
+              {item.badge}
+            </span>
+            <div className="mb-3 text-[0.95rem] font-semibold leading-[1.3] text-slate-900">{item.title}</div>
+            <div className="text-[0.83rem] leading-[1.65] text-slate-600">
+              <span dangerouslySetInnerHTML={{ __html: item.body }} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
+
+const Blog02SectionSeven: React.FC = () => {
+  return (
+    <section className="mb-16 w-full">
+      <h2
+        id="length"
+        className="mb-[1.2rem] border-t-2 border-slate-900 pt-12 text-slate-900"
+        style={{ fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.02em' }}
+      >
+        <span className="mb-2 block font-mono text-[0.65rem] uppercase tracking-[0.12em] text-blue-600">Section 07</span>
+        The length question, answered properly
+      </h2>
+
+      <div className="space-y-0">
+        <p
+          className="text-slate-600 font-normal tracking-normal"
+          style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+        >
+          One page is the default. Not a rule {'\u2014'} a default. A default means: start here, move away only when
+          you have a clear reason grounded in evidence.
+        </p>
+        <p
+          className="text-slate-600 font-normal tracking-normal"
+          style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+        >
+          Note: a 2025 Novoresume survey of 418 HR professionals found 68% consider a two-page resume ideal versus only
+          22% preferring one page. This doesn&apos;t mean everyone should go to two pages {'\u2014'} it means that for
+          candidates with substantial relevant experience, two pages are not penalized the way conventional wisdom
+          suggests. The operative word is &quot;relevant.&quot; Two pages of relevant content is better than one page
+          padded out. One tight page is better than two pages with filler.
+        </p>
+      </div>
+
+      <div className="my-10 grid gap-px overflow-hidden border border-slate-200 bg-slate-200 sm:grid-cols-2 xl:grid-cols-4">
+        {BLOG_02_SECTION_SEVEN_LENGTH_CARDS.map((item) => (
+          <div key={item.label} className="flex h-full flex-col bg-white px-5 py-5">
+            <div className="mb-3 font-mono text-[0.62rem] uppercase tracking-[0.1em] text-slate-500">{item.label}</div>
+            <div className="mb-3 text-[1rem] font-semibold leading-[1.25] text-slate-900">{item.title}</div>
+            <div className="text-[0.84rem] leading-[1.65] text-slate-600">{item.body}</div>
+            <span className="mt-[0.8rem] inline-block w-fit rounded-[2px] bg-blue-50 px-2 py-1 font-mono text-[0.62rem] text-blue-700">
+              {item.value}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      <div className="my-9 border-l-[3px] border-blue-600 bg-blue-50 px-7 py-6">
+        <div className="mb-3 text-[10px] font-black uppercase tracking-[0.12em] text-blue-600">
+          The right length question
+        </div>
+        <p className="text-[0.92rem] leading-[1.65] text-slate-700">
+          Don&apos;t ask: &quot;Have I worked long enough for a second page?&quot; Ask: &quot;Would cutting to one page
+          force me to remove strong evidence that directly supports my fit for this specific role?&quot; If yes, keep
+          it. If no, cut it. Never pad to reach a target. Never cram to hit one page. Readable whitespace is not wasted
+          space.
+        </p>
       </div>
     </section>
   );
@@ -786,8 +2143,18 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
           {/* ── MAIN CONTENT ── */}
           <article ref={contentRef} className="flex-1 min-w-0 max-w-[850px] pb-12">
             {showResumeLeadBlocks && <Blog02LeadBlocks />}
+            {showResumeLeadBlocks && <Blog02Intro />}
+            {showResumeLeadBlocks && <Blog02QuoteSeparator />}
+            {showResumeLeadBlocks && <Blog02SectionOne />}
+            {showResumeLeadBlocks && <Blog02SectionTwo />}
+            {showResumeLeadBlocks && <Blog02SectionThree />}
+            {showResumeLeadBlocks && <Blog02SectionFour />}
+            {showResumeLeadBlocks && <Blog02SectionFive />}
+            {showResumeLeadBlocks && <Blog02SectionSix />}
+            {showResumeLeadBlocks && <Blog02SectionSeven />}
 
-            <div className="prose prose-lg max-w-none text-slate-600 tracking-normal leading-[1.5]">
+            {!showResumeLeadBlocks && (
+              <div className="prose prose-lg max-w-none text-slate-600 tracking-normal leading-[1.5]">
               {blocks.map((block, i) => {
                 if (block.type === 'h2') {
                   const id = (block.text || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -911,7 +2278,8 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
                   </p>
                 );
               })}
-            </div>
+              </div>
+            )}
             {/* Post Tags & Bottom Meta — Webflow-Inspired Premium Minimal */}
             <div className="mt-16 pt-8 border-t border-slate-100">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-12 sm:gap-16">

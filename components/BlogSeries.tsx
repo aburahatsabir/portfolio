@@ -351,6 +351,186 @@ const InlineText: React.FC<{ text: string }> = ({ text }) => {
 
 // ─── Blog Post Detail (100% Webflow Replica) ──────────────────────────────────
 
+const BLOG_02_STATS = [
+  {
+    value: '42%',
+    label: 'of HR professionals decide in under 10 seconds',
+    source: 'Novoresume HR Survey 2025',
+    accentClass: 'text-blue-400',
+  },
+  {
+    value: '82%',
+    label: 'of companies use ATS to screen resumes',
+    source: 'Novoresume HR Survey 2025',
+    accentClass: 'text-cyan-300',
+  },
+  {
+    value: '79%',
+    label: 'of hiring managers check work experience first',
+    source: 'Novoresume HR Survey 2025',
+    accentClass: 'text-sky-300',
+  },
+  {
+    value: '92.6%',
+    label: 'of HR professionals say LinkedIn is critical or useful',
+    source: 'Novoresume HR Survey 2025',
+    accentClass: 'text-indigo-300',
+  },
+  {
+    value: '506',
+    label: 'average applications per job posting',
+    source: 'Testlify 2025',
+    accentClass: 'text-blue-200',
+  },
+  {
+    value: '99%',
+    label: 'of hiring managers now use AI in some part of hiring',
+    source: 'Insight Global 2025',
+    accentClass: 'text-teal-300',
+  },
+] as const;
+
+const BLOG_02_TESTS = [
+  {
+    step: 'Test 01',
+    title: 'Target-role match',
+    description: 'Does this item help a reader evaluate fit for this specific role, not your career in general?',
+    question: '"Is this relevant to the role I am applying for right now?"',
+    accentClass: 'bg-blue-500',
+  },
+  {
+    step: 'Test 02',
+    title: 'Strength of evidence',
+    description: 'Does it prove a claim with concrete detail, or just assert one with vague language?',
+    question: '"Does this sentence actually demonstrate something?"',
+    accentClass: 'bg-cyan-400',
+  },
+  {
+    step: 'Test 03',
+    title: 'Recency',
+    description: 'Is this evidence recent enough to signal that your skills and judgment are current?',
+    question: '"Is this still meaningful given how much has changed?"',
+    accentClass: 'bg-sky-400',
+  },
+  {
+    step: 'Test 04',
+    title: 'Space efficiency',
+    description: 'Does it earn its space against everything competing for it? Every line displaces something else.',
+    question: '"Is this worth more than what it displaces?"',
+    accentClass: 'bg-indigo-400',
+  },
+] as const;
+
+const BLOG_02_INTRO = {
+  lead:
+    "Most resume advice is a list of things someone did wrong. Don't use tables. Don't put your address. Don't go two pages if you have less than ten years. These rules float around without context, get passed between people, and become gospel — even when they contradict each other depending on who you ask.",
+  paragraphs: [
+    "The problem isn't that the rules are wrong. It's that rules without decision logic are nearly useless when you actually sit down to write. When you're staring at a draft that doesn't feel right, what you need isn't another rule. You need a framework for thinking.",
+    'This guide gives you that. A complete system covering every resume element — plus the science of how resumes are actually screened, recruiter psychology, ATS intelligence, and the fatal mistakes that eliminate otherwise-qualified candidates before a human ever sees them.',
+  ],
+  quote:
+    'A resume that answers "What have I done?" will always lose to one that answers "Why am I the right fit for this specific role?"',
+  cite: 'The core shift that changes every decision',
+} as const;
+
+const Blog02LeadBlocks: React.FC = () => {
+  return (
+    <>
+      <section className="mb-8 bg-slate-950">
+        <div className="grid grid-cols-2 gap-px bg-white/10 sm:grid-cols-3 xl:grid-cols-6">
+          {BLOG_02_STATS.map((stat) => (
+            <div
+              key={stat.label}
+              className="bg-slate-950 px-4 py-6 text-center transition-colors duration-200 hover:bg-white/[0.04] md:px-5"
+            >
+              <div className={`mb-2 text-[28px] font-semibold leading-none tracking-[-0.04em] md:text-[34px] ${stat.accentClass}`}>
+                {stat.value}
+              </div>
+              <div className="text-[11px] font-medium leading-[1.45] text-white/55 md:text-[12px]">
+                {stat.label}
+              </div>
+              <div className="mt-2 text-[10px] uppercase tracking-[0.12em] text-white/20">
+                {stat.source}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="mb-14 overflow-hidden bg-slate-950">
+        <div className="flex flex-col gap-3 border-b border-white/10 px-6 py-5 md:flex-row md:items-center md:justify-between md:px-8">
+          <span className="text-[10px] font-black uppercase tracking-[0.24em] text-white/35">
+            Core decision system
+          </span>
+          <span className="max-w-[660px] text-[14px] italic leading-[1.5] text-white/50 md:text-right">
+            Run every element through all four tests before it earns space on the page
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 gap-px bg-white/10 md:grid-cols-2 xl:grid-cols-4">
+          {BLOG_02_TESTS.map((test) => (
+            <div
+              key={test.step}
+              className="bg-slate-950 px-6 py-8 transition-colors duration-200 hover:bg-white/[0.04] md:px-7 md:py-9"
+            >
+              <div className={`mb-4 h-[2px] w-7 rounded-full ${test.accentClass}`}></div>
+              <div className="mb-3 text-[10px] font-black uppercase tracking-[0.24em] text-white/30">
+                {test.step}
+              </div>
+              <h2 className="mb-3 border-none pt-0 text-[22px] font-semibold leading-[1.15] tracking-[-0.03em] text-white md:text-[24px]">
+                {test.title}
+              </h2>
+              <p className="mb-0 text-[14px] leading-[1.65] text-white/55">
+                {test.description}
+              </p>
+              <p className="mb-0 mt-4 text-[14px] italic leading-[1.6] text-white/28">
+                {test.question}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+    </>
+  );
+};
+
+const Blog02Intro: React.FC = () => {
+  return (
+    <section className="mb-14">
+      <p
+        className="text-slate-700 font-normal first-letter:float-left first-letter:mr-[0.09em] first-letter:mt-[0.08em] first-letter:text-[4.2rem] first-letter:font-semibold first-letter:leading-[0.82] first-letter:text-blue-600"
+        style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+      >
+        {BLOG_02_INTRO.lead}
+      </p>
+
+      <div className="mt-6 space-y-4">
+        {BLOG_02_INTRO.paragraphs.map((paragraph) => (
+          <p
+            key={paragraph}
+            className="text-slate-600 font-normal"
+            style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
+          >
+            {paragraph}
+          </p>
+        ))}
+      </div>
+
+      <div className="relative mt-10 overflow-hidden rounded-[2.5rem] border border-slate-100 bg-slate-50 px-8 py-10 md:px-10 md:py-12">
+        <div className="pointer-events-none absolute left-6 top-4 text-[88px] leading-none text-blue-100 md:left-8 md:top-5">
+          &ldquo;
+        </div>
+        <p className="relative z-10 pr-2 text-[22px] italic leading-[1.5] tracking-[-0.02em] text-slate-900 md:text-[28px]">
+          {BLOG_02_INTRO.quote}
+        </p>
+        <cite className="relative z-10 mt-5 block text-[11px] font-black uppercase tracking-[0.24em] text-blue-600 not-italic">
+          {BLOG_02_INTRO.cite}
+        </cite>
+      </div>
+    </section>
+  );
+};
+
 const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
   const [activeToc, setActiveToc] = useState('');
   const [copiedLink, setCopiedLink] = useState(false);
@@ -439,6 +619,8 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
     const others = BLOG_POSTS.filter(p => p.id !== post.id);
     return [...others.filter(p => p.category === post.category), ...others.filter(p => p.category !== post.category)].slice(0, 3);
   }, [post]);
+  const showResumeLeadBlocks = post.id === 'blog-02';
+  const postTags = post.tags ?? [];
 
   useEffect(() => {
     const obs = new IntersectionObserver(
@@ -603,7 +785,8 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
 
           {/* ── MAIN CONTENT ── */}
           <article ref={contentRef} className="flex-1 min-w-0 max-w-[850px] pb-12">
-            
+            {showResumeLeadBlocks && <Blog02LeadBlocks />}
+
             <div className="prose prose-lg max-w-none text-slate-600 tracking-normal leading-[1.5]">
               {blocks.map((block, i) => {
                 if (block.type === 'h2') {
@@ -734,7 +917,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-12 sm:gap-16">
                 <div className="col-span-1 sm:col-span-3 flex flex-col gap-2 justify-center">
                   <div className="flex flex-wrap gap-x-6 gap-y-2">
-                    {['Search', 'AI', 'Marketing'].map((tag, i) => (
+                    {postTags.map((tag, i) => (
                       <span 
                         key={i} 
                         className="text-[16px] font-medium text-slate-900 hover:text-blue-600 transition-colors cursor-pointer"
@@ -745,7 +928,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
                   </div>
                 </div>
                 <div className="flex flex-col gap-2 justify-center sm:text-right">
-                  <span className="text-[16px] font-medium text-slate-900 whitespace-nowrap">March 2026</span>
+                  <span className="text-[16px] font-medium text-slate-900 whitespace-nowrap">{post.date}</span>
                 </div>
               </div>
             </div>

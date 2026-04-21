@@ -11,16 +11,27 @@ export interface PostMortemEntry {
   tags: string[];
 }
 
+export type BlogTemplate = 'standard' | 'flagship';
+export type BlogBodyRenderer = 'markdown' | 'resumeGuide';
+
 export interface BlogPost {
   id: string;
   title: string;
   date: string;
+  publishedAt?: string;
   readTime: string;
   excerpt: string;
   category: string;
   tags?: string[];
+  featuredRank?: number;
+  showFooterDate?: boolean;
+  footerTagLimit?: number;
+  singleLineFooterTags?: boolean;
+  template?: BlogTemplate;
+  bodyRenderer?: BlogBodyRenderer;
   content: string;
   image: string; // Added image property
+  ogImage?: string;
   author: {
     name: string;
     role: string;

@@ -4002,17 +4002,32 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
     // Inject OG + Twitter Card meta tags
     const pageUrl = window.location.href;
     const socialImage = post.ogImage ?? post.image;
+    const absoluteSocialImage = socialImage.startsWith("http")
+      ? socialImage
+      : `${window.location.origin}${socialImage}`;
     const metaTags: { property?: string; name?: string; content: string }[] = [
       { property: "og:type", content: "article" },
       { property: "og:title", content: post.title },
       { property: "og:description", content: post.excerpt },
-      { property: "og:image", content: socialImage },
+      { property: "og:image", content: absoluteSocialImage },
+      { property: "og:image:secure_url", content: absoluteSocialImage },
       { property: "og:url", content: pageUrl },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: post.title },
       { name: "twitter:description", content: post.excerpt },
-      { name: "twitter:image", content: socialImage },
+      { name: "twitter:image", content: absoluteSocialImage },
     ];
+
+    let canonicalLink = document.querySelector(
+      'link[rel="canonical"]',
+    ) as HTMLLinkElement | null;
+    const previousCanonicalHref = canonicalLink?.href ?? null;
+    if (!canonicalLink) {
+      canonicalLink = document.createElement("link");
+      canonicalLink.rel = "canonical";
+      document.head.appendChild(canonicalLink);
+    }
+    canonicalLink.href = pageUrl;
 
     const injected: HTMLMetaElement[] = [];
     metaTags.forEach(({ property, name, content }) => {
@@ -4032,6 +4047,13 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
     return () => {
       document.title = originalTitle;
       injected.forEach((m) => m.remove());
+      if (canonicalLink) {
+        if (previousCanonicalHref) {
+          canonicalLink.href = previousCanonicalHref;
+        } else {
+          canonicalLink.remove();
+        }
+      }
     };
   }, [post]);
 

@@ -12,6 +12,7 @@ declare global {
 
 const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
     const lenisRef = useRef<Lenis | null>(null);
+    const rafIdRef = useRef<number | null>(null);
 
     useEffect(() => {
         // Prevent browser from restoring scroll position on navigation
@@ -32,13 +33,15 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
 
         lenisRef.current = lenis;
         window.__lenis = lenis;
+        let disposed = false;
 
         function raf(time: number) {
+            if (disposed) return;
             lenis.raf(time);
-            requestAnimationFrame(raf);
+            rafIdRef.current = requestAnimationFrame(raf);
         }
 
-        requestAnimationFrame(raf);
+        rafIdRef.current = requestAnimationFrame(raf);
 
         // Initial scroll position handling for hash links
         if (window.location.hash) {
@@ -50,7 +53,13 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
         }
 
         return () => {
+            disposed = true;
+            if (rafIdRef.current !== null) {
+                cancelAnimationFrame(rafIdRef.current);
+                rafIdRef.current = null;
+            }
             lenis.destroy();
+            lenisRef.current = null;
             window.__lenis = undefined;
         };
     }, []);

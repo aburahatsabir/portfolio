@@ -17,6 +17,8 @@ type ContentBlock =
   | { type: 'table'; headers: string[]; rows: string[][]; }
   | { type: 'buttons'; buttons: Array<{ label: string; url: string; variant: 'download' | 'demo' }>; };
 
+type TocHeading = { id: string; text: string; level: 'h2' | 'h3' };
+
 function escapeHtml(value: string) {
   return value
     .replace(/&/g, '&amp;')
@@ -88,6 +90,7 @@ function buildExactWebflowHeroBackgroundSrcDoc(
       inset: 0;
       width: 100%;
       height: 100%;
+      pointer-events: none;
     }
 
     .fluted-glass-image,
@@ -97,6 +100,7 @@ function buildExactWebflowHeroBackgroundSrcDoc(
       height: 100%;
       opacity: 0;
       transition: opacity 160ms ease;
+      pointer-events: none;
     }
 
     .fluted-glass-image {
@@ -130,14 +134,14 @@ function buildExactWebflowHeroBackgroundSrcDoc(
         data-size-three="1.3"
         data-fluted-glass="true"
         data-noise="0.40"
-        data-hover="true"
+        data-hover="false"
         data-color-one="var(--colors--background)"
         data-columns="6"
         data-shape-type-three="0"
         data-sensitivity-two="0.15"
         data-size-one="0.85"
         data-bg-color=""
-        data-hover-intensity="2.0"
+        data-hover-intensity="0"
         data-color-two="#EEEEEE"
         data-use-blob-one="true"
         data-background-image="">
@@ -312,9 +316,9 @@ function parseContent(content: string): Array<ContentBlock> {
   return blocks;
 }
 
-function extractHeadings(content: string): Array<{ id: string; text: string; level: 'h2' | 'h3' }> {
+function extractHeadings(content: string): TocHeading[] {
   const lines = content.split('\n');
-  const headings: Array<{ id: string; text: string; level: 'h2' | 'h3' }> = [];
+  const headings: TocHeading[] = [];
   lines.forEach(l => {
     const trimmed = l.trim();
     if (trimmed.startsWith('## ') || trimmed.startsWith('### ')) {
@@ -555,6 +559,7 @@ const Blog02SectionOne: React.FC = () => {
         Section 01
       </div>
       <h2
+        id="what-most-resume-advice-gets-wrong"
         className="mb-6 text-slate-900"
         style={{ fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.02em' }}
       >
@@ -846,6 +851,38 @@ const BLOG_02_SECTION_FIVE_STRONG = [
     label: 'defensible',
     text: 'Drove launch strategy for flagship product; 12,000 users in 30 days, exceeding target by 40%.',
   },
+] as const;
+
+const BLOG_02_HEADINGS: TocHeading[] = [
+  { id: 'what-most-resume-advice-gets-wrong', text: 'What most resume advice gets wrong', level: 'h2' },
+  { id: 'science-of-how-resumes-are-screened', text: 'The science of how resumes are screened', level: 'h2' },
+  { id: 'f-pattern-six-fixation-points', text: 'The F-pattern and six fixation points', level: 'h3' },
+  { id: 'confirmation-bias-mechanism', text: 'The confirmation bias mechanism', level: 'h3' },
+  { id: 'four-test-decision-system', text: 'The four-test decision system', level: 'h2' },
+  { id: 'test-1-target-role-match', text: 'Test 1 — Target-role match', level: 'h3' },
+  { id: 'test-2-strength-of-evidence', text: 'Test 2 — Strength of evidence', level: 'h3' },
+  { id: 'test-3-recency', text: 'Test 3 — Recency', level: 'h3' },
+  { id: 'test-4-space-efficiency', text: 'Test 4 — Space efficiency', level: 'h3' },
+  { id: 'writing-bullets-that-actually-prove-things', text: 'Writing bullets that actually prove things', level: 'h2' },
+  { id: 'ownership', text: 'The ownership language principle', level: 'h2' },
+  { id: 'sections', text: 'Every section, decided', level: 'h2' },
+  { id: 'contact-information', text: 'Contact information', level: 'h3' },
+  { id: 'profile-summary', text: 'Profile summary', level: 'h3' },
+  { id: 'company-context-line', text: 'The company context line', level: 'h3' },
+  { id: 'work-experience', text: 'Work experience', level: 'h3' },
+  { id: 'education', text: 'Education', level: 'h3' },
+  { id: 'skills-section', text: 'Skills section', level: 'h3' },
+  { id: 'optional-sections', text: 'Optional sections', level: 'h3' },
+  { id: 'length', text: 'The length question, answered properly', level: 'h2' },
+  { id: 'ats', text: 'ATS and formatting rules that actually matter', level: 'h2' },
+  { id: 'file-format-decision-tree', text: 'File format decision tree', level: 'h3' },
+  { id: 'tailoring', text: 'Tailoring without keyword stuffing', level: 'h2' },
+  { id: 'linkedin', text: 'LinkedIn as a strategic layer', level: 'h2' },
+  { id: 'special-cases', text: 'Special cases: when the standard rules change', level: 'h2' },
+  { id: 'employment-gaps', text: 'Employment gaps', level: 'h3' },
+  { id: 'mistakes', text: 'Nine fatal mistakes that eliminate otherwise-qualified candidates', level: 'h2' },
+  { id: 'workflow', text: 'Application workflow beyond the resume', level: 'h2' },
+  { id: 'checklist', text: 'The complete pre-submit checklist', level: 'h2' },
 ] as const;
 
 const BLOG_02_SECTION_SIX_CONTACT_INCLUDE: React.ReactNode[] = [
@@ -1338,6 +1375,7 @@ const Blog02SectionTwo: React.FC = () => {
         Section 02
       </div>
       <h2
+        id="science-of-how-resumes-are-screened"
         className="mb-6 text-slate-900"
         style={{ fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.02em' }}
       >
@@ -1397,6 +1435,7 @@ const Blog02SectionTwo: React.FC = () => {
       </p>
 
       <h3
+        id="f-pattern-six-fixation-points"
         className="mt-10 mb-3 text-slate-900"
         style={{ fontSize: '1.15rem', fontWeight: 700, fontStyle: 'italic', lineHeight: 1.2 }}
       >
@@ -1509,6 +1548,7 @@ const Blog02SectionTwo: React.FC = () => {
       </p>
 
       <h3
+        id="confirmation-bias-mechanism"
         className="mt-10 mb-3 text-slate-900"
         style={{ fontSize: '1.15rem', fontWeight: 700, fontStyle: 'italic', lineHeight: 1.2 }}
       >
@@ -1564,6 +1604,7 @@ const Blog02SectionThree: React.FC = () => {
         Section 03
       </div>
       <h2
+        id="four-test-decision-system"
         className="mb-6 text-slate-900"
         style={{ fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.02em' }}
       >
@@ -1579,6 +1620,7 @@ const Blog02SectionThree: React.FC = () => {
       </p>
 
       <h3
+        id="test-1-target-role-match"
         className="mt-10 mb-3 text-slate-900"
         style={{ fontSize: '1.15rem', fontWeight: 700, fontStyle: 'italic', lineHeight: 1.2 }}
       >
@@ -1596,6 +1638,7 @@ const Blog02SectionThree: React.FC = () => {
       </p>
 
       <h3
+        id="test-2-strength-of-evidence"
         className="mt-10 mb-3 text-slate-900"
         style={{ fontSize: '1.15rem', fontWeight: 700, fontStyle: 'italic', lineHeight: 1.2 }}
       >
@@ -1623,6 +1666,7 @@ const Blog02SectionThree: React.FC = () => {
       </div>
 
       <h3
+        id="test-3-recency"
         className="mt-10 mb-3 text-slate-900"
         style={{ fontSize: '1.15rem', fontWeight: 700, fontStyle: 'italic', lineHeight: 1.2 }}
       >
@@ -1639,6 +1683,7 @@ const Blog02SectionThree: React.FC = () => {
       </p>
 
       <h3
+        id="test-4-space-efficiency"
         className="mt-10 mb-3 text-slate-900"
         style={{ fontSize: '1.15rem', fontWeight: 700, fontStyle: 'italic', lineHeight: 1.2 }}
       >
@@ -1666,6 +1711,7 @@ const Blog02SectionFour: React.FC = () => {
         Section 04
       </div>
       <h2
+        id="writing-bullets-that-actually-prove-things"
         className="mb-6 text-slate-900"
         style={{ fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.02em' }}
       >
@@ -1854,9 +1900,10 @@ const Blog02SectionFive: React.FC = () => {
   );
 };
 
-const Blog02SectionSixSubheading: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const Blog02SectionSixSubheading: React.FC<{ children: React.ReactNode; id?: string }> = ({ children, id }) => {
   return (
     <h3
+      id={id}
       className="mt-10 mb-3 text-slate-900"
       style={{ fontSize: '1.15rem', fontWeight: 700, fontStyle: 'italic', lineHeight: 1.2 }}
     >
@@ -1982,7 +2029,7 @@ const Blog02SectionSix: React.FC = () => {
         Every section, decided
       </h2>
 
-      <Blog02SectionSixSubheading>Contact information</Blog02SectionSixSubheading>
+      <Blog02SectionSixSubheading id="contact-information">Contact information</Blog02SectionSixSubheading>
       <p
         className="text-slate-600 font-normal tracking-normal"
         style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
@@ -1997,7 +2044,7 @@ const Blog02SectionSix: React.FC = () => {
         <Blog02RuleColumn title="Exclude" items={BLOG_02_SECTION_SIX_CONTACT_EXCLUDE} variant="exclude" />
       </div>
 
-      <Blog02SectionSixSubheading>Profile summary</Blog02SectionSixSubheading>
+      <Blog02SectionSixSubheading id="profile-summary">Profile summary</Blog02SectionSixSubheading>
       <p
         className="text-slate-600 font-normal tracking-normal"
         style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
@@ -2032,7 +2079,7 @@ const Blog02SectionSix: React.FC = () => {
         </p>
       </div>
 
-      <Blog02SectionSixSubheading>The company context line</Blog02SectionSixSubheading>
+      <Blog02SectionSixSubheading id="company-context-line">The company context line</Blog02SectionSixSubheading>
       <p
         className="text-slate-600 font-normal tracking-normal"
         style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
@@ -2070,7 +2117,7 @@ const Blog02SectionSix: React.FC = () => {
         goodNote="One line gives the recruiter the scale and context to interpret every bullet that follows."
       />
 
-      <Blog02SectionSixSubheading>Work experience</Blog02SectionSixSubheading>
+      <Blog02SectionSixSubheading id="work-experience">Work experience</Blog02SectionSixSubheading>
       <p
         className="text-slate-600 font-normal tracking-normal"
         style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
@@ -2084,13 +2131,13 @@ const Blog02SectionSix: React.FC = () => {
         rows={BLOG_02_SECTION_SIX_WORK_ROWS}
       />
 
-      <Blog02SectionSixSubheading>Education</Blog02SectionSixSubheading>
+      <Blog02SectionSixSubheading id="education">Education</Blog02SectionSixSubheading>
       <Blog02DecisionTable
         headers={['Situation', 'Placement', 'What to include']}
         rows={BLOG_02_SECTION_SIX_EDUCATION_ROWS}
       />
 
-      <Blog02SectionSixSubheading>Skills section</Blog02SectionSixSubheading>
+      <Blog02SectionSixSubheading id="skills-section">Skills section</Blog02SectionSixSubheading>
       <p
         className="text-slate-600 font-normal tracking-normal"
         style={{ fontSize: '16px', lineHeight: '25.6px', marginBottom: '12.5714px' }}
@@ -2105,7 +2152,7 @@ const Blog02SectionSix: React.FC = () => {
         <Blog02RuleColumn title="Never include" items={BLOG_02_SECTION_SIX_SKILLS_EXCLUDE} variant="exclude" />
       </div>
 
-      <Blog02SectionSixSubheading>Optional sections</Blog02SectionSixSubheading>
+      <Blog02SectionSixSubheading id="optional-sections">Optional sections</Blog02SectionSixSubheading>
       <div className="my-8 grid gap-px overflow-hidden border border-slate-200 bg-slate-200 md:grid-cols-2 xl:grid-cols-3">
         {BLOG_02_SECTION_SIX_OPTIONAL_SECTIONS.map((item) => (
             <div key={item.badge} className="bg-white px-5 py-5 transition-colors duration-200 hover:bg-slate-50">
@@ -2240,7 +2287,7 @@ const Blog02SectionEight: React.FC = () => {
         </div>
       </div>
 
-      <Blog02SectionSixSubheading>File format decision tree</Blog02SectionSixSubheading>
+      <Blog02SectionSixSubheading id="file-format-decision-tree">File format decision tree</Blog02SectionSixSubheading>
       <Blog02DecisionTable
         headers={['Situation', 'Format', 'Why']}
         rows={BLOG_02_SECTION_EIGHT_FILE_ROWS as React.ReactNode[][]}
@@ -2456,7 +2503,7 @@ const Blog02SectionEleven: React.FC = () => {
         ))}
       </div>
 
-      <Blog02SectionSixSubheading>Employment gaps</Blog02SectionSixSubheading>
+      <Blog02SectionSixSubheading id="employment-gaps">Employment gaps</Blog02SectionSixSubheading>
       <div className="space-y-0">
         <p
           className="text-slate-600 font-normal tracking-normal"
@@ -2693,6 +2740,8 @@ const Blog02FinalBlock: React.FC = () => {
 
 const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
   const [activeToc, setActiveToc] = useState('');
+  const [activeTocIndicator, setActiveTocIndicator] = useState<{ top: number; height: number } | null>(null);
+  const [tocScrollState, setTocScrollState] = useState({ canScrollUp: false, canScrollDown: false });
   const [copiedLink, setCopiedLink] = useState(false);
   const [canShare, setCanShare] = useState(false);
   const [heroReady, setHeroReady] = useState(false);
@@ -2763,8 +2812,12 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
   }, []);
   */
 
+  const showResumeLeadBlocks = post.id === 'blog-02';
   const blocks = useMemo(() => parseContent(post.content), [post.content]);
-  const headings = useMemo(() => extractHeadings(post.content), [post.content]);
+  const headings = useMemo(
+    () => (showResumeLeadBlocks ? [...BLOG_02_HEADINGS] : extractHeadings(post.content)),
+    [post.content, showResumeLeadBlocks]
+  );
   const heroBackgroundSrcDoc = useMemo(
     () => buildExactWebflowHeroBackgroundSrcDoc(
       post.image || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2000',
@@ -2779,8 +2832,8 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
     const others = BLOG_POSTS.filter(p => p.id !== post.id);
     return [...others.filter(p => p.category === post.category), ...others.filter(p => p.category !== post.category)].slice(0, 3);
   }, [post]);
-  const showResumeLeadBlocks = post.id === 'blog-02';
   const postTags = post.tags ?? [];
+  const shouldConstrainToc = headings.length > 12;
 
   useEffect(() => {
     const obs = new IntersectionObserver(
@@ -2799,6 +2852,57 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
       activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   }, [activeToc]);
+
+  useEffect(() => {
+    const syncActiveTocIndicator = () => {
+      if (!activeToc || !tocNavRef.current) {
+        setActiveTocIndicator(null);
+        return;
+      }
+
+      const activeBtn = tocNavRef.current.querySelector(`[data-toc-id="${activeToc}"]`) as HTMLElement | null;
+      if (!activeBtn) {
+        setActiveTocIndicator(null);
+        return;
+      }
+
+      setActiveTocIndicator({
+        top: activeBtn.offsetTop,
+        height: activeBtn.offsetHeight,
+      });
+    };
+
+    syncActiveTocIndicator();
+    window.addEventListener('resize', syncActiveTocIndicator);
+
+    return () => window.removeEventListener('resize', syncActiveTocIndicator);
+  }, [activeToc, headings]);
+
+  useEffect(() => {
+    const nav = tocNavRef.current;
+
+    if (!nav) {
+      setTocScrollState({ canScrollUp: false, canScrollDown: false });
+      return;
+    }
+
+    const syncTocScrollState = () => {
+      const maxScrollTop = nav.scrollHeight - nav.clientHeight;
+      setTocScrollState({
+        canScrollUp: nav.scrollTop > 2,
+        canScrollDown: maxScrollTop - nav.scrollTop > 2,
+      });
+    };
+
+    syncTocScrollState();
+    nav.addEventListener('scroll', syncTocScrollState, { passive: true });
+    window.addEventListener('resize', syncTocScrollState);
+
+    return () => {
+      nav.removeEventListener('scroll', syncTocScrollState);
+      window.removeEventListener('resize', syncTocScrollState);
+    };
+  }, [headings, activeToc]);
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
@@ -2856,6 +2960,19 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
         top: offsetPosition,
         behavior: 'smooth'
       });
+    }
+  };
+
+  const handleTocWheel = (event: React.WheelEvent<HTMLElement>) => {
+    const nav = tocNavRef.current;
+    if (!nav) return;
+
+    const canScrollUp = nav.scrollTop > 0;
+    const canScrollDown = nav.scrollTop + nav.clientHeight < nav.scrollHeight - 1;
+
+    if ((event.deltaY < 0 && canScrollUp) || (event.deltaY > 0 && canScrollDown)) {
+      event.preventDefault();
+      nav.scrollTop += event.deltaY;
     }
   };
 
@@ -3157,42 +3274,73 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
             {headings.length > 0 && (
               <div className="mb-8">
                 <p className="text-[13px] font-bold text-[#222] mb-4 tracking-wide uppercase">Table of contents</p>
-                <nav
-                  ref={tocNavRef as React.RefObject<HTMLElement>}
-                  className="no-scrollbar flex flex-col border-l-2 border-slate-100"
-                  style={{
-                    maxHeight: 'calc(100vh - 20rem)',
-                    overflowY: 'auto',
-                  }}
-                >
-                  {headings.map((h) => {
-                    const isH3 = h.level === 'h3';
-                    const isActive = activeToc === h.id;
-                    return (
-                      <button
+                <div className="relative">
+                  <div
+                    aria-hidden="true"
+                    className={`pointer-events-none absolute inset-x-0 top-0 z-30 h-8 bg-gradient-to-b from-white via-white/90 to-transparent transition-opacity duration-200 ${
+                      tocScrollState.canScrollUp ? 'opacity-100' : 'opacity-0'
+                    }`}
+                  />
+                  <div
+                    aria-hidden="true"
+                    className={`pointer-events-none absolute inset-x-0 bottom-0 z-30 h-10 bg-gradient-to-t from-white via-white/92 to-transparent transition-opacity duration-200 ${
+                      tocScrollState.canScrollDown ? 'opacity-100' : 'opacity-0'
+                    }`}
+                  />
+                  <nav
+                    ref={tocNavRef as React.RefObject<HTMLElement>}
+                    onWheel={handleTocWheel}
+                    data-lenis-prevent=""
+                    data-lenis-prevent-wheel=""
+                    className="no-scrollbar relative overscroll-y-contain"
+                    style={{
+                      maxHeight: shouldConstrainToc ? 'min(24rem, calc(100vh - 18rem))' : undefined,
+                      overflowY: 'auto',
+                      WebkitOverflowScrolling: 'touch',
+                      overscrollBehaviorY: 'contain',
+                    }}
+                  >
+                    <div aria-hidden="true" className="pointer-events-none absolute left-0 top-0 bottom-0 w-[2px] bg-slate-100" />
+                    <motion.div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute left-0 z-20 w-[2px] rounded-full bg-brand-blue"
+                      initial={false}
+                      animate={{
+                        opacity: activeTocIndicator ? 1 : 0,
+                        y: activeTocIndicator?.top ?? 0,
+                        height: activeTocIndicator?.height ?? 0,
+                      }}
+                      transition={{ type: 'spring', stiffness: 420, damping: 38 }}
+                    />
+                    {headings.map((h) => {
+                      const isH3 = h.level === 'h3';
+                      const isActive = activeToc === h.id;
+                      return (
+                        <button
                         key={h.id}
                         type="button"
                         data-toc-id={h.id}
                         onClick={() => scrollToHeading(h.id)}
-                        className={`text-left border-l-2 transition-all leading-snug ${
+                        className={`relative z-10 block w-full text-left border-l-2 transition-all leading-snug ${
                           isH3
                             ? 'py-1.5 text-[13px]'
                             : 'py-2 text-[14px] font-medium'
                         } ${
-                          isActive
-                            ? 'border-brand-blue text-brand-blue bg-blue-50/50 font-semibold'
-                            : 'border-transparent text-slate-500 hover:text-brand-blue hover:border-slate-300'
-                        }`}
-                        style={{
-                          paddingLeft: isH3 ? '1.5rem' : '1rem',
-                          marginLeft: '-2px',
-                        }}
-                      >
-                        {h.text}
-                      </button>
-                    );
-                  })}
-                </nav>
+                            isActive
+                              ? 'border-brand-blue text-brand-blue bg-blue-50/50 font-semibold'
+                              : 'border-transparent text-slate-500 hover:text-brand-blue hover:border-slate-300'
+                          }`}
+                          style={{
+                            paddingLeft: isH3 ? '1.5rem' : '1rem',
+                            marginLeft: '-2px',
+                          }}
+                        >
+                          {h.text}
+                        </button>
+                      );
+                    })}
+                  </nav>
+                </div>
               </div>
             )}
 

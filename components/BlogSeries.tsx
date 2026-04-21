@@ -90,7 +90,6 @@ function buildExactWebflowHeroBackgroundSrcDoc(
       inset: 0;
       width: 100%;
       height: 100%;
-      pointer-events: none;
     }
 
     .fluted-glass-image,
@@ -100,7 +99,6 @@ function buildExactWebflowHeroBackgroundSrcDoc(
       height: 100%;
       opacity: 0;
       transition: opacity 160ms ease;
-      pointer-events: none;
     }
 
     .fluted-glass-image {
@@ -134,14 +132,14 @@ function buildExactWebflowHeroBackgroundSrcDoc(
         data-size-three="1.3"
         data-fluted-glass="true"
         data-noise="0.40"
-        data-hover="false"
+        data-hover="true"
         data-color-one="var(--colors--background)"
         data-columns="6"
         data-shape-type-three="0"
         data-sensitivity-two="0.15"
         data-size-one="0.85"
         data-bg-color=""
-        data-hover-intensity="0"
+        data-hover-intensity="2.0"
         data-color-two="#EEEEEE"
         data-use-blob-one="true"
         data-background-image="">
@@ -2745,11 +2743,13 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
   const [copiedLink, setCopiedLink] = useState(false);
   const [canShare, setCanShare] = useState(false);
   const [heroReady, setHeroReady] = useState(false);
+  const [heroInteractionPaused, setHeroInteractionPaused] = useState(false);
   const [prefersDarkHero, setPrefersDarkHero] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const tocNavRef = useRef<HTMLElement>(null);
   const heroFrameRef = useRef<HTMLIFrameElement>(null);
   const heroReadyTimeoutRef = useRef<number | null>(null);
+  const heroInteractionResumeRef = useRef<number | null>(null);
 
   useEffect(() => {
     // Check Web Share API support
@@ -2834,6 +2834,9 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
   }, [post]);
   const postTags = post.tags ?? [];
   const shouldConstrainToc = headings.length > 12;
+  const heroMetaItems = showResumeLeadBlocks
+    ? [post.readTime, 'Updated 2026']
+    : [post.category, post.readTime, post.date];
 
   useEffect(() => {
     const obs = new IntersectionObserver(
@@ -2937,6 +2940,36 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
     };
   }, [post.id, prefersDarkHero]);
 
+  useEffect(() => {
+    const pauseHeroInteraction = () => {
+      setHeroInteractionPaused(true);
+
+      if (heroInteractionResumeRef.current !== null) {
+        window.clearTimeout(heroInteractionResumeRef.current);
+      }
+
+      heroInteractionResumeRef.current = window.setTimeout(() => {
+        setHeroInteractionPaused(false);
+        heroInteractionResumeRef.current = null;
+      }, 140);
+    };
+
+    window.addEventListener('scroll', pauseHeroInteraction, { passive: true });
+    window.addEventListener('wheel', pauseHeroInteraction, { passive: true });
+    window.addEventListener('touchmove', pauseHeroInteraction, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', pauseHeroInteraction);
+      window.removeEventListener('wheel', pauseHeroInteraction);
+      window.removeEventListener('touchmove', pauseHeroInteraction);
+
+      if (heroInteractionResumeRef.current !== null) {
+        window.clearTimeout(heroInteractionResumeRef.current);
+        heroInteractionResumeRef.current = null;
+      }
+    };
+  }, []);
+
   const navigateBack = () => {
     // Reset scroll BEFORE navigating so the blog list opens at the top
     if (window.__lenis) {
@@ -2980,7 +3013,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
     <div className={`blog-post-detail-page bg-white min-h-screen font-sans selection-blue ${prefersDarkHero ? 'is-dark' : 'is-light'}`}>
       {/* ── HERO SECTION ── */}
       {/* Webflow exact: white base + fluted glass bars + blue bottom fade + diagonal white overlay */}
-      <div key={prefersDarkHero ? 'dark-hero' : 'light-hero'} className={`blog-post-hero relative overflow-hidden border-b border-[#d9e4f3] ${heroReady ? 'is-ready' : ''}`}>
+      <div key={prefersDarkHero ? 'dark-hero' : 'light-hero'} className={`blog-post-hero relative overflow-hidden border-b border-[#d9e4f3] ${heroReady ? 'is-ready' : ''} ${heroInteractionPaused ? 'is-scrolling' : ''}`}>
         
         {/* EXACT WEBFLOW BACKGROUND REPLICATION (REFINED SHADER MATCH) */}
         <div className="blog-post-hero__bg absolute inset-0 overflow-hidden">
@@ -3057,11 +3090,40 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
       </div>
 
       {/* ── ARTICLE SECTION ── */}
-      <div className="max-w-[1280px] mx-auto px-6 pt-24 pb-32">
+      <div className={`max-w-[1280px] mx-auto px-6 pb-32 ${showResumeLeadBlocks ? 'pt-6 md:pt-8' : 'pt-24'}`}>
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-24 items-start">
 
           {/* ── MAIN CONTENT ── */}
           <article ref={contentRef} className="flex-1 min-w-0 max-w-[850px] pb-12">
+            {showResumeLeadBlocks && (
+              <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:gap-5">
+                <div className="flex items-center gap-3">
+                  <div className="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-slate-200">
+                    <img
+                      src={post.author.avatar}
+                      alt={post.author.name}
+                      className="h-full w-full object-cover"
+                      style={{ objectPosition: 'center top' }}
+                    />
+                  </div>
+                  <div className="flex items-center gap-2.5">
+                    <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Written by</span>
+                    <span className="text-[15px] font-bold leading-none text-slate-900">{post.author.name}</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+                  {heroMetaItems.map((item, index) => (
+                    <React.Fragment key={item}>
+                      <span className={index === 0 ? 'text-blue-600' : ''}>{item}</span>
+                      {index < heroMetaItems.length - 1 && (
+                        <span aria-hidden="true" className="h-[3px] w-[3px] rounded-full bg-slate-300"></span>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
+              </div>
+            )}
             {showResumeLeadBlocks && <Blog02LeadBlocks />}
             {showResumeLeadBlocks && <Blog02Intro />}
             {showResumeLeadBlocks && <Blog02QuoteSeparator />}
@@ -3255,20 +3317,6 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
               </button>
             </div>
 
-            <div className="flex items-center gap-4 mb-8 border-b border-slate-100 pb-6">
-              <div className="w-[60px] h-[60px] bg-slate-200 rounded-full overflow-hidden shrink-0 border-2 border-slate-100 shadow-sm">
-                <img
-                  src={post.author.avatar}
-                  alt={post.author.name}
-                  className="w-full h-full object-cover"
-                  style={{ objectPosition: 'center top' }}
-                />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-[16px] font-bold text-slate-900 leading-snug">{post.author.name}</span>
-                <span className="text-[13px] text-slate-500 font-medium leading-snug">{post.author.role}</span>
-              </div>
-            </div>
 
             {/* Table of Contents — multi-level */}
             {headings.length > 0 && (

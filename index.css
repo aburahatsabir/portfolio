@@ -445,7 +445,7 @@ img {
     opacity: 0;
     visibility: hidden;
     transition: opacity 140ms ease;
-    pointer-events: none;
+    pointer-events: auto;
     transform: translateZ(0);
     backface-visibility: hidden;
     will-change: opacity;
@@ -454,6 +454,10 @@ img {
 .blog-post-hero.is-ready .blog-post-hero__frame {
     opacity: 1;
     visibility: visible;
+}
+
+.blog-post-hero.is-scrolling .blog-post-hero__frame {
+    pointer-events: none;
 }
 
 .blog-post-fluted-bg {

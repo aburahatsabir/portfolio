@@ -54,7 +54,7 @@ Feature:
     id: 'blog-02',
     title: 'The Science of Getting Shortlisted',
     date: 'February 2024',
-    readTime: '6 min read',
+    readTime: '30 min read',
     category: 'Career',
     tags: ['Product', 'Research', 'Frameworks'],
     excerpt: 'Most resume advice gives you rules. This gives you the reasoning behind them. Every section. Every judgment call. Built from recruiter research, eye-tracking studies, and ATS data.',

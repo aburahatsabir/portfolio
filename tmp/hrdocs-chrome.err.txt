@@ -1,0 +1,2 @@
+[0423/135614.530:ERROR:third_party\crashpad\crashpad\util\win\registration_protocol_win.cc:108] CreateFile: Access is denied. (0x5)
+[0423/135614.556:ERROR:third_party\crashpad\crashpad\util\file\file_io_win.cc:172] CreateFile C:\Users\abura\AppData\Local\Google\Chrome\User Data\Crashpad\reports\a9668094-80cd-4e95-808d-03c44d4b9d3e.dmp: Access is denied. (0x5)

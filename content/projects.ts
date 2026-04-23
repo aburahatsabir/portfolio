@@ -256,7 +256,7 @@ export const PROJECTS: Project[] = [
   },
 
   {
-    id: 'med-ops',
+    id: 'mocs',
     title: 'Medical Operations Control System',
     headline: 'Engineering Control in Medical Logistics',
     badge: 'Operational Systems Architecture',

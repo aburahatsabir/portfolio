@@ -170,7 +170,7 @@ Organizations select ERP platforms based on vendor demos instead of documented b
 
 **The Fix:** Build data governance BEFORE migration. In my medical operations system, I implemented a static CSV data definition layer that enforced normalization rules. This prevented the "12 naming variations for the same hospital" problem that kills most healthcare ERPs.
 
-[See the Medical Operations case study](/work/med-ops)
+[See the Medical Operations case study](/work/mocs)
 
 ### Mistake #3: Treating ERP as a Technology Project
 ERP implementations fail when treated as IT initiatives instead of operational redesign. The technology is easy—changing how people work is hard.
@@ -253,7 +253,7 @@ Every change needs a paper trail:
 - Version control for master data
 - Correction via reversal (never delete)
 
-[See the governance framework I built for HR](/work/hr-docs)
+Governance controls matter most when they are enforced in the workflow itself, not documented after the fact.
 
 ## Phase 3: Automation (Days 61-90)
 
@@ -322,7 +322,7 @@ In my HR documentation system, I used LaTeX page geometry to enforce governance:
 - Salary offers must reference the locked compensation matrix
 - Termination memos require specific legal compliance sections
 
-**The system won't compile** if governance requirements aren't met. [See the HR Docs case study](/work/hr-docs)
+**The system won't compile** if governance requirements aren't met.
 
 ### 2. Immutable Audit Trails
 

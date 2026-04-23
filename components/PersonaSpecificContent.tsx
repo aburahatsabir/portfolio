@@ -426,7 +426,7 @@ const PERSONAS: Record<string, PersonaConfig> = {
             primary: 'No commitment. Let\'s map your bottlenecks.',
             secondary: 'Documented production evidence.'
         },
-        relevantCaseStudies: ['med-ops', 'fmcg-erp'],
+        relevantCaseStudies: ['mocs', 'fmcg-erp'],
         relevantTestimonials: [0, 1]
     },
     'founders': {
@@ -660,7 +660,7 @@ const PERSONAS: Record<string, PersonaConfig> = {
             secondary: 'Request Resume',
             secondaryLink: '/contact'
         },
-        relevantCaseStudies: ['payroll-control', 'hr-docs', 'med-ops'],
+        relevantCaseStudies: ['payroll-control', 'hr-docs', 'mocs'],
         relevantTestimonials: [0, 1, 2]
     }
 };

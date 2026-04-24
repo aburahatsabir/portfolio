@@ -3325,7 +3325,7 @@ const HRDocsCaseStudy: React.FC = () => {
                     font-family: var(--sans);
                     font-size: var(--wfvwp-eyebrow-size);
                     line-height: 1.4;
-                    font-weight: 500;
+                    font-weight: 600;
                     letter-spacing: 0;
                 }
                 .fmcg-case-study .wfvwp-hero__heading-wrap {
@@ -3339,7 +3339,7 @@ const HRDocsCaseStudy: React.FC = () => {
                     font-family: var(--sans);
                     font-size: var(--wfvwp-title-size);
                     line-height: 1.04;
-                    font-weight: 600;
+                    font-weight: 700;
                     letter-spacing: -0.01em;
                     text-wrap: balance;
                 }
@@ -3353,7 +3353,7 @@ const HRDocsCaseStudy: React.FC = () => {
                     font-family: var(--sans);
                     font-size: var(--wfvwp-body-size);
                     line-height: 1.5;
-                    font-weight: 400;
+                    font-weight: 500;
                     letter-spacing: 0;
                 }
                 .fmcg-case-study .wfvwp-hero__button-wrap {
@@ -3373,7 +3373,7 @@ const HRDocsCaseStudy: React.FC = () => {
                     font-family: var(--sans);
                     font-size: 16px;
                     line-height: 1.2;
-                    font-weight: 500;
+                    font-weight: 600;
                     letter-spacing: -0.01em;
                     text-decoration: none;
                     transition: none;

@@ -136,12 +136,12 @@ const NativeWebflowVsWordpressHero: React.FC = () => {
                             </div>
 
                             <div className="wfvwp-hero__heading-wrap">
-                                <h1 id="wfvwp-hero-title" className="wfvwp-hero__heading">A modern, scalable WordPress alternative</h1>
+                                <h1 id="wfvwp-hero-title" className="wfvwp-hero__heading">HR Documentation & Control System</h1>
                             </div>
 
                             <div className="wfvwp-hero__body-wrap">
                                 <p className="wfvwp-hero__body">
-                                    Discover why leading agencies and organizations are switching from WordPress to Webflow.
+                                    A compliance-focused HR platform unifying records, payroll, and documentation.
                                 </p>
                             </div>
 
@@ -285,44 +285,32 @@ const WEBFLOW_VS_WORDPRESS_CMS_TABS_AUTOPLAY_MS = 6000;
 const WEBFLOW_VS_WORDPRESS_CMS_TABS_DESKTOP_QUERY = '(min-width: 768px)';
 const webflowVsWordpressCmsTabs: WebflowVsWordpressCmsTab[] = [
     {
-        title: 'Designers',
-        body: 'Design and build sophisticated websites with or without writing custom code. Create design systems and components that drive brand consistency at scale.',
-        imageSrc: 'https://cdn.prod.website-files.com/686294e263eb7e215bd232f7/6895e78dd96d1469d0b6a628_wordpress-tab1-1.avif',
+        title: 'Why Lite',
+        body: 'ERP-Lite is not a reduced enterprise suite. It is a focused HR control system built for SMEs—prioritizing records, workflows, and traceable approvals without unnecessary complexity.',
+        imageSrc: '/images/hr-docs/cms-tab-why-lite.avif',
         imageAlt: '',
-        ctas: [
-            {
-                label: 'Learn more about design in Webflow',
-                href: '/feature/design',
-            },
-        ],
+        ctas: [],
     },
     {
-        title: 'Marketers',
-        body: 'Build quickly with design-approved building blocks — plus write, edit, and update content directly on the canvas or generate it with the help of AI. Publish with just a click, then use Webflow’s native analytics and experimentation tools to optimize every piece of content without the need for plugins or developers.',
-        imageSrc: 'https://cdn.prod.website-files.com/686294e263eb7e215bd232f7/6895e78df34417242202e109_wordpress-tab1-2.avif',
+        title: 'Connected Modules',
+        body: 'Modules work as one system. Records drive workflows, workflows drive payroll, and every action feeds auditability—creating a connected operating model across HR processes.',
+        imageSrc: '/images/hr-docs/cms-tab-connected-modules.avif',
         imageAlt: '',
-        ctas: [
-            {
-                label: 'Explore Webflow\u00A0Optimize',
-                href: '/feature/optimize',
-            },
-            {
-                label: 'Explore page building',
-                href: '/feature/page-building',
-            },
-        ],
+        ctas: [],
     },
     {
-        title: 'Developers',
-        body: 'Add custom code into any page, programmatically serve content in and out of Webflow, and build bespoke integrations with MACH-certified APIs.',
-        imageSrc: 'https://cdn.prod.website-files.com/686294e263eb7e215bd232f7/6895e78deb7f2e1e2ec0168b_wordpress-tab1-3.avif',
+        title: 'Controls First',
+        body: 'Compliance is built into the architecture. Retention, document expiry, payroll locking, and audit trails are enforced by design—ensuring consistent control without manual oversight.',
+        imageSrc: '/images/hr-docs/cms-tab-controls-first.avif',
         imageAlt: '',
-        ctas: [
-            {
-                label: 'Learn more about developer tools',
-                href: '/developers',
-            },
-        ],
+        ctas: [],
+    },
+    {
+        title: 'API-Level Access',
+        body: 'Access is enforced at the API layer, not just the interface. Every action follows strict permissions, ensuring unauthorized operations are structurally impossible across the system.',
+        imageSrc: '/images/hr-docs/cms-tab-api-level-access.avif',
+        imageAlt: '',
+        ctas: [],
     },
 ];
 
@@ -342,61 +330,47 @@ function repairWebflowVsWordpressCopy(value: string) {
 const webflowVsWordpressWhyFeatures: WebflowVsWordpressWhyFeature[] = [
     {
         anchorId: 'sticky-scroll-1',
-        title: 'No more plugin, core, or PHP updates',
+        title: 'Payroll cannot be run with pending approvals',
         body: [
-            'With Webflow, you\'ll never need to update software or manage outdated plugins - you\'re always on the latest version, updated automatically in a secure sandbox with zero downtime.',
-            'More importantly, you don\'t need to rely on plugins anymore - we built the most popular WordPress plugins straight into our platform as native features. Plus, we have a Marketplace with vetted apps and APIs to build your own bespoke integrations and logic.',
+            'In legacy setups, payroll is often run while leave requests sit unapproved in an inbox, requiring retroactive corrections next month.',
+            'ERP-Lite structurally blocks the payroll lock action if there are any unhandled attendance anomalies, missing document updates, or pending leave requests in the current cycle. The system forces operational hygiene.',
         ],
         imageSrc: 'https://cdn.prod.website-files.com/686294e263eb7e215bd232f7/6895e78d6e55a19349eaaaad_wordpress-sticky2-1.avif',
-        imageAlt: '',
+        imageAlt: 'Payroll logic check',
         imageObjectPosition: '0% 0%',
     },
     {
         anchorId: 'sticky-scroll-2',
-        title: 'Go live quickly and safely',
+        title: 'Expired documents freeze associated actions',
         body: [
-            'Custom roles, page branching, private staging, and approval workflows ensure marketers and designers follow DevOps best practices as they go live with a few clicks.',
+            'If an employee\'s mandatory visa or certification expires, they cannot be scheduled or approved for specific operational tasks.',
+            'The document control module isn\'t just a storage drive; it is an active state machine that feeds real-time compliance status to the attendance and payroll engines.',
         ],
         imageSrc: 'https://cdn.prod.website-files.com/686294e263eb7e215bd232f7/6895e78d6f8193e0964081a3_wordpress-sticky2-2.avif',
-        imageAlt: '',
+        imageAlt: 'Expired document state',
         imageObjectPosition: '0% 0%',
     },
     {
         anchorId: 'sticky-scroll-3',
-        title: 'Enterprise-grade managed hosting and security included',
+        title: 'Immutable event logs for every state change',
         body: [
-            'Webflow offers a fully-managed, auto-cached, instantly-deployed hosting environment that automatically serves your site from a location near each visitor. 15,000 websites are published with Webflow every hour with 99.99% hosting uptime, reaching 95% of the world in <50ms.',
-            'Webflow also offers enterprise-grade SOC 2 Type II along with a multitude of security features like global DDoS and bot protection - eliminating the engineering or IT burden of evaluating, implementing, and maintaining website infrastructure and security.',
+            'Accountability requires traceability. When a leave request is approved, or an attendance record is overridden, the system creates a permanent cryptographic-style log.',
+            'It records the exact timestamp, the user ID of the actor, the original state, and the new state. If a manager questions an anomaly three months later, the truth is indisputable.',
         ],
         imageSrc: 'https://cdn.prod.website-files.com/686294e263eb7e215bd232f7/6895e78d30d7de744c94878d_wordpress-sticky2-3.avif',
-        imageAlt: '',
+        imageAlt: 'Audit log view',
         imageObjectPosition: '0% 100%',
-        ctas: [
-            {
-                label: 'Explore hosting',
-                href: '/feature/hosting',
-            },
-            {
-                label: 'Explore security',
-                href: 'https://webflow.com/security',
-            },
-        ],
     },
     {
         anchorId: 'sticky-scroll-4',
-        title: 'Launching your site is just the beginning',
+        title: 'Role-based access enforced at the API layer',
         body: [
-            'Webflow enables anyone on your team to expand your global reach with Localization, make data-driven decisions using native analytics, and run AI-powered tests and personalization with Optimize.',
+            'Security by hiding UI elements is insufficient. If a user inspects the network traffic, they should not be able to forge an approval request.',
+            'ERP-Lite enforces all state-machine rules and role validations at the core server level, ensuring that even if an interface is bypassed, the system remains mathematically secure.',
         ],
         imageSrc: 'https://cdn.prod.website-files.com/686294e263eb7e215bd232f7/6895e78d20825e8a37db9f5a_wordpress-sticky2-4.avif',
         imageAlt: '',
         imageObjectPosition: '0% 0%',
-        ctas: [
-            {
-                label: 'Explore Webflow Optimize',
-                href: '/feature/optimize',
-            },
-        ],
     },
 ];
 
@@ -417,403 +391,208 @@ const webflowVsWordpressCustomerBadges: WebflowVsWordpressCustomerBadge[] = [
 
 const webflowVsWordpressTestimonials: WebflowVsWordpressTestimonial[] = [
     {
-        name: 'Elyssa Albert',
-        title: 'VP of Design',
-        company: 'Attentive',
-        quote: '\u201COur new designs didn\'t need to go through anyone else besides brand and marketing \u2014 no engineers needed. The freedom and flexibility we gained through Webflow was invaluable.\u201D',
+        name: 'Managing Director',
+        title: 'Executive Oversight',
+        company: 'SME Leadership',
+        quote: '\u201CWe needed a single source of truth. Approvals were happening on WhatsApp and there was no way to trace them later. The lack of operational controls was creating real compliance risks.\u201D',
         imageSrc: 'https://cdn.prod.website-files.com/687e8d1b96312cc631cafec7/68921df8b7ed02975aa81f12_609b198fb3c3ab3989d51db6_elyssa-albert.jpeg',
-        imageAlt: 'Elyssa Albert',
-        href: 'https://webflow.com/customers/attentive',
+        imageAlt: 'Managing Director',
+        href: '#',
     },
     {
-        name: 'Curtis Anderson',
-        title: 'Founder and CEO',
-        company: 'Nursa',
-        quote: '\u201CThe biggest value driver for us is speed. Webflow delivers the performance we need while giving us a flexible foundation that scales as our platform grows and the landscape of site discovery evolves \u2014 all without sacrificing team or cost efficiency.\u201D',
+        name: 'Sr. HR Executive',
+        title: 'HR & Payroll',
+        company: 'Core Operations',
+        quote: '\u201CPayroll prep was a three-day ordeal of cross-referencing spreadsheets with leave balances and WhatsApp attendance drops. It was manually exhausting and prone to constant errors.\u201D',
         imageSrc: 'https://cdn.prod.website-files.com/687e8d1b96312cc631cafec7/68a49e6cc818ea3a30397ff2_WfS0vcSrwzZozkZeHQ8-2jJn48Cd_scrppPzRo8_Zcg.webp',
-        imageAlt: 'Curtis Anderson',
-        href: 'https://webflow.com/customers/nursa',
+        imageAlt: 'Sr. HR Executive',
+        href: '#',
     },
     {
-        name: 'Elizabeth Walton Egan',
-        title: 'CMO',
-        company: 'Lattice',
-        quote: '\u201CRapid experimentation with Webflow is huge for us: We\'re able to test quickly which leads to sizable increases in our top-of-funnel metrics and drives more value for our prospects and customers.\u201D',
+        name: 'Operations Manager',
+        title: 'Department Head',
+        company: 'Team Leadership',
+        quote: '\u201CIt was impossible to pull cross-department reports. I couldn\'t tell who was on leave without messaging HR directly. We needed self-service visibility, not just another spreadsheet.\u201D',
         imageSrc: 'https://cdn.prod.website-files.com/687e8d1b96312cc631cafec7/68921d7f25a16ed1eae3e911_66952004d3d1489d86a9e1d7_1662084310247.jpeg',
-        imageAlt: 'Elizabeth Walton Egan',
-        href: 'https://webflow.com/customers/lattice',
+        imageAlt: 'Operations Manager',
+        href: '#',
     },
     {
-        name: 'Kyle Johnston',
-        title: 'Senior Graphic Designer',
-        company: 'HireClix',
-        quote: '\u201CWe don\'t need to hire engineers because we have Webflow, which allows us to push our creative limits and elevate our entire web experience.\u201D',
+        name: 'Operations Employee',
+        title: 'Team Member',
+        company: 'Field Operations',
+        quote: '\u201CI just wanted to know my leave balance and get my payslip without having to email someone every month. Basic transparency was missing from our daily workflow.\u201D',
         imageSrc: 'https://cdn.prod.website-files.com/687e8d1b96312cc631cafec7/68921e413356a6d78eeadedc_1719321093068.jpeg',
-        imageAlt: 'Kyle Johnston',
-        href: 'https://webflow.com/customers/hireclix',
+        imageAlt: 'Operations Employee',
+        href: '#',
     },
 ];
 
 const webflowVsWordpressComparisonRows: WebflowVsWordpressComparisonRow[] = [
     {
-        feature: 'Design flexibility',
+        feature: 'Document Compliance',
+        wordpress: {
+            icon: 'minus',
+            detail: 'Stored in personal Google Drives. Renewals tracked by memory.',
+        },
+        wordpressVip: {
+            icon: 'minus',
+            detail: 'Central repository with simple reminder notifications.',
+        },
+        webflow: {
+            icon: 'check',
+            detail: 'Strict expiry tracking. Expired statuses automatically freeze associated operations.',
+        },
+    },
+    {
+        feature: 'Leave & Attendance',
+        wordpress: {
+            icon: 'minus',
+            detail: 'WhatsApp requests compiled into a master spreadsheet.',
+        },
+        wordpressVip: {
+            icon: 'minus',
+            detail: 'Independent portal requiring manual export for payroll processing.',
+        },
+        webflow: {
+            icon: 'check',
+            detail: 'Integrated leave engine dynamically calculates accurate payroll inputs based on policies.',
+        },
+    },
+    {
+        feature: 'Approval Audits',
         wordpress: {
             icon: 'no',
-            detail: 'Developer-customized themes and blocks with support from 3rd party plugins.',
-        },
-        wordpressVip: {
-            icon: 'no',
-            detail: 'Developer-customized themes and blocks with support from 3rd party plugins.',
-        },
-        webflow: {
-            icon: 'check',
-            detail: 'Power of HTML, CSS, and JS in a visual canvas.',
-        },
-    },
-    {
-        feature: 'Development tools',
-        wordpress: {
-            icon: 'minus',
-            detail: 'PHP with a script for every plugin and GitHub-managed code.',
+            detail: '"Approved" text message from management. Zero traceability.',
         },
         wordpressVip: {
             icon: 'minus',
-            detail: 'PHP with a script for every plugin and GitHub-managed code.',
+            detail: 'Simple state changes with basic timestamping.',
         },
         webflow: {
             icon: 'check',
-            detail: 'SEO-optimized HTML, CSS, and JS generated that you can customize and extend with MACH-certified headless APIs.',
+            detail: 'Immutable audit log capturing actor, time, and exact record state for every decision.',
         },
     },
     {
-        feature: 'Animations and interactions',
-        wordpress: {
-            icon: 'minus',
-            detail: 'Requires plugins, integrations, or custom code.',
-        },
-        wordpressVip: {
-            icon: 'minus',
-            detail: 'Requires plugins, integrations, or custom code.',
-        },
-        webflow: {
-            icon: 'check',
-            detail: 'No-code scroll-based and multi-step interactions and animations. Easily work with Spline, GSAP, 3D, Lottie and Rive.',
-        },
-    },
-    {
-        feature: 'Scaled content',
-        wordpress: {
-            icon: 'minus',
-            detail: 'Quick templated content with proper theme configuration from developers.',
-        },
-        wordpressVip: {
-            icon: 'minus',
-            detail: 'Quick templated content with proper theme and 3rd party plugin configuration from developers.',
-        },
-        webflow: {
-            icon: 'check',
-            detail: 'Rich design system features and a full-featured visual CMS.',
-        },
-    },
-    {
-        feature: 'Collaboration',
+        feature: 'System Access',
         wordpress: {
             icon: 'no',
+            detail: 'Shared credentials leading to zero accountability.',
         },
         wordpressVip: {
             icon: 'minus',
-            detail: 'Preset roles and permissions.',
+            detail: 'Basic UI-level feature toggles.',
         },
         webflow: {
             icon: 'check',
-            detail: 'Custom roles and permissions along with no-code branching, staging, and approval workflows.',
+            detail: 'Role-based access strictly enforced at the core API layer, preventing unauthorized bypasses.',
         },
-    },
-    {
-        feature: 'SEO tools',
-        wordpress: {
-            icon: 'minus',
-            detail: 'Plugins required.',
-        },
-        wordpressVip: {
-            icon: 'minus',
-            detail: 'Plugins required.',
-        },
-        webflow: {
-            icon: 'check',
-            detail: 'Automatic SEO audits and warnings plus unbloated SEO-optimized code.',
-        },
-    },
-    {
-        feature: 'Analytics',
-        wordpress: {
-            icon: 'minus',
-            detail: '3rd party with dev setup and ongoing dev maintenance.',
-        },
-        wordpressVip: {
-            icon: 'minus',
-            detail: '3rd party with dev setup and ongoing dev maintenance.',
-        },
-        webflow: {
-            icon: 'check',
-            detail: 'Visual editor and native no-code setup.',
-        },
-    },
-    {
-        feature: 'Testing and personalization',
-        wordpress: {
-            icon: 'no',
-        },
-        wordpressVip: {
-            icon: 'minus',
-            detail: '3rd party with dev setup and ongoing dev maintenance.',
-        },
-        webflow: {
-            icon: 'check',
-            detail: 'Integrated with testing, advanced targeting, and AI-powered personalization with ability to integrate.',
-        },
-    },
-    {
-        feature: 'Localization',
-        wordpress: {
-            icon: 'minus',
-            detail: 'Duplicated sites with multiple subdomains and subdirectories or plugins.',
-        },
-        wordpressVip: {
-            icon: 'minus',
-            detail: 'Duplicated sites with multiple subdomains and subdirectories or plugins.',
-        },
-        webflow: {
-            icon: 'check',
-            detail: 'Visual-first design and content localization, native AI-powered or extensible translation options, and best-in-class localized SEO.',
-        },
-    },
-    {
-        feature: 'AI',
-        wordpress: {
-            icon: 'no',
-        },
-        wordpressVip: {
-            icon: 'minus',
-            detail: '3rd party / integrated.',
-        },
-        webflow: {
-            icon: 'check',
-            detail: 'Integrated natively throughout Webflow, for content generation, audience personalization, and language translation in addition to 3rd party AI apps such as Jasper.',
-        },
-    },
-    {
-        feature: 'Hosting and security',
-        wordpress: {
-            icon: 'minus',
-            detail: '3rd party with dev setup and ongoing dev maintenance.',
-        },
-        wordpressVip: {
-            icon: 'check',
-            detail: 'Provided and managed by WordPress VIP.',
-        },
-        webflow: {
-            icon: 'check',
-            detail: 'Native, integrated, auto-cached hosting for staging and production fully managed by Webflow’s infrastructure team.',
-        },
-    },
-    {
-        feature: 'Version control and workflows',
-        wordpress: {
-            icon: 'no',
-        },
-        wordpressVip: {
-            icon: 'check',
-            detail: 'Version control using GitHub and can be automated through GitHub Actions. Production and staging environments provided along with controlled deployment to production.',
-        },
-        webflow: {
-            icon: 'check',
-            detail: 'No-code page branching, branch staging, approval workflows, commenting, custom roles and permissions, private staging, site activity log, auto-saving and instant rollback.',
-        },
-    },
-    {
-        feature: 'Pricing',
-        wordpress: {
-            icon: 'minus',
-            detail: 'Free for default WordPress. Plugins and hosting add ongoing unpredictable incremental costs.',
-        },
-        wordpressVip: {
-            icon: 'minus',
-            detail: 'Starts at $25k per year, typically more than 6 figures.',
-        },
-        webflow: {
-            icon: 'check',
-            detail: 'Flexible plans that scale into Enterprise.',
-        },
-    },
-    {
-        feature: 'Partner network',
-        wordpress: {
-            icon: 'check',
-            detail: 'Extensive network of freelancers.',
-        },
-        wordpressVip: {
-            icon: 'minus',
-            detail: 'Small, but loyal pool of agency partners.',
-        },
-        webflow: {
-            icon: 'check',
-            detail: (
-                <>
-                    Extensive network of{' '}
-                    <a href="https://webflow.com/certified-partners" target="_blank" rel="noreferrer">
-                        certified partners.
-                    </a>
-                </>
-            ),
-        },
-    },
-    {
-        feature: 'Support and education',
-        wordpress: {
-            icon: 'minus',
-            detail: 'Strong open source community support.',
-        },
-        wordpressVip: {
-            icon: 'minus',
-            detail: 'Small partner network.',
-        },
-        webflow: {
-            icon: 'check',
-            detail: (
-                <>
-                    Industry-leading{' '}
-                    <a href="https://help.webflow.com/hc/en-us" target="_blank" rel="noreferrer">
-                        Knowledge Base
-                    </a>{' '}
-                    and{' '}
-                    <a href="https://university.webflow.com/" target="_blank" rel="noreferrer">
-                        University
-                    </a>{' '}
-                    provide extensive written and video documentation. Webflow Enterprise includes dedicated CMSs and SAs alongside specialist 24/7 support.
-                </>
-            ),
-        },
-    },
-    {
-        feature: 'Certifications',
-        wordpress: {
-            icon: 'no',
-        },
-        wordpressVip: {
-            icon: 'check',
-            detail: 'SOC1 and SOC2 Type 2.',
-        },
-        webflow: {
-            icon: 'check',
-            detail: 'SOC 2 Type 2 and MACH alliance-certified APIs.',
-        },
-    },
-];
+    }];
 
 const webflowVsWordpressG2Tabs: WebflowVsWordpressG2Tab[] = [
     {
-        title: 'Document control',
+        title: 'Leave Management',
         imageSrc: '/images/hr-docs/g2-document-control.webp',
         imageAlt: 'HR Docs document library demo showing version history, expiry tracking, and document status controls.',
     },
     {
-        title: 'Approval workflows',
+        title: 'Payroll Processing',
         imageSrc: '/images/hr-docs/g2-approval-workflows.webp',
         imageAlt: 'HR Docs approval queue demo showing pending requests, SLA indicators, and approve or reject actions.',
     },
     {
-        title: 'Audit trail',
+        title: 'Document Control',
         imageSrc: '/images/hr-docs/g2-audit-trail.webp',
         imageAlt: 'HR Docs audit log demo showing immutable event history, actors, and record-level change traces.',
+    },
+    {
+        title: 'Attendance Tracking',
+        imageSrc: '/images/hr-docs/g2-document-control.webp',
+        imageAlt: 'HR Docs attendance module showing daily logs, anomaly flags, and correction workflows.',
     },
 ];
 
 const webflowVsWordpressFaqItems: WebflowVsWordpressFaqItem[] = [
     {
-        question: 'What’s the difference between Webflow and WordPress?',
+        question: "What's the difference between ERP-Lite and spreadsheets?",
         answer: [
-            'WordPress is an open-source blogging platform with an extensive library of plugins that can extend it into a CMS offering. Marketers typically rely on prebuilt templates and themes while developers integrate with custom code, which requires significant upfront and ongoing engineering support and puts a low ceiling on what marketing can achieve.',
-            'Moreover, because WordPress doesn’t include integrated hosting, developers must provision, secure, and deploy to their own hosting environments, which adds an additional resourcing burden. Separating the hosting from the vendor tool also opens up the possibility that the two may stop communicating with each other without warning, stranding users with sites and plugins that cannot be updated.',
-            'Webflow is a website experience platform that gives teams the power to build, manage, and optimize websites in a visual-first canvas. On top of a composable CMS, Webflow offers optimization tools, managed hosting, native integrations, and more — plus industry-leading education and support.',
+            'Spreadsheets store data but don\'t govern it. ERP-Lite connects records, approvals, payroll, and documents into one system—ensuring every action is structured, traceable, and operationally consistent.',
         ],
     },
     {
-        question: 'Does Webflow have a CMS?',
+        question: 'Does ERP-Lite include document management?',
         answer: [
-            'Yes. Webflow’s visual-first, composable CMS empowers marketers and designers to create, edit, and publish CMS content and collections without writing code — so you can ship high-impact work, fast. Edit content directly on the canvas, create custom content collections with flexible data models, import content from any CMS instantly via CSV, and connect to your front-end templates visually without developer expertise.',
-            'Our CMS also provides extensive value to engineering and IT by removing the burdens of pixel pushing and managing infrastructure, while still allowing for custom HTML, CSS, and JS to be written anywhere in the page and offering MACH-certified APIs to build bespoke logic and integrations.',
+            'Yes. ERP-Lite includes a governed document layer with versioning, expiry tracking, and employee linkage—ensuring documents actively support compliance, payroll readiness, and operational control.',
         ],
     },
     {
-        question: 'Why switch from WordPress to Webflow?',
+        question: 'Why move from fragmented HR operations to ERP-Lite?',
         answer: [
-            'WordPress websites require significant engineering time to maintain and neither marketing or design have the autonomy or agility to build their own designs, experiments, or personalize content. Unoptimized content slowly rolls out leaving money on the table and your total cost of ownership inflates as more and more Engineering hours are spent just keeping the lights on.',
-            'Webflow customers experience faster time-to-market, the ability to build more engaging and better-performing websites, and much-improved collaboration across every person or team who crafts websites.',
+            'Fragmented systems create delays, errors, and blind spots. ERP-Lite connects attendance, leave, payroll, and approvals—removing coordination overhead and delivering consistent, visible operations.',
         ],
     },
     {
-        question: 'WordPress has a huge plugin ecosystem and can connect to my martech tools. Will I lose this extensibility with Webflow?',
+        question: 'Will ERP-Lite reduce flexibility in handling exceptions?',
         answer: [
-            'You won’t! In fact, Webflow improves on the traditional open-source plugin ecosystem model in 2 ways:',
-            (
-                <>
-                    First, by offering a comprehensive, robust, and sanctioned set of APIs which can be used to create any kind of integration imaginable. Plus, our App Marketplace features fully-vetted and approved apps automatically updated by the developer, which use a sandboxed model to keep the code separate from the Webflow application. <strong>This means that any updates or crashes to the plugin will never affect your core site.</strong>
-                </>
-            ),
-            'Second, a large diversity of plugins itself is an indication of missing functionality out of the box. Because so many features provided by plugins in a typical WordPress build are built natively in to Webflow, developers don’t need to fill as many product gaps in the first place.',
+            'No. ERP-Lite structures exceptions without removing flexibility. Edge cases are processed through defined workflows—making them visible, traceable, and governed without relying on informal handling.',
         ],
     },
     {
-        question: 'Does Webflow provide Advanced Custom Fields?',
+        question: 'Can ERP-Lite support different policies and workflows?',
         answer: [
-            'As a fully-featured CMS, Webflow includes custom post types (called CMS collections) natively. By contrast, default WordPress installations do not include this essential core functionality, so developers have to rely on plugins like Advanced Custom Fields to define and configure additional post types and data models.',
-            'As a complete solution, Webflow offers native, flexible, and visual-first versions of all the crucial functionality WordPress developers are forced to cobble together or build themselves, from SEO to layout builders to custom content types. This not only saves development time, but empowers less technical users to do the same work which currently requires extensive developer expertise.',
+            'Yes. ERP-Lite supports configurable roles, approval paths, and policy rules—allowing teams to model real operational variation while maintaining system-level consistency and control.',
         ],
     },
     {
-        question: 'How is Webflow different from WordPress plugins like Elementor or Divi?',
+        question: 'How is ERP-Lite different from standalone HR tools?',
         answer: [
-            'Beyond the common issue where excess plugins create bloated sites, resulting in performance and security issues, Elementor, Divi, Bricks, Oxygen and other simplified versions of Webflow’s visual editor still face the same fundamental problem of any WordPress implementation: making adjustments to components or themes still requires writing code.',
-            'With Webflow, marketing and design can import from Figma or create their own variables, components, templates, and even full atomic design systems that scale across your entire site.',
+            'Standalone tools solve isolated problems. ERP-Lite connects records, approvals, payroll, and documents—eliminating handoff gaps and creating one continuous operational system.',
         ],
     },
     {
-        question: 'What about site backup and restore?',
+        question: 'What happens after payroll is locked?',
         answer: [
-            (
-                <>
-                    As a complete, integrated solution, Webflow offers automatic and instant{' '}
-                    <a href="https://help.webflow.com/hc/en-us/articles/33961244069395-Save-and-restore-backups" target="_blank" rel="noreferrer">
-                        backups
-                    </a>{' '}
-                    every 10 minutes or every 10 changes – whichever comes first. Backups can be previewed in a new tab – like looking at a time capsule of your site – and one-click restored so that every atomic element of your design system and every asset are instantly restored, so you can design and develop without fear.
-                </>
-            ),
+            'Locked payroll remains unchanged. Corrections are recorded as new adjustment entries—preserving the original state while maintaining a clear and auditable history.',
+        ],
+    },
+    {
+        question: 'How does ERP-Lite ensure compliance?',
+        answer: [
+            'Compliance is enforced by system rules. Invalid data, missing approvals, or expired documents automatically block actions—ensuring operations meet requirements before progressing.',
+        ],
+    },
+    {
+        question: 'Can employees access their own information?',
+        answer: [
+            'Yes. Employees can view leave, attendance, payslips, and document status—improving transparency while reducing dependency on HR teams.',
+        ],
+    },
+    {
+        question: 'Is ERP-Lite suitable for growing SMEs?',
+        answer: [
+            'Yes. ERP-Lite is built for SMEs moving beyond manual processes—delivering structured workflows and control without the complexity of enterprise systems.',
         ],
     },
 ];
 
 const webflowVsWordpressDemoSupportItems: WebflowVsWordpressDemoSupportItem[] = [
-    'Onboarding and training',
-    'Technical consulting',
-    'Personalized help from a dedicated CSM',
-    'On-demand phone support',
-    (
-        <a href="https://webflow.com/certified-partners" target="_blank" rel="noreferrer">
-            Certified Webflow partners
-        </a>
-    ),
+    'Relational database schema diagrams',
+    'State machine definitions for all 8 modules',
+    'Role-based API access control rules',
+    'WhatsApp integration sequence diagrams',
 ];
 
 const NativeWebflowVsWordpressCmsTabs: React.FC = () => {
     const [activeTab, setActiveTab] = useState(0);
     const tabsListRef = useRef<HTMLDivElement>(null);
+    const interactiveInnerRefs = useRef<Array<HTMLDivElement | null>>([]);
     const autoplayTimeoutRef = useRef<number | null>(null);
     const autoplayStartTimeRef = useRef<number | null>(null);
     const autoplayRemainingTimeRef = useRef(WEBFLOW_VS_WORDPRESS_CMS_TABS_AUTOPLAY_MS);
     const isInViewRef = useRef(false);
     const activeTabRef = useRef(0);
+    const [desktopInteractiveHeight, setDesktopInteractiveHeight] = useState<number | null>(null);
     const [isDesktop, setIsDesktop] = useState(() => {
         if (typeof window === 'undefined') {
             return true;
@@ -893,6 +672,62 @@ const NativeWebflowVsWordpressCmsTabs: React.FC = () => {
             image.src = tab.imageSrc;
         });
     }, []);
+
+    useEffect(() => {
+        if (!isDesktop || typeof window === 'undefined') {
+            setDesktopInteractiveHeight(null);
+            return;
+        }
+
+        let frameId = 0;
+        let resizeObserver: ResizeObserver | null = null;
+
+        const measureInteractiveHeight = () => {
+            frameId = 0;
+
+            const nextHeight = interactiveInnerRefs.current.reduce((maxHeight, element) => {
+                if (!element) {
+                    return maxHeight;
+                }
+
+                return Math.max(maxHeight, Math.ceil(element.scrollHeight));
+            }, 0);
+
+            setDesktopInteractiveHeight(currentHeight => (
+                currentHeight === nextHeight ? currentHeight : nextHeight
+            ));
+        };
+
+        const requestMeasure = () => {
+            if (frameId !== 0) {
+                return;
+            }
+
+            frameId = window.requestAnimationFrame(measureInteractiveHeight);
+        };
+
+        requestMeasure();
+        window.addEventListener('resize', requestMeasure);
+
+        if (typeof ResizeObserver === 'function') {
+            resizeObserver = new ResizeObserver(requestMeasure);
+
+            interactiveInnerRefs.current.forEach(element => {
+                if (element) {
+                    resizeObserver?.observe(element);
+                }
+            });
+        }
+
+        return () => {
+            if (frameId !== 0) {
+                window.cancelAnimationFrame(frameId);
+            }
+
+            resizeObserver?.disconnect();
+            window.removeEventListener('resize', requestMeasure);
+        };
+    }, [isDesktop]);
 
     useEffect(() => {
         if (!isDesktop) {
@@ -990,9 +825,9 @@ const NativeWebflowVsWordpressCmsTabs: React.FC = () => {
 
                     <div className="wfvwp-cms-tabs__menu">
                         <div className="wfvwp-cms-tabs__content">
-                            <h3 id="wfvwp-cms-tabs-title" className="wfvwp-cms-tabs__title">Visual-first, composable CMS</h3>
+                            <h3 id="wfvwp-cms-tabs-title" className="wfvwp-cms-tabs__title">Focused scope, connected operations</h3>
                             <p className="wfvwp-cms-tabs__intro">
-                                {'Webflow\u2019s CMS is designed for everyone who has a hand in crafting websites.'}
+                                {'ERP-Lite is designed for teams that need structured HR control without enterprise complexity.'}
                             </p>
                         </div>
 
@@ -1045,8 +880,19 @@ const NativeWebflowVsWordpressCmsTabs: React.FC = () => {
                                                 id={panelId}
                                                 className="wfvwp-cms-tabs__interactive-content"
                                                 aria-labelledby={buttonId}
+                                                style={isDesktop && desktopInteractiveHeight !== null
+                                                    ? {
+                                                        height: isActive ? `${desktopInteractiveHeight}px` : '0px',
+                                                        opacity: isActive ? 1 : 0,
+                                                    }
+                                                    : undefined}
                                             >
-                                                <div className="wfvwp-cms-tabs__interactive-inner">
+                                                <div
+                                                    ref={element => {
+                                                        interactiveInnerRefs.current[index] = element;
+                                                    }}
+                                                    className="wfvwp-cms-tabs__interactive-inner"
+                                                >
                                                     <p className="wfvwp-cms-tabs__body">{repairWebflowVsWordpressCopy(tab.body)}</p>
 
                                                     <div className="wfvwp-cms-tabs__cta-row">
@@ -1142,40 +988,69 @@ const NativeWebflowVsWordpressWhySection: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        if (!isDesktop) {
+        if (!isDesktop || typeof window === 'undefined') {
             setActiveFeature(0);
             return;
         }
 
-        const observer = new IntersectionObserver(
-            entries => {
-                const visibleEntries = entries
-                    .filter(entry => entry.isIntersecting)
-                    .sort((entryA, entryB) => entryB.intersectionRatio - entryA.intersectionRatio);
+        let frameId = 0;
 
-                if (visibleEntries.length === 0) {
-                    return;
+        const updateActiveFeature = () => {
+            frameId = 0;
+
+            const viewportCenter = window.innerHeight / 2;
+            let nextIndex = rowRefs.current.findIndex(row => {
+                if (!row) {
+                    return false;
                 }
 
-                const nextIndex = Number((visibleEntries[0].target as HTMLElement).dataset.index);
-                if (!Number.isNaN(nextIndex)) {
-                    setActiveFeature(nextIndex);
-                }
-            },
-            {
-                threshold: [0.2, 0.35, 0.5, 0.65],
-                rootMargin: '-20% 0px -20% 0px',
-            }
-        );
+                const rect = row.getBoundingClientRect();
+                return rect.top <= viewportCenter && rect.bottom >= viewportCenter;
+            });
 
-        rowRefs.current.forEach(row => {
-            if (row) {
-                observer.observe(row);
+            if (nextIndex === -1) {
+                let closestDistance = Number.POSITIVE_INFINITY;
+
+                rowRefs.current.forEach((row, index) => {
+                    if (!row) {
+                        return;
+                    }
+
+                    const rect = row.getBoundingClientRect();
+                    const rowCenter = rect.top + (rect.height / 2);
+                    const distance = Math.abs(rowCenter - viewportCenter);
+
+                    if (distance < closestDistance) {
+                        closestDistance = distance;
+                        nextIndex = index;
+                    }
+                });
             }
-        });
+
+            if (nextIndex !== -1) {
+                setActiveFeature(currentIndex => (currentIndex === nextIndex ? currentIndex : nextIndex));
+            }
+        };
+
+        const requestUpdate = () => {
+            if (frameId !== 0) {
+                return;
+            }
+
+            frameId = window.requestAnimationFrame(updateActiveFeature);
+        };
+
+        requestUpdate();
+        window.addEventListener('scroll', requestUpdate, { passive: true });
+        window.addEventListener('resize', requestUpdate);
 
         return () => {
-            observer.disconnect();
+            if (frameId !== 0) {
+                window.cancelAnimationFrame(frameId);
+            }
+
+            window.removeEventListener('scroll', requestUpdate);
+            window.removeEventListener('resize', requestUpdate);
         };
     }, [isDesktop]);
 
@@ -1183,9 +1058,9 @@ const NativeWebflowVsWordpressWhySection: React.FC = () => {
         <section className="wfvwp-why-section">
             <div className="max-w-7xl mx-auto px-6 w-full">
                 <div className="wfvwp-why__intro">
-                    <h2 className="wfvwp-why__heading">Why teams choose Webflow</h2>
+                    <h2 className="wfvwp-why__heading">Controls, not just features</h2>
                     <p className="wfvwp-why__summary">
-                        Discover why leading agencies and organizations trust Webflow&apos;s website experience platform over WordPress with their websites.
+                        Compliance isn&apos;t achieved by writing policies; it&apos;s achieved by making non-compliant operations structurally impossible.
                     </p>
                 </div>
 
@@ -1356,18 +1231,18 @@ const NativeWebflowVsWordpressMigrationCta: React.FC = () => {
                     <div className="wfvwp-migration-card__body">
                         <div className="wfvwp-migration-card__content">
                             <div className="wfvwp-migration-card__copy-group">
-                                <h2 className="wfvwp-migration-card__title">How to navigate the WordPress to Webflow migration</h2>
+                                <h2 className="wfvwp-migration-card__title">How to move from fragmented HR ops to one governed system</h2>
                                 <p className="wfvwp-migration-card__body-copy">
-                                    Modern teams need to unplug from WordPress&apos; technical burdens, dev dependencies, workflow bottlenecks, and performance issues that drain critical resources. Download our migration guide to learn why and how migrating to Webflow will refocus your teams on optimizing conversions and ROI.
+                                    Growing teams need to unplug from spreadsheet sprawl, chat-based approvals, missing document controls, and payroll bottlenecks that drain time and create compliance risk. Explore the system story to see why and how ERP-Lite reconnects records, workflows, and auditability so HR teams can refocus on operational clarity, decision speed, and control.
                                 </p>
                             </div>
 
                             <div className="wfvwp-migration-card__button">
-                                <div aria-hidden="true" className="wfvwp-migration-card__button-text">Get the guide</div>
+                                <div aria-hidden="true" className="wfvwp-migration-card__button-text">Get the story</div>
                                 <a
                                     className="wfvwp-migration-card__button-link"
                                     href="/resources/ebooks/wordpress-webflow-migration"
-                                    aria-label="Get the guide"
+                                    aria-label="Get the story"
                                 />
                             </div>
                         </div>
@@ -1404,9 +1279,9 @@ const NativeWebflowVsWordpressCustomersSection: React.FC = () => {
                 <div className="max-w-7xl mx-auto px-6 w-full">
                     <div className="wfvwp-customers__intro-row">
                         <div className="wfvwp-customers__intro-col">
-                            <h2 className="wfvwp-customers__heading">Customers love us</h2>
+                            <h2 className="wfvwp-customers__heading">Teams trust ERP-Lite</h2>
                             <p className="wfvwp-customers__summary">
-                                But don&apos;t just take our word for it — check out our latest G2 awards.
+                                But don&apos;t take our word for it — see how teams rely on it in real operations.
                             </p>
                         </div>
 
@@ -1563,9 +1438,9 @@ const NativeWebflowVsWordpressComparisonTable: React.FC = () => {
                 <div className="wfvwp-compare__intro-row">
                     <div className="wfvwp-compare__intro-col">
                         <h2 className="wfvwp-compare__heading">
-                            How do WordPress, WordPress
+                            Before (Chaos) vs. After
                             <br className="wfvwp-compare__heading-break" />
-                            VIP, and Webflow compare?
+                            (ERP-Lite)
                         </h2>
                     </div>
                 </div>
@@ -1586,7 +1461,7 @@ const NativeWebflowVsWordpressComparisonTable: React.FC = () => {
                                     <div className="wfvwp-compare__cell-slot wfvwp-compare__cell-slot--feature">
                                         <div className="wfvwp-compare__rich-text wfvwp-compare__rich-text--header">
                                             <p>
-                                                <strong>Features</strong>
+                                                <strong>Workflow</strong>
                                             </p>
                                         </div>
                                     </div>
@@ -1595,7 +1470,7 @@ const NativeWebflowVsWordpressComparisonTable: React.FC = () => {
                                     <div className="wfvwp-compare__cell-slot wfvwp-compare__cell-slot--header-value">
                                         <div className="wfvwp-compare__rich-text wfvwp-compare__rich-text--header">
                                             <p>
-                                                <strong>WordPress</strong>
+                                                <strong>Legacy Process</strong>
                                             </p>
                                         </div>
                                     </div>
@@ -1604,7 +1479,7 @@ const NativeWebflowVsWordpressComparisonTable: React.FC = () => {
                                     <div className="wfvwp-compare__cell-slot wfvwp-compare__cell-slot--header-value">
                                         <div className="wfvwp-compare__rich-text wfvwp-compare__rich-text--header">
                                             <p>
-                                                <strong>WordPress VIP</strong>
+                                                <strong>Standard App</strong>
                                             </p>
                                         </div>
                                     </div>
@@ -1613,7 +1488,7 @@ const NativeWebflowVsWordpressComparisonTable: React.FC = () => {
                                     <div className="wfvwp-compare__cell-slot wfvwp-compare__cell-slot--header-value">
                                         <div className="wfvwp-compare__rich-text wfvwp-compare__rich-text--header">
                                             <p>
-                                                <strong>Webflow</strong>
+                                                <strong>ERP-Lite</strong>
                                             </p>
                                         </div>
                                     </div>
@@ -1801,24 +1676,23 @@ const NativeWebflowVsWordpressBusinessImpactSection: React.FC = () => {
                     <div className="wfvwp-business-impact__body">
                         <div className="wfvwp-business-impact__copy-col">
                             <h2 className="wfvwp-business-impact__title">
-                                <span className="wfvwp-business-impact__title-line">See the business{' '}</span>
-                                <span className="wfvwp-business-impact__title-line">impact of moving{' '}</span>
-                                <span className="wfvwp-business-impact__title-line">to Webflow</span>
+                                <span className="wfvwp-business-impact__title-line">See the operational</span>
+                                <span className="wfvwp-business-impact__title-line">impact of ERP-Lite</span>
                             </h2>
                             <p className="wfvwp-business-impact__body-copy">
                                 <span className="wfvwp-business-impact__copy-line">
-                                    Use this calculator to estimate the impact of{' '}
+                                    The implementation transformed HR from an administrative bottleneck{' '}
                                 </span>
                                 <span className="wfvwp-business-impact__copy-line">
-                                    Webflow&apos;s platform on your goals &mdash; backed{' '}
+                                    into an auditable, self-service operation, eliminating weeks{' '}
                                 </span>
                                 <span className="wfvwp-business-impact__copy-line">
-                                    by real-world results.
+                                    of manual payroll processing.
                                 </span>
                             </p>
                             <div data-wf--button--variant="primary" className="wfvwp-business-impact__button btn">
                                 <div aria-hidden="true" className="wfvwp-business-impact__button-text btn-text">
-                                    Use the calculator
+                                    View how it works
                                 </div>
                                 <div className="wfvwp-business-impact__button-icon btn-icon" aria-hidden="true">
                                     <div data-wf--button-icon--variant="arrow-right" className="button-icon-wrap">
@@ -1840,7 +1714,7 @@ const NativeWebflowVsWordpressBusinessImpactSection: React.FC = () => {
                                     target="_blank"
                                     rel="noreferrer"
                                 >
-                                    <span className="wfvwp-hero__sr-only">Use the calculator</span>
+                                    <span className="wfvwp-hero__sr-only">View how it works</span>
                                 </a>
                             </div>
                         </div>
@@ -1921,9 +1795,9 @@ const NativeWebflowVsWordpressG2Section: React.FC = () => {
                 <div className="wfvwp-g2-tabs">
                     <div className="wfvwp-g2-tabs__menu">
                         <div className="wfvwp-g2-tabs__content">
-                            <h2 className="wfvwp-g2-tabs__title">A G2 leader</h2>
+                            <h2 className="wfvwp-g2-tabs__title">Workflows and rules</h2>
                             <p className="wfvwp-g2-tabs__intro">
-                                Three local ERP-Lite views now run inside the original Webflow autoplay pattern: document control, approval routing, and audit traceability.
+                                Each module enforces specific operational rules. Hover over the tabs below to inspect how Leave, Payroll, Documents, and Attendance are systematically governed.
                             </p>
                         </div>
 
@@ -2004,7 +1878,7 @@ const NativeWebflowVsWordpressFaqSection: React.FC = () => {
                 <div className="wfvwp-faq__row">
                     <div className="wfvwp-faq__heading-col">
                         <div className="wfvwp-faq__heading-sticky">
-                            <h2 className="wfvwp-faq__heading">Frequently asked<br />questions</h2>
+                            <h2 className="wfvwp-faq__heading">About ERP-Lite</h2>
                         </div>
                     </div>
 
@@ -2154,12 +2028,12 @@ const NativeWebflowVsWordpressScheduleDemoSection: React.FC = () => {
 
                 <div className="wfvwp-demo-row">
                     <div className="wfvwp-demo-shell__copy-col">
-                        <h2 className="wfvwp-demo-shell__title">Schedule a product demo</h2>
+                        <h2 className="wfvwp-demo-shell__title">View the full architecture</h2>
 
-                        <p className="wfvwp-demo-shell__subheading">We&apos;re invested in your success</p>
+                        <p className="wfvwp-demo-shell__subheading">System Architecture &amp; API Specs</p>
 
                         <p className="wfvwp-demo-shell__body-copy">
-                            From implementation support to in-the-moment troubleshooting, we&apos;re here to help you build, scale, and optimize your sites.
+                            Explore the complete database schema, module relationships, and API specifications that power ERP-Lite.
                         </p>
 
                         <div className="wfvwp-demo-shell__spacer" aria-hidden="true" />
@@ -2176,7 +2050,7 @@ const NativeWebflowVsWordpressScheduleDemoSection: React.FC = () => {
 
                         <div data-wf--button--variant="primary" className="wfvwp-demo-shell__button btn">
                             <div aria-hidden="true" className="wfvwp-demo-shell__button-text btn-text">
-                                Contact sales
+                                Contacts
                             </div>
                             <div className="wfvwp-demo-shell__button-icon btn-icon" aria-hidden="true">
                                 <div data-wf--button-icon--variant="arrow-right" className="button-icon-wrap">
@@ -2198,7 +2072,7 @@ const NativeWebflowVsWordpressScheduleDemoSection: React.FC = () => {
                                 target="_blank"
                                 rel="noreferrer"
                             >
-                                <span className="wfvwp-hero__sr-only">Contact sales</span>
+                                <span className="wfvwp-hero__sr-only">Contacts</span>
                             </a>
                         </div>
                     </div>
@@ -2231,951 +2105,8 @@ const NativeWebflowVsWordpressScheduleDemoSection: React.FC = () => {
 };
 
 const HRDocsCaseStudy: React.FC = () => {
-    const containerRef = useRef<HTMLDivElement>(null);
-
-    const [activeWorkflow, setActiveWorkflow] = useState('leave');
-    const [activeResearchPersona, setActiveResearchPersona] = useState(0);
-
-    const hypothesisData = [
-        {
-            tag: 'Observation Â· Month 1',
-            title: 'The spreadsheet was the symptom, not the system',
-            quote: `"We knew the payroll was probably right. We just couldn't prove it from the data."`,
-            body: "A 120-employee company running HR through twelve disconnected spreadsheets, WhatsApp threads, and personal Google Drive folders. The real problem wasn't the tools â€” it was that there was no data model. Attendance lived in chat screenshots. Approvals vanished with the person who sent them. Document versions were indistinguishable. The first insight: this wasn't a UI problem. It was a structural one.",
-            pills: ['Root cause identified', 'No shared data model', 'Compliance blind spot']
-        },
-        {
-            tag: 'Hypothesis Â· Month 2',
-            title: 'Business rules encoded in the schema outlast any spreadsheet',
-            body: "The core question: what are the actual entities in this business? Employee, Attendance, Leave, Payroll Run, Document, Approval â€” six entities, not twelve spreadsheets. Once you define what a 'Payroll Run' is (period, lock state, variance threshold, approval chain) and what a 'Document' is (owner, version, expiry, access role), all the chaos in WhatsApp threads resolves into proper workflow states. The hypothesis: model the controls correctly and most of the compliance risk disappears without building anything clever.",
-            pills: ['6 core entities defined', 'Relationships mapped', 'Hypothesis formed']
-        },
-        {
-            tag: 'Design decision Â· Month 2',
-            title: 'Build the controls first. UI second.',
-            body: 'Audit logs and period locking were architected before the first interface component was drawn. Three deliberate exclusions kept the scope clean: no recruitment module, no accounting integration, no benefits marketplace. Every design decision was tested against one constraint â€” can a compliance auditor reconstruct exactly what happened and who approved it? If yes, ship. If no, redesign.',
-            pills: ['Audit-first architecture', 'Period locking', 'Deliberate exclusions']
-        },
-        {
-            tag: 'Validation Â· Month 3',
-            title: 'Payroll cycle dropped from 3 days to 2 hours.',
-            body: "The clearest validation was time. Before: a payroll computation spread across 12 spreadsheets took three working days. After: the structured payroll engine â€” pulling directly from the attendance module â€” produced the same output in under two hours, with an automatic variance alert if any department's figure deviated more than 15% from the prior period. The variance guard alone caught two data-entry errors in the first run.",
-            pills: ['3 days â†’ 2 hours', 'Variance guard live', '2 errors caught on first run']
-        },
-        {
-            tag: 'Surprise finding Â· Month 4',
-            title: 'The audit log became the most-used feature.',
-            body: "The audit log was built for compliance. What wasn't expected was how often HR used it for internal disputes. When an employee challenged their leave balance or a manager denied approving something they had approved, the append-only log ended the conversation in seconds. A feature built to satisfy auditors became the system's most trusted source of truth for everyday operations.",
-            pills: ['Unexpected use case', 'Dispute resolution', 'Trust signal for staff']
-        }
-    ];
-
-    const workflowWalkthroughs = [
-        {
-            id: 'leave',
-            tab: 'Leave Request',
-            title: 'Leave Request — Complete State Machine',
-            steps: [
-                {
-                    type: 'state',
-                    label: 'DRAFT',
-                    tone: 'draft',
-                    detail: 'Employee creates. Balance checked. Date overlap validated against locked periods.'
-                },
-                {
-                    type: 'arrow',
-                    label: '',
-                    tone: 'arrow',
-                    detail: '↓ Employee submits — system validates balance and period availability'
-                },
-                {
-                    type: 'state',
-                    label: 'SUBMITTED',
-                    tone: 'pending',
-                    detail: 'Enters workflow queue. Tier 1 (Team Lead) notified. 48-hour SLA countdown starts.'
-                },
-                {
-                    type: 'arrow',
-                    label: '',
-                    tone: 'arrow',
-                    detail: '↓ Team Lead acts — OR 48h passes → auto-escalates'
-                },
-                {
-                    type: 'state',
-                    label: 'UNDER REVIEW',
-                    tone: 'review',
-                    detail: 'Tier 2 (HR Manager) review. Validates policy eligibility and team coverage.'
-                },
-                {
-                    type: 'arrow',
-                    label: '',
-                    tone: 'arrow',
-                    detail: '↓ Approved → balance deducted, payroll notified | Rejected → reason mandatory'
-                },
-                {
-                    type: 'state',
-                    label: 'APPROVED',
-                    tone: 'approved',
-                    detail: 'Balance updated. Calendar flagged. Payroll engine notified for period impact.'
-                },
-                {
-                    type: 'state',
-                    label: 'REJECTED',
-                    tone: 'rejected',
-                    detail: 'Reason recorded immutably. Balance unchanged. Employee notified. Resubmission allowed.'
-                },
-                {
-                    type: 'arrow',
-                    label: '',
-                    tone: 'arrow',
-                    detail: '↓ Approved leave → applied in next payroll run'
-                },
-                {
-                    type: 'state',
-                    label: 'IN PAYROLL',
-                    tone: 'locked',
-                    detail: 'Leave days reflected in payroll computation. Unpaid leave creates deduction entry.'
-                }
-            ],
-            rules: [
-                {
-                    tone: 'good',
-                    typeLabel: 'Auto-Approve Rule',
-                    title: 'Casual ≤1 day + prior month attendance ≥95%',
-                    body: 'Bypasses Team Lead tier. Routes direct to HR stamp. Full audit entry still written — the shortcut is operational, not a compliance bypass.'
-                },
-                {
-                    tone: 'alert',
-                    typeLabel: 'Escalation Rule',
-                    title: '48-hour inaction triggers automatic escalation',
-                    body: 'The original approver receives a missed-action notification. Request routes to the next tier. This eliminates the "lost in inbox" failure structurally — not by policy, by system design.'
-                },
-                {
-                    tone: 'risk',
-                    typeLabel: 'Conflict Detection',
-                    title: 'Submission blocked if preconditions fail',
-                    body: 'Three hard blocks: insufficient balance, overlap with locked payroll period, leave type ineligible for contract type. These are not warnings — submission is structurally impossible when any condition fails.'
-                },
-                {
-                    tone: 'good',
-                    typeLabel: 'Payroll Integration',
-                    title: 'Approval writes directly to payroll engine',
-                    body: 'HR Manager never manually communicates leave status to payroll. The approved leave event triggers a payroll input flag automatically. The payroll run reads this flag during computation.'
-                }
-            ]
-        },
-        {
-            id: 'payroll',
-            tab: 'Payroll Run',
-            title: 'Payroll Run — Complete State Machine',
-            steps: [
-                {
-                    type: 'state',
-                    label: 'INITIATED',
-                    tone: 'draft',
-                    detail: 'HR starts run. System validates: attendance finalized, no open leave, prior period locked.'
-                },
-                {
-                    type: 'arrow',
-                    label: '',
-                    tone: 'arrow',
-                    detail: '↓ Validation passes — computation begins per employee'
-                },
-                {
-                    type: 'state',
-                    label: 'COMPUTING',
-                    tone: 'pending',
-                    detail: 'Gross = base + overtime + allowances. Deductions = tax + PF + unpaid leave + penalties. Net computed.'
-                },
-                {
-                    type: 'arrow',
-                    label: '',
-                    tone: 'arrow',
-                    detail: '↓ Computation complete — variance check runs (>15% flags records)'
-                },
-                {
-                    type: 'state',
-                    label: 'PENDING APPROVAL',
-                    tone: 'review',
-                    detail: 'HR reviews totals. Flagged variances require Finance clearance before MD approval.'
-                },
-                {
-                    type: 'arrow',
-                    label: '',
-                    tone: 'arrow',
-                    detail: '↓ HR clears flags → MD sign-off requested'
-                },
-                {
-                    type: 'state',
-                    label: 'APPROVED',
-                    tone: 'approved',
-                    detail: 'MD approves. Payslips generated per employee with entity branding.'
-                },
-                {
-                    type: 'arrow',
-                    label: '',
-                    tone: 'arrow',
-                    detail: '↓ MD approval → period permanently locked'
-                },
-                {
-                    type: 'state',
-                    label: 'LOCKED',
-                    tone: 'locked',
-                    detail: 'Period locked at DB level. No edits possible. Post-lock corrections create Adjustment entries only.'
-                }
-            ],
-            rules: [
-                {
-                    tone: 'risk',
-                    typeLabel: 'Variance Alert — Mandatory',
-                    title: '>15% net pay deviation vs prior month blocks progression',
-                    body: 'Finance review is not optional. Run cannot proceed to MD while flagged records are uncleared. Catches errors without blocking legitimate changes (new hires, revisions).'
-                },
-                {
-                    tone: 'risk',
-                    typeLabel: 'Period Lock — Permanent',
-                    title: 'Locked period cannot be modified — only adjustment entries',
-                    body: 'Post-lock corrections create a new Adjustment PayrollEntry referencing the original run. The error cannot be silently fixed. Both the error and the correction are permanently in the audit log.'
-                },
-                {
-                    tone: 'alert',
-                    typeLabel: 'Exception: Expired Document',
-                    title: 'Expired ID document blocks payslip release for that employee',
-                    body: "Payroll run continues for all other employees. The specific employee's payslip is held in PENDING state until the document exception is resolved. This prevents one bad record from delaying the entire payroll cycle."
-                }
-            ]
-        },
-        {
-            id: 'doc',
-            tab: 'Document Control',
-            title: 'Document — Complete Lifecycle State Machine',
-            steps: [
-                {
-                    type: 'state',
-                    label: 'DRAFT',
-                    tone: 'draft',
-                    detail: 'HR creates from template or blank. Version 1. Employee linked. Type defined.'
-                },
-                {
-                    type: 'arrow',
-                    label: '',
-                    tone: 'arrow',
-                    detail: '↓ HR submits for MD sign-off — version number locked'
-                },
-                {
-                    type: 'state',
-                    label: 'PENDING SIGN-OFF',
-                    tone: 'review',
-                    detail: 'MD reviews. Revisions increment version. Every version preserved — no overwrite.'
-                },
-                {
-                    type: 'arrow',
-                    label: '',
-                    tone: 'arrow',
-                    detail: '↓ MD signs → document issued'
-                },
-                {
-                    type: 'state',
-                    label: 'ISSUED',
-                    tone: 'issued',
-                    detail: 'Available in employee self-service. Physical copy tracked in custody register.'
-                },
-                {
-                    type: 'arrow',
-                    label: '',
-                    tone: 'arrow',
-                    detail: '↓ Employee signs / acknowledges'
-                },
-                {
-                    type: 'state',
-                    label: 'SIGNED',
-                    tone: 'approved',
-                    detail: 'Acknowledgement recorded with timestamp. Document legally executed.'
-                },
-                {
-                    type: 'arrow',
-                    label: '',
-                    tone: 'arrow',
-                    detail: '↓ On expiry date → status automatically transitions'
-                },
-                {
-                    type: 'state',
-                    label: 'EXPIRED',
-                    tone: 'expired',
-                    detail: 'Alert generated. Renewal workflow triggered. Prior signed version preserved in archive.'
-                },
-                {
-                    type: 'state',
-                    label: 'ARCHIVED',
-                    tone: 'archived',
-                    detail: 'Still retrievable. Still attached to employee record. Never deleted. 5-year minimum retention.'
-                }
-            ],
-            rules: [
-                {
-                    tone: 'good',
-                    typeLabel: 'Version Control',
-                    title: 'Every save is a new version — no overwrite',
-                    body: '"FINAL_v3_ACTUAL.docx" is structurally impossible. The system never allows overwrite. Prior versions are always accessible with their author and timestamp.'
-                },
-                {
-                    tone: 'risk',
-                    typeLabel: 'Expiry Blocking',
-                    title: 'Expired ID document blocks payslip release',
-                    body: 'Document expiry is not cosmetic. An employee with an expired mandatory document has their payslip held in PENDING state until resolution. The block is enforced at payroll run time.'
-                },
-                {
-                    tone: 'risk',
-                    typeLabel: 'Exit Clearance',
-                    title: 'Employee cannot exit with documents in Issued status',
-                    body: 'Exit clearance checklist is system-generated. Every document in Issued status appears automatically. Completion of exit is blocked until all items are returned or marked as waived with a reason.'
-                }
-            ]
-        },
-        {
-            id: 'att',
-            tab: 'Attendance Exception',
-            title: 'Attendance Exception — State Machine',
-            steps: [
-                {
-                    type: 'state',
-                    label: 'OPEN',
-                    tone: 'exception',
-                    detail: 'System auto-creates exception for missed punch, late beyond threshold, or invalid span.'
-                },
-                {
-                    type: 'arrow',
-                    label: '',
-                    tone: 'arrow',
-                    detail: '↓ Employee submits correction reason (or Team Lead initiates)'
-                },
-                {
-                    type: 'state',
-                    label: 'SUBMITTED',
-                    tone: 'pending',
-                    detail: 'Correction reason attached. Team Lead and HR notified for review.'
-                },
-                {
-                    type: 'arrow',
-                    label: '',
-                    tone: 'arrow',
-                    detail: '↓ Team Lead reviews correction reason'
-                },
-                {
-                    type: 'state',
-                    label: 'REVIEWED',
-                    tone: 'review',
-                    detail: 'Team Lead recommends approval or rejection with comments.'
-                },
-                {
-                    type: 'arrow',
-                    label: '',
-                    tone: 'arrow',
-                    detail: '↓ HR finalizes — attendance status updates, payroll impact recalculates'
-                },
-                {
-                    type: 'state',
-                    label: 'RESOLVED',
-                    tone: 'approved',
-                    detail: 'Corrected attendance record created. Original exception preserved. Payroll impact updated if period open.'
-                },
-                {
-                    type: 'state',
-                    label: 'REJECTED',
-                    tone: 'rejected',
-                    detail: 'Original anomalous record stands. Absent/unpaid treatment applied. Audit entry written.'
-                }
-            ],
-            rules: [
-                {
-                    tone: 'alert',
-                    typeLabel: 'Auto-Exception Creation',
-                    title: 'System creates exceptions automatically — no manual reporting',
-                    body: 'Missed clock-out, late arrival beyond threshold, and negative/invalid time spans create AttendanceException records automatically at end of shift. No HR manual intervention required to catch anomalies.'
-                },
-                {
-                    tone: 'risk',
-                    typeLabel: 'Payroll Impact Rule',
-                    title: 'Unresolved exception = absent treatment in payroll',
-                    body: 'If an exception is still OPEN when the payroll period closes, the system treats that day as absent. The correction process must happen before the payroll period locks. This creates urgency without requiring manual tracking.'
-                }
-            ]
-        }
-    ];
-
-    const complianceDesignCards = [
-        {
-            icon: '📋',
-            title: 'Record Keeping',
-            checks: [
-                'Service records retained 5+ years post-exit — soft-delete only, no physical removal ever at any role level',
-                'NID, DOB, blood group stored as verified fields — edits require HR Manager role and auto-write immutable audit entry',
-                'Every salary revision records: effective date, prior amount, new amount, approved-by, and reason — full trail for any inspection',
-                'Employment type tracked explicitly: Permanent / Probation / MTO / Contractual — each triggers different entitlement calculation rules'
-            ]
-        },
-        {
-            icon: '⚖️',
-            title: 'Payroll & Leave Compliance',
-            checks: [
-                'Annual leave entitlement encoded per employment type and location — factory vs commercial rates applied at computation time',
-                'Payroll period locking: locked months cannot be edited by anyone — corrections create adjustment entries with full approval chain',
-                'Post-lock adjustments reference original run ID, reason, and actor — the error and correction both permanently in audit log',
-                'Leave balance deducted only on approval, not on submission — pending requests do not prematurely reduce available balance'
-            ]
-        },
-        {
-            icon: '🔒',
-            title: 'Data Protection',
-            checks: [
-                'NID, personal mobile, bank details masked in list views — full values only visible to HR Manager and above at API query level',
-                'Photo and personal email optional with explicit consent flag — system enforces consent is set before data can be stored',
-                'Data export requires HR Manager minimum — export events logged with actor, timestamp, data scope, and format',
-                'Session tokens carry role claims — role checked at API query level, not at UI rendering level'
-            ]
-        },
-        {
-            icon: '🕵️',
-            title: 'Audit Trail Architecture',
-            checks: [
-                'Every write operation writes to audit_log before main transaction commits — if audit write fails, main write rolls back atomically',
-                'Full before/after state stored as JSONB — not just "field X changed" but complete record snapshot at that moment in time',
-                'Append-only at database level — no UPDATE or DELETE permission on audit_log table, including for Super Admin role',
-                'Audit entries exportable as structured CSV for labor authority submission — filterable by date, actor, entity, and event type'
-            ]
-        }
-    ];
-
-    const auditLogEntries = [
-        {
-            timestamp: '2025-11-01 09:02',
-            event: 'PAYROLL_LOCK',
-            tone: 'lock',
-            actor: 'N. Sultana · HR',
-            change: 'Nov 2025 · 15 employees · Gross BDT 1,104,800 · Period locked pending MD approval'
-        },
-        {
-            timestamp: '2025-10-30 14:33',
-            event: 'LEAVE_APPROVED',
-            tone: 'approve',
-            actor: 'M.I. Serwany',
-            change: 'LR-089 · T.J. Parvez · Sick leave 3 days · Balance 8→5 · Payroll flag written'
-        },
-        {
-            timestamp: '2025-10-28 11:15',
-            event: 'SALARY_UPDATED',
-            tone: 'update',
-            actor: 'N. Sultana · HR',
-            change: 'EMP-047 · gross_salary 8,000→12,000 BDT · Reason: post-probation · Effective Nov 2025'
-        },
-        {
-            timestamp: '2025-10-15 08:55',
-            event: 'EMP_CREATED',
-            tone: 'create',
-            actor: 'N. Sultana · HR',
-            change: 'EMP-047 · A.J. Yeana · Entity: Operations · Type: MTO · Dept: People & HR'
-        },
-        {
-            timestamp: '2025-10-10 10:22',
-            event: 'DOC_EXPIRED',
-            tone: 'expire',
-            actor: 'System',
-            change: 'DOC-031 · Sabbir Hassan · ID Document expired · Payslip hold flag activated · Renewal alert sent'
-        },
-        {
-            timestamp: '2025-10-01 14:40',
-            event: 'PAYROLL_LOCKED',
-            tone: 'lock',
-            actor: 'Tanvir Morshed · MD',
-            change: 'Oct 2025 · 13 employees · Gross BDT 1,067,480 · MD signed off · Period permanently locked'
-        }
-    ];
-
-    const problemStatementCards = [
-        {
-            label: 'PAIN — 01',
-            title: 'Payroll preparation was a 3-day manual ordeal',
-            desc: 'Twelve disconnected spreadsheets, each with different formula logic, maintained by different people. Cross-validating attendance with payroll required reading WhatsApp conversation history. A single mid-month salary change required manual updates across multiple files with no confirmation it was complete.',
-            tag: '3 days \u2192 72 staff-hours lost monthly'
-        },
-        {
-            label: 'PAIN — 02',
-            title: 'Attendance lived in a WhatsApp group — unverifiable',
-            desc: 'Daily attendance submitted as text messages. No timestamp integrity, no verification mechanism, no way to detect missed punches or late arrivals systematically. Leave balances were approximated from memory. A dispute about attendance three weeks ago was structurally impossible to resolve.',
-            tag: 'Leave disputes unresolvable in ~40% of cases'
-        },
-        {
-            label: 'PAIN — 03',
-            title: 'HR documents stored in personal accounts',
-            desc: 'Employment contracts, offer letters, and NID copies lived in personal Google Drive folders — not company-owned. When two employees left within three months, their contract files left with them. No version tracking. The "latest" file was whatever had most recently been renamed "FINAL." A compliance audit would have been a catastrophe.',
-            tag: 'Doc recovery rate post-exit \u2192 ~60%'
-        },
-        {
-            label: 'PAIN — 04',
-            title: 'Approval decisions made on WhatsApp — no record',
-            desc: 'Leave approvals, salary revisions, document issuances — all communicated via chat message. No formal record, no timestamp integrity, no way to reconstruct the decision chain six months later. The system literally could not answer: who approved this, when, and under what conditions?',
-            tag: 'Approval audit trail recoverable \u2192 0%'
-        },
-        {
-            label: 'PAIN — 05',
-            title: 'Cross-department reporting was structurally impossible',
-            desc: "Getting total headcount, payroll cost, or leave utilization across departments meant manually aggregating files with inconsistent structures. This report was never produced. Leadership made staffing decisions with no data. Finance couldn't predict monthly payroll cost with any precision.",
-            tag: 'Consolidated HR report \u2192 never produced'
-        },
-        {
-            label: 'PAIN — 06',
-            title: 'Equipment custody invisible — no exit clearance',
-            desc: 'Laptops, SIM cards, and mobile phones issued to employees and then forgotten. No custody register, no return workflow, no exit clearance checklist. Devices discovered missing only at the next procurement cycle. No mechanism for enforcing document or asset return on departure.',
-            tag: 'Asset recovery rate on exit \u2192 below 70%'
-        }
-    ];
-
-    const preSystemInfrastructure = [
-        { label: '\u00D7 12 Google Sheets', tone: 'risk' },
-        { label: '\u00D7 3 WhatsApp Groups', tone: 'risk' },
-        { label: '\u00D7 4 Personal Drives', tone: 'risk' },
-        { label: '0 Approval Records', tone: 'risk' },
-        { label: '0 Audit Trail', tone: 'risk' },
-        { label: 'Paper NID Copies', tone: 'warn' },
-        { label: 'Email Thread Approvals', tone: 'warn' },
-        { label: 'Unversioned Contracts', tone: 'warn' },
-        { label: 'No Leave Balances', tone: 'warn' },
-        { label: 'Memory-based Decisions', tone: 'neutral' },
-        { label: 'No Cross-dept View', tone: 'neutral' },
-        { label: 'No Exit Clearance', tone: 'neutral' }
-    ];
-
-    const researchPersonas = [
-        {
-            tabRole: 'Executive Leadership',
-            tabName: 'Managing Director',
-            tabDept: 'Strategic oversight · All departments',
-            role: 'Executive Leadership · Strategic Oversight',
-            name: 'Managing Director',
-            meta: '8 years tenure · Final approver · Cross-department visibility',
-            quote: `"I need total payroll cost across all departments in one view — not four files I have to add up. And when I ask how a decision was made, I should get a timestamped record, not a WhatsApp screenshot."`,
-            needs: [
-                'Consolidated cross-department analytics — headcount, payroll cost, leave utilization in one dashboard',
-                'Final approval authority embedded in workflow chain — no parallel approval tracks',
-                'Complete audit trail — every decision reconstructable with actor, timestamp, rationale'
-            ]
-        },
-        {
-            tabRole: 'HR Operations',
-            tabName: 'Sr. HR Executive',
-            tabDept: 'People ops · Payroll prep',
-            role: 'HR Operations · Head Office',
-            name: 'Sr. HR Executive',
-            meta: 'Manages records, payroll prep, documentation for all staff',
-            quote: `"Payroll takes three full days — opening twelve sheets, reading WhatsApp history for attendance, manually calculating deductions for each person. Every month. One missed punch can break the whole calculation chain."`,
-            needs: [
-                'Automated payroll run — system computes from attendance and contracts, HR reviews and approves',
-                'Leave request management with real-time balance tracking — no memory-based decisions',
-                'Document creation with versioning — generate letters from templates, track issuance and signatures'
-            ]
-        },
-        {
-            tabRole: 'Department Manager',
-            tabName: 'Operations Manager',
-            tabDept: 'Team management · 12 reports',
-            role: 'Department Manager · Operations',
-            name: 'Operations Manager',
-            meta: '12 direct reports · Responsible for team attendance and leave decisions',
-            quote: `"Someone requests leave on WhatsApp, I reply 'ok', and then nothing happens — HR doesn't know, payroll doesn't know. Three weeks later HR asks me and I've forgotten the conversation."`,
-            needs: [
-                'Team-scoped view — attendance and leave for my direct reports only',
-                'In-app approval with automatic cascade to HR and payroll — no manual communication',
-                'Mobile-ready — approve requests from phone, no desktop or special software needed'
-            ]
-        },
-        {
-            tabRole: 'Field / Factory Staff',
-            tabName: 'Operations Employee',
-            tabDept: 'Frontline · Mobile-primary user',
-            role: 'Field Operations · Factory & Delivery',
-            name: 'Operations Employee',
-            meta: 'Permanent · Factory or field location · Smartphone-primary',
-            quote: `"I don't know how many leave days I have left. My manager guesses. I find out leave was unpaid only when I see the payslip — nobody told me before. I don't even know what the deductions mean."`,
-            needs: [
-                'Self-service leave balance — real-time balance per leave type without asking anyone',
-                'Itemized payslip with every line explained — understand every deduction before it happens',
-                'Browser-based on any smartphone — no app install, fast on slow mobile connections'
-            ]
-        }
-    ];
-
-    const researchFindings = [
-        {
-            number: '01',
-            title: 'Single source of truth was the unanimous demand',
-            body: 'Every role cited data fragmentation as their primary pain. The architecture principle — one canonical employee record that all modules derive from — came directly from this convergence. No module was designed until the entity relationships were locked.'
-        },
-        {
-            number: '02',
-            title: 'Compliance controls were the actual business case',
-            body: 'Leadership agreed to fund the system after calculating payroll ROI. But the compliance architecture — audit log, period locking, document versioning — was cited as the reason they would trust the system. Controls are not features; they are the foundation of credibility.'
-        },
-        {
-            number: '03',
-            title: 'Mobile-first was a structural requirement, not a preference',
-            body: '40% of the workforce uses smartphones exclusively. A system requiring desktop access fails before deployment for nearly half its users. The progressive web architecture and mobile layout were specified before any screen was designed.'
-        }
-    ];
-    const strategyCards = [
-        {
-            number: '1',
-            title: 'Why "Lite" — Deliberate Exclusions',
-            body: 'ERP-Lite v1 excludes recruitment/ATS, full accounting ledger, benefits marketplace, multi-country tax engine, and drag-and-drop workflow builder. These are excluded not because they are unimportant, but because including them would require enterprise infrastructure to operate and would dilute the credibility of the core operations system.',
-            note: '→ The scope boundary creates the value proposition. "Lite but complete" beats "everything but unreliable."'
-        },
-        {
-            number: '2',
-            title: 'Why 8 Modules — Connected, Not Isolated',
-            body: 'The 8 modules were selected because they form a complete operations loop: Employee Records feed Attendance and Leave; Attendance and Leave feed Payroll; Payroll and Documents feed Approval Workflows; Approvals and all state changes feed the Audit Log; the Audit Log feeds Analytics. Removing any module breaks the loop.',
-            note: '→ Module selection was determined by data dependencies, not by feature checklists.'
-        },
-        {
-            number: '3',
-            title: 'Why Controls Were Designed First',
-            body: `The audit log, soft-delete policy, payroll period locking, and approval workflow architecture were specified before any UI was designed. This is not standard product development practice — it reflects a deliberate choice that a system handling people's money and employment records must be trustworthy before it is convenient.`,
-            note: '→ Compliance infrastructure is not overhead. It is the reason stakeholders will trust the system with real data.'
-        },
-        {
-            number: '4',
-            title: 'Why Role-Based Access at API Level',
-            body: 'Access control enforced at UI level is cosmetic — a hidden button can be revealed with developer tools. ERP-Lite enforces access at the API query level: an Employee role session requesting the payroll endpoint receives a 403, not empty data. The salary figure never travels across the network to an unauthorized session.',
-            note: '→ The distinction between UI-level and API-level access control is the difference between appearance and security.'
-        }
-    ];
-
-    const moduleArchitectureCards = [
-        {
-            number: 'MOD-01',
-            icon: '👤',
-            title: 'Employee Records',
-            desc: 'Canonical profile, contract, reporting line, status history, equipment custody, linked documents. Source of truth for all modules.',
-            badge: 'Core',
-            tone: 'core'
-        },
-        {
-            number: 'MOD-02',
-            icon: '📆',
-            title: 'Attendance & Time',
-            desc: 'Clock-in/out logs, shift assignment, anomaly detection (missed punch, late, overtime), manual correction requests with approval flow.',
-            badge: 'Core',
-            tone: 'core'
-        },
-        {
-            number: 'MOD-03',
-            icon: '🏖️',
-            title: 'Leave & Absence',
-            desc: 'Multi-type leave with real-time balance tracking, request lifecycle, overlap detection, payroll impact flag on approval.',
-            badge: 'Core',
-            tone: 'core'
-        },
-        {
-            number: 'MOD-04',
-            icon: '💰',
-            title: 'Payroll Engine',
-            desc: 'Pay-period batch computation, earnings + deductions pipeline, period locking, payslip generation, post-lock adjustment entries only.',
-            badge: 'Core',
-            tone: 'core'
-        },
-        {
-            number: 'MOD-05',
-            icon: '📄',
-            title: 'Documentation',
-            desc: 'Versioned document library, status pipeline (Draft→Issued→Signed→Archived), expiry alerts, acknowledgement tracking, custody register.',
-            badge: 'Control',
-            tone: 'control'
-        },
-        {
-            number: 'MOD-06',
-            icon: '✅',
-            title: 'Approval Workflows',
-            desc: 'Sequential approval steps with 48h escalation, rejection with mandatory reason, reassignment, full step-by-step decision history per request.',
-            badge: 'Control',
-            tone: 'control'
-        },
-        {
-            number: 'MOD-07',
-            icon: '📊',
-            title: 'Analytics & Reporting',
-            desc: 'Headcount, payroll cost by department, leave utilization, attendance compliance rate, document expiry risk, pending approval SLA count.',
-            badge: 'Insight',
-            tone: 'insight'
-        },
-        {
-            number: 'MOD-08',
-            icon: '🔍',
-            title: 'Audit Log',
-            desc: 'Immutable append-only event stream. Who changed what, to which record, with full before/after state as JSONB. Filterable, exportable.',
-            badge: 'Control',
-            tone: 'control'
-        }
-    ];
-
-    const moduleConnections = [
-        { label: 'Employee Records', active: true },
-        { label: 'Attendance & Leave', active: false },
-        { label: 'Document Vault', active: false },
-        { label: 'Payroll Inputs', active: true },
-        { label: 'Compliance Checks', active: false },
-        { label: 'Payroll Run', active: true },
-        { label: 'Payslips & Reports', active: false },
-        { label: 'Audit Log', active: true }
-    ];
-
-    const liveSystemScenarios = [
-        {
-            label: 'Guided Scenario 1',
-            name: 'Leave Approval Workflow',
-            desc: 'Switch to Employee → submit leave → switch to Team Lead → approve it'
-        },
-        {
-            label: 'Guided Scenario 2',
-            name: 'Run Payroll for November',
-            desc: 'Switch to HR Manager → go to Payroll → run the computation sequence'
-        },
-        {
-            label: 'Guided Scenario 3',
-            name: 'Document Expiry Review',
-            desc: 'Switch to HR Manager → go to Documentation → review 3 expiring documents'
-        }
-    ];
-
-    const activeWorkflowData =
-        workflowWalkthroughs.find((workflow) => workflow.id === activeWorkflow) ?? workflowWalkthroughs[0];
-
-    const dataFlowRows = [
-        {
-            layer: 'Input',
-            cells: [
-                {
-                    title: 'Onboarding Data',
-                    body: 'Name, NID, DOB, contract type, salary grade, department, reporting line, blood group, emergency contact',
-                    tone: 'brand'
-                },
-                {
-                    title: 'Daily Clock Record',
-                    body: 'Timestamp, location flag, shift assignment, manager verify trigger'
-                },
-                {
-                    title: 'Leave Request',
-                    body: 'Employee ID, type, date range, reason, day count'
-                },
-                {
-                    title: 'Period Definition',
-                    body: 'Month, entity, run type — full or corrective'
-                }
-            ]
-        },
-        {
-            layer: 'Compute',
-            cells: [
-                {
-                    title: 'Record Validation',
-                    body: 'NID uniqueness, department FK valid, reporting chain exists, employment type recognized'
-                },
-                {
-                    title: 'Hours Calculation',
-                    body: 'worked_hours = clock_out − clock_in. Anomaly flags: late, missed punch, overtime, negative span'
-                },
-                {
-                    title: 'Balance Check',
-                    body: 'Requested ≤ available? Overlaps locked period? Leave type eligible for contract?'
-                },
-                {
-                    title: 'Deduction Pipeline',
-                    body: 'gross = base + OT + allowances. deductions = tax + PF + unpaid_leave + penalties. net = gross − deductions',
-                    tone: 'warn'
-                }
-            ]
-        },
-        {
-            layer: 'Output',
-            cells: [
-                {
-                    title: 'Employee Profile',
-                    body: 'Fed to all modules via FK. Document templates, payslip headers, org chart, approval chains'
-                },
-                {
-                    title: 'Attendance Score',
-                    body: 'compliance_rate = present_days ÷ working_days. Monthly summary for HR. Anomaly list flagged.'
-                },
-                {
-                    title: 'Payroll Input Flag',
-                    body: 'Approved leave → payroll engine notified. Unpaid leave → deduction entry created automatically.'
-                },
-                {
-                    title: 'Locked Payslip',
-                    body: 'Itemized PDF per employee. Period locked. Run entry written to audit log. Finance notified.'
-                }
-            ]
-        }
-    ];
-
-    const schemaEntities = [
-        {
-            name: 'employees',
-            tone: 'core',
-            fields: [
-                ['id', 'uuid PK', 'pk'],
-                ['employee_code', 'varchar'],
-                ['department_id', 'uuid FK', 'fk'],
-                ['employment_type', 'enum'],
-                ['gross_salary', 'decimal'],
-                ['status', 'enum']
-            ]
-        },
-        {
-            name: 'attendance_records',
-            tone: 'core',
-            fields: [
-                ['id', 'uuid PK', 'pk'],
-                ['employee_id', 'uuid FK', 'fk'],
-                ['date', 'date'],
-                ['status', 'enum'],
-                ['late_minutes', 'integer']
-            ]
-        },
-        {
-            name: 'leave_requests',
-            tone: 'core',
-            fields: [
-                ['id', 'uuid PK', 'pk'],
-                ['employee_id', 'uuid FK', 'fk'],
-                ['leave_type', 'enum'],
-                ['status', 'enum'],
-                ['approved_by', 'uuid FK', 'fk'],
-                ['days_count', 'decimal']
-            ]
-        },
-        {
-            name: 'payroll_runs',
-            tone: 'reference',
-            fields: [
-                ['id', 'uuid PK', 'pk'],
-                ['period_month', 'date'],
-                ['is_locked', 'boolean'],
-                ['total_gross', 'decimal'],
-                ['approved_by', 'uuid FK', 'fk']
-            ]
-        },
-        {
-            name: 'audit_log',
-            tone: 'control',
-            fields: [
-                ['id', 'uuid PK', 'pk'],
-                ['actor_id', 'uuid FK', 'fk'],
-                ['event_type', 'enum'],
-                ['before_state', 'jsonb'],
-                ['after_state', 'jsonb']
-            ]
-        },
-        {
-            name: 'documents',
-            tone: 'control',
-            fields: [
-                ['id', 'uuid PK', 'pk'],
-                ['employee_id', 'uuid FK', 'fk'],
-                ['doc_type', 'enum'],
-                ['status', 'enum'],
-                ['expiry_date', 'date']
-            ]
-        },
-        {
-            name: 'departments',
-            tone: 'reference',
-            fields: [
-                ['id', 'uuid PK', 'pk'],
-                ['name', 'varchar'],
-                ['head_id', 'uuid FK', 'fk'],
-                ['cost_center', 'varchar']
-            ]
-        }
-    ];
-
-    const results = [
-        {
-            value: '92%',
-            unit: 'Payroll Processing Reduction',
-            note: '3-day cycle â†’ 2-hour structured run'
-        },
-        {
-            value: '0',
-            unit: 'Compliance Blind Spots',
-            note: 'Append-only log covers every state transition'
-        },
-        {
-            value: '8',
-            unit: 'Integrated Modules',
-            note: 'Records, Attendance, Leave, Payroll, Docs, Approvals, Analytics, Audit'
-        },
-        {
-            value: '4s',
-            unit: 'Document Retrieval',
-            note: 'Previously 15+ minutes per request'
-        }
-    ];
-
-    useEffect(() => {
-        const container = containerRef.current;
-        if (!container) return;
-
-        const elements = Array.from(container.querySelectorAll<HTMLElement>('.fade'));
-
-        const hide = (el: HTMLElement) => {
-            el.style.setProperty('opacity', '0', 'important');
-            el.style.setProperty('transform', 'translateY(28px)', 'important');
-            el.style.setProperty('transition', 'opacity 0.85s cubic-bezier(0.16,1,0.3,1), transform 0.85s cubic-bezier(0.16,1,0.3,1)', 'important');
-            el.style.setProperty('will-change', 'opacity, transform', 'important');
-            if (el.classList.contains('d1')) el.style.setProperty('transition-delay', '0.12s', 'important');
-            else if (el.classList.contains('d2')) el.style.setProperty('transition-delay', '0.24s', 'important');
-            else if (el.classList.contains('d3')) el.style.setProperty('transition-delay', '0.36s', 'important');
-            else if (el.classList.contains('d4')) el.style.setProperty('transition-delay', '0.48s', 'important');
-        };
-        const reveal = (el: HTMLElement) => {
-            el.style.setProperty('opacity', '1', 'important');
-            el.style.setProperty('transform', 'none', 'important');
-            el.classList.add('in');
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const target = entry.target as HTMLElement;
-                    reveal(target);
-
-                    target.querySelectorAll('.metric-ring-fill').forEach(ring => {
-                        const val = ring.getAttribute('data-val');
-                        if (val) (ring as HTMLElement).style.strokeDasharray = `${val} 314`;
-                    });
-
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
-
-        elements.forEach(el => observer.observe(el));
-
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                elements.forEach(el => {
-                    if (!el.classList.contains('in')) {
-                        hide(el);
-                    }
-                });
-            });
-        });
-
-        return () => {
-            observer.disconnect();
-        };
-    }, []);
-
     return (
-        <div className="fmcg-case-study" ref={containerRef}>
+        <div className="fmcg-case-study">
             <style>{`
                 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap');
                 @font-face {
@@ -3220,16 +2151,6 @@ const HRDocsCaseStudy: React.FC = () => {
                     color: var(--ink4);
                     font-weight: 600;
                 }
-                .fmcg-case-study .lead {
-                    font-size: 17px;
-                    color: var(--ink2);
-                    line-height: 1.82;
-                    font-weight: 300;
-                    margin-top: 0;
-                    max-width: 540px;
-                    margin-bottom: 40px;
-                }
-
                 .fmcg-case-study #hero {
                     min-height: 100vh;
                     display: flex;
@@ -3623,10 +2544,11 @@ const HRDocsCaseStudy: React.FC = () => {
                 }
                 .fmcg-case-study .wfvwp-cms-tabs__interactive-content {
                     width: 100%;
-                    max-height: 0;
+                    height: 0;
                     overflow: hidden;
                     opacity: 0;
-                    transition: max-height 0.5s cubic-bezier(0.45, 0, 0.55, 1), opacity 0.1s linear;
+                    transition: height 0.5s cubic-bezier(0.45, 0, 0.55, 1), opacity 0.1s linear;
+                    will-change: height, opacity;
                 }
                 .fmcg-case-study .wfvwp-cms-tabs__interactive-inner {
                     padding-top: var(--wfvwp-tabs-gap-sm);
@@ -3717,12 +2639,12 @@ const HRDocsCaseStudy: React.FC = () => {
                 .fmcg-case-study .wfvwp-cms-tabs__stage {
                     pointer-events: none;
                     position: absolute;
-                    inset: 0 auto auto 0;
+                    inset: auto auto 0 0;
                     display: flex;
                     width: calc((100% - var(--wfvwp-tabs-gap-main)) / 2);
                     max-height: none;
                     flex-direction: column;
-                    justify-content: flex-start;
+                    justify-content: flex-end;
                     align-items: stretch;
                     opacity: 0;
                     transition: opacity 0.25s cubic-bezier(0.45, 0, 0.55, 1);
@@ -3735,6 +2657,7 @@ const HRDocsCaseStudy: React.FC = () => {
                     aspect-ratio: 8 / 9;
                     overflow: hidden;
                     background: #f0f0f0;
+                    border-radius: 0.5rem;
                 }
                 .fmcg-case-study .wfvwp-cms-tabs__image {
                     position: absolute;
@@ -3745,6 +2668,7 @@ const HRDocsCaseStudy: React.FC = () => {
                     object-position: 0% 0%;
                     display: block;
                     backface-visibility: hidden;
+                    border-radius: inherit;
                 }
                 @keyframes wfvwpCmsTabsProgress {
                     from { width: 0%; }
@@ -3777,8 +2701,6 @@ const HRDocsCaseStudy: React.FC = () => {
                         filter: saturate(100%);
                     }
                     .fmcg-case-study .wfvwp-cms-tabs__item.cc-active .wfvwp-cms-tabs__interactive-content {
-                        max-height: 24rem;
-                        overflow: visible;
                         opacity: 1;
                     }
                 }
@@ -3993,8 +2915,8 @@ const HRDocsCaseStudy: React.FC = () => {
                     background: #f0f0f0;
                     clip-path: inset(0% 0% 0% 100%);
                     transition-property: clip-path, opacity;
-                    transition-duration: 0.35s, 0.25s;
-                    transition-timing-function: cubic-bezier(0.77, 0, 0.175, 1), cubic-bezier(0.45, 0, 0.55, 1);
+                    transition-duration: 0.45s, 0.3s;
+                    transition-timing-function: cubic-bezier(0.77, 0, 0.175, 1), cubic-bezier(0.455, 0.03, 0.515, 0.955);
                     will-change: clip-path, opacity;
                 }
                 .fmcg-case-study .wfvwp-why__image-wrap:has(.wfvwp-why__image-link.w--current) {
@@ -5751,884 +4673,74 @@ const HRDocsCaseStudy: React.FC = () => {
                         width: 160%;
                     }
                 }
-                .fmcg-case-study .hero-grid {
-                    position: absolute;
-                    inset: 0;
-                    background-image: linear-gradient(var(--ln) 1px, transparent 1px), linear-gradient(90deg, var(--ln) 1px, transparent 1px);
-                    background-size: 64px 64px;
-                    opacity: .4;
-                    pointer-events: none;
-                    mask-image: radial-gradient(circle at 75% 50%, rgba(0,0,0,0.6) 0%, transparent 50%);
-                    -webkit-mask-image: radial-gradient(circle at 75% 50%, rgba(0,0,0,0.6) 0%, transparent 50%);
-                }
-                .fmcg-case-study .hero-inner {
-                    display: grid;
-                    grid-template-columns: 1.15fr 0.85fr;
-                    gap: 60px;
-                    align-items: center;
-                    position: relative;
-                    z-index: 1;
-                }
-                .fmcg-case-study .hero-meta {
-                    display: grid;
-                    grid-template-columns: repeat(4, auto);
-                    gap: 0;
-                    border-top: 1px solid var(--ln);
-                    padding-top: 40px;
-                    margin-top: 0;
-                    width: fit-content;
-                }
-                .fmcg-case-study .hm {
-                    padding: 0 40px 0 0;
-                    border-right: 1px solid var(--ln);
-                    margin-right: 40px;
-                }
-                .fmcg-case-study .hm:last-child {
-                    border-right: none;
-                    margin-right: 0;
-                    padding-right: 0;
-                }
-                .fmcg-case-study .hm-label {
-                    font-family: var(--mono);
-                    font-size: 10px;
-                    color: var(--ink4);
-                    letter-spacing: 1.5px;
-                    text-transform: uppercase;
-                    margin-bottom: 5px;
-                }
-                .fmcg-case-study .hm-val {
-                    font-size: 14px;
-                    color: var(--ink2);
-                    font-weight: 400;
-                }
-                
-                .fmcg-case-study section { padding: 100px 0; }
-                .fmcg-case-study section.alt { background: var(--off); border-top: 1px solid var(--ln); border-bottom: 1px solid var(--ln); }
-                .fmcg-case-study .wide { width: 100%; }
-                
-                .fmcg-case-study .eyebrow { font-family: var(--mono); font-size: 12px; color: var(--brand); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-                .fmcg-case-study .eyebrow::after { content: ''; width: 24px; height: 1px; background: var(--brand-border); }
-                .fmcg-case-study .eyebrow.lt { color: rgba(255,255,255,.3); }
-                .fmcg-case-study .eyebrow.lt::after { background: rgba(255,255,255,.15); }
-                .fmcg-case-study h2 { font-family: var(--sans); font-size: clamp(28px, 4vw, 46px); line-height: 1.1; letter-spacing: -0.04em; color: var(--ink); margin-bottom: 18px; font-weight: 700; }
-                .fmcg-case-study h2 em { font-style: italic; color: var(--ink4); font-weight: 600; }
-                .fmcg-case-study h2.lt { color: #FFFFFF; }
-                .fmcg-case-study h2.lt em { color: rgba(255,255,255,.4); }
-                .fmcg-case-study .body-copy { font-size: 16px; color: var(--ink2); line-height: 1.9; font-weight: 300; max-width: 600px; }
-
-                .fmcg-case-study .two-col { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 64px; align-items: start; margin-top: 40px; }
-                .fmcg-case-study .context-quote { border-left: 2px solid var(--brand); padding: 24px 28px; background: var(--w); border-radius: 0 12px 12px 0; font-family: var(--serif); font-size: 20px; color: var(--ink2); line-height: 1.62; margin: 32px 0; font-style: italic; }
-                .fmcg-case-study .context-quote cite { display: block; font-family: var(--sans); font-size: 13px; font-style: normal; color: var(--ink4); margin-top: 12px; }
-
-                .fmcg-case-study .stakeholders-list { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
-                .fmcg-case-study .stakeholder-card { background: var(--w); border: 1px solid var(--ln); border-radius: 10px; padding: 20px; transition: all .2s; }
-                .fmcg-case-study .stakeholder-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.05); border-color: var(--ln2); }
-                .fmcg-case-study .sh-role { font-family: var(--mono); font-size: 10px; color: var(--gm); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px; font-weight: 600; }
-                .fmcg-case-study .sh-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--ink); }
-                .fmcg-case-study .sh-desc { font-size: 13px; color: var(--ink3); line-height: 1.6; }
-
-                .fmcg-case-study .pain-grid {
-                    display: grid;
-                    grid-template-columns: repeat(3, 1fr);
-                    gap: 1px;
-                    background: var(--ln);
-                    border: 1px solid var(--ln);
-                    border-radius: 10px;
-                    overflow: hidden;
-                    margin-top: 48px;
-                }
-                .fmcg-case-study .pain-card {
-                    background: var(--w);
-                    padding: 28px 24px;
-                    transition: background .2s;
-                }
-                .fmcg-case-study .pain-card:hover {
-                    background: var(--off);
-                }
-                .fmcg-case-study .pain-n {
-                    display: block;
-                    font-family: var(--mono);
-                    font-size: 11px;
-                    color: var(--ink4);
-                    letter-spacing: .06em;
-                    margin-bottom: 12px;
-                }
-                .fmcg-case-study .pain-t {
-                    font-size: 15px;
-                    font-weight: 600;
-                    margin-bottom: 8px;
-                    line-height: 1.35;
-                    color: var(--ink);
-                }
-                .fmcg-case-study .pain-b {
-                    font-size: 13px;
-                    color: var(--ink3);
-                    line-height: 1.7;
-                    margin: 0 0 14px;
-                }
-                .fmcg-case-study .pain-tag {
-                    display: inline-block;
-                    font-family: var(--mono);
-                    font-size: 11px;
-                    color: var(--brand);
-                    background: var(--brand-light);
-                    padding: 3px 9px;
-                    border-radius: 6px;
-                    font-weight: 500;
-                }
-                .fmcg-case-study .chaos-strip {
-                    grid-column: 1 / -1;
-                    padding: 24px 28px;
-                    background: var(--off);
-                    border-top: 1px solid var(--ln);
-                }
-                .fmcg-case-study .chaos-label {
-                    font-family: var(--mono);
-                    font-size: 11px;
-                    letter-spacing: .08em;
-                    text-transform: uppercase;
-                    color: var(--ink4);
-                    margin-bottom: 14px;
-                }
-                .fmcg-case-study .chaos-tags {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 8px;
-                }
-                .fmcg-case-study .chaos-tag {
-                    display: inline-flex;
-                    align-items: center;
-                    border: 1px solid;
-                    border-radius: 999px;
-                    padding: 5px 11px;
-                    font-family: var(--mono);
-                    font-size: 10px;
-                    line-height: 1;
-                }
-                .fmcg-case-study .chaos-tag.risk {
-                    border-color: rgba(220,38,38,.12);
-                    color: var(--rm);
-                    background: var(--rbg);
-                }
-                .fmcg-case-study .chaos-tag.warn {
-                    border-color: rgba(217,119,6,.12);
-                    color: var(--am);
-                    background: var(--abg);
-                }
-                .fmcg-case-study .chaos-tag.neutral {
-                    border-color: var(--ln);
-                    color: var(--ink3);
-                    background: var(--off2);
-                }
-
-                @media(max-width:1000px) {
-                    .fmcg-case-study .two-col { grid-template-columns: 1fr; gap: 40px; }
-                    .fmcg-case-study .pain-grid { grid-template-columns: 1fr 1fr; }
-                }
-                @media(max-width:600px) {
-                    .fmcg-case-study .pain-grid { grid-template-columns: 1fr; }
-                }
-                
-                .fmcg-case-study .arch-wrap { border: 1px solid var(--ln); border-radius: 10px; overflow: hidden; background: var(--off); margin-top: 0; }
-                
-                .fmcg-case-study .feat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--ln); border: 1px solid var(--ln); border-radius: 10px; overflow: hidden; margin-top: 48px; }
-                .fmcg-case-study .feat { background: var(--w); padding: 26px 24px; transition: background .2s; }
-                .fmcg-case-study .feat:hover { background: var(--off); }
-                .fmcg-case-study .feat-n { font-family: var(--mono); font-size: 11px; color: var(--brand); letter-spacing: 0.08em; margin-bottom: 12px; font-weight: 500; }
-                .fmcg-case-study .feat-t { font-size: 16px; font-weight: 500; color: var(--ink); margin-bottom: 8px; line-height: 1.35; }
-                .fmcg-case-study .feat-d { font-size: 14px; color: var(--ink3); line-height: 1.78; font-weight: 300; }
-                .fmcg-case-study .feat-tag { display: inline-block; margin-top: 14px; font-family: var(--mono); font-size: 11px; color: var(--brand); background: var(--brand-light); padding: 3px 9px; border-radius: 6px; font-weight: 500; }
-                
-                .fmcg-case-study .ba-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 48px; }
-                .fmcg-case-study .ba-card { border: 1px solid var(--ln); border-radius: 10px; overflow: hidden; }
-                .fmcg-case-study .ba-head { padding: 12px 18px; border-bottom: 1px solid var(--ln); display: flex; align-items: center; gap: 9px; }
-                .fmcg-case-study .ba-head.before { background: #fff7f7; }
-                .fmcg-case-study .ba-head.after { background: #f5fbf6; }
-                .fmcg-case-study .ba-dot { width: 7px; height: 7px; border-radius: 50%; }
-                .fmcg-case-study .ba-head.before .ba-dot { background: var(--rm); }
-                .fmcg-case-study .ba-head.after .ba-dot { background: var(--gm); }
-                .fmcg-case-study .ba-lbl { font-family: var(--mono); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; font-weight: 500; }
-                .fmcg-case-study .ba-head.before .ba-lbl { color: var(--rm); }
-                .fmcg-case-study .ba-head.after .ba-lbl { color: var(--gdk); }
-                .fmcg-case-study .ba-row { display: flex; gap: 11px; padding: 12px 18px; border-bottom: 1px solid var(--ln); font-size: 14px; color: var(--ink2); line-height: 1.65; font-weight: 300; }
-                .fmcg-case-study .ba-row:last-child { border-bottom: none; }
-                .fmcg-case-study .ba-mark { font-family: var(--mono); font-size: 12px; flex-shrink: 0; margin-top: 2px; }
-                .fmcg-case-study .bm-bad { color: var(--rm); }
-                .fmcg-case-study .bm-good { color: var(--gm); }
-
-                .fmcg-case-study .g4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: 1px solid var(--ln); border-radius: 10px; overflow: hidden; }
-
-                .fmcg-case-study .tech-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 40px; }
-                .fmcg-case-study .tech-card { background: var(--w); border: 1px solid var(--ln); border-radius: 10px; padding: 24px; transition: background .2s, border-color .2s; }
-                .fmcg-case-study .tech-card:hover { background: var(--off); border-color: var(--ln2); }
-                .fmcg-case-study .tech-layer { font-family: var(--mono); font-size: 10px; color: var(--brand); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px; font-weight: 500; }
-                .fmcg-case-study .tech-title { font-size: 15px; font-weight: 600; letter-spacing: -.01em; margin-bottom: 12px; color: var(--ink); }
-                .fmcg-case-study .tech-items { display: flex; flex-direction: column; gap: 8px; }
-                .fmcg-case-study .tech-item { font-size: 13px; font-weight: 300; color: var(--ink3); display: flex; align-items: flex-start; gap: 8px; line-height: 1.55; }
-                .fmcg-case-study .tech-item::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--brand); flex-shrink: 0; display: block; margin-top: 6px; }
-                @media(max-width:900px){ .fmcg-case-study .tech-grid { grid-template-columns: 1fr 1fr; gap: 16px; } }
-                @media(max-width:600px){ .fmcg-case-study .tech-grid { grid-template-columns: 1fr; } }
-
-                .fmcg-case-study .alerts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 48px; }
-                .fmcg-case-study .alert { border-radius: 8px; padding: 16px 20px; display: flex; align-items: center; gap: 14px; background: var(--w); border: 1px solid var(--ln); }
-                .fmcg-case-study .al-icon { font-family: var(--mono); font-size: 14px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 6px; }
-                .fmcg-case-study .alert.danger .al-icon { color: var(--rm); background: var(--rbg); border: 1px solid rgba(220, 38, 38, 0.1); }
-                .fmcg-case-study .alert.warn .al-icon { color: var(--am); background: var(--abg); border: 1px solid rgba(217, 119, 6, 0.1); }
-                .fmcg-case-study .alert.info .al-icon { color: var(--bm); background: var(--bbg); border: 1px solid rgba(37, 99, 235, 0.1); }
-                .fmcg-case-study .al-title { font-size: 14px; color: var(--ink2); font-weight: 500; line-height: 1.5; letter-spacing: -0.01em; }
-
-                .fmcg-case-study .impact-stat { padding: 32px 26px; border-right: 1px solid var(--ln); }
-                .fmcg-case-study .impact-stat:last-child { border-right: none; }
-                .fmcg-case-study .stat-num { font-family: var(--sans); font-size: 46px; line-height: 1; color: var(--ink); margin-bottom: 5px; font-weight: 800; letter-spacing: -0.05em; }
-                .fmcg-case-study .stat-unit { font-family: var(--mono); font-size: 11px; color: var(--brand); letter-spacing: 0.08em; display: block; margin-bottom: 6px; font-weight: 500; text-transform: uppercase; }
-                .fmcg-case-study .stat-desc { font-size: 14px; color: var(--ink3); line-height: 1.65; font-weight: 300; }
-
-                .fmcg-case-study .learning-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; }
-                .fmcg-case-study .learning-card { background: var(--w); border: 1px solid var(--ln); border-radius: 10px; padding: 28px; display: flex; gap: 18px; transition: all .2s; }
-                .fmcg-case-study .learning-card:hover { background: var(--off); border-color: var(--ln2); }
-                .fmcg-case-study .lc-num { font-size: 38px; font-weight: 800; color: var(--ln2); line-height: 1; flex-shrink: 0; min-width: 46px; letter-spacing: -.04em; }
-                .fmcg-case-study .lc-cat { font-family: var(--mono); font-size: 9px; color: var(--brand); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 6px; }
-                .fmcg-case-study .lc-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; letter-spacing: -.01em; }
-                .fmcg-case-study .lc-body { font-size: 13px; font-weight: 300; color: var(--ink3); line-height: 1.7; margin-bottom: 10px; }
-                .fmcg-case-study .lc-rule { font-family: var(--mono); font-size: 10px; color: var(--gm); background: var(--gbg); padding: 5px 10px; border-radius: 4px; letter-spacing: .04em; display: inline-block; }
-
-                .fmcg-case-study .sk-note { margin-top: 24px; padding: 18px 24px; border: 1px solid var(--ln); border-left: 3px solid var(--brand); border-radius: 0 8px 8px 0; background: var(--off); font-size: 14px; color: var(--ink2); line-height: 1.7; font-weight: 300; }
-
-                .fmcg-case-study .chart-card { border: 1px solid var(--ln); border-radius: 10px; overflow: hidden; margin-top: 14px; }
-                .fmcg-case-study .cc-head { padding: 13px 18px; border-bottom: 1px solid var(--ln); display: flex; justify-content: space-between; align-items: center; }
-                .fmcg-case-study .cc-t { font-size: 14px; font-weight: 500; color: var(--ink); }
-                .fmcg-case-study .cc-s { font-family: var(--mono); font-size: 12px; color: var(--ink4); }
-                .fmcg-case-study .cc-body { padding: 16px 18px; height: 196px; position: relative; }
-
-                .fmcg-case-study .workflow-tabs { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 42px; }
-                .fmcg-case-study .workflow-tab {
-                    padding: 12px 18px;
-                    border-radius: 999px;
-                    border: 1px solid var(--ln);
-                    background: var(--w);
-                    color: var(--ink2);
-                    font-family: var(--sans);
-                    font-size: 14px;
-                    font-weight: 500;
-                    letter-spacing: -0.01em;
-                    transition: background .2s, border-color .2s, color .2s;
-                }
-                .fmcg-case-study .workflow-tab:hover { background: var(--off); border-color: var(--ln2); }
-                .fmcg-case-study .workflow-tab.is-active {
-                    background: var(--brand-light);
-                    border-color: var(--brand-border);
-                    color: var(--brand);
-                }
-                .fmcg-case-study .workflow-grid {
-                    display: grid;
-                    grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
-                    gap: 20px;
-                    margin-top: 28px;
-                    align-items: start;
-                }
-                .fmcg-case-study .state-machine-card {
-                    border: 1px solid var(--ln);
-                    border-radius: 10px;
-                    overflow: hidden;
-                    background: var(--w);
-                }
-                .fmcg-case-study .state-machine-head {
-                    padding: 16px 20px;
-                    border-bottom: 1px solid var(--ln);
-                    font-size: 14px;
-                    font-weight: 600;
-                    letter-spacing: -0.01em;
-                    color: var(--ink);
-                }
-                .fmcg-case-study .state-machine-row {
-                    display: grid;
-                    grid-template-columns: 180px 1fr;
-                    gap: 18px;
-                    align-items: start;
-                    padding: 16px 20px;
-                    border-bottom: 1px solid var(--ln);
-                }
-                .fmcg-case-study .state-machine-row:last-child { border-bottom: none; }
-                .fmcg-case-study .state-machine-arrow {
-                    padding: 12px 20px;
-                    border-bottom: 1px solid var(--ln);
-                    background: var(--off);
-                    font-family: var(--mono);
-                    font-size: 11px;
-                    line-height: 1.75;
-                    letter-spacing: 0.04em;
-                    color: var(--ink3);
-                }
-                .fmcg-case-study .state-pill {
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: center;
-                    min-width: 146px;
-                    padding: 8px 12px;
-                    border-radius: 999px;
-                    border: 1px solid transparent;
-                    font-family: var(--mono);
-                    font-size: 11px;
-                    font-weight: 600;
-                    letter-spacing: 0.08em;
-                    text-transform: uppercase;
-                }
-                .fmcg-case-study .tone-draft { background: #f8fafc; border-color: #e2e8f0; color: #475569; }
-                .fmcg-case-study .tone-pending { background: #fff7ed; border-color: #fed7aa; color: #c2410c; }
-                .fmcg-case-study .tone-review { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
-                .fmcg-case-study .tone-approved { background: #f0fdf4; border-color: #bbf7d0; color: #15803d; }
-                .fmcg-case-study .tone-rejected { background: #fef2f2; border-color: #fecaca; color: #b91c1c; }
-                .fmcg-case-study .tone-locked { background: #f8fafc; border-color: #cbd5e1; color: #0f172a; }
-                .fmcg-case-study .tone-issued { background: #eef2ff; border-color: #c7d2fe; color: #4338ca; }
-                .fmcg-case-study .tone-expired { background: #fff1f2; border-color: #fecdd3; color: #be123c; }
-                .fmcg-case-study .tone-archived { background: #f8fafc; border-color: #e2e8f0; color: #64748b; }
-                .fmcg-case-study .tone-exception { background: #fff7ed; border-color: #fdba74; color: #c2410c; }
-                .fmcg-case-study .state-machine-detail {
-                    font-size: 14px;
-                    line-height: 1.8;
-                    color: var(--ink3);
-                    font-weight: 300;
-                }
-                .fmcg-case-study .workflow-rules { display: grid; gap: 16px; }
-                .fmcg-case-study .workflow-rule {
-                    border: 1px solid var(--ln);
-                    border-radius: 10px;
-                    background: var(--w);
-                    padding: 22px;
-                }
-                .fmcg-case-study .workflow-rule-type {
-                    display: inline-flex;
-                    align-items: center;
-                    padding: 4px 10px;
-                    border-radius: 999px;
-                    border: 1px solid transparent;
-                    font-family: var(--mono);
-                    font-size: 10px;
-                    font-weight: 600;
-                    letter-spacing: 0.08em;
-                    text-transform: uppercase;
-                }
-                .fmcg-case-study .workflow-rule-type.tone-good { background: #f0fdf4; border-color: #bbf7d0; color: #15803d; }
-                .fmcg-case-study .workflow-rule-type.tone-alert { background: #fff7ed; border-color: #fed7aa; color: #c2410c; }
-                .fmcg-case-study .workflow-rule-type.tone-risk { background: #fef2f2; border-color: #fecaca; color: #b91c1c; }
-                .fmcg-case-study .workflow-rule-title {
-                    margin-top: 14px;
-                    font-size: 15px;
-                    line-height: 1.5;
-                    font-weight: 600;
-                    letter-spacing: -0.01em;
-                    color: var(--ink);
-                }
-                .fmcg-case-study .workflow-rule-body {
-                    margin-top: 10px;
-                    font-size: 13px;
-                    line-height: 1.75;
-                    font-weight: 300;
-                    color: var(--ink3);
-                }
-
-                .fmcg-case-study .flow-table-wrap {
-                    margin-top: 42px;
-                    overflow-x: auto;
-                    border: 1px solid var(--ln);
-                    border-radius: 10px;
-                    background: var(--w);
-                }
-                .fmcg-case-study .flow-table {
-                    width: 100%;
-                    min-width: 1050px;
-                    border-collapse: collapse;
-                    table-layout: fixed;
-                }
-                .fmcg-case-study .flow-table th,
-                .fmcg-case-study .flow-table td {
-                    border-right: 1px solid var(--ln);
-                    border-bottom: 1px solid var(--ln);
-                    padding: 18px 16px;
-                    vertical-align: top;
-                }
-                .fmcg-case-study .flow-table th:last-child,
-                .fmcg-case-study .flow-table td:last-child { border-right: none; }
-                .fmcg-case-study .flow-table tbody tr:last-child td { border-bottom: none; }
-                .fmcg-case-study .flow-table th {
-                    background: var(--off);
-                    font-size: 13px;
-                    font-weight: 600;
-                    letter-spacing: -0.01em;
-                    color: var(--ink);
-                    text-align: left;
-                }
-                .fmcg-case-study .flow-layer {
-                    width: 110px;
-                    font-family: var(--mono);
-                    font-size: 11px;
-                    font-weight: 600;
-                    letter-spacing: 0.08em;
-                    text-transform: uppercase;
-                    color: var(--brand);
-                    background: var(--off);
-                }
-                .fmcg-case-study .flow-cell {
-                    font-size: 13px;
-                    line-height: 1.75;
-                    font-weight: 300;
-                    color: var(--ink3);
-                }
-                .fmcg-case-study .flow-cell.tone-brand { background: var(--brand-light); }
-                .fmcg-case-study .flow-cell.tone-warn { background: var(--abg); }
-                .fmcg-case-study .flow-cell-label {
-                    display: block;
-                    margin-bottom: 8px;
-                    font-family: var(--mono);
-                    font-size: 10px;
-                    font-weight: 600;
-                    letter-spacing: 0.08em;
-                    text-transform: uppercase;
-                    color: var(--brand);
-                }
-
-                .fmcg-case-study .schema-box {
-                    margin-top: 28px;
-                    border: 1px solid var(--ln);
-                    border-radius: 10px;
-                    overflow: hidden;
-                    background: var(--w);
-                }
-                .fmcg-case-study .schema-head {
-                    padding: 16px 20px;
-                    border-bottom: 1px solid var(--ln);
-                    font-size: 14px;
-                    font-weight: 600;
-                    color: var(--ink);
-                    letter-spacing: -0.01em;
-                }
-                .fmcg-case-study .schema-body {
-                    padding: 20px;
-                    background: linear-gradient(180deg, rgba(248, 250, 252, 0.7) 0%, rgba(255, 255, 255, 1) 100%);
-                }
-                .fmcg-case-study .schema-legend {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 10px;
-                    margin-bottom: 18px;
-                }
-                .fmcg-case-study .schema-legend-item {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 8px;
-                    padding: 7px 10px;
-                    border: 1px solid var(--ln);
-                    border-radius: 999px;
-                    background: var(--w);
-                    font-family: var(--mono);
-                    font-size: 10px;
-                    font-weight: 500;
-                    letter-spacing: 0.08em;
-                    text-transform: uppercase;
-                    color: var(--ink3);
-                }
-                .fmcg-case-study .schema-legend-swatch {
-                    width: 10px;
-                    height: 10px;
-                    border-radius: 2px;
-                    flex-shrink: 0;
-                }
-                .fmcg-case-study .schema-grid {
-                    display: grid;
-                    grid-template-columns: repeat(4, minmax(0, 1fr));
-                    gap: 14px;
-                }
-                .fmcg-case-study .schema-card {
-                    border: 1px solid var(--ln);
-                    border-radius: 10px;
-                    overflow: hidden;
-                    background: var(--w);
-                }
-                .fmcg-case-study .schema-card-head {
-                    padding: 12px 14px;
-                    font-family: var(--mono);
-                    font-size: 11px;
-                    font-weight: 600;
-                    letter-spacing: 0.08em;
-                    color: #fff;
-                }
-                .fmcg-case-study .schema-card-head.tone-core { background: var(--brand); }
-                .fmcg-case-study .schema-card-head.tone-control { background: var(--gm); }
-                .fmcg-case-study .schema-card-head.tone-reference { background: var(--am); }
-                .fmcg-case-study .schema-fields { padding: 6px 14px 10px; }
-                .fmcg-case-study .schema-field {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: flex-start;
-                    gap: 12px;
-                    padding: 10px 0;
-                    border-bottom: 1px solid var(--ln);
-                }
-                .fmcg-case-study .schema-field:last-child { border-bottom: none; }
-                .fmcg-case-study .schema-field-name {
-                    font-size: 13px;
-                    color: var(--ink2);
-                    line-height: 1.5;
-                }
-                .fmcg-case-study .schema-field-name.key-fk { color: var(--am); }
-                .fmcg-case-study .schema-field-name.key-pk { color: var(--brand); font-weight: 600; }
-                .fmcg-case-study .schema-field-type {
-                    font-family: var(--mono);
-                    font-size: 10px;
-                    letter-spacing: 0.06em;
-                    text-transform: uppercase;
-                    color: var(--ink4);
-                    white-space: nowrap;
-                }
-
-                .fmcg-case-study .compliance-grid {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    gap: 20px;
-                    margin-top: 40px;
-                }
-                .fmcg-case-study .compliance-card {
-                    border: 1px solid var(--ln);
-                    border-radius: 10px;
-                    background: var(--w);
-                    overflow: hidden;
-                }
-                .fmcg-case-study .compliance-card:hover { border-color: var(--ln2); }
-                .fmcg-case-study .compliance-head {
-                    display: flex;
-                    align-items: center;
-                    gap: 14px;
-                    padding: 18px 20px;
-                    border-bottom: 1px solid var(--ln);
-                    background: var(--off);
-                }
-                .fmcg-case-study .compliance-icon {
-                    width: 40px;
-                    height: 40px;
-                    border-radius: 10px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    background: var(--brand-light);
-                    font-size: 18px;
-                    flex-shrink: 0;
-                }
-                .fmcg-case-study .compliance-title {
-                    font-size: 16px;
-                    font-weight: 600;
-                    color: var(--ink);
-                    letter-spacing: -0.01em;
-                }
-                .fmcg-case-study .compliance-body {
-                    padding: 20px;
-                    display: grid;
-                    gap: 14px;
-                }
-                .fmcg-case-study .compliance-check {
-                    display: flex;
-                    align-items: flex-start;
-                    gap: 10px;
-                    font-size: 13px;
-                    line-height: 1.75;
-                    font-weight: 300;
-                    color: var(--ink3);
-                }
-                .fmcg-case-study .compliance-check-mark {
-                    color: var(--gm);
-                    font-weight: 700;
-                    margin-top: 2px;
-                    flex-shrink: 0;
-                }
-
-                .fmcg-case-study .audit-sample {
-                    margin-top: 24px;
-                    border: 1px solid var(--ln);
-                    border-radius: 10px;
-                    overflow: hidden;
-                    background: var(--w);
-                }
-                .fmcg-case-study .audit-head {
-                    padding: 16px 20px;
-                    border-bottom: 1px solid var(--ln);
-                    font-size: 14px;
-                    font-weight: 600;
-                    color: var(--ink);
-                    letter-spacing: -0.01em;
-                }
-                .fmcg-case-study .audit-list { padding: 2px; }
-                .fmcg-case-study .audit-entry {
-                    display: grid;
-                    grid-template-columns: 132px 156px 148px 1fr;
-                    gap: 14px;
-                    align-items: start;
-                    padding: 14px 16px;
-                    border-bottom: 1px solid var(--ln);
-                }
-                .fmcg-case-study .audit-entry:last-child { border-bottom: none; }
-                .fmcg-case-study .audit-ts,
-                .fmcg-case-study .audit-actor {
-                    font-family: var(--mono);
-                    font-size: 11px;
-                    line-height: 1.7;
-                    color: var(--ink4);
-                }
-                .fmcg-case-study .audit-actor { color: var(--ink2); }
-                .fmcg-case-study .audit-change {
-                    font-size: 13px;
-                    line-height: 1.75;
-                    color: var(--ink3);
-                    font-weight: 300;
-                }
-                .fmcg-case-study .audit-event {
-                    display: inline-flex;
-                    align-items: center;
-                    padding: 6px 10px;
-                    border-radius: 999px;
-                    border: 1px solid transparent;
-                    font-family: var(--mono);
-                    font-size: 10px;
-                    font-weight: 600;
-                    letter-spacing: 0.08em;
-                    text-transform: uppercase;
-                }
-                .fmcg-case-study .audit-event.tone-lock { background: var(--off); border-color: var(--ln2); color: var(--ink2); }
-                .fmcg-case-study .audit-event.tone-approve { background: #f0fdf4; border-color: #bbf7d0; color: #15803d; }
-                .fmcg-case-study .audit-event.tone-update { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
-                .fmcg-case-study .audit-event.tone-create { background: var(--brand-light); border-color: var(--brand-border); color: var(--brand); }
-                .fmcg-case-study .audit-event.tone-expire { background: #fff1f2; border-color: #fecdd3; color: #be123c; }
-
-                .fmcg-case-study .cta-section {
-                    padding: 110px 0 120px;
-                    background:
-                        radial-gradient(circle at top, rgba(79, 70, 229, 0.08), transparent 42%),
-                        linear-gradient(180deg, var(--off) 0%, var(--w) 100%);
-                    text-align: center;
-                }
-                .fmcg-case-study .cta-inner {
-                    max-width: 680px;
-                    margin: 0 auto;
-                }
-                .fmcg-case-study .cta-kicker {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 14px;
-                    font-family: var(--mono);
-                    font-size: 10px;
-                    font-weight: 600;
-                    letter-spacing: 0.14em;
-                    text-transform: uppercase;
-                    color: var(--brand);
-                    margin-bottom: 24px;
-                }
-                .fmcg-case-study .cta-kicker::before,
-                .fmcg-case-study .cta-kicker::after {
-                    content: '';
-                    display: block;
-                    width: 32px;
-                    height: 1.5px;
-                    background: var(--brand);
-                    opacity: 0.45;
-                }
-                .fmcg-case-study .cta-heading {
-                    font-size: clamp(42px, 5vw, 70px);
-                    line-height: 1.04;
-                    letter-spacing: -0.04em;
-                    font-weight: 800;
-                    color: var(--ink);
-                    margin-bottom: 22px;
-                }
-                .fmcg-case-study .cta-heading em { font-style: italic; color: var(--brand); }
-                .fmcg-case-study .cta-sub {
-                    font-size: 15px;
-                    line-height: 1.82;
-                    font-weight: 300;
-                    color: var(--ink3);
-                    margin: 0 auto 38px;
-                    max-width: 620px;
-                }
-                .fmcg-case-study .cta-btns {
-                    display: flex;
-                    justify-content: center;
-                    flex-wrap: wrap;
-                    gap: 12px;
-                }
-                .fmcg-case-study .cta-btn {
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: center;
-                    min-height: 48px;
-                    padding: 0 18px;
-                    border-radius: 999px;
-                    border: 1px solid var(--ln);
-                    font-size: 13px;
-                    font-weight: 600;
-                    letter-spacing: -0.01em;
-                    text-decoration: none;
-                    transition: background .2s, border-color .2s, color .2s, transform .2s;
-                }
-                .fmcg-case-study .cta-btn:hover { transform: translateY(-1px); }
-                .fmcg-case-study .cta-btn.primary {
-                    background: var(--brand);
-                    border-color: var(--brand);
-                    color: #fff;
-                }
-                .fmcg-case-study .cta-btn.primary:hover { background: var(--brand-hover); border-color: var(--brand-hover); }
-                .fmcg-case-study .cta-btn.secondary {
-                    background: var(--w);
-                    color: var(--ink2);
-                }
-                .fmcg-case-study .cta-btn.secondary:hover {
-                    background: var(--off);
-                    border-color: var(--ln2);
-                }
-                
-                .fmcg-case-study .fade {
-                    opacity: 0;
-                    transform: translateY(16px);
-                    transition: opacity .6s ease, transform .6s ease;
-                    will-change: opacity, transform;
-                }
-                .fmcg-case-study .fade.in {
-                    opacity: 1;
-                    transform: none;
-                }
-                .fmcg-case-study .d1 { transition-delay: .1s; }
-                .fmcg-case-study .d2 { transition-delay: .2s; }
-                .fmcg-case-study .d3 { transition-delay: .3s; }
-                .fmcg-case-study .d4 { transition-delay: .4s; }
-                
-                .fmcg-case-study .hero-visual {
-                    position: relative;
-                    width: 100%;
-                    height: 100%;
-                    min-height: 520px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-                .fmcg-case-study .structure-container {
-                   position: relative;
-                   width: 100%;
-                   max-width: 580px;
-                   display: flex;
-                   align-items: center;
-                   justify-content: center;
-                   animation: float-arch 15s ease-in-out infinite;
-                }
-                @keyframes float-arch {
-                    0%, 100% { transform: translateY(0); }
-                    50% { transform: translateY(-15px); }
-                }
-                .fmcg-case-study .structure-svg {
-                    width: 100%;
-                    height: auto;
-                    display: block;
-                    overflow: visible;
-                }
-                @keyframes dispatch-anim {
-                    0%, 15% { transform: translateY(0) translateX(0) scale(1); opacity: 1; }
-                    40%, 60% { transform: translateY(-120px) translateX(40px) scale(0.9); opacity: 0; }
-                    70% { transform: translateY(-40px) translateX(0) scale(0.95); opacity: 0; }
-                    85%, 100% { transform: translateY(0) translateX(0) scale(1); opacity: 1; }
-                }
-                .fmcg-case-study .dispatched-cube {
-                    animation: dispatch-anim 6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
-                }
-
                 @media(max-width:991px){
                     .fmcg-case-study .wfvwp-hero__copy-col {
                         flex-basis: 100%;
                         max-width: 100%;
                     }
                 }
-                
+
                 @media(max-width:900px){
-                    .fmcg-case-study section { padding: 80px 0; }
-                    .fmcg-case-study .prob-grid, .fmcg-case-study .feat-grid, .fmcg-case-study .ba-grid { grid-template-columns: 1fr; gap: 32px; }
-                    .fmcg-case-study .alerts, .fmcg-case-study .g4 { grid-template-columns: 1fr; }
-                    .fmcg-case-study .impact-stat { border-right: none; border-bottom: 1px solid var(--ln); }
                     .fmcg-case-study h1 { font-size: clamp(38px, 10vw, 60px); }
                     .fmcg-case-study #hero.wfvwp-hero-section { padding: var(--wfvwp-hero-top-space) 0 var(--wfvwp-section-space-sm); }
                     .fmcg-case-study .wfvwp-hero__heading { max-width: none; font-size: var(--wfvwp-title-size); }
                     .fmcg-case-study .wfvwp-hero__body { font-size: var(--wfvwp-body-size); }
-                    .fmcg-case-study .hero-meta { grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; border-top: none; padding-top: 0; }
-                    .fmcg-case-study .hm { border-right: none; margin-right: 0; padding-right: 0; border-bottom: 1px solid var(--ln); padding-bottom: 14px; }
-                    .fmcg-case-study .hero-inner { grid-template-columns: 1fr; gap: 48px; }
-                    .fmcg-case-study #hero { padding: 100px 0 60px; min-height: auto; }
-                    .fmcg-case-study .hero-visual { min-height: 400px; }
-                    .fmcg-case-study .tech-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
-                    .fmcg-case-study .learning-grid { grid-template-columns: 1fr 1fr; }
-                    .fmcg-case-study .workflow-grid { grid-template-columns: 1fr; }
-                    .fmcg-case-study .state-machine-row { grid-template-columns: 1fr; gap: 12px; }
-                    .fmcg-case-study .schema-grid { grid-template-columns: 1fr 1fr; }
-                    .fmcg-case-study .compliance-grid { grid-template-columns: 1fr; }
-                    .fmcg-case-study .audit-entry { grid-template-columns: 1fr; gap: 8px; }
-                    .fmcg-case-study .cta-section { padding: 90px 0 100px; }
                 }
+
                 @media(max-width:600px){
                     .fmcg-case-study #hero.wfvwp-hero-section { padding: var(--wfvwp-hero-top-space) 0 var(--wfvwp-section-space-sm); }
                     .fmcg-case-study .wfvwp-hero__heading { max-width: none; font-size: var(--wfvwp-title-size); }
                     .fmcg-case-study .wfvwp-hero__body { font-size: var(--wfvwp-body-size); }
-                    .fmcg-case-study .tech-grid { grid-template-columns: 1fr; }
-                    .fmcg-case-study .learning-grid { grid-template-columns: 1fr; }
-                    .fmcg-case-study .g4 { grid-template-columns: 1fr; }
-                    .fmcg-case-study .alerts { grid-template-columns: 1fr; }
-                    .fmcg-case-study .workflow-tab { width: 100%; text-align: left; }
-                    .fmcg-case-study .state-pill { min-width: 0; width: 100%; justify-content: flex-start; }
-                    .fmcg-case-study .schema-grid { grid-template-columns: 1fr; }
-                    .fmcg-case-study .cta-btn { width: 100%; }
                 }
                 @media(max-width:767px){
                     .fmcg-case-study .wfvwp-overview-col { flex-basis: 100%; max-width: 100%; }
                     .fmcg-case-study .wfvwp-overview-row { row-gap: 1.25rem; }
                 }
             `}</style>
-
             <NativeWebflowVsWordpressHero />
 
             <main id="main" className="wfvwp-page-main">
                 <section className="wfvwp-overview-section">
-                <div className="max-w-7xl mx-auto px-6 w-full">
-                    <div className="wfvwp-overview-row">
-                        <div className="wfvwp-overview-col">
-                            <h2 className="wfvwp-overview-heading">Build with more power, creativity, and agility</h2>
-                        </div>
-                        <div className="wfvwp-overview-col">
-                            <div className="wfvwp-overview-copy">
-                                <p>
-                                    WordPress websites require engineering time to maintain and they don’t give marketing or design the autonomy to build their own designs, run experiments, or personalize content. Unoptimized content slowly rolls out — leaving money on the table — and your total cost of ownership inflates as engineering spends more and more hours just keeping the lights on.
-                                </p>
-                                <p>
-                                    In Webflow’s visual-first, composable CMS, designers, developers, and marketers can come together to build, manage, and optimize websites that can drive conversions and fuel business growth.
-                                </p>
+                    <div className="max-w-7xl mx-auto px-6 w-full">
+                        <div className="wfvwp-overview-row">
+                            <div className="wfvwp-overview-col">
+                                <h2 className="wfvwp-overview-heading">Build systems with control, clarity, and precision</h2>
+                            </div>
+                            <div className="wfvwp-overview-col">
+                                <div className="wfvwp-overview-copy">
+                                    <p>
+                                        A 90-employee SME was running HR through spreadsheets, chat threads, and personal folders. Payroll was slow, approvals were untraceable, and compliance readiness depended on memory.
+                                    </p>
+                                    <p>
+                                        ERP-Lite introduces a centralized system where employee records, workflows, and documentation operate in one controlled environment. Teams can manage, track, and validate actions with clarity—ensuring faster operations, stronger compliance, and full visibility.
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 </section>
 
-            <NativeWebflowVsWordpressCmsTabs />
+                <NativeWebflowVsWordpressCmsTabs />
 
-            <NativeWebflowVsWordpressWhySection />
+                <NativeWebflowVsWordpressWhySection />
 
-            <NativeWebflowVsWordpressMigrationCta />
+                <NativeWebflowVsWordpressMigrationCta />
 
-            <NativeWebflowVsWordpressCustomersSection />
+                <NativeWebflowVsWordpressCustomersSection />
 
-            <NativeWebflowVsWordpressComparisonTable />
+                <NativeWebflowVsWordpressComparisonTable />
 
-            <NativeWebflowVsWordpressBusinessImpactSection />
+                <NativeWebflowVsWordpressBusinessImpactSection />
 
-            <NativeWebflowVsWordpressG2Section />
+                <NativeWebflowVsWordpressG2Section />
 
-            <NativeWebflowVsWordpressFaqSection />
+                <NativeWebflowVsWordpressFaqSection />
 
-            <NativeWebflowVsWordpressScheduleDemoSection />
+                <NativeWebflowVsWordpressScheduleDemoSection />
             </main>
         </div>
     );
 };
 
 export default HRDocsCaseStudy;
-
 

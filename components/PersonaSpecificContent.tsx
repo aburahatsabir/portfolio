@@ -1,6 +1,7 @@
 ﻿import React from 'react';
 import { motion } from 'framer-motion';
 import { TESTIMONIALS, PROJECTS } from '../constants';
+import { getWorkRoutePath } from '../content/work-route-titles';
 import OptimizedImage from './OptimizedImage';
 import SectionLabel from './shared/SectionLabel';
 
@@ -972,11 +973,11 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
                                     className="relative group"
                                 >
                                     <a
-                                        href={`/work/${project.id}`}
+                                        href={getWorkRoutePath(project.id) ?? `/work/${project.id}`}
                                         className="block py-8 md:py-10 border-t border-slate-100 relative z-10"
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            window.history.pushState({}, '', `/work/${project.id}`);
+                                            window.history.pushState({}, '', getWorkRoutePath(project.id) ?? `/work/${project.id}`);
                                             window.dispatchEvent(new PopStateEvent('popstate'));
                                             window.scrollTo(0, 0);
                                         }}

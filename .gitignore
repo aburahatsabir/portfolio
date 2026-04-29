@@ -37,3 +37,6 @@ Thumbs.db
 
 # Local temp artifacts
 tmp/localhost-root.html
+tmp/
+tmp_*
+*.tmp.webp

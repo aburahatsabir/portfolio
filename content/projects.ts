@@ -1,9 +1,10 @@
 import { Project, Experience, Testimonial, PostMortemEntry, SuccessStory, IndustryBlueprint, Standard, BlogPost } from '../types';
+import { WORK_ROUTE_TITLES } from './work-route-titles';
 
 export const PROJECTS: Project[] = [
   {
     id: 'fmcg-erp',
-    title: 'Integrated FMCG Distribution ERP',
+    title: WORK_ROUTE_TITLES['fmcg-erp'],
     headline: 'From Ledger Chaos to Real-Time Control',
     badge: 'Production-Grade ERP • Zero-Code Architecture',
     category: 'Systems',
@@ -257,7 +258,7 @@ export const PROJECTS: Project[] = [
 
   {
     id: 'mocs',
-    title: 'Medical Operations Control System',
+    title: WORK_ROUTE_TITLES.mocs,
     headline: 'Engineering Control in Medical Logistics',
     badge: 'Operational Systems Architecture',
     category: 'Systems',
@@ -306,7 +307,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 'hr-docs',
-    title: 'HR Documentation System',
+    title: WORK_ROUTE_TITLES['hr-docs'],
     headline: 'Hiring Governance via Docs-as-Code',
     badge: 'Operational Systems Architecture • HR Governance',
     category: 'Governance',

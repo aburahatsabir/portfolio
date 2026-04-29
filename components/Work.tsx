@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import SectionLabel from './shared/SectionLabel';
 import { trackProjectClick } from '../utils/analytics';
 import OptimizedImage from './OptimizedImage';
+import { getWorkRoutePath } from '../content/work-route-titles';
 
 const revealVariants = {
   hidden: { opacity: 0, y: 30 },
@@ -56,11 +57,13 @@ const Work: React.FC = () => {
   ];
 
   const openProject = (project: (typeof PROJECTS)[number]) => {
+    const projectPath = getWorkRoutePath(project.id) ?? `/work/${project.id}`;
+
     trackProjectClick({
       projectName: project.title,
       projectCategory: project.category,
     });
-    window.history.pushState({}, '', `/work/${project.id}`);
+    window.history.pushState({}, '', projectPath);
     window.dispatchEvent(new PopStateEvent('popstate'));
   };
 

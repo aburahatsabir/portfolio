@@ -21,6 +21,7 @@ const PersonaDirectory = lazyLoadPage(() => import('./components/PersonaDirector
 const FMCGCaseStudy = lazyLoadPage(() => import('./components/FMCGCaseStudy'));
 const MocsCaseStudy = lazyLoadPage(() => import('./components/MocsCaseStudy'));
 const HRDocsCaseStudy = lazyLoadPage(() => import('./components/HRDocsCaseStudy'));
+const ErpLiteCaseStudy = lazyLoadPage(() => import('./components/ErpLiteCaseStudy'));
 const PrivacyPolicy = lazyLoadPage(() => import('./components/PrivacyPolicy'));
 const CookiePolicy = lazyLoadPage(() => import('./components/CookiePolicy'));
 const AccessibilityStatement = lazyLoadPage(() => import('./components/AccessibilityStatement'));
@@ -44,6 +45,7 @@ import { trackPageView, trackNavigation, trackError } from './utils/analytics';
 import { useScrollDepth } from './hooks/useScrollDepth';
 import { useEngagementTime } from './hooks/useEngagementTime';
 import { useExitIntent } from './hooks/useExitIntent';
+import { getWorkProjectIdFromRouteSegment, getWorkRoutePath, getWorkRouteTitle, normalizeWorkRoutePath } from './content/work-route-titles';
 import CookieConsent from './components/CookieConsent';
 import OfflineIndicator from './components/OfflineIndicator';
 
@@ -63,9 +65,14 @@ function getBreadcrumbsForRoute(currentPath: string): Array<{ name: string; url:
     // Handle case study routes
     if (currentPath.startsWith('/work/')) {
         breadcrumbs.push({ name: 'Work', url: `${baseUrl}/work` });
-        const projectId = currentPath.replace('/work/', '');
-        const project = { id: projectId, title: projectId.replace(/-/g, ' ') };
-        breadcrumbs.push({ name: project.title, url: `${baseUrl}${currentPath}` });
+        const routeSegment = currentPath.replace('/work/', '');
+        const projectId = getWorkProjectIdFromRouteSegment(routeSegment) ?? routeSegment;
+        const project = {
+            id: projectId,
+            title: getWorkRouteTitle(projectId) ?? projectId.replace(/-/g, ' '),
+        };
+        const projectPath = getWorkRoutePath(projectId) ?? currentPath;
+        breadcrumbs.push({ name: project.title, url: `${baseUrl}${projectPath}` });
         return breadcrumbs;
     }
 
@@ -111,8 +118,8 @@ function getBreadcrumbsForRoute(currentPath: string): Array<{ name: string; url:
 import SmoothScroll from './components/shared/SmoothScroll';
 
 function App() {
-    const [currentPath, setCurrentPath] = useState(window.location.pathname || '/');
-    const [previousPath, setPreviousPath] = useState(window.location.pathname || '/');
+    const [currentPath, setCurrentPath] = useState(() => normalizeWorkRoutePath(window.location.pathname || '/'));
+    const [previousPath, setPreviousPath] = useState(() => normalizeWorkRoutePath(window.location.pathname || '/'));
 
     // Track scroll depth for the current page
     useScrollDepth(currentPath);
@@ -125,6 +132,13 @@ function App() {
 
 
     useEffect(() => {
+        const browserPath = window.location.pathname || '/';
+        const normalizedBrowserPath = normalizeWorkRoutePath(browserPath);
+
+        if (normalizedBrowserPath !== browserPath) {
+            window.history.replaceState(window.history.state, '', normalizedBrowserPath);
+        }
+
         // Update metadata on initial load and path change
         updatePageMetadata(currentPath);
 
@@ -166,7 +180,10 @@ function App() {
         }
 
         const handlePopState = () => {
-            const newPath = window.location.pathname || '/';
+            const newPath = normalizeWorkRoutePath(window.location.pathname || '/');
+            if (newPath !== (window.location.pathname || '/')) {
+                window.history.replaceState(window.history.state, '', newPath);
+            }
             setCurrentPath(newPath);
         };
 
@@ -175,6 +192,13 @@ function App() {
     }, [currentPath, previousPath]);
 
     const renderContent = () => {
+        const workRouteSegment = currentPath.startsWith('/work/')
+            ? currentPath.replace('/work/', '')
+            : null;
+        const workProjectId = workRouteSegment
+            ? getWorkProjectIdFromRouteSegment(workRouteSegment)
+            : undefined;
+
         if (currentPath.startsWith('/blog/')) {
             // CRITICAL FIX: The unique key forces React to fully unmount and remount
             // the component when transitioning between the list (/blog) and a post (/blog/id).
@@ -182,16 +206,20 @@ function App() {
             return <React.Fragment key={currentPath}><ErrorBoundary><BlogSeries /></ErrorBoundary></React.Fragment>;
         }
 
-        if (currentPath === '/work/fmcg-erp') {
+        if (workProjectId === 'fmcg-erp') {
             return <ErrorBoundary><FMCGCaseStudy /></ErrorBoundary>;
         }
 
-        if (currentPath === '/work/mocs' || currentPath === '/work/med-ops') {
+        if (workProjectId === 'mocs') {
             return <ErrorBoundary><MocsCaseStudy /></ErrorBoundary>;
         }
 
-        if (currentPath === '/work/hr-docs') {
+        if (workProjectId === 'hr-docs') {
             return <ErrorBoundary><HRDocsCaseStudy /></ErrorBoundary>;
+        }
+
+        if (workProjectId === 'erp-lite') {
+            return <ErrorBoundary><ErpLiteCaseStudy /></ErrorBoundary>;
         }
 
         if (currentPath.startsWith('/work/')) {

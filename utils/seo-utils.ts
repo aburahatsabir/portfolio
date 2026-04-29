@@ -1,4 +1,5 @@
 import { PROJECTS } from '../constants';
+import { getWorkProjectIdFromRouteSegment } from '../content/work-route-titles';
 
 // Re-export schema utilities for centralized SEO management
 export {
@@ -139,7 +140,8 @@ const ROUTE_METADATA: Record<string, PageMetadata> = {
 function getMetadataForRoute(path: string): PageMetadata {
     // Handle case study routes: /work/project-id
     if (path.startsWith('/work/')) {
-        const projectId = path.replace('/work/', '');
+        const routeSegment = path.replace('/work/', '');
+        const projectId = getWorkProjectIdFromRouteSegment(routeSegment) ?? routeSegment;
         const project = PROJECTS.find(p => p.id === projectId);
 
         if (project) {

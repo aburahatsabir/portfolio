@@ -1,27 +1,25 @@
 export const WORK_ROUTE_TITLES = {
   'fmcg-erp': 'Integrated FMCG Distribution ERP',
   mocs: 'Medical Operations Control System',
-  'hr-docs': 'HR Documentation System',
-  'erp-lite': 'ERP-Lite Integrated HR Control System',
+  'hr-docs': 'HR Documentation & Control System',
 } as const;
 
 const WORK_ROUTE_SEGMENTS = {
   'fmcg-erp': 'fmcg-erp',
   mocs: 'mocs',
   'hr-docs': 'hr-documentation-control-system',
-  'erp-lite': 'erp-lite',
 } as const;
 
 const LEGACY_WORK_ROUTE_SEGMENTS: Record<string, keyof typeof WORK_ROUTE_SEGMENTS> = {
   'med-ops': 'mocs',
   'hr-docs': 'hr-docs',
+  'erp-lite': 'hr-docs',
 };
 
 const WORK_PROJECT_IDS_BY_ROUTE_SEGMENT: Record<string, keyof typeof WORK_ROUTE_TITLES> = {
   'fmcg-erp': 'fmcg-erp',
   mocs: 'mocs',
   'hr-documentation-control-system': 'hr-docs',
-  'erp-lite': 'erp-lite',
   ...LEGACY_WORK_ROUTE_SEGMENTS,
 };
 
@@ -50,9 +48,10 @@ export function normalizeWorkRoutePath(pathname: string) {
   }
 
   const routeSegment = pathname.replace('/work/', '');
-  if (routeSegment !== 'hr-docs') {
+  if (routeSegment !== 'hr-docs' && routeSegment !== 'erp-lite') {
     return pathname;
   }
 
-  return getWorkRoutePath('hr-docs') ?? pathname;
+  const projectId = getWorkProjectIdFromRouteSegment(routeSegment) ?? routeSegment;
+  return getWorkRoutePath(projectId) ?? pathname;
 }

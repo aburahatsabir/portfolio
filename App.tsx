@@ -21,7 +21,6 @@ const PersonaDirectory = lazyLoadPage(() => import('./components/PersonaDirector
 const FMCGCaseStudy = lazyLoadPage(() => import('./components/FMCGCaseStudy'));
 const MocsCaseStudy = lazyLoadPage(() => import('./components/MocsCaseStudy'));
 const HRDocsCaseStudy = lazyLoadPage(() => import('./components/HRDocsCaseStudy'));
-const ErpLiteCaseStudy = lazyLoadPage(() => import('./components/ErpLiteCaseStudy'));
 const PrivacyPolicy = lazyLoadPage(() => import('./components/PrivacyPolicy'));
 const CookiePolicy = lazyLoadPage(() => import('./components/CookiePolicy'));
 const AccessibilityStatement = lazyLoadPage(() => import('./components/AccessibilityStatement'));
@@ -216,10 +215,6 @@ function App() {
 
         if (workProjectId === 'hr-docs') {
             return <ErrorBoundary><HRDocsCaseStudy /></ErrorBoundary>;
-        }
-
-        if (workProjectId === 'erp-lite') {
-            return <ErrorBoundary><ErpLiteCaseStudy /></ErrorBoundary>;
         }
 
         if (currentPath.startsWith('/work/')) {

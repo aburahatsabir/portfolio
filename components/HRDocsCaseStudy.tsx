@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { TESTIMONIALS } from '../content';
 
 type FlutedGlassWindow = Window & typeof globalThis & {
     initializeOptimizedShaders?: () => void;
@@ -142,15 +143,9 @@ const NativeHrDocsHero: React.FC = () => {
                             </div>
 
                             <div className="hrdocs-hero__button-wrap">
-                                <div className="hrdocs-hero__button">
-                                    <div aria-hidden="true" className="hrdocs-hero__button-text">Get in touch</div>
-                                    <a
-                                        className="hrdocs-hero__button-link"
-                                        href="/contact"
-                                    >
-                                        <span className="hrdocs-hero__sr-only">Get in touch</span>
-                                    </a>
-                                </div>
+                                <a className="hrdocs-hero__button" href="/contact">
+                                    <span className="hrdocs-hero__button-text">Get in touch</span>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -197,7 +192,7 @@ const NativeHrDocsHero: React.FC = () => {
                         <div className="hrdocs-hero__image-frame">
                             <img
                                 src="/images/hr-docs/hero-canvas-preview.avif"
-                                alt="ERP-Lite HR document control screen showing version history, expiry tracking, and document status controls."
+                                alt="HR document control screen showing version history, expiry tracking, and document status controls."
                                 loading="eager"
                                 fetchPriority="high"
                                 className="hrdocs-hero__image"
@@ -233,11 +228,6 @@ type HrDocsWhyFeature = {
     ctas?: HrDocsCmsTabCta[];
 };
 
-type HrDocsCustomerBadge = {
-    imageSrc: string;
-    imageAlt: string;
-};
-
 type HrDocsTestimonial = {
     name: string;
     title: string;
@@ -245,7 +235,6 @@ type HrDocsTestimonial = {
     quote: string;
     imageSrc: string;
     imageAlt: string;
-    href: string;
 };
 
 type HrDocsComparisonIcon = 'no' | 'minus' | 'check';
@@ -279,31 +268,31 @@ const HR_DOCS_CMS_TABS_AUTOPLAY_MS = 6000;
 const HR_DOCS_CMS_TABS_DESKTOP_QUERY = '(min-width: 768px)';
 const hrDocsCmsTabs: HrDocsCmsTab[] = [
     {
-        title: 'Why Lite',
-        body: 'ERP-Lite is not a reduced enterprise suite. It is a focused HR control system built for SMEs - prioritizing records, workflows, and traceable approvals without unnecessary complexity.',
+        title: 'Why this system',
+        body: 'This system is not a broad enterprise suite. It is a focused HR control system built for SMEs - prioritizing records, workflows, and traceable approvals without unnecessary complexity.',
         imageSrc: '/images/hr-docs/cms-tab-why-lite.avif',
-        imageAlt: 'ERP-Lite overview screen showing employee records, approvals, and compliance workflows in one focused HR system.',
+        imageAlt: 'HR documentation system overview screen showing employee records, approvals, and compliance workflows in one focused HR system.',
         ctas: [],
     },
     {
         title: 'Connected Modules',
         body: 'Modules work as one system. Records drive workflows, workflows drive payroll, and every action feeds auditability - creating a connected operating model across HR processes.',
         imageSrc: '/images/hr-docs/cms-tab-connected-modules.avif',
-        imageAlt: 'ERP-Lite connected modules view showing how employee records, workflows, payroll, and audit history operate as one system.',
+        imageAlt: 'HR documentation system modules view showing how employee records, workflows, payroll, and audit history operate as one system.',
         ctas: [],
     },
     {
         title: 'Controls First',
         body: 'Compliance is built into the architecture. Retention, document expiry, payroll locking, and audit trails are enforced by design - ensuring consistent control without manual oversight.',
         imageSrc: '/images/hr-docs/cms-tab-controls-first.avif',
-        imageAlt: 'ERP-Lite controls screen showing document expiry checks, payroll locking, and audit enforcement across HR operations.',
+        imageAlt: 'HR documentation control screen showing document expiry checks, payroll locking, and audit enforcement across HR operations.',
         ctas: [],
     },
     {
         title: 'API-Level Access',
         body: 'Access is enforced at the API layer, not just the interface. Every action follows strict permissions, ensuring unauthorized operations are structurally impossible across the system.',
         imageSrc: '/images/hr-docs/cms-tab-api-level-access.avif',
-        imageAlt: 'ERP-Lite access control screen showing API-level permissions and restricted actions by user role.',
+        imageAlt: 'HR documentation system access control screen showing API-level permissions and restricted actions by user role.',
         ctas: [],
     },
 ];
@@ -327,10 +316,10 @@ const hrDocsWhyFeatures: HrDocsWhyFeature[] = [
         title: 'Payroll cannot be run with pending approvals',
         body: [
             'In legacy setups, payroll is often run while leave requests sit unapproved in an inbox, requiring retroactive corrections next month.',
-            'ERP-Lite structurally blocks the payroll lock action if there are any unhandled attendance anomalies, missing document updates, or pending leave requests in the current cycle. The system forces operational hygiene.',
+            'The system structurally blocks the payroll lock action if there are any unhandled attendance anomalies, missing document updates, or pending leave requests in the current cycle. The system forces operational hygiene.',
         ],
         imageSrc: '/images/hr-docs/g2-approval-workflows.webp',
-        imageAlt: 'ERP-Lite approval workflow screen showing pending requests, status indicators, and approval controls.',
+        imageAlt: 'HR approval workflow screen showing pending requests, status indicators, and approval controls.',
         imageObjectPosition: '0% 0%',
     },
     {
@@ -341,7 +330,7 @@ const hrDocsWhyFeatures: HrDocsWhyFeature[] = [
             'The document control module isn\'t just a storage drive; it is an active state machine that feeds real-time compliance status to the attendance and payroll engines.',
         ],
         imageSrc: '/images/hr-docs/g2-document-control.webp',
-        imageAlt: 'ERP-Lite document control screen showing version status, expiry tracking, and compliance-related record states.',
+        imageAlt: 'HR document control screen showing version status, expiry tracking, and compliance-related record states.',
         imageObjectPosition: '0% 0%',
     },
     {
@@ -352,7 +341,7 @@ const hrDocsWhyFeatures: HrDocsWhyFeature[] = [
             'It records the exact timestamp, the user ID of the actor, the original state, and the new state. If a manager questions an anomaly three months later, the truth is indisputable.',
         ],
         imageSrc: '/images/hr-docs/g2-audit-trail.webp',
-        imageAlt: 'ERP-Lite audit trail screen showing timestamps, user actions, and record-level state changes.',
+        imageAlt: 'HR audit trail screen showing timestamps, user actions, and record-level state changes.',
         imageObjectPosition: '0% 100%',
     },
     {
@@ -360,65 +349,48 @@ const hrDocsWhyFeatures: HrDocsWhyFeature[] = [
         title: 'Role-based access enforced at the API layer',
         body: [
             'Security by hiding UI elements is insufficient. If a user inspects the network traffic, they should not be able to forge an approval request.',
-            'ERP-Lite enforces all state-machine rules and role validations at the core server level, ensuring that even if an interface is bypassed, the system remains mathematically secure.',
+            'The system enforces all state-machine rules and role validations at the core server level, ensuring that even if an interface is bypassed, the system remains mathematically secure.',
         ],
         imageSrc: '/images/hr-docs/cms-tab-api-level-access.avif',
-        imageAlt: 'ERP-Lite role-based access diagram showing API-level permission enforcement for sensitive HR actions.',
+        imageAlt: 'HR documentation system access diagram showing API-level permission enforcement for sensitive HR actions.',
         imageObjectPosition: '0% 0%',
     },
 ];
 
-const hrDocsCustomerBadges: HrDocsCustomerBadge[] = [
-    {
-        imageSrc: 'https://cdn.prod.website-files.com/686294e263eb7e215bd232f7/695d1a83f727ce7de53a4c8c_Enterprise%20Leader%20-%20Winter%202026%20G2.svg',
-        imageAlt: 'G2 Enterprise Leader Winter 2026',
-    },
-    {
-        imageSrc: 'https://cdn.prod.website-files.com/686294e263eb7e215bd232f7/695d1aeb3253f22d5bbe6aab_g2-badge_overall-leader_winter-26.svg',
-        imageAlt: 'G2 Overall Leader Winter 2026',
-    },
-    {
-        imageSrc: 'https://cdn.prod.website-files.com/686294e263eb7e215bd232f7/695d1aeb1bdcf54c2ba09181_g2-badge_regional-leader_emea_winter-26.svg',
-        imageAlt: 'G2 Regional Leader for EMEA Winter 2026',
-    },
-];
+const hrDocsAnonymousAvatar = "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' rx='24' fill='%23edf2f7'/%3E%3Ccircle cx='48' cy='36' r='18' fill='%2394a3b8'/%3E%3Cpath d='M20 82c4-16 18-24 28-24s24 8 28 24' fill='%2394a3b8'/%3E%3C/svg%3E";
 
 const hrDocsTestimonials: HrDocsTestimonial[] = [
     {
-        name: 'Managing Director',
+        name: TESTIMONIALS[0]?.name ?? 'Md Tanvir Morshed',
         title: 'Executive Oversight',
         company: 'SME Leadership',
         quote: '\u201CWe needed a single source of truth. Approvals were happening on WhatsApp and there was no way to trace them later. The lack of operational controls was creating real compliance risks.\u201D',
-        imageSrc: 'https://cdn.prod.website-files.com/687e8d1b96312cc631cafec7/68921df8b7ed02975aa81f12_609b198fb3c3ab3989d51db6_elyssa-albert.jpeg',
-        imageAlt: 'Managing Director',
-        href: '#',
+        imageSrc: TESTIMONIALS[0]?.avatar ?? '/images/testimonial/Md Tanvir Morshed.webp',
+        imageAlt: TESTIMONIALS[0]?.name ?? 'Md Tanvir Morshed',
     },
     {
-        name: 'Sr. HR Executive',
+        name: TESTIMONIALS[1]?.name ?? 'Md. Moshiur Rahman',
         title: 'HR & Payroll',
         company: 'Core Operations',
         quote: '\u201CPayroll prep was a three-day ordeal of cross-referencing spreadsheets with leave balances and WhatsApp attendance drops. It was manually exhausting and prone to constant errors.\u201D',
-        imageSrc: 'https://cdn.prod.website-files.com/687e8d1b96312cc631cafec7/68a49e6cc818ea3a30397ff2_WfS0vcSrwzZozkZeHQ8-2jJn48Cd_scrppPzRo8_Zcg.webp',
-        imageAlt: 'Sr. HR Executive',
-        href: '#',
+        imageSrc: TESTIMONIALS[1]?.avatar ?? '/images/testimonial/Md.Moshiur Rahman.webp',
+        imageAlt: TESTIMONIALS[1]?.name ?? 'Md. Moshiur Rahman',
     },
     {
-        name: 'Operations Manager',
+        name: TESTIMONIALS[2]?.name ?? 'Muntasir Mahmood',
         title: 'Department Head',
         company: 'Team Leadership',
         quote: '\u201CIt was impossible to pull cross-department reports. I couldn\'t tell who was on leave without messaging HR directly. We needed self-service visibility, not just another spreadsheet.\u201D',
-        imageSrc: 'https://cdn.prod.website-files.com/687e8d1b96312cc631cafec7/68921d7f25a16ed1eae3e911_66952004d3d1489d86a9e1d7_1662084310247.jpeg',
-        imageAlt: 'Operations Manager',
-        href: '#',
+        imageSrc: TESTIMONIALS[2]?.avatar ?? '/images/testimonial/Muntasir Mahmood.webp',
+        imageAlt: TESTIMONIALS[2]?.name ?? 'Muntasir Mahmood',
     },
     {
-        name: 'Operations Employee',
+        name: 'Anonymous',
         title: 'Team Member',
         company: 'Field Operations',
         quote: '\u201CI just wanted to know my leave balance and get my payslip without having to email someone every month. Basic transparency was missing from our daily workflow.\u201D',
-        imageSrc: 'https://cdn.prod.website-files.com/687e8d1b96312cc631cafec7/68921e413356a6d78eeadedc_1719321093068.jpeg',
-        imageAlt: 'Operations Employee',
-        href: '#',
+        imageSrc: hrDocsAnonymousAvatar,
+        imageAlt: 'Anonymous team member',
     },
 ];
 
@@ -509,39 +481,39 @@ const hrDocsG2Tabs: HrDocsG2Tab[] = [
 
 const hrDocsFaqItems: HrDocsFaqItem[] = [
     {
-        question: "What's the difference between ERP-Lite and spreadsheets?",
+        question: "What's the difference between the system and spreadsheets?",
         answer: [
-            'Spreadsheets store data but don\'t govern it. ERP-Lite connects records, approvals, payroll, and documents into one system - ensuring every action is structured, traceable, and operationally consistent.',
+            'Spreadsheets store data but don\'t govern it. The system connects records, approvals, payroll, and documents into one system - ensuring every action is structured, traceable, and operationally consistent.',
         ],
     },
     {
-        question: 'Does ERP-Lite include document management?',
+        question: 'Does the system include document management?',
         answer: [
-            'Yes. ERP-Lite includes a governed document layer with versioning, expiry tracking, and employee linkage - ensuring documents actively support compliance, payroll readiness, and operational control.',
+            'Yes. The system includes a governed document layer with versioning, expiry tracking, and employee linkage - ensuring documents actively support compliance, payroll readiness, and operational control.',
         ],
     },
     {
-        question: 'Why move from fragmented HR operations to ERP-Lite?',
+        question: 'Why move from fragmented HR operations to a governed system?',
         answer: [
-            'Fragmented systems create delays, errors, and blind spots. ERP-Lite connects attendance, leave, payroll, and approvals - removing coordination overhead and delivering consistent, visible operations.',
+            'Fragmented systems create delays, errors, and blind spots. The system connects attendance, leave, payroll, and approvals - removing coordination overhead and delivering consistent, visible operations.',
         ],
     },
     {
-        question: 'Will ERP-Lite reduce flexibility in handling exceptions?',
+        question: 'Will the system reduce flexibility in handling exceptions?',
         answer: [
-            'No. ERP-Lite structures exceptions without removing flexibility. Edge cases are processed through defined workflows - making them visible, traceable, and governed without relying on informal handling.',
+            'No. The system structures exceptions without removing flexibility. Edge cases are processed through defined workflows - making them visible, traceable, and governed without relying on informal handling.',
         ],
     },
     {
-        question: 'Can ERP-Lite support different policies and workflows?',
+        question: 'Can the system support different policies and workflows?',
         answer: [
-            'Yes. ERP-Lite supports configurable roles, approval paths, and policy rules - allowing teams to model real operational variation while maintaining system-level consistency and control.',
+            'Yes. The system supports configurable roles, approval paths, and policy rules - allowing teams to model real operational variation while maintaining system-level consistency and control.',
         ],
     },
     {
-        question: 'How is ERP-Lite different from standalone HR tools?',
+        question: 'How is the system different from standalone HR tools?',
         answer: [
-            'Standalone tools solve isolated problems. ERP-Lite connects records, approvals, payroll, and documents - eliminating handoff gaps and creating one continuous operational system.',
+            'Standalone tools solve isolated problems. The system connects records, approvals, payroll, and documents - eliminating handoff gaps and creating one continuous operational system.',
         ],
     },
     {
@@ -551,7 +523,7 @@ const hrDocsFaqItems: HrDocsFaqItem[] = [
         ],
     },
     {
-        question: 'How does ERP-Lite ensure compliance?',
+        question: 'How does the system ensure compliance?',
         answer: [
             'Compliance is enforced by system rules. Invalid data, missing approvals, or expired documents automatically block actions - ensuring operations meet requirements before progressing.',
         ],
@@ -563,9 +535,9 @@ const hrDocsFaqItems: HrDocsFaqItem[] = [
         ],
     },
     {
-        question: 'Is ERP-Lite suitable for growing SMEs?',
+        question: 'Is the system suitable for growing SMEs?',
         answer: [
-            'Yes. ERP-Lite is built for SMEs moving beyond manual processes - delivering structured workflows and control without the complexity of enterprise systems.',
+            'Yes. The system is built for SMEs moving beyond manual processes - delivering structured workflows and control without the complexity of enterprise systems.',
         ],
     },
 ];
@@ -821,7 +793,7 @@ const NativeHrDocsCmsTabs: React.FC = () => {
                         <div className="hrdocs-cms-tabs__content">
                             <h3 id="hrdocs-cms-tabs-title" className="hrdocs-cms-tabs__title">Focused scope, connected operations</h3>
                             <p className="hrdocs-cms-tabs__intro">
-                                {'ERP-Lite is designed for teams that need structured HR control without enterprise complexity.'}
+                                {'The system is designed for teams that need structured HR control without enterprise complexity.'}
                             </p>
                         </div>
 
@@ -1227,25 +1199,20 @@ const NativeHrDocsMigrationCta: React.FC = () => {
                             <div className="hrdocs-migration-card__copy-group">
                                 <h2 className="hrdocs-migration-card__title">How to move from fragmented HR ops to one governed system</h2>
                                 <p className="hrdocs-migration-card__body-copy">
-                                    Growing teams need to unplug from spreadsheet sprawl, chat-based approvals, missing document controls, and payroll bottlenecks that drain time and create compliance risk. Explore the system story to see why and how ERP-Lite reconnects records, workflows, and auditability so HR teams can refocus on operational clarity, decision speed, and control.
+                                    Growing teams need to unplug from spreadsheet sprawl, chat-based approvals, missing document controls, and payroll bottlenecks that drain time and create compliance risk. Explore the system story to see why and how the system reconnects records, workflows, and auditability so HR teams can refocus on operational clarity, decision speed, and control.
                                 </p>
                             </div>
 
-                            <div className="hrdocs-migration-card__button">
-                                <div aria-hidden="true" className="hrdocs-migration-card__button-text">Get the story</div>
-                                <a
-                                    className="hrdocs-migration-card__button-link"
-                                    href="/blog"
-                                    aria-label="Get the story"
-                                />
-                            </div>
+                            <a className="hrdocs-migration-card__button" href="/blog/blog-07">
+                                <span className="hrdocs-migration-card__button-text">Get the story</span>
+                            </a>
                         </div>
 
                         <div className="hrdocs-migration-card__cover-col">
                             <div className="hrdocs-migration-card__cover-wrap">
                                 <img
                                     src="/images/hr-docs/resources_ebook.avif"
-                                    alt="Cover art for the ERP-Lite HR operations ebook"
+                                    alt="Cover art for the HR documentation system guide"
                                     loading="lazy"
                                     className="hrdocs-migration-card__cover"
                                 />
@@ -1273,25 +1240,10 @@ const NativeHrDocsCustomersSection: React.FC = () => {
                 <div className="max-w-7xl mx-auto px-6 w-full">
                     <div className="hrdocs-customers__intro-row">
                         <div className="hrdocs-customers__intro-col">
-                            <h2 className="hrdocs-customers__heading">Teams trust ERP-Lite</h2>
+                            <h2 className="hrdocs-customers__heading">Built for real HR operations</h2>
                             <p className="hrdocs-customers__summary">
-                                But don&apos;t take our word for it - see how teams rely on it in real operations.
+                                See the workflows, controls, and operational patterns demonstrated across real HR processes.
                             </p>
-                        </div>
-
-                        <div className="hrdocs-customers__badges-col">
-                            <div className="hrdocs-customers__badges-grid">
-                                {hrDocsCustomerBadges.map(badge => (
-                                    <div key={badge.imageAlt} className="hrdocs-customers__badge-frame">
-                                        <img
-                                            src={badge.imageSrc}
-                                            alt={badge.imageAlt}
-                                            loading="lazy"
-                                            className="hrdocs-customers__badge-image"
-                                        />
-                                    </div>
-                                ))}
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -1355,13 +1307,10 @@ const NativeHrDocsCustomersSection: React.FC = () => {
                                 aria-label="Customer testimonials"
                             >
                                 {hrDocsTestimonials.map((testimonial, index) => (
-                                    <a
+                                    <div
                                         key={testimonial.name}
                                         data-index={index}
                                         className="hrdocs-customers-slider__slide"
-                                        href={testimonial.href}
-                                        target="_blank"
-                                        rel="noreferrer"
                                         role="listitem"
                                         aria-current={activeSlide === index ? 'true' : undefined}
                                     >
@@ -1396,7 +1345,7 @@ const NativeHrDocsCustomersSection: React.FC = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                    </a>
+                                    </div>
                                 ))}
                             </div>
                         </div>
@@ -1434,7 +1383,7 @@ const NativeHrDocsComparisonTable: React.FC = () => {
                         <h2 className="hrdocs-compare__heading">
                             Before (Chaos) vs. After
                             <br className="hrdocs-compare__heading-break" />
-                            (ERP-Lite)
+                            (Governed System)
                         </h2>
                     </div>
                 </div>
@@ -1444,7 +1393,7 @@ const NativeHrDocsComparisonTable: React.FC = () => {
                 <div
                     className="hrdocs-compare__table-shell"
                     role="table"
-                    aria-label="Before vs After: Legacy HR Process vs ERP-Lite"
+                    aria-label="Before vs After: Legacy HR Process vs Governed HR System"
                     aria-colcount={4}
                     aria-rowcount={hrDocsComparisonRows.length + 1}
                 >
@@ -1482,7 +1431,7 @@ const NativeHrDocsComparisonTable: React.FC = () => {
                                     <div className="hrdocs-compare__cell-slot hrdocs-compare__cell-slot--header-value">
                                         <div className="hrdocs-compare__rich-text hrdocs-compare__rich-text--header">
                                             <p>
-                                                <strong>ERP-Lite</strong>
+                                                <strong>Governed System</strong>
                                             </p>
                                         </div>
                                     </div>
@@ -1671,7 +1620,7 @@ const NativeHrDocsBusinessImpactSection: React.FC = () => {
                         <div className="hrdocs-business-impact__copy-col">
                             <h2 className="hrdocs-business-impact__title">
                                 <span className="hrdocs-business-impact__title-line">See the operational</span>
-                                <span className="hrdocs-business-impact__title-line">impact of ERP-Lite</span>
+                                <span className="hrdocs-business-impact__title-line">impact of the system</span>
                             </h2>
                             <p className="hrdocs-business-impact__body-copy">
                                 <span className="hrdocs-business-impact__copy-line">
@@ -1684,8 +1633,8 @@ const NativeHrDocsBusinessImpactSection: React.FC = () => {
                                     of manual payroll processing.
                                 </span>
                             </p>
-                            <div data-wf--button--variant="primary" className="hrdocs-business-impact__button btn">
-                                <div aria-hidden="true" className="hrdocs-business-impact__button-text btn-text">
+                            <a data-wf--button--variant="primary" className="hrdocs-business-impact__button btn" href="/contact">
+                                <div className="hrdocs-business-impact__button-text btn-text">
                                     Get in touch
                                 </div>
                                 <div className="hrdocs-business-impact__button-icon btn-icon" aria-hidden="true">
@@ -1702,13 +1651,7 @@ const NativeHrDocsBusinessImpactSection: React.FC = () => {
                                         <div className="button-icon cc-arrow-up" aria-hidden="true"></div>
                                     </div>
                                 </div>
-                                <a
-                                    className="hrdocs-business-impact__link-cover u-link-cover w-inline-block"
-                                    href="/contact"
-                                >
-                                    <span className="hrdocs-hero__sr-only">Get in touch</span>
-                                </a>
-                            </div>
+                            </a>
                         </div>
 
                         <div className="hrdocs-business-impact__media-col">
@@ -1716,7 +1659,7 @@ const NativeHrDocsBusinessImpactSection: React.FC = () => {
                                 <div className="hrdocs-business-impact__image-frame">
                                     <img
                                         src="/images/hr-docs/g2-audit-trail.webp"
-                                        alt="ERP-Lite audit log showing recorded HR events and payroll status changes"
+                                        alt="HR audit log showing recorded HR events and payroll status changes"
                                         loading="lazy"
                                         className="hrdocs-business-impact__image"
                                     />
@@ -1870,7 +1813,7 @@ const NativeHrDocsFaqSection: React.FC = () => {
                 <div className="hrdocs-faq__row">
                     <div className="hrdocs-faq__heading-col">
                         <div className="hrdocs-faq__heading-sticky">
-                            <h2 className="hrdocs-faq__heading">About ERP-Lite</h2>
+                            <h2 className="hrdocs-faq__heading">About the system</h2>
                         </div>
                     </div>
 
@@ -2025,7 +1968,7 @@ const NativeHrDocsScheduleDemoSection: React.FC = () => {
                         <p className="hrdocs-demo-shell__subheading">System Architecture &amp; API Specs</p>
 
                         <p className="hrdocs-demo-shell__body-copy">
-                            Explore the complete database schema, module relationships, and API specifications that power ERP-Lite.
+                            Explore the complete database schema, module relationships, and API specifications behind the system.
                         </p>
 
                         <div className="hrdocs-demo-shell__spacer" aria-hidden="true" />
@@ -2040,9 +1983,9 @@ const NativeHrDocsScheduleDemoSection: React.FC = () => {
 
                         <div className="hrdocs-demo-shell__spacer" aria-hidden="true" />
 
-                        <div data-wf--button--variant="primary" className="hrdocs-demo-shell__button btn">
-                            <div aria-hidden="true" className="hrdocs-demo-shell__button-text btn-text">
-                                Request a walkthrough
+                        <a data-wf--button--variant="primary" className="hrdocs-demo-shell__button btn" href="/contact">
+                            <div className="hrdocs-demo-shell__button-text btn-text">
+                                Request details
                             </div>
                             <div className="hrdocs-demo-shell__button-icon btn-icon" aria-hidden="true">
                                 <div data-wf--button-icon--variant="arrow-right" className="button-icon-wrap">
@@ -2058,13 +2001,7 @@ const NativeHrDocsScheduleDemoSection: React.FC = () => {
                                     <div className="button-icon cc-arrow-up" aria-hidden="true"></div>
                                 </div>
                             </div>
-                            <a
-                                className="hrdocs-demo-shell__link-cover u-link-cover w-inline-block"
-                                href="/contact"
-                            >
-                                <span className="hrdocs-hero__sr-only">Request a walkthrough</span>
-                            </a>
-                        </div>
+                        </a>
                     </div>
 
                     <div className="hrdocs-demo-shell__media-col">
@@ -2072,7 +2009,7 @@ const NativeHrDocsScheduleDemoSection: React.FC = () => {
                             <div className="hrdocs-demo-shell__base-image-wrap">
                                 <img
                                     src="/images/hr-docs/cms-tab-connected-modules.avif"
-                                    alt="ERP-Lite architecture view showing connected HR modules and system relationships"
+                                    alt="HR documentation system architecture view showing connected HR modules and system relationships"
                                     loading="lazy"
                                     className="hrdocs-demo-shell__base-image"
                                 />
@@ -2277,24 +2214,13 @@ const HRDocsCaseStudy: React.FC = () => {
                     background: #146ef5;
                     transform: none;
                 }
+                .hr-docs-case-study .hrdocs-hero__button:focus-visible {
+                    outline: 2px solid #146ef5;
+                    outline-offset: 2px;
+                }
                 .hr-docs-case-study .hrdocs-hero__button-text {
                     pointer-events: none;
                     position: relative;
-                }
-                .hr-docs-case-study .hrdocs-hero__button-link {
-                    z-index: 1;
-                    display: block;
-                    cursor: pointer;
-                    position: absolute;
-                    inset: 0;
-                    width: 100%;
-                    height: 100%;
-                    border-radius: inherit;
-                    text-decoration: none;
-                }
-                .hr-docs-case-study .hrdocs-hero__button-link:focus-visible {
-                    outline: 2px solid #146ef5;
-                    outline-offset: 2px;
                 }
                 .hr-docs-case-study .hrdocs-hero__sr-only {
                     position: absolute;
@@ -3070,27 +2996,17 @@ const HRDocsCaseStudy: React.FC = () => {
                     transition: background-color 0.3s cubic-bezier(0.165, 0.84, 0.44, 1), color 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
                 }
                 .hr-docs-case-study .hrdocs-migration-card__button:hover,
-                .hr-docs-case-study .hrdocs-migration-card__button:has(.hrdocs-migration-card__button-link:focus-visible) {
+                .hr-docs-case-study .hrdocs-migration-card__button:focus-visible {
                     background: #0055d4;
                     color: #ffffff;
+                }
+                .hr-docs-case-study .hrdocs-migration-card__button:focus-visible {
+                    outline: 2px solid #146ef5;
+                    outline-offset: 2px;
                 }
                 .hr-docs-case-study .hrdocs-migration-card__button-text {
                     pointer-events: none;
                     position: relative;
-                }
-                .hr-docs-case-study .hrdocs-migration-card__button-link {
-                    position: absolute;
-                    inset: 0;
-                    z-index: 3;
-                    width: 100%;
-                    height: 100%;
-                    border-radius: inherit;
-                    cursor: pointer;
-                    text-decoration: none;
-                }
-                .hr-docs-case-study .hrdocs-migration-card__button-link:focus-visible {
-                    outline: 2px solid #146ef5;
-                    outline-offset: 2px;
                 }
                 .hr-docs-case-study .hrdocs-migration-card__cover-col {
                     display: flex;
@@ -3139,8 +3055,8 @@ const HRDocsCaseStudy: React.FC = () => {
                     row-gap: var(--hrdocs-customers-gap-md);
                 }
                 .hr-docs-case-study .hrdocs-customers__intro-col {
-                    flex: 0 1 41.6667%;
-                    max-width: 41.6667%;
+                    flex: 0 1 62%;
+                    max-width: 62%;
                 }
                 .hr-docs-case-study .hrdocs-customers__heading {
                     margin: 0;
@@ -3163,36 +3079,13 @@ const HRDocsCaseStudy: React.FC = () => {
                     font-weight: 400;
                     letter-spacing: 0;
                 }
-                .hr-docs-case-study .hrdocs-customers__badges-col {
-                    flex: 0 1 50%;
-                    max-width: 50%;
-                }
-                .hr-docs-case-study .hrdocs-customers__badges-grid {
-                    display: grid;
-                    grid-template-columns: repeat(3, minmax(0, 1fr));
-                    gap: var(--hrdocs-customers-gap-md);
-                }
-                .hr-docs-case-study .hrdocs-customers__badge-frame {
-                    position: relative;
-                    width: 100%;
-                    aspect-ratio: 869 / 1000;
-                }
-                .hr-docs-case-study .hrdocs-customers__badge-image {
-                    position: absolute;
-                    inset: 0;
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                    object-position: 50% 50%;
-                    display: block;
-                }
                 .hr-docs-case-study .hrdocs-customers-slider-section {
                     --hrdocs-customers-slider-gap-xs: clamp(0.375rem, calc(0.3392857143rem + 0.1785714286vw), 0.5rem);
                     --hrdocs-customers-slider-gap-sm: clamp(0.625rem, calc(0.5178571429rem + 0.5357142857vw), 1rem);
                     --hrdocs-customers-slider-gap-md: clamp(1.25rem, calc(1.1785714286rem + 0.3571428571vw), 1.5rem);
                     --hrdocs-customers-slider-gap-main: clamp(1.75rem, calc(1.6785714286rem + 0.3571428571vw), 2rem);
                     --hrdocs-customers-slider-gap-xl: clamp(2.25rem, calc(2.0357142857rem + 1.0714285714vw), 3rem);
-                    --hrdocs-customers-slider-card-width: min(100%, calc(100vw - clamp(10rem, 18vw, 16rem)));
+                    --hrdocs-customers-slider-card-width: min(100%, calc(100cqw - clamp(6rem, 10cqw, 10rem)));
                     padding: 0 0 clamp(3rem, calc(2.4285714286rem + 2.8571428571vw), 5rem);
                     background: #ffffff;
                     position: relative;
@@ -3346,29 +3239,30 @@ const HRDocsCaseStudy: React.FC = () => {
                 .hr-docs-case-study .hrdocs-customers-slider__offset {
                     flex: 1;
                     display: flex;
-                    width: 100vw;
-                    margin-left: calc((100vw - 100%) / -2);
-                    margin-right: calc((100vw - 100%) / -2);
-                    overflow: visible;
+                    width: 100%;
+                    margin-left: 0;
+                    margin-right: 0;
+                    overflow: hidden;
                 }
                 .hr-docs-case-study .hrdocs-customers-slider__track {
                     display: flex;
                     align-items: stretch;
                     gap: var(--hrdocs-customers-slider-gap-md);
                     width: max-content;
+                    max-width: 100%;
                     overflow: visible;
-                    transform: translate3d(calc((100vw - var(--hrdocs-customers-slider-card-width)) / 2), 0, 0);
+                    transform: translate3d(calc((100cqw - var(--hrdocs-customers-slider-card-width)) / 2), 0, 0);
                     transition: transform 0.55s cubic-bezier(0.165, 0.84, 0.44, 1);
                     will-change: transform;
                 }
                 .hr-docs-case-study .hrdocs-customers-slider__track[data-active-slide="1"] {
-                    transform: translate3d(calc((100vw - var(--hrdocs-customers-slider-card-width)) / 2 - var(--hrdocs-customers-slider-card-width) - var(--hrdocs-customers-slider-gap-md)), 0, 0);
+                    transform: translate3d(calc((100cqw - var(--hrdocs-customers-slider-card-width)) / 2 - var(--hrdocs-customers-slider-card-width) - var(--hrdocs-customers-slider-gap-md)), 0, 0);
                 }
                 .hr-docs-case-study .hrdocs-customers-slider__track[data-active-slide="2"] {
-                    transform: translate3d(calc((100vw - var(--hrdocs-customers-slider-card-width)) / 2 - var(--hrdocs-customers-slider-card-width) - var(--hrdocs-customers-slider-gap-md) - var(--hrdocs-customers-slider-card-width) - var(--hrdocs-customers-slider-gap-md)), 0, 0);
+                    transform: translate3d(calc((100cqw - var(--hrdocs-customers-slider-card-width)) / 2 - var(--hrdocs-customers-slider-card-width) - var(--hrdocs-customers-slider-gap-md) - var(--hrdocs-customers-slider-card-width) - var(--hrdocs-customers-slider-gap-md)), 0, 0);
                 }
                 .hr-docs-case-study .hrdocs-customers-slider__track[data-active-slide="3"] {
-                    transform: translate3d(calc((100vw - var(--hrdocs-customers-slider-card-width)) / 2 - var(--hrdocs-customers-slider-card-width) - var(--hrdocs-customers-slider-gap-md) - var(--hrdocs-customers-slider-card-width) - var(--hrdocs-customers-slider-gap-md) - var(--hrdocs-customers-slider-card-width) - var(--hrdocs-customers-slider-gap-md)), 0, 0);
+                    transform: translate3d(calc((100cqw - var(--hrdocs-customers-slider-card-width)) / 2 - var(--hrdocs-customers-slider-card-width) - var(--hrdocs-customers-slider-gap-md) - var(--hrdocs-customers-slider-card-width) - var(--hrdocs-customers-slider-gap-md) - var(--hrdocs-customers-slider-card-width) - var(--hrdocs-customers-slider-gap-md)), 0, 0);
                 }
                 .hr-docs-case-study .hrdocs-customers-slider__track::-webkit-scrollbar {
                     display: none;
@@ -3376,6 +3270,8 @@ const HRDocsCaseStudy: React.FC = () => {
                 .hr-docs-case-study .hrdocs-customers-slider__slide {
                     flex: 0 0 var(--hrdocs-customers-slider-card-width);
                     width: var(--hrdocs-customers-slider-card-width);
+                    max-width: 100%;
+                    min-width: 0;
                     color: inherit;
                     text-decoration: none;
                     display: block;
@@ -3499,8 +3395,7 @@ const HRDocsCaseStudy: React.FC = () => {
                     letter-spacing: inherit;
                 }
                 @media (max-width: 991px) {
-                    .hr-docs-case-study .hrdocs-customers__intro-col,
-                    .hr-docs-case-study .hrdocs-customers__badges-col {
+                    .hr-docs-case-study .hrdocs-customers__intro-col {
                         flex-basis: 100%;
                         max-width: 100%;
                     }
@@ -3515,10 +3410,10 @@ const HRDocsCaseStudy: React.FC = () => {
                 }
                 @media (max-width: 767px) {
                     .hr-docs-case-study .hrdocs-customers-slider-section {
-                        --hrdocs-customers-slider-card-width: calc(100vw - 3rem);
+                        --hrdocs-customers-slider-card-width: 100cqw;
                     }
                     .hr-docs-case-study .hrdocs-customers-slider__offset {
-                        width: 100vw;
+                        width: 100%;
                     }
                     .hr-docs-case-study .hrdocs-customers-slider__card-body {
                         min-height: 0;
@@ -3887,6 +3782,13 @@ const HRDocsCaseStudy: React.FC = () => {
                 .hr-docs-case-study .hrdocs-business-impact__button:hover [data-wf--button-icon--variant="arrow-right"] {
                     transform: translateX(6px);
                 }
+                .hr-docs-case-study .hrdocs-business-impact__button:focus-visible {
+                    outline: 2px solid #146ef5;
+                    outline-offset: 2px;
+                }
+                .hr-docs-case-study .hrdocs-business-impact__button:focus-visible [data-wf--button-icon--variant="arrow-right"] {
+                    transform: translateX(6px);
+                }
                 .hr-docs-case-study .hrdocs-business-impact__button .accordion-line-wrap {
                     pointer-events: none;
                     justify-content: center;
@@ -3947,16 +3849,6 @@ const HRDocsCaseStudy: React.FC = () => {
                     border-radius: 0;
                     transform: translateY(-50%) rotate(45deg);
                     transform-origin: center;
-                }
-                .hr-docs-case-study .hrdocs-business-impact__link-cover {
-                    z-index: 3;
-                    cursor: pointer;
-                    border-radius: inherit;
-                    width: 100%;
-                    height: 100%;
-                    display: inline-block;
-                    position: absolute;
-                    inset: 0;
                 }
                 .hr-docs-case-study .hrdocs-business-impact__media-col {
                     display: flex;
@@ -4509,6 +4401,13 @@ const HRDocsCaseStudy: React.FC = () => {
                 .hr-docs-case-study .hrdocs-demo-shell__button:hover [data-wf--button-icon--variant="arrow-right"] {
                     transform: translateX(6px);
                 }
+                .hr-docs-case-study .hrdocs-demo-shell__button:focus-visible {
+                    outline: 2px solid #146ef5;
+                    outline-offset: 2px;
+                }
+                .hr-docs-case-study .hrdocs-demo-shell__button:focus-visible [data-wf--button-icon--variant="arrow-right"] {
+                    transform: translateX(6px);
+                }
                 .hr-docs-case-study .hrdocs-demo-shell__button .accordion-line-wrap {
                     pointer-events: none;
                     justify-content: center;
@@ -4569,16 +4468,6 @@ const HRDocsCaseStudy: React.FC = () => {
                     border-radius: 0;
                     transform: translateY(-50%) rotate(45deg);
                     transform-origin: center;
-                }
-                .hr-docs-case-study .hrdocs-demo-shell__link-cover {
-                    z-index: 3;
-                    cursor: pointer;
-                    border-radius: inherit;
-                    width: 100%;
-                    height: 100%;
-                    display: inline-block;
-                    position: absolute;
-                    inset: 0;
                 }
                 .hr-docs-case-study .hrdocs-demo-shell__media-col {
                     position: relative;
@@ -4686,7 +4575,7 @@ const HRDocsCaseStudy: React.FC = () => {
                                         A 90-employee SME was running HR through spreadsheets, chat threads, and personal folders. Payroll was slow, approvals were untraceable, and compliance readiness depended on memory.
                                     </p>
                                     <p>
-                                        ERP-Lite introduces a centralized system where employee records, workflows, and documentation operate in one controlled environment. Teams can manage, track, and validate actions with clarity - ensuring faster operations, stronger compliance, and full visibility.
+                                        This system introduces a centralized model where employee records, workflows, and documentation operate in one controlled environment. Teams can manage, track, and validate actions with clarity - ensuring faster operations, stronger compliance, and full visibility.
                                     </p>
                                 </div>
                             </div>

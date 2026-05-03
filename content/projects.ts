@@ -308,47 +308,47 @@ export const PROJECTS: Project[] = [
   {
     id: 'hr-docs',
     title: WORK_ROUTE_TITLES['hr-docs'],
-    headline: 'Hiring Governance via Docs-as-Code',
-    badge: 'Operational Systems Architecture • HR Governance',
+    headline: 'HR Documentation for SME Governance',
+    badge: 'HR Documentation | Compliance Workflows',
     category: 'Governance',
-    description: 'Built a docs-as-code HR architecture (LaTeX/TikZ + BARS) that enforces compensation rules, standardizes interviews, and produces audit-ready hiring artifacts aligned to BD Labour Act 2006.',
+    description: 'A compliance-focused HR control system for SMEs that unifies records, approvals, payroll readiness, document expiry, and audit trails in one governed workflow.',
     image: '/images/projects/hr-docs.webp',
-    client: 'Corporate HR Operations',
-    impact: '30% Faster Hiring',
-    technologies: ['LaTeX', 'TikZ', 'BARS Scoring'],
-    relevantFor: ['Hiring Managers', 'Operations Leaders'],
+    client: 'SME HR Operations',
+    impact: 'Weeks of manual payroll removed',
+    technologies: ['Approval Workflows', 'Document Control', 'Audit Logging'],
+    relevantFor: ['Operations Leaders', 'Hiring Managers'],
     systemSpecs: [
-      { label: 'Salary Matrix', value: '9 Grades x 20 Steps' },
-      { label: 'Competencies', value: '12+ Frameworks' },
-      { label: 'Score Scale', value: '5-Point BARS' },
-      { label: 'Compliance', value: 'Labour Act 2006' },
-      { label: 'Audit Status', value: 'Audit-Complete' }
+      { label: 'Operating Context', value: '90-Employee SME' },
+      { label: 'Primary Scope', value: 'Records + Payroll Readiness' },
+      { label: 'Control Surface', value: 'Approvals + Document Expiry' },
+      { label: 'Access Model', value: 'Role-Based API Rules' },
+      { label: 'Auditability', value: 'Immutable Event Logs' }
     ],
     dataSchema: [
-      'Policy Kernel (Salary Matrix / Compliance Macros)',
-      'Hiring Runtime (Question Banks / BARS Scorecards)',
-      'Audit Artifacts (Memos / Decision Traces)',
-      'ptecWarn (Auto-injected legal environments)'
+      'Employee records linked to attendance, leave, payroll, and document states',
+      'Approval workflows that block downstream actions until upstream decisions clear',
+      'Document versioning and expiry status propagated into payroll-readiness checks',
+      'Append-only audit history preserving actor, timestamp, and state transitions'
     ],
     auditControls: [
-      'GP-01: Evidence-before-Score (Build Fail Logic)',
-      'GP-02: Salary Type Safety (Matrix Locking)',
-      'GP-03: Compliance Injection (Auto-Footers)',
-      'GP-04: Decision Traceability (Unique Trace IDs)'
+      'Payroll lock blocked by pending approvals, anomalies, or missing document updates',
+      'Expired documents freeze dependent actions until records return to compliance',
+      'Role-based permissions enforced at the API layer for sensitive HR actions',
+      'Immutable logs capture every decision, override, and state transition'
     ],
     fullCaseStudy: {
-      challenge: 'The organization faced a "Gut-Feeling" governance gap. Legal liability arose from hiring/termination lacking audit trails relative to the Bangladesh Labour Act 2006. Compensation chaos ensued from unauthorized negotiations, and interview subjectivity created indefensible hiring decisions.',
-      solution: 'Engineered a "Policy Kernel + Hiring Runtime" architecture using LaTeX. Implemented an immutable salary matrix and BARS-anchored structured assessments. The system uses "Evidence-First" layouts where page geometry forces users to record evidence before assigning a score.',
-      result: 'Accelerated time-to-hire by 30% while achieving zero audit findings. All hiring decisions are now backed by version-controlled, evidence-based artifacts that are legally defensible.',
+      challenge: 'A 90-employee SME was running HR through spreadsheets, chat threads, and personal folders. Payroll was slow, approvals were untraceable, and compliance readiness depended on memory.',
+      solution: 'Built a focused HR documentation and control system for SMEs, connecting employee records, approval workflows, payroll readiness, document expiry tracking, and audit trails in one governed operating model.',
+      result: 'Transformed HR from an administrative bottleneck into an auditable, self-service operation, eliminating weeks of manual payroll processing while making approvals and compliance status visible in real time.',
       painPoints: [
-        'Legal Liability Risk',
-        'Compensation Chaos',
-        'Interviewer Variance'
+        'Untraceable approvals',
+        'Manual payroll dependencies',
+        'Fragmented document control'
       ]
     },
     postMortem: {
-      risk: "Manual score overrides bypassing the BARS governance anchors.",
-      resolution: "Hard-coded a 'Compliance Logic Gate' in the document build process that flags and requires senior signing for any score-evidence mismatch."
+      risk: 'Critical exceptions could drift back into chat-based or offline approvals and break the control chain.',
+      resolution: 'Kept exceptions inside governed workflows so every downstream action checks current system state before progressing.'
     }
   },
   {

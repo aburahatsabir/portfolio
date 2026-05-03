@@ -146,8 +146,8 @@ function getMetadataForRoute(path: string): PageMetadata {
 
         if (project) {
             return {
-                title: `${project.title} | Case Study - Abu Rahat Sabir`,
-                description: project.headline + ' - ' + project.description,
+                title: `${project.title} | Case Study`,
+                description: [project.headline, project.description].filter(Boolean).join(' - '),
                 ogImage: project.image,
                 ogType: 'article'
             };

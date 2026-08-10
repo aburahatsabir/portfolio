@@ -235,7 +235,6 @@ function buildBlogPostingSchema(post, canonicalUrl, imageUrl, siteUrl = SITE_URL
 function buildBreadcrumbListSchema(post, canonicalUrl, siteUrl = SITE_URL) {
   const homeUrl = buildCanonicalUrl("/", siteUrl);
   const blogUrl = buildCanonicalUrl("/blog", siteUrl);
-  const categoryUrl = `${blogUrl}?category=${encodeURIComponent(post.category || "General")}`;
 
   return {
     "@context": "https://schema.org",
@@ -257,12 +256,6 @@ function buildBreadcrumbListSchema(post, canonicalUrl, siteUrl = SITE_URL) {
       {
         "@type": "ListItem",
         position: 3,
-        name: post.category || "General",
-        item: categoryUrl,
-      },
-      {
-        "@type": "ListItem",
-        position: 4,
         name: post.title,
         item: canonicalUrl,
       },

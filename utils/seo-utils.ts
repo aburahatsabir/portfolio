@@ -129,7 +129,7 @@ const ROUTE_METADATA: Record<string, PageMetadata> = {
 /**
  * Get metadata for a specific route, including dynamic case study metadata
  */
-function getMetadataForRoute(path: string): PageMetadata {
+function getMetadataForRoute(path: string): PageMetadata | null {
     // Handle case study routes: /work/project-id
     if (path.startsWith('/work/')) {
         const routeSegment = path.replace('/work/', '');
@@ -148,7 +148,7 @@ function getMetadataForRoute(path: string): PageMetadata {
 
     // Handle blog post routes: /blog/post-id
     if (path.startsWith('/blog/')) {
-        const rawRouteId = path.replace('/blog/', '');
+        const rawRouteId = path.replace('/blog/', '').replace(/\/+$/, '');
         const routeId = resolveBlogPostRouteId(rawRouteId);
         const post = BLOG_POSTS.find(p => p.id === routeId);
 
@@ -160,12 +160,9 @@ function getMetadataForRoute(path: string): PageMetadata {
                 ogType: 'article'
             };
         }
-        return {
-            title: 'Blog Post | Abu Rahat Sabir',
-            description: 'Insights on enterprise architecture, operational governance, and administrative automation.',
-            ogImage: '/images/og-blog.webp',
-            ogType: 'article'
-        };
+        // Unknown slug — do not overwrite with generic fallback; return null
+        // so the caller can preserve existing prerendered meta tags.
+        return null;
     }
 
     // Return route-specific metadata or default
@@ -207,10 +204,14 @@ function updateMetaTag(selector: string, content: string): void {
 export function updatePageMetadata(path: string): void {
     const metadata = getMetadataForRoute(path);
 
+    // If no metadata resolved (e.g. unknown blog slug), preserve existing
+    // prerendered meta tags rather than overwriting with generic values.
+    if (!metadata) return;
+
     const cleanPath = path.split('?')[0].split('#')[0];
     let canonicalPath = cleanPath;
     if (cleanPath.startsWith('/blog/')) {
-        const rawRouteId = cleanPath.replace('/blog/', '');
+        const rawRouteId = cleanPath.replace('/blog/', '').replace(/\/+$/, '');
         const resolvedId = resolveBlogPostRouteId(rawRouteId);
         canonicalPath = `/blog/${resolvedId}`;
     }

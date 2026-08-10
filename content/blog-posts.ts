@@ -27,7 +27,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
     publishedAt: "2026-04-01",
 
-    dateModified: "2026-04-01",
+    dateModified: "2026-08-10",
 
     readTime: "30 min read",
 
@@ -75,7 +75,7 @@ export const BLOG_POSTS: BlogPost[] = [
     seoTitle: "How to Learn Computer Networking: 2026 Roadmap | Abu Rahat Sabir",
     date: "August 2026",
     publishedAt: "2026-08-02",
-    dateModified: "2026-08-02",
+    dateModified: "2026-08-10",
     readTime: "18 min read",
     category: "Networking",
     tags: [

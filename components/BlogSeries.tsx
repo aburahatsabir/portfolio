@@ -5,7 +5,7 @@ import React, {
   useLayoutEffect,
   useRef,
 } from "react";
-import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useSpring, useReducedMotion } from "framer-motion";
 import { BLOG_POSTS, resolveBlogPostRouteId } from "../content/blog-posts";
 import type { BlogBodyRenderer, BlogPost, BlogTemplate } from "../types";
 import NotFoundPage from "./NotFoundPage";
@@ -1276,7 +1276,9 @@ const BLOG_02_SECTION_SEVEN_LENGTH_CARDS = [
   },
 ] as const;
 
-const BLOG_02_SECTION_EIGHT_ATS_ITEMS = [
+type AtsItem = { title: string; body: string; isBad?: boolean };
+
+const BLOG_02_SECTION_EIGHT_ATS_ITEMS: AtsItem[] = [
   {
     title: "Standard section headings",
     body: `Work Experience, Education, Skills, Certifications. Parsers look for these by name. "Where I've Been" is creative but won't parse reliably.`,
@@ -1303,7 +1305,7 @@ const BLOG_02_SECTION_EIGHT_ATS_ITEMS = [
     body: "Progress bars and star ratings provide no information to a parser (or a human). Images are skipped entirely. Use text. Always text.",
     isBad: true,
   },
-] as const;
+];
 
 const BLOG_02_SECTION_EIGHT_FILE_ROWS: React.ReactNode[][] = [
   [
@@ -2366,6 +2368,7 @@ const StandardArticleContent: React.FC<{ blocks: ContentBlock[] }> = ({
             </div>
           );
         }
+        if (!("text" in block)) return null;
         return (
           <p key={i} className="article-body">
             <InlineText text={block.text || ""} />
@@ -2754,7 +2757,7 @@ const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
     {
       type: "dropcapIntro",
       lead: BLOG_02_INTRO_COPY.lead,
-      paragraphs: BLOG_02_INTRO_COPY.paragraphs,
+      paragraphs: [...BLOG_02_INTRO_COPY.paragraphs],
     },
     {
       type: "pullQuote",
@@ -5369,7 +5372,7 @@ const ResumeGuideFlagshipContent: React.FC = () => {
     const root = articleRef.current;
     if (!root) return;
 
-    const boxes = Array.from(
+    const boxes: HTMLInputElement[] = Array.from(
       root.querySelectorAll<HTMLInputElement>(
         '.cl-item input[type="checkbox"]',
       ),
@@ -5378,7 +5381,7 @@ const ResumeGuideFlagshipContent: React.FC = () => {
     const total = boxes.length;
 
     const updateProgress = () => {
-      const completedCount = boxes.reduce((count, box) => {
+      const completedCount = boxes.reduce((count: number, box: HTMLInputElement) => {
         const item = box.closest(".cl-item");
         if (box.checked) {
           item?.classList.add("checked");
@@ -5394,11 +5397,11 @@ const ResumeGuideFlagshipContent: React.FC = () => {
       }
     };
 
-    boxes.forEach((box) => box.addEventListener("change", updateProgress));
+    boxes.forEach((box: HTMLInputElement) => box.addEventListener("change", updateProgress));
     updateProgress();
 
     return () => {
-      boxes.forEach((box) => box.removeEventListener("change", updateProgress));
+      boxes.forEach((box: HTMLInputElement) => box.removeEventListener("change", updateProgress));
     };
   }, []);
 
@@ -5575,18 +5578,21 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
 
     if (!articleRoot) return;
 
-    const revealNodes = [
+    const revealNodes: HTMLElement[] = [
       ...Array.from(
         articleRoot.querySelectorAll<HTMLElement>(
           BLOG_POST_SCROLL_REVEAL_SELECTOR,
         ),
       ),
       ...(relatedRoot ? [relatedRoot] : []),
-    ].filter((node, index, list) => list.indexOf(node) === index);
+    ].filter(
+      (node, index, list): node is HTMLElement =>
+        Boolean(node) && list.indexOf(node) === index,
+    );
 
     if (revealNodes.length === 0) return;
 
-    revealNodes.forEach((node) => {
+    revealNodes.forEach((node: HTMLElement) => {
       node.classList.add("blog-post-scroll-reveal");
       node.classList.remove("is-visible");
       node.style.removeProperty("transition-delay");
@@ -5606,11 +5612,11 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
       { threshold: 0.05, rootMargin: "0px 0px -30px 0px" },
     );
 
-    revealNodes.forEach((node) => revealObserver.observe(node));
+    revealNodes.forEach((node: HTMLElement) => revealObserver.observe(node));
 
     return () => {
       revealObserver.disconnect();
-      revealNodes.forEach((node) => {
+      revealNodes.forEach((node: HTMLElement) => {
         node.classList.remove("blog-post-scroll-reveal", "is-visible");
         node.style.removeProperty("transition-delay");
       });
@@ -6392,6 +6398,7 @@ const BlogSeries: React.FC = () => {
     message: string;
   } | null>(null);
   const subscribeResetTimeoutRef = useRef<number | null>(null);
+  const prefersReducedMotion = useReducedMotion();
   const POSTS_PER_PAGE = 9;
 
   const allCategories = useMemo(() => {
@@ -6578,12 +6585,12 @@ const BlogSeries: React.FC = () => {
         {/* Background Circles */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
           <motion.div
-            animate={{ scale: [1, 1.06, 1], opacity: [0.3, 0.6, 0.3] }}
+            animate={prefersReducedMotion ? undefined : { scale: [1, 1.06, 1], opacity: [0.3, 0.6, 0.3] }}
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
             className="absolute top-1/2 -translate-y-1/2 -left-[10%] w-[1000px] h-[1000px] rounded-full border border-white/30"
           />
           <motion.div
-            animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.5, 0.2] }}
+            animate={prefersReducedMotion ? undefined : { scale: [1, 1.1, 1], opacity: [0.2, 0.5, 0.2] }}
             transition={{
               duration: 4,
               repeat: Infinity,
@@ -6593,7 +6600,7 @@ const BlogSeries: React.FC = () => {
             className="absolute top-1/2 -translate-y-1/2 -left-[5%] w-[600px] h-[600px] rounded-full border border-white/30"
           />
           <motion.div
-            animate={{ scale: [1, 1.08, 1], opacity: [0.25, 0.55, 0.25] }}
+            animate={prefersReducedMotion ? undefined : { scale: [1, 1.08, 1], opacity: [0.25, 0.55, 0.25] }}
             transition={{
               duration: 5,
               repeat: Infinity,
@@ -6603,7 +6610,7 @@ const BlogSeries: React.FC = () => {
             className="absolute top-1/2 -translate-y-1/2 right-[5%] w-[800px] h-[800px] rounded-full border border-white/30"
           />
           <motion.div
-            animate={{ scale: [1, 1.05, 1], opacity: [0.15, 0.4, 0.15] }}
+            animate={prefersReducedMotion ? undefined : { scale: [1, 1.05, 1], opacity: [0.15, 0.4, 0.15] }}
             transition={{
               duration: 7,
               repeat: Infinity,
@@ -6696,7 +6703,6 @@ const BlogSeries: React.FC = () => {
                     <div
                       id="blog-subscribe-feedback"
                       role="alert"
-                      aria-live="polite"
                       className="mt-3 inline-flex items-center gap-3 rounded-xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 shadow-sm"
                     >
                       <span>{subscribeFeedback.message}</span>

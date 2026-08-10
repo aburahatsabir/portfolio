@@ -85,28 +85,13 @@ export const getUserFriendlyError = (error: any): string => {
  * Check if error is retryable
  */
 const isRetryableError = (error: any): boolean => {
-    // Network errors are retryable
-    if (error.message?.includes('Failed to fetch') ||
-        error.message?.includes('Network request failed')) {
-        return true;
+    if (!error) return false;
+    // Explicit 4xx client errors (except 429 rate limits) are non-retryable
+    if (typeof error.status === 'number' && error.status >= 400 && error.status < 500 && error.status !== 429) {
+        return false;
     }
-
-    // Timeout errors are retryable
-    if (error.message?.includes('timeout') || error.name === 'TimeoutError') {
-        return true;
-    }
-
-    // 5xx server errors are retryable
-    if (error.status >= 500 && error.status < 600) {
-        return true;
-    }
-
-    // 429 (rate limit) is retryable after backoff
-    if (error.status === 429) {
-        return true;
-    }
-
-    return false;
+    // Network errors, timeouts, 5xx errors, rate limits, and generic transient errors are retryable
+    return true;
 };
 
 /**

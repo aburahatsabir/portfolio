@@ -47,8 +47,13 @@ export function generateRssXml({
 } = {}) {
   const baseUrl = normalizeSiteUrl(siteUrl);
   const posts = extractBlogPostMetadataEntries(blogPostsSource);
-  const latestPostDate = posts[0]
-    ? posts[0].publishedAt || posts[0].dateModified
+  const sortedByDate = [...posts].sort(
+    (a, b) =>
+      Date.parse(b.publishedAt || b.dateModified || "0") -
+      Date.parse(a.publishedAt || a.dateModified || "0"),
+  );
+  const latestPostDate = sortedByDate[0]
+    ? sortedByDate[0].publishedAt || sortedByDate[0].dateModified
     : null;
   const lastBuildDate = toRfc822Date(latestPostDate);
 

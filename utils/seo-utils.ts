@@ -1,5 +1,6 @@
 import { PROJECTS } from '../constants';
 import { getWorkProjectIdFromRouteSegment } from '../content/work-route-titles';
+import { BLOG_POSTS, resolveBlogPostRouteId } from '../content/blog-posts';
 
 // Re-export schema utilities for centralized SEO management
 export {
@@ -63,16 +64,12 @@ const ROUTE_METADATA: Record<string, PageMetadata> = {
         ogType: 'website'
     },
 
-
-
     '/governance': {
         title: 'Reliability Standards & Governance | Abu Rahat Sabir',
         description: 'Enterprise governance frameworks and reliability standards for institutional operations.',
         ogImage: '/images/og-governance.webp',
         ogType: 'website'
     },
-
-
 
     '/success-stories': {
         title: 'Success Stories & Endorsements | Abu Rahat Sabir',
@@ -82,8 +79,8 @@ const ROUTE_METADATA: Record<string, PageMetadata> = {
     },
 
     '/blog': {
-        title: 'Blog Series | Abu Rahat Sabir',
-        description: 'Insights on enterprise architecture, operational governance, and administrative automation.',
+        title: 'The Journal: Ideas, Guides, Resources, Articles and Notes | Abu Rahat Sabir',
+        description: 'Ideas, guides, resources, articles, and notes from Abu Rahat Sabir.',
         ogImage: '/images/og-blog.webp',
         ogType: 'website'
     },
@@ -151,6 +148,18 @@ function getMetadataForRoute(path: string): PageMetadata {
 
     // Handle blog post routes: /blog/post-id
     if (path.startsWith('/blog/')) {
+        const rawRouteId = path.replace('/blog/', '');
+        const routeId = resolveBlogPostRouteId(rawRouteId);
+        const post = BLOG_POSTS.find(p => p.id === routeId);
+
+        if (post) {
+            return {
+                title: post.seoTitle || `${post.title} | Abu Rahat Sabir`,
+                description: post.seoDescription || post.excerpt,
+                ogImage: post.ogImage || post.image,
+                ogType: 'article'
+            };
+        }
         return {
             title: 'Blog Post | Abu Rahat Sabir',
             description: 'Insights on enterprise architecture, operational governance, and administrative automation.',
@@ -197,7 +206,15 @@ function updateMetaTag(selector: string, content: string): void {
  */
 export function updatePageMetadata(path: string): void {
     const metadata = getMetadataForRoute(path);
-    const currentUrl = window.location.href;
+
+    const cleanPath = path.split('?')[0].split('#')[0];
+    let canonicalPath = cleanPath;
+    if (cleanPath.startsWith('/blog/')) {
+        const rawRouteId = cleanPath.replace('/blog/', '');
+        const resolvedId = resolveBlogPostRouteId(rawRouteId);
+        canonicalPath = `/blog/${resolvedId}`;
+    }
+    const cleanUrl = (typeof window !== 'undefined' ? window.location.origin : 'https://aburahatsabir.com') + canonicalPath;
 
     // Update document title
     document.title = metadata.title;
@@ -208,7 +225,7 @@ export function updatePageMetadata(path: string): void {
     // Update Open Graph tags
     updateMetaTag('meta[property="og:title"]', metadata.title);
     updateMetaTag('meta[property="og:description"]', metadata.description);
-    updateMetaTag('meta[property="og:url"]', currentUrl);
+    updateMetaTag('meta[property="og:url"]', cleanUrl);
     updateMetaTag('meta[property="og:type"]', metadata.ogType || 'website');
 
     if (metadata.ogImage) {
@@ -237,6 +254,6 @@ export function updatePageMetadata(path: string): void {
         canonicalLink.rel = 'canonical';
         document.head.appendChild(canonicalLink);
     }
-    canonicalLink.href = currentUrl;
+    canonicalLink.href = cleanUrl;
 }
 

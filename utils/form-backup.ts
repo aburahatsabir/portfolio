@@ -40,6 +40,7 @@ export const saveFailedSubmission = (formData: BackupSubmission['formData']): st
         existing.push(submission);
 
         localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+        localStorage.setItem(`form_backup_${id}`, JSON.stringify(submission));
 
         // Log to Sentry for monitoring
         captureMessage(`Form submission backed up to localStorage: ${id}`, 'info');
@@ -138,6 +139,7 @@ export const cleanupOldSubmissions = (): void => {
     try {
         const submissions = getBackupSubmissions();
         const sevenDaysAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+        const thirtyDaysAgo = Date.now() - (30 * 24 * 60 * 60 * 1000);
 
         const cleaned = submissions.filter(sub => {
             // Keep pending submissions
@@ -149,6 +151,28 @@ export const cleanupOldSubmissions = (): void => {
         });
 
         localStorage.setItem(STORAGE_KEY, JSON.stringify(cleaned));
+
+        // Also clean up individual form_backup_* keys from localStorage
+        const keysToRemove: string[] = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && key.startsWith('form_backup_')) {
+                try {
+                    const raw = localStorage.getItem(key);
+                    if (raw) {
+                        const parsed = JSON.parse(raw);
+                        const ts = parsed.timestamp || 0;
+                        if (ts < thirtyDaysAgo || (parsed.status === 'sent' && ts < sevenDaysAgo)) {
+                            keysToRemove.push(key);
+                        }
+                    }
+                } catch {
+                    keysToRemove.push(key);
+                }
+            }
+        }
+        keysToRemove.forEach(k => localStorage.removeItem(k));
+
         console.log('[FormBackup] Cleaned up old submissions');
     } catch (error) {
         console.error('[FormBackup] Failed to cleanup submissions:', error);

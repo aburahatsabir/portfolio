@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { BLOG_POSTS } from '../content/blog-posts';
 import type { BlogPost } from '../types';
 import './HomeBlogPreview.css';
@@ -72,13 +72,14 @@ const BlogPreviewCard: React.FC<{ post: BlogPost; isFirst?: boolean }> = ({ post
 );
 
 const HomeBlogPreview: React.FC = () => {
+  const prefersReducedMotion = useReducedMotion();
   return (
     <section className="section home-blog-preview" aria-labelledby="home-blog-preview-title">
       <div className="home-blog-preview__container">
         <motion.div
           className="home-blog-preview__header"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 24 }}
+          whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.35 }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         >
@@ -112,8 +113,8 @@ const HomeBlogPreview: React.FC = () => {
 
         <motion.div
           className="home-blog-preview__grid blog-post-related__grid"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 24 }}
+          whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.7, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
         >

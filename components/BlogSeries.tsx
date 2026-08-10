@@ -153,7 +153,7 @@ type StructuredArticleBlock =
       className?: string;
     }
   | { type: "compare"; comparison: StructuredArticleCompare }
-  | { type: "decisionTable"; headers: string[]; rows: React.ReactNode[][] }
+  | { type: "decisionTable"; headers: string[]; rows: React.ReactNode[][]; caption?: string }
   | { type: "custom"; key: string; render: () => React.ReactNode };
 
 type StructuredArticleSection = {
@@ -761,7 +761,8 @@ const BLOG_02_SECTION_TWO_PIPELINE = [
   },
 ] as const;
 
-const BLOG_02_SECTION_TWO_HEATMAP_ZONES = [
+type HeatmapZone = { text: string; level: string; badge?: string };
+const BLOG_02_SECTION_TWO_HEATMAP_ZONES: HeatmapZone[] = [
   { text: "YOUR NAME · Title / Headline", level: "hot", badge: "🔥 Hottest" },
   {
     text: "Contact info · Location · LinkedIn",
@@ -784,7 +785,7 @@ const BLOG_02_SECTION_TWO_HEATMAP_ZONES = [
   { text: "Earlier roles — largely skipped", level: "cold" },
   { text: "Education — checked late if at all", level: "cold" },
   { text: "Skills / Certifications — bottom-right blind spot", level: "cold" },
-] as const;
+];
 
 const BLOG_02_SECTION_TWO_FIXATIONS = [
   "Your name — first thing seen, every time",
@@ -1201,7 +1202,8 @@ const BLOG_02_SECTION_SEVEN_LENGTH_CARDS = [
   },
 ] as const;
 
-const BLOG_02_SECTION_EIGHT_ATS_ITEMS = [
+type AtsItem = { title: string; body: string; isBad?: boolean };
+const BLOG_02_SECTION_EIGHT_ATS_ITEMS: AtsItem[] = [
   {
     title: "Standard section headings",
     body: `Work Experience, Education, Skills, Certifications. Parsers look for these by name. "Where I've Been" is creative but won't parse reliably.`,
@@ -1228,7 +1230,7 @@ const BLOG_02_SECTION_EIGHT_ATS_ITEMS = [
     body: "Progress bars and star ratings provide no information to a parser (or a human). Images are skipped entirely. Use text. Always text.",
     isBad: true,
   },
-] as const;
+];
 
 const BLOG_02_SECTION_EIGHT_FILE_ROWS: React.ReactNode[][] = [
   [
@@ -1633,16 +1635,14 @@ const ArticleParagraph: React.FC<{
   children: React.ReactNode;
   className?: string;
 }> = ({ children, className = "" }) => (
-  <p className={`article-body ${className}`.trim()}>{children}</p>
+  <p className={`text-slate-700 font-sans text-lg md:text-[1.125rem] leading-[1.75] mb-6 ${className}`.trim()}>{children}</p>
 );
-
 
 const ArticleSubheading: React.FC<{
   children: React.ReactNode;
   id?: string;
 }> = ({ children, id }) => (
-  <h3 id={id} className="article-h3">
-    <span className="article-h3-accent">&mdash;</span>
+  <h3 id={id} className="article-markdown-h3 scroll-mt-32">
     {children}
   </h3>
 );
@@ -1652,8 +1652,8 @@ const ArticleCalloutPanel: React.FC<{
   children: React.ReactNode;
   className?: string;
 }> = ({ eyebrow, children, className = "" }) => (
-  <div className={`article-panel--callout ${className}`.trim()}>
-    <div className="article-eyebrow">{eyebrow}</div>
+  <div className={`my-8 p-6 md:p-8 rounded-2xl bg-slate-50 border border-slate-200/80 shadow-sm ${className}`.trim()}>
+    <div className="font-mono text-xs font-bold uppercase tracking-wider text-blue-600 mb-3">{eyebrow}</div>
     {children}
   </div>
 );
@@ -1934,14 +1934,16 @@ const ArticleCompareBlock: React.FC<{
 const ArticleDecisionTable: React.FC<{
   headers: string[];
   rows: React.ReactNode[][];
-}> = ({ headers, rows }) => {
+  caption?: string;
+}> = ({ headers, rows, caption }) => {
   return (
     <div className="article-table-frame my-8 overflow-x-auto border">
       <table className="article-table w-full">
+        {caption && <caption className="sr-only">{caption}</caption>}
         <thead className="article-table__head-row">
           <tr>
             {headers.map((header) => (
-              <th key={header} className="article-table__head px-4 py-3">
+              <th key={header} scope="col" className="article-table__head px-4 py-3">
                 {header}
               </th>
             ))}
@@ -1954,16 +1956,22 @@ const ArticleDecisionTable: React.FC<{
               className="article-table__row align-top transition-colors"
             >
               {row.map((cell, cellIndex) => (
-                <td
-                  key={`cell-${rowIndex}-${cellIndex}`}
-                  className={`article-table__cell px-4 py-3 ${
-                    cellIndex === 0
-                      ? "article-table__cell--key font-medium"
-                      : ""
-                  }`}
-                >
-                  {cell}
-                </td>
+                cellIndex === 0 ? (
+                  <th
+                    key={`cell-${rowIndex}-${cellIndex}`}
+                    scope="row"
+                    className="article-table__cell article-table__cell--key px-4 py-3 font-medium"
+                  >
+                    {cell}
+                  </th>
+                ) : (
+                  <td
+                    key={`cell-${rowIndex}-${cellIndex}`}
+                    className="article-table__cell px-4 py-3"
+                  >
+                    {cell}
+                  </td>
+                )
               ))}
             </tr>
           ))}
@@ -2128,13 +2136,17 @@ const StandardArticleContent: React.FC<{ blocks: ContentBlock[] }> = ({
         );
       }
       if (block.type === "table") {
+        const cleanHeaders = block.headers.map((h) => h.replace(/[\*_]/g, "").trim());
+        const captionText = block.caption || `Table with columns: ${cleanHeaders.join(", ")}`;
+
         return (
           <div key={i} className="my-6 overflow-x-auto">
             <table className="article-table article-table--legacy w-full">
+              <caption className="sr-only">{captionText}</caption>
               <thead>
                 <tr>
                   {block.headers.map((header, j) => (
-                    <th key={j} className="article-table__head p-3">
+                    <th key={j} scope="col" className="article-table__head p-3">
                       <InlineText text={header} />
                     </th>
                   ))}
@@ -2143,11 +2155,17 @@ const StandardArticleContent: React.FC<{ blocks: ContentBlock[] }> = ({
               <tbody>
                 {block.rows.map((row, rowIndex) => (
                   <tr key={rowIndex}>
-                    {row.map((cell, cellIndex) => (
-                      <td key={cellIndex} className="article-table__cell p-3">
-                        <InlineText text={cell} />
-                      </td>
-                    ))}
+                    {row.map((cell, cellIndex) =>
+                      cellIndex === 0 ? (
+                        <th key={cellIndex} scope="row" className="article-table__cell p-3 font-medium text-left">
+                          <InlineText text={cell} />
+                        </th>
+                      ) : (
+                        <td key={cellIndex} className="article-table__cell p-3">
+                          <InlineText text={cell} />
+                        </td>
+                      ),
+                    )}
                   </tr>
                 ))}
               </tbody>
@@ -2188,28 +2206,13 @@ const StandardArticleContent: React.FC<{ blocks: ContentBlock[] }> = ({
 const StructuredArticleSectionHeading: React.FC<{
   section: StructuredArticleSection;
 }> = ({ section }) => {
-  if (section.headingStyle === "kicker") {
-    return (
-      <h2
-        id={section.id}
-        className={`article-h2 ${section.headingClassName ?? ""}`.trim()}
-      >
-        <span className="article-section-kicker">{section.sectionLabel}</span>
-        {section.title}
-      </h2>
-    );
-  }
-
   return (
-    <>
-      <div className="article-label">{section.sectionLabel}</div>
-      <h2
-        id={section.id}
-        className={`article-h2 ${section.headingClassName ?? ""}`.trim()}
-      >
-        {section.title}
-      </h2>
-    </>
+    <h2
+      id={section.id}
+      className={`article-markdown-h2 scroll-mt-32 ${section.headingClassName ?? ""}`.trim()}
+    >
+      {section.title}
+    </h2>
   );
 };
 
@@ -2227,7 +2230,7 @@ const StructuredArticleBlockRenderer: React.FC<{
       return (
         <ArticleCalloutPanel eyebrow={block.eyebrow} className={block.className}>
           {block.paragraphs.map((paragraph, index) => (
-            <p key={index} className="article-panel--callout-copy">
+            <p key={index} className="text-slate-700 font-sans text-base leading-relaxed mb-2">
               {paragraph}
             </p>
           ))}
@@ -2236,7 +2239,7 @@ const StructuredArticleBlockRenderer: React.FC<{
     case "divider":
       return (
         <div
-          className={`article-divider ${block.className ?? "mt-12"}`.trim()}
+          className={`my-12 border-t border-slate-200 ${block.className ?? ""}`.trim()}
           aria-hidden="true"
         ></div>
       );
@@ -2287,7 +2290,7 @@ const StructuredArticleBlockRenderer: React.FC<{
       return <ArticleCompareBlock {...block.comparison} />;
     case "decisionTable":
       return (
-        <ArticleDecisionTable headers={block.headers} rows={block.rows} />
+        <ArticleDecisionTable headers={block.headers} rows={block.rows} caption={block.caption} />
       );
     case "custom":
       return <>{block.render()}</>;
@@ -2309,7 +2312,7 @@ function getStructuredArticleBlockKey(
 const StructuredArticleContent: React.FC<{
   document: StructuredArticleDocument;
 }> = ({ document }) => (
-  <>
+  <div className="article-markdown article-markdown--webflow article-rich-text article-webflow-static prose prose-lg max-w-none">
     {document.leadBlocks.map((block, index) => (
       <StructuredArticleBlockRenderer
         key={getStructuredArticleBlockKey("lead", block, index)}
@@ -2335,7 +2338,7 @@ const StructuredArticleContent: React.FC<{
         block={block}
       />
     ))}
-  </>
+  </div>
 );
 
 const ResumeGuideChecklistBlock: React.FC = () => {
@@ -2470,7 +2473,7 @@ const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
     {
       type: "dropcapIntro",
       lead: BLOG_02_INTRO_COPY.lead,
-      paragraphs: BLOG_02_INTRO_COPY.paragraphs,
+      paragraphs: [...BLOG_02_INTRO_COPY.paragraphs],
     },
     {
       type: "pullQuote",
@@ -3319,6 +3322,7 @@ const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
           type: "decisionTable",
           headers: ["Role situation", "What to do"],
           rows: BLOG_02_SECTION_SIX_WORK_ROWS,
+          caption: "Work experience resume guidance",
         },
         {
           type: "subheading",
@@ -3969,6 +3973,10 @@ const BLOG_BODY_RENDERERS: Record<
     getHeadings: () => extractStructuredArticleHeadings(RESUME_GUIDE_DOCUMENT),
     renderBody: () => <ResumeGuideFlagshipContent />,
   },
+  networkingRoadmap: {
+    getHeadings: (post) => extractHeadings(post.content),
+    renderBody: (_post, blocks) => <StandardArticleContent blocks={blocks} />,
+  },
 };
 
 const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
@@ -4111,12 +4119,15 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
 
     if (!articleRoot) return;
 
-    const revealNodes = [
-      ...Array.from(
-        articleRoot.querySelectorAll<HTMLElement>(BLOG_POST_SCROLL_REVEAL_SELECTOR),
-      ),
+    const allRevealElements: HTMLElement[] = [
+      ...(Array.from(
+        articleRoot.querySelectorAll(BLOG_POST_SCROLL_REVEAL_SELECTOR),
+      ) as HTMLElement[]),
       ...(relatedRoot ? [relatedRoot] : []),
-    ].filter((node, index, list) => list.indexOf(node) === index);
+    ];
+    const revealNodes = allRevealElements.filter(
+      (node, index, list) => list.indexOf(node) === index,
+    );
 
     if (revealNodes.length === 0) return;
 
@@ -5098,7 +5109,18 @@ const BlogSeries: React.FC = () => {
     [selectedPostId],
   );
 
-  if (selectedPost) {
+  if (selectedPostId) {
+    if (!selectedPost) {
+      return (
+        <div className="min-h-screen bg-slate-950 text-white flex flex-col items-center justify-center p-6 text-center">
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">Blog post not found</h1>
+          <p className="text-slate-400 mb-8 max-w-md">The blog article you are looking for does not exist or has been moved.</p>
+          <a href="/blog" className="px-6 py-3 bg-blue-600 hover:bg-blue-700 font-semibold rounded-lg transition-colors">
+            Back to Blog Index
+          </a>
+        </div>
+      );
+    }
     return <BlogPostDetail post={selectedPost} />;
   }
 
@@ -5148,11 +5170,10 @@ const BlogSeries: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="flex flex-col lg:flex-row justify-between gap-12 lg:gap-20 lg:items-end">
             <div className="flex-1 max-w-[800px]">
-              <h2 className="text-white font-semibold text-base mb-4">Blog</h2>
-              <h3 className="text-4xl md:text-5xl lg:text-[64px] font-bold tracking-tight text-white leading-[1.1]">
-                The Journal: Design Resources,
-                <br className="hidden md:block" /> Interviews, and Industry News
-              </h3>
+              <p className="text-white font-semibold text-base mb-4">Blog</p>
+              <h1 className="text-4xl md:text-5xl lg:text-[64px] font-bold tracking-tight text-white leading-[1.1]">
+                The Journal: Ideas, Guides, Resources, Articles and Notes
+              </h1>
             </div>
 
             <div className="max-w-[400px] w-full shrink-0 flex flex-col justify-end mb-1">

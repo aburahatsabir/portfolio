@@ -1,7 +1,15 @@
-import React, { useState, useMemo, useEffect, useLayoutEffect, useRef } from "react";
+import React, {
+  useState,
+  useMemo,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+} from "react";
 import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
-import { BLOG_POSTS } from "../content/blog-posts";
+import { BLOG_POSTS, resolveBlogPostRouteId } from "../content/blog-posts";
 import type { BlogBodyRenderer, BlogPost, BlogTemplate } from "../types";
+import NotFoundPage from "./NotFoundPage";
+import DOMPurify from "dompurify";
 
 const BLOG_HERO_WEBFLOW_SHARED_CSS_URL =
   "/blog-hero/marketing-main.webflow.shared.156580216.min.css";
@@ -10,9 +18,19 @@ const BLOG_HERO_WEBFLOW_PAGE_CSS_URL =
 const BLOG_HERO_THREE_URL = "/blog-hero/three-r128.min.js";
 const BLOG_HERO_FLUTED_RUNTIME_URL = "/blog-hero/fluted-glass-op.min.js";
 const BLOG_HERO_FALLBACK_IMAGE =
-  "/images/blogs/blog-02-hero.webp";
+  "/images/blogs/resume-writing-guide-getting-shortlisted-cover.webp";
 
 type BlogSortBy = "recent" | "oldest";
+
+type ArticleFaqItem = {
+  question: React.ReactNode;
+  answer: React.ReactNode;
+};
+
+type MarkdownFaqItem = {
+  question: string;
+  answer: string[];
+};
 
 const SUBSCRIBE_EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const SUBSCRIBE_SUCCESS_RESET_DELAY_MS = 5000;
@@ -82,8 +100,10 @@ type ContentBlock =
       url?: string;
       label?: string;
     }
+  | { type: "quote"; lines: string[] }
   | { type: "image"; url: string; caption?: string }
-  | { type: "table"; headers: string[]; rows: string[][] }
+  | { type: "table"; headers: string[]; rows: string[][]; caption?: string }
+  | { type: "faq"; items: MarkdownFaqItem[] }
   | {
       type: "buttons";
       buttons: Array<{
@@ -153,7 +173,13 @@ type StructuredArticleBlock =
       className?: string;
     }
   | { type: "compare"; comparison: StructuredArticleCompare }
-  | { type: "decisionTable"; headers: string[]; rows: React.ReactNode[][]; caption?: string }
+  | {
+      type: "decisionTable";
+      headers: string[];
+      rows: React.ReactNode[][];
+      caption?: string;
+    }
+  | { type: "faq"; items: ArticleFaqItem[] }
   | { type: "custom"; key: string; render: () => React.ReactNode };
 
 type StructuredArticleSection = {
@@ -199,6 +225,8 @@ const BLOG_POST_SCROLL_REVEAL_SELECTOR = [
   ".article-case-card--transition",
   ".article-final-prompt",
   ".article-checklist",
+  ".article-faq",
+  ".article-faq details",
 ].join(", ");
 
 const BLOG_TEMPLATE_DEFAULT_RENDERER: Record<BlogTemplate, BlogBodyRenderer> = {
@@ -469,6 +497,7 @@ function parseContent(content: string): Array<ContentBlock> {
   let currentList: string[] | null = null;
   let isFeatureList = false;
   let currentTable: { headers: string[]; rows: string[][] } | null = null;
+  let currentQuote: string[] | null = null;
 
   const flushList = () => {
     if (currentList && currentList.length > 0) {
@@ -488,6 +517,13 @@ function parseContent(content: string): Array<ContentBlock> {
     }
   };
 
+  const flushQuote = () => {
+    if (currentQuote && currentQuote.length > 0) {
+      blocks.push({ type: "quote", lines: currentQuote });
+      currentQuote = null;
+    }
+  };
+
   for (let i = 0; i < lines.length; i++) {
     const raw = lines[i];
     const line = raw.trim();
@@ -495,7 +531,19 @@ function parseContent(content: string): Array<ContentBlock> {
     if (!line) {
       flushList();
       flushTable();
+      flushQuote();
       continue;
+    }
+
+    if (line.startsWith(">")) {
+      flushList();
+      flushTable();
+      if (!currentQuote) currentQuote = [];
+      const quoteLine = line.replace(/^>\s?/, "").trim();
+      if (quoteLine) currentQuote.push(quoteLine);
+      continue;
+    } else {
+      flushQuote();
     }
 
     // Check for Table
@@ -523,6 +571,7 @@ function parseContent(content: string): Array<ContentBlock> {
     const imgMatch = line.match(/^!\[(.*?)\]\((.*?)\)$/);
     if (imgMatch) {
       flushList();
+      flushQuote();
       blocks.push({ type: "image", caption: imgMatch[1], url: imgMatch[2] });
       continue;
     }
@@ -531,6 +580,7 @@ function parseContent(content: string): Array<ContentBlock> {
     const btnMatch = line.match(/\[(Download|Demo)\]\((.*?)\)/gi);
     if (btnMatch && line.includes("Download") && line.includes("Demo")) {
       flushList();
+      flushQuote();
       const buttons: Array<{
         label: string;
         url: string;
@@ -552,6 +602,7 @@ function parseContent(content: string): Array<ContentBlock> {
     const readMoreMatch = line.match(/^\[(Read more:[^\]]+)\]\(([^)]+)\)$/i);
     if (readMoreMatch) {
       flushList();
+      flushQuote();
       blocks.push({
         type: "read_more",
         label: readMoreMatch[1],
@@ -562,40 +613,55 @@ function parseContent(content: string): Array<ContentBlock> {
 
     if (line.startsWith("Feature:")) {
       flushList();
+      flushQuote();
       isFeatureList = true;
       continue;
     }
 
     if (line.startsWith("#### ")) {
       flushList();
+      flushQuote();
       blocks.push({ type: "h4", text: line.slice(5) });
     } else if (line.startsWith("### ")) {
       flushList();
+      flushQuote();
       blocks.push({ type: "h3", text: line.slice(4) });
     } else if (line.startsWith("## ")) {
       flushList();
+      flushQuote();
       blocks.push({ type: "h2", text: line.slice(3) });
     } else if (line.startsWith("- ") || line.startsWith("* ")) {
       if (!currentList) currentList = [];
       currentList.push(line.slice(2));
     } else {
       flushList();
+      flushQuote();
       blocks.push({ type: "p", text: line });
     }
   }
   flushList();
   flushTable();
+  flushQuote();
   return blocks;
 }
 
 function extractHeadings(content: string): TocHeading[] {
   const lines = content.split("\n");
   const headings: TocHeading[] = [];
+  let isInsideFaqSection = false;
+
   lines.forEach((l) => {
     const trimmed = l.trim();
     if (trimmed.startsWith("## ") || trimmed.startsWith("### ")) {
       const level = trimmed.startsWith("### ") ? "h3" : "h2";
       const text = trimmed.replace(/^#+\s+/, "");
+
+      if (level === "h2") {
+        isInsideFaqSection = isFaqHeading(text);
+      } else if (isInsideFaqSection) {
+        return;
+      }
+
       const id = text
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, "-")
@@ -604,6 +670,17 @@ function extractHeadings(content: string): TocHeading[] {
     }
   });
   return headings;
+}
+
+function isFaqHeading(text?: string) {
+  const normalizedText = (text ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/[?.!]+$/g, "");
+
+  return (
+    normalizedText === "faq" || normalizedText === "frequently asked questions"
+  );
 }
 
 const InlineText: React.FC<{ text: string }> = ({ text }) => {
@@ -736,7 +813,6 @@ const BLOG_02_INTRO_COPY = {
   ],
 } as const;
 
-
 const BLOG_02_SECTION_TWO_PIPELINE = [
   {
     stage: "Stage 01",
@@ -761,8 +837,7 @@ const BLOG_02_SECTION_TWO_PIPELINE = [
   },
 ] as const;
 
-type HeatmapZone = { text: string; level: string; badge?: string };
-const BLOG_02_SECTION_TWO_HEATMAP_ZONES: HeatmapZone[] = [
+const BLOG_02_SECTION_TWO_HEATMAP_ZONES = [
   { text: "YOUR NAME · Title / Headline", level: "hot", badge: "🔥 Hottest" },
   {
     text: "Contact info · Location · LinkedIn",
@@ -785,7 +860,7 @@ const BLOG_02_SECTION_TWO_HEATMAP_ZONES: HeatmapZone[] = [
   { text: "Earlier roles — largely skipped", level: "cold" },
   { text: "Education — checked late if at all", level: "cold" },
   { text: "Skills / Certifications — bottom-right blind spot", level: "cold" },
-];
+] as const;
 
 const BLOG_02_SECTION_TWO_FIXATIONS = [
   "Your name — first thing seen, every time",
@@ -819,7 +894,7 @@ const BLOG_02_SECTION_FOUR_COMPARISONS = [
     goodText:
       "Built Python ETL pipeline processing 2M+ daily records; reduced data latency from 4 hrs to 8 min for 3 downstream analytics teams.",
     goodNote:
-      "Python is named once as context. The proof is the outcome â€” specific, measurable, scoped.",
+      "Python is named once as context. The proof is the outcome \u2014 specific, measurable, scoped.",
   },
 ] as const;
 
@@ -852,7 +927,7 @@ const BLOG_02_SECTION_FOUR_EVIDENCE_TIERS = [
 
 const BLOG_02_SECTION_FOUR_DO = [
   "Start with a strong, specific action verb (Led, Rebuilt, Reduced, Shipped, Negotiated)",
-  "Vary the opening verb â€” no repeated starts across bullets",
+  "Vary the opening verb \u2014 no repeated starts across bullets",
   "Lead with the outcome when it&apos;s compelling",
   "Use the before/after mindset: what changed because of your work?",
   "Keep bullets to 1&ndash;2 lines; 3 maximum",
@@ -868,7 +943,7 @@ const BLOG_02_SECTION_FOUR_DONT = [
   "List daily tasks without outcomes or proof of value",
   "Use buzzword filler: &quot;team player,&quot; &quot;results-oriented,&quot; &quot;passionate about&quot;",
   "Include fake or inflated metrics you can&apos;t defend in an interview",
-  "Overload with 10+ bullets â€” 4&ndash;6 is usually right for a strong recent role",
+  "Overload with 10+ bullets \u2014 4&ndash;6 is usually right for a strong recent role",
   "Write bullets that could appear on any resume for any company",
   "Use first-person pronouns (I, my, me)",
 ] as const;
@@ -995,7 +1070,6 @@ const BLOG_02_SECTION_FIVE_STRONG = [
     text: "Drove launch strategy for flagship product; 12,000 users in 30 days, exceeding target by 40%.",
   },
 ] as const;
-
 
 const BLOG_02_SECTION_SIX_CONTACT_INCLUDE: React.ReactNode[] = [
   "Full name (largest element on the page)",
@@ -1202,8 +1276,7 @@ const BLOG_02_SECTION_SEVEN_LENGTH_CARDS = [
   },
 ] as const;
 
-type AtsItem = { title: string; body: string; isBad?: boolean };
-const BLOG_02_SECTION_EIGHT_ATS_ITEMS: AtsItem[] = [
+const BLOG_02_SECTION_EIGHT_ATS_ITEMS = [
   {
     title: "Standard section headings",
     body: `Work Experience, Education, Skills, Certifications. Parsers look for these by name. "Where I've Been" is creative but won't parse reliably.`,
@@ -1230,7 +1303,7 @@ const BLOG_02_SECTION_EIGHT_ATS_ITEMS: AtsItem[] = [
     body: "Progress bars and star ratings provide no information to a parser (or a human). Images are skipped entirely. Use text. Always text.",
     isBad: true,
   },
-];
+] as const;
 
 const BLOG_02_SECTION_EIGHT_FILE_ROWS: React.ReactNode[][] = [
   [
@@ -1628,32 +1701,56 @@ const BLOG_02_SECTION_FOURTEEN_TOTAL_ITEMS =
     0,
   );
 
-
 type ArticleMetaItem = string;
+type StructuredArticleVariant = "legacy" | "webflow";
 
 const ArticleParagraph: React.FC<{
   children: React.ReactNode;
   className?: string;
 }> = ({ children, className = "" }) => (
-  <p className={`text-slate-700 font-sans text-lg md:text-[1.125rem] leading-[1.75] mb-6 ${className}`.trim()}>{children}</p>
+  <p className={`article-body ${className}`.trim()}>{children}</p>
 );
 
 const ArticleSubheading: React.FC<{
   children: React.ReactNode;
   id?: string;
 }> = ({ children, id }) => (
-  <h3 id={id} className="article-markdown-h3 scroll-mt-32">
+  <h3 id={id} className="article-h3">
+    <span className="article-h3-accent">&mdash;</span>
     {children}
   </h3>
 );
+
+const ArticleWebflowQuote: React.FC<{
+  quote: React.ReactNode;
+  cite?: React.ReactNode;
+  className?: string;
+}> = ({ quote, cite, className = "" }) => {
+  const quoteClassName = `article-webflow-quote ${className}`.trim();
+
+  return (
+    <blockquote className={quoteClassName}>
+      <em>
+        {quote}
+        {cite && (
+          <>
+            <br />
+            <br />
+            {cite}
+          </>
+        )}
+      </em>
+    </blockquote>
+  );
+};
 
 const ArticleCalloutPanel: React.FC<{
   eyebrow: React.ReactNode;
   children: React.ReactNode;
   className?: string;
 }> = ({ eyebrow, children, className = "" }) => (
-  <div className={`my-8 p-6 md:p-8 rounded-2xl bg-slate-50 border border-slate-200/80 shadow-sm ${className}`.trim()}>
-    <div className="font-mono text-xs font-bold uppercase tracking-wider text-blue-600 mb-3">{eyebrow}</div>
+  <div className={`article-panel--callout ${className}`.trim()}>
+    <div className="article-eyebrow">{eyebrow}</div>
     {children}
   </div>
 );
@@ -1784,17 +1881,14 @@ const ArticleAuthorMeta: React.FC<{
         />
       </div>
       <div className="flex flex-col gap-1">
-        <span className="article-author-meta__label">Written by</span>
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-          <span className="article-author-meta__name text-[15px] font-bold leading-none">
-            {post.author.name}
+        <span className="article-author-meta__name text-[15px] font-bold leading-none">
+          {post.author.name}
+        </span>
+        {post.author.role && (
+          <span className="article-author-meta__role text-[13px]">
+            {post.author.role}
           </span>
-          {post.author.role && (
-            <span className="article-author-meta__role text-[13px]">
-              {post.author.role}
-            </span>
-          )}
-        </div>
+        )}
       </div>
     </div>
 
@@ -1827,7 +1921,9 @@ const ArticleFooterMeta: React.FC<{ post: BlogPost; tags: string[] }> = ({
   tags,
 }) => {
   const showFooterDate = post.showFooterDate !== false;
-  const footerTags = post.footerTagLimit ? tags.slice(0, post.footerTagLimit) : tags;
+  const footerTags = post.footerTagLimit
+    ? tags.slice(0, post.footerTagLimit)
+    : tags;
   const singleLineFooterTags = post.singleLineFooterTags === true;
 
   return (
@@ -1931,56 +2027,82 @@ const ArticleCompareBlock: React.FC<{
   );
 };
 
-const ArticleDecisionTable: React.FC<{
-  headers: string[];
+const ArticleGlobalTable: React.FC<{
+  headers: React.ReactNode[];
   rows: React.ReactNode[][];
   caption?: string;
-}> = ({ headers, rows, caption }) => {
-  return (
-    <div className="article-table-frame my-8 overflow-x-auto border">
-      <table className="article-table w-full">
-        {caption && <caption className="sr-only">{caption}</caption>}
-        <thead className="article-table__head-row">
-          <tr>
-            {headers.map((header) => (
-              <th key={header} scope="col" className="article-table__head px-4 py-3">
-                {header}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row, rowIndex) => (
-            <tr
-              key={`row-${rowIndex}`}
-              className="article-table__row align-top transition-colors"
+  useFirstColumnAsRowHeader?: boolean;
+}> = ({ headers, rows, caption, useFirstColumnAsRowHeader = true }) => (
+  <figure className="article-table-frame article-table-frame--elementor wp-block-table table-bf-26">
+    <table className="article-table article-table--legacy has-fixed-layout">
+      {caption && <caption className="sr-only">{caption}</caption>}
+      <thead>
+        <tr className="article-table__head-row">
+          {headers.map((header, headerIndex) => (
+            <th
+              key={`header-${headerIndex}`}
+              scope="col"
+              className="article-table__head article-table__cell article-table__cell--head has-text-align-center"
+              data-align="center"
             >
-              {row.map((cell, cellIndex) => (
-                cellIndex === 0 ? (
+              {header}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row, rowIndex) => (
+          <tr key={`row-${rowIndex}`} className="article-table__row">
+            {row.map((cell, cellIndex) => {
+              if (useFirstColumnAsRowHeader && cellIndex === 0) {
+                return (
                   <th
                     key={`cell-${rowIndex}-${cellIndex}`}
                     scope="row"
-                    className="article-table__cell article-table__cell--key px-4 py-3 font-medium"
+                    className="article-table__cell article-table__cell--key has-text-align-center"
+                    data-align="center"
                   >
                     {cell}
                   </th>
-                ) : (
-                  <td
-                    key={`cell-${rowIndex}-${cellIndex}`}
-                    className="article-table__cell px-4 py-3"
-                  >
-                    {cell}
-                  </td>
-                )
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-};
+                );
+              }
 
+              return (
+                <td
+                  key={`cell-${rowIndex}-${cellIndex}`}
+                  className="article-table__cell has-text-align-center"
+                  data-align="center"
+                >
+                  {cell}
+                </td>
+              );
+            })}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </figure>
+);
+
+const ArticleDecisionTable: React.FC<{
+  headers: string[];
+  rows: React.ReactNode[][];
+  variant?: StructuredArticleVariant;
+  caption?: string;
+}> = ({ headers, rows, caption }) => (
+  <ArticleGlobalTable headers={headers} rows={rows} caption={caption} />
+);
+
+const ArticleFaq: React.FC<{ items: ArticleFaqItem[] }> = ({ items }) => (
+  <div className="article-faq">
+    {items.map((item, index) => (
+      <details key={`faq-${index}`}>
+        <summary>{item.question}</summary>
+        <div className="article-faq__answer">{item.answer}</div>
+      </details>
+    ))}
+  </div>
+);
 
 const ArticleFinalPrompt: React.FC = () => {
   return (
@@ -2016,221 +2138,362 @@ const ArticleFinalPrompt: React.FC = () => {
   );
 };
 
+const NetworkingGuideFinalPrompt: React.FC = () => {
+  return (
+    <div className="article-final-prompt relative mt-16 overflow-hidden bg-slate-950 px-8 py-16 md:px-10">
+      <div className="pointer-events-none absolute -bottom-20 right-[-2rem] text-[14rem] font-bold leading-none text-white/[0.03] md:text-[22rem]">
+        ?
+      </div>
+      <h2 className="mb-3 text-[clamp(1.5rem,3vw,2.2rem)] font-bold leading-[1.2] text-white">
+        One question before you study
+      </h2>
+      <p className="mb-4 max-w-[560px] font-sans text-[0.95rem] leading-[1.7] text-white/55">
+        Before opening another course, ask this once:
+      </p>
+      <div className="relative z-10 my-8 max-w-[640px] border-l-[3px] border-blue-500 px-7 py-6 font-serif text-[clamp(1.1rem,2vw,1.4rem)] italic leading-[1.5] text-white">
+        &quot;Can I build, break, and repair the smallest real version of the
+        topic I am studying today?&quot;
+      </div>
+      <p className="mb-4 max-w-[560px] font-sans text-[0.95rem] leading-[1.7] text-white/55">
+        If the answer is no, the next step is not more theory. Build a smaller
+        lab until the concept becomes visible in the terminal, the router UI, or
+        the packet trace.
+      </p>
+      <p className="max-w-[560px] font-sans text-[0.95rem] leading-[1.7] text-white/55">
+        Networking sticks when every definition is attached to a fault you can
+        reproduce, diagnose, and fix.
+      </p>
+    </div>
+  );
+};
+
 const StandardArticleContent: React.FC<{ blocks: ContentBlock[] }> = ({
   blocks,
-}) => (
-  <div className="article-markdown prose prose-lg max-w-none">
-    {blocks.map((block, i) => {
-      if (block.type === "h2") {
-        const id = (block.text || "")
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/(^-|-$)/g, "");
-        const rawText = block.text || "";
-        const hasGradient = rawText.includes("[gradient]");
-        const cleanText = rawText.replace("[gradient]", "").trim();
-        return (
-          <h2
-            key={i}
-            id={id}
-            className={`article-markdown-h2 scroll-mt-32 ${
-              hasGradient ? "blog-gradient-heading tracking-[-0.02em]" : ""
-            }`}
-          >
-            {cleanText}
-          </h2>
-        );
-      }
-      if (block.type === "h3") {
-        const id = (block.text || "")
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/(^-|-$)/g, "");
-        const rawText = block.text || "";
-        const hasGradient = rawText.includes("[gradient]");
-        const cleanText = rawText.replace("[gradient]", "").trim();
-        return (
-          <h3
-            key={i}
-            id={id}
-            className={`article-markdown-h3 scroll-mt-32 ${
-              hasGradient ? "blog-gradient-heading" : ""
-            }`}
-          >
-            {cleanText}
-          </h3>
-        );
-      }
-      if (block.type === "h4") {
-        return (
-          <h4 key={i} className="article-h4">
-            {block.text}
-          </h4>
-        );
-      }
-      if (block.type === "ul") {
-        return (
-          <ul key={i} className="article-list list-disc">
-            {(block.items || []).map((item, j) => (
-              <li key={j} className="article-list__item">
-                <InlineText text={item} />
-              </li>
-            ))}
-          </ul>
-        );
-      }
-      if (block.type === "feature_ul") {
-        return (
-          <div key={i} className="my-5">
-            <p className="article-feature-list-label">Feature:</p>
-            <ul className="article-list list-none">
+}) => {
+  const articleBlocks = normalizeStandardArticleBlocks(blocks);
+
+  return (
+    <div className="article-markdown article-markdown--webflow article-rich-text article-webflow-static">
+      {articleBlocks.map((block, i) => {
+        if (block.type === "h2") {
+          const id = (block.text || "")
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/(^-|-$)/g, "");
+          const rawText = block.text || "";
+          const hasGradient = rawText.includes("[gradient]");
+          const cleanText = rawText.replace("[gradient]", "").trim();
+          return (
+            <h2
+              key={i}
+              id={id}
+              className={`article-markdown-h2 scroll-mt-32 ${
+                hasGradient ? "blog-gradient-heading tracking-[-0.02em]" : ""
+              }`}
+            >
+              {cleanText}
+            </h2>
+          );
+        }
+        if (block.type === "h3") {
+          const id = (block.text || "")
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/(^-|-$)/g, "");
+          const rawText = block.text || "";
+          const hasGradient = rawText.includes("[gradient]");
+          const cleanText = rawText.replace("[gradient]", "").trim();
+          return (
+            <h3
+              key={i}
+              id={id}
+              className={`article-markdown-h3 scroll-mt-32 ${
+                hasGradient ? "blog-gradient-heading" : ""
+              }`}
+            >
+              {cleanText}
+            </h3>
+          );
+        }
+        if (block.type === "h4") {
+          return (
+            <h4 key={i} className="article-h4">
+              {block.text}
+            </h4>
+          );
+        }
+        if (block.type === "ul") {
+          return (
+            <ul key={i} className="article-list list-disc">
               {(block.items || []).map((item, j) => (
-                <li
-                  key={j}
-                  className="article-feature-list__item flex items-start gap-3"
-                >
-                  <span className="article-feature-list__dot mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full" />
+                <li key={j} className="article-list__item">
                   <InlineText text={item} />
                 </li>
               ))}
             </ul>
-          </div>
-        );
-      }
-      if (block.type === "read_more" && block.url && block.label) {
-        return (
-          <div
-            key={i}
-            className="article-link-card group my-5 w-fit px-5 py-3 transition-all"
-          >
-            <a
-              href={block.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="article-link-card__link flex items-center gap-2"
-            >
-              <span className="shrink-0">Read more:</span>
-              <span className="group-hover:underline underline-offset-4 decoration-2">
-                {block.label.replace(/^Read more:\s*/i, "")}
-              </span>
-            </a>
-          </div>
-        );
-      }
-      if (block.type === "image" && block.url) {
-        return (
-          <figure key={i} className="my-10 text-center">
-            <div className="rounded-lg overflow-hidden border border-slate-200 inline-block max-w-full">
-              <img
-                src={block.url}
-                alt={block.caption || "Blog image"}
-                className="max-w-full h-auto"
-              />
-            </div>
-            {block.caption && (
-              <figcaption className="article-caption mt-4">
-                {block.caption}
-              </figcaption>
-            )}
-          </figure>
-        );
-      }
-      if (block.type === "table") {
-        const cleanHeaders = block.headers.map((h) => h.replace(/[\*_]/g, "").trim());
-        const captionText = block.caption || `Table with columns: ${cleanHeaders.join(", ")}`;
-
-        return (
-          <div key={i} className="my-6 overflow-x-auto">
-            <table className="article-table article-table--legacy w-full">
-              <caption className="sr-only">{captionText}</caption>
-              <thead>
-                <tr>
-                  {block.headers.map((header, j) => (
-                    <th key={j} scope="col" className="article-table__head p-3">
-                      <InlineText text={header} />
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {block.rows.map((row, rowIndex) => (
-                  <tr key={rowIndex}>
-                    {row.map((cell, cellIndex) =>
-                      cellIndex === 0 ? (
-                        <th key={cellIndex} scope="row" className="article-table__cell p-3 font-medium text-left">
-                          <InlineText text={cell} />
-                        </th>
-                      ) : (
-                        <td key={cellIndex} className="article-table__cell p-3">
-                          <InlineText text={cell} />
-                        </td>
-                      ),
-                    )}
-                  </tr>
+          );
+        }
+        if (block.type === "feature_ul") {
+          return (
+            <div key={i} className="my-5">
+              <p className="article-feature-list-label">Feature:</p>
+              <ul className="article-list list-none">
+                {(block.items || []).map((item, j) => (
+                  <li
+                    key={j}
+                    className="article-feature-list__item flex items-start gap-3"
+                  >
+                    <span className="article-feature-list__dot mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full" />
+                    <InlineText text={item} />
+                  </li>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        );
-      }
-      if (block.type === "buttons") {
-        return (
-          <div key={i} className="flex flex-wrap gap-4 my-8">
-            {block.buttons.map((btn, j) => (
+              </ul>
+            </div>
+          );
+        }
+        if (block.type === "read_more" && block.url && block.label) {
+          return (
+            <div
+              key={i}
+              className="article-link-card group my-5 w-fit px-5 py-3 transition-all"
+            >
               <a
-                key={j}
-                href={btn.url}
+                href={block.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`px-10 py-4 rounded-lg font-bold text-[17px] transition-all shadow-md hover:shadow-xl hover:-translate-y-1 ${
-                  btn.variant === "download"
-                    ? "article-button--download bg-brand-blue text-white"
-                    : "bg-slate-900 text-white hover:bg-black"
-                }`}
+                className="article-link-card__link flex items-center gap-2"
               >
-                {btn.label}
+                <span className="shrink-0">Read more:</span>
+                <span className="group-hover:underline underline-offset-4 decoration-2">
+                  {block.label.replace(/^Read more:\s*/i, "")}
+                </span>
               </a>
-            ))}
-          </div>
+            </div>
+          );
+        }
+        if (block.type === "image" && block.url) {
+          return (
+            <figure key={i} className="my-10 text-center">
+              <div className="rounded-lg overflow-hidden border border-slate-200 inline-block max-w-full">
+                <img
+                  src={block.url}
+                  alt={block.caption || "Blog image"}
+                  className="max-w-full h-auto"
+                />
+              </div>
+              {block.caption && (
+                <figcaption className="article-caption mt-4">
+                  {block.caption}
+                </figcaption>
+              )}
+            </figure>
+          );
+        }
+        if (block.type === "quote") {
+          return (
+            <blockquote key={i} className="article-webflow-quote">
+              <em>
+                {block.lines.map((line, lineIndex) => (
+                  <React.Fragment key={lineIndex}>
+                    <InlineText text={line} />
+                    {lineIndex < block.lines.length - 1 && (
+                      <>
+                        <br />
+                        <br />
+                      </>
+                    )}
+                  </React.Fragment>
+                ))}
+              </em>
+            </blockquote>
+          );
+        }
+        if (block.type === "table") {
+          return (
+            <ArticleGlobalTable
+              key={i}
+              caption={
+                block.caption || `Table with columns: ${block.headers.join(", ")}`
+              }
+              headers={block.headers.map((header, headerIndex) => (
+                <InlineText key={headerIndex} text={header} />
+              ))}
+              rows={block.rows.map((row) =>
+                row.map((cell, cellIndex) => (
+                  <InlineText key={cellIndex} text={cell} />
+                )),
+              )}
+            />
+          );
+        }
+        if (block.type === "faq") {
+          return (
+            <ArticleFaq
+              key={i}
+              items={block.items.map((item) => ({
+                question: item.question,
+                answer: (
+                  <>
+                    {item.answer.map((paragraph, paragraphIndex) => (
+                      <p key={paragraphIndex}>
+                        <InlineText text={paragraph} />
+                      </p>
+                    ))}
+                  </>
+                ),
+              }))}
+            />
+          );
+        }
+        if (block.type === "buttons") {
+          return (
+            <div key={i} className="flex flex-wrap gap-4 my-8">
+              {block.buttons.map((btn, j) => (
+                <a
+                  key={j}
+                  href={btn.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`px-10 py-4 rounded-lg font-bold text-[17px] transition-all shadow-md hover:shadow-xl hover:-translate-y-1 ${
+                    btn.variant === "download"
+                      ? "article-button--download bg-brand-blue text-white"
+                      : "bg-slate-900 text-white hover:bg-black"
+                  }`}
+                >
+                  {btn.label}
+                </a>
+              ))}
+            </div>
+          );
+        }
+        return (
+          <p key={i} className="article-body">
+            <InlineText text={block.text || ""} />
+          </p>
         );
+      })}
+    </div>
+  );
+};
+
+function normalizeStandardArticleBlocks(blocks: ContentBlock[]) {
+  const normalizedBlocks: ContentBlock[] = [];
+
+  for (let index = 0; index < blocks.length; index++) {
+    const block = blocks[index];
+
+    if (block.type !== "h2" || !isFaqHeading(block.text)) {
+      normalizedBlocks.push(block);
+      continue;
+    }
+
+    const faqItems: MarkdownFaqItem[] = [];
+    let activeItem: MarkdownFaqItem | null = null;
+    let cursor = index + 1;
+
+    while (cursor < blocks.length) {
+      const nextBlock = blocks[cursor];
+
+      if (nextBlock.type === "h2") {
+        break;
       }
-      return (
-        <p key={i} className="article-body">
-          <InlineText text={block.text || ""} />
-        </p>
-      );
-    })}
-  </div>
-);
+
+      if (nextBlock.type === "h3") {
+        if (activeItem) {
+          faqItems.push(activeItem);
+        }
+
+        activeItem = {
+          question: nextBlock.text ?? "",
+          answer: [],
+        };
+      } else if (activeItem && nextBlock.type === "p" && nextBlock.text) {
+        activeItem.answer.push(nextBlock.text);
+      }
+
+      cursor++;
+    }
+
+    if (activeItem) {
+      faqItems.push(activeItem);
+    }
+
+    normalizedBlocks.push(block);
+
+    if (faqItems.length > 0) {
+      normalizedBlocks.push({ type: "faq", items: faqItems });
+      index = cursor - 1;
+    }
+  }
+
+  return normalizedBlocks;
+}
 
 const StructuredArticleSectionHeading: React.FC<{
   section: StructuredArticleSection;
-}> = ({ section }) => {
+  variant?: StructuredArticleVariant;
+}> = ({ section, variant = "legacy" }) => {
+  if (variant !== "legacy") {
+    return (
+      <h2 id={section.id} className="article-markdown-h2 scroll-mt-32">
+        {section.title}
+      </h2>
+    );
+  }
+
+  if (section.headingStyle === "kicker") {
+    return (
+      <h2
+        id={section.id}
+        className={`article-h2 ${section.headingClassName ?? ""}`.trim()}
+      >
+        <span className="article-section-kicker">{section.sectionLabel}</span>
+        {section.title}
+      </h2>
+    );
+  }
+
   return (
-    <h2
-      id={section.id}
-      className={`article-markdown-h2 scroll-mt-32 ${section.headingClassName ?? ""}`.trim()}
-    >
-      {section.title}
-    </h2>
+    <>
+      <div className="article-label">{section.sectionLabel}</div>
+      <h2
+        id={section.id}
+        className={`article-h2 ${section.headingClassName ?? ""}`.trim()}
+      >
+        {section.title}
+      </h2>
+    </>
   );
 };
 
 const StructuredArticleBlockRenderer: React.FC<{
   block: StructuredArticleBlock;
-}> = ({ block }) => {
+  variant?: StructuredArticleVariant;
+}> = ({ block, variant = "legacy" }) => {
   switch (block.type) {
     case "paragraph":
       return (
-        <ArticleParagraph className={block.className}>{block.body}</ArticleParagraph>
+        <ArticleParagraph className={block.className}>
+          {block.body}
+        </ArticleParagraph>
       );
     case "subheading":
+      if (variant !== "legacy") {
+        return (
+          <h3 id={block.id} className="article-markdown-h3 scroll-mt-32">
+            {block.title}
+          </h3>
+        );
+      }
       return <ArticleSubheading id={block.id}>{block.title}</ArticleSubheading>;
     case "callout":
       return (
-        <ArticleCalloutPanel eyebrow={block.eyebrow} className={block.className}>
+        <ArticleCalloutPanel
+          eyebrow={block.eyebrow}
+          className={block.className}
+        >
           {block.paragraphs.map((paragraph, index) => (
-            <p key={index} className="text-slate-700 font-sans text-base leading-relaxed mb-2">
+            <p key={index} className="article-panel--callout-copy">
               {paragraph}
             </p>
           ))}
@@ -2239,7 +2502,7 @@ const StructuredArticleBlockRenderer: React.FC<{
     case "divider":
       return (
         <div
-          className={`my-12 border-t border-slate-200 ${block.className ?? ""}`.trim()}
+          className={`article-divider ${block.className ?? "mt-12"}`.trim()}
           aria-hidden="true"
         ></div>
       );
@@ -2255,12 +2518,18 @@ const StructuredArticleBlockRenderer: React.FC<{
       );
     case "dropcapIntro":
       return (
-        <ArticleDropcapIntro
-          lead={block.lead}
-          paragraphs={block.paragraphs}
-        />
+        <ArticleDropcapIntro lead={block.lead} paragraphs={block.paragraphs} />
       );
     case "pullQuote":
+      if (variant !== "legacy") {
+        return (
+          <ArticleWebflowQuote
+            quote={block.quote}
+            cite={block.cite}
+            className={block.className}
+          />
+        );
+      }
       return (
         <ArticlePullQuote
           quote={block.quote}
@@ -2290,8 +2559,15 @@ const StructuredArticleBlockRenderer: React.FC<{
       return <ArticleCompareBlock {...block.comparison} />;
     case "decisionTable":
       return (
-        <ArticleDecisionTable headers={block.headers} rows={block.rows} caption={block.caption} />
+        <ArticleDecisionTable
+          headers={block.headers}
+          rows={block.rows}
+          variant={variant}
+          caption={block.caption}
+        />
       );
+    case "faq":
+      return <ArticleFaq items={block.items} />;
     case "custom":
       return <>{block.render()}</>;
     default:
@@ -2311,35 +2587,62 @@ function getStructuredArticleBlockKey(
 
 const StructuredArticleContent: React.FC<{
   document: StructuredArticleDocument;
-}> = ({ document }) => (
-  <div className="article-markdown article-markdown--webflow article-rich-text article-webflow-static prose prose-lg max-w-none">
-    {document.leadBlocks.map((block, index) => (
-      <StructuredArticleBlockRenderer
-        key={getStructuredArticleBlockKey("lead", block, index)}
-        block={block}
-      />
-    ))}
+  variant?: StructuredArticleVariant;
+}> = ({ document, variant = "legacy" }) => {
+  const content = (
+    <>
+      {document.leadBlocks.map((block, index) => (
+        <StructuredArticleBlockRenderer
+          key={getStructuredArticleBlockKey("lead", block, index)}
+          block={block}
+          variant={variant}
+        />
+      ))}
 
-    {document.sections.map((section) => (
-      <section key={section.id} className="mb-16 w-full">
-        <StructuredArticleSectionHeading section={section} />
-        {section.blocks.map((block, index) => (
-          <StructuredArticleBlockRenderer
-            key={getStructuredArticleBlockKey(section.id, block, index)}
-            block={block}
+      {document.sections.map((section) => (
+        <section
+          key={section.id}
+          className={`article-section article-section--${section.id} mb-16 w-full`}
+        >
+          <StructuredArticleSectionHeading
+            section={section}
+            variant={variant}
           />
-        ))}
-      </section>
-    ))}
+          {section.blocks.map((block, index) => (
+            <StructuredArticleBlockRenderer
+              key={getStructuredArticleBlockKey(section.id, block, index)}
+              block={block}
+              variant={variant}
+            />
+          ))}
+        </section>
+      ))}
 
-    {document.outroBlocks?.map((block, index) => (
-      <StructuredArticleBlockRenderer
-        key={getStructuredArticleBlockKey("outro", block, index)}
-        block={block}
-      />
-    ))}
-  </div>
-);
+      {document.outroBlocks?.map((block, index) => (
+        <StructuredArticleBlockRenderer
+          key={getStructuredArticleBlockKey("outro", block, index)}
+          block={block}
+          variant={variant}
+        />
+      ))}
+    </>
+  );
+
+  if (variant !== "legacy") {
+    const className = [
+      "article-markdown",
+      "article-markdown--webflow",
+      "article-rich-text",
+      "article-rich-text--structured",
+    ]
+      .filter(Boolean)
+      .join(" ");
+
+    return <div className={className}>{content}</div>;
+  }
+
+  return content;
+};
 
 const ResumeGuideChecklistBlock: React.FC = () => {
   const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
@@ -2449,31 +2752,9 @@ const ResumeGuideChecklistBlock: React.FC = () => {
 const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
   leadBlocks: [
     {
-      type: "statStrip",
-      items: BLOG_02_STATS.map((stat) => ({
-        value: stat.value,
-        label: stat.label,
-        note: stat.source,
-        accentClass: stat.accentClass,
-      })),
-    },
-    {
-      type: "insightGrid",
-      eyebrow: "Core decision system",
-      summary:
-        "Run every element through all four tests before it earns space on the page",
-      items: BLOG_02_TESTS.map((test) => ({
-        step: test.step,
-        title: test.title,
-        description: test.description,
-        note: test.question,
-        accentClass: test.accentClass,
-      })),
-    },
-    {
       type: "dropcapIntro",
       lead: BLOG_02_INTRO_COPY.lead,
-      paragraphs: [...BLOG_02_INTRO_COPY.paragraphs],
+      paragraphs: BLOG_02_INTRO_COPY.paragraphs,
     },
     {
       type: "pullQuote",
@@ -2504,10 +2785,9 @@ const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
             <>
               Most candidates write a resume that answers{" "}
               <em>What have I done?</em> A strong resume answers{" "}
-              <em>Why am I the right fit for this specific role?</em> That
-              shift changes almost every decision {"\u2014"} what to include,
-              what to cut, how many bullets to write, which jobs to even
-              mention.
+              <em>Why am I the right fit for this specific role?</em> That shift
+              changes almost every decision {"\u2014"} what to include, what to
+              cut, how many bullets to write, which jobs to even mention.
             </>
           ),
         },
@@ -2576,30 +2856,24 @@ const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
           type: "custom",
           key: "section-two-pipeline",
           render: () => (
-            <div className="article-stage-flow">
+            <div className="article-stage-flow article-stage-flow--editorial">
               {BLOG_02_SECTION_TWO_PIPELINE.map((item, index) => (
                 <React.Fragment key={item.stage}>
-                  <div className="article-stage-card">
+                  <div className="article-stage-card article-stage-card--editorial">
                     <div className="article-stage-card__label">
                       {item.stage}
                     </div>
-                    <div className="article-stage-card__icon">
-                      {item.icon}
-                    </div>
+                    <div className="article-stage-card__icon">{item.icon}</div>
                     <div className="article-stage-card__title">
                       {item.title}
                     </div>
-                    <div className="article-stage-card__body">
-                      {item.body}
-                    </div>
+                    <div className="article-stage-card__body">{item.body}</div>
                     <div className="article-stage-card__footer">
                       {item.footer}
                     </div>
                   </div>
                   {index < BLOG_02_SECTION_TWO_PIPELINE.length - 1 && (
-                    <div className="article-stage-flow__arrow">
-                      &rarr;
-                    </div>
+                    <div className="article-stage-flow__arrow">&rarr;</div>
                   )}
                 </React.Fragment>
               ))}
@@ -2639,11 +2913,11 @@ const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
           type: "paragraph",
           body: (
             <>
-              Eye-tracking studies {"\u2014"} including TheLadders&apos;
-              studies (2012, 2018) and a 2025 Wonsulting experiment using
-              recruiters with tracking equipment {"\u2014"} show consistent
-              patterns in how trained screeners read resumes. The findings have
-              been replicated multiple times:
+              Eye-tracking studies {"\u2014"} including TheLadders&apos; studies
+              (2012, 2018) and a 2025 Wonsulting experiment using recruiters
+              with tracking equipment {"\u2014"} show consistent patterns in how
+              trained screeners read resumes. The findings have been replicated
+              multiple times:
             </>
           ),
         },
@@ -2651,98 +2925,87 @@ const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
           type: "custom",
           key: "section-two-attention-grid",
           render: () => (
-            <div className="my-10 overflow-hidden border border-slate-200">
-              <div className="flex flex-col justify-between gap-3 border-b border-white/10 bg-slate-950 px-6 py-4 md:flex-row md:items-center">
-                <span className="mono text-[0.65rem] uppercase tracking-[0.12em] text-white/50">
-                  Eye-tracking research {"\u2014"} where recruiters actually
-                  look
+            <figure className="article-attention-figure article-attention-figure--compact">
+              <figcaption className="article-attention-figure__header">
+                <span className="article-attention-figure__eyebrow">
+                  Eye-tracking research
                 </span>
-                <span className="text-[0.75rem] italic text-white/40">
-                  Based on TheLadders, Wonsulting &amp; Nielsen Norman Group
-                  research
+                <span className="article-attention-figure__note">
+                  Where recruiters actually look, based on TheLadders,
+                  Wonsulting, and Nielsen Norman Group research.
                 </span>
-              </div>
+              </figcaption>
 
-              <div className="grid gap-px bg-slate-200 md:grid-cols-2">
-                <div className="bg-white p-6">
-                  <div className="mb-4 text-[0.78rem] font-semibold text-slate-900">
-                    Attention heat map {"\u2014"} simulated
-                  </div>
-                  <div className="min-h-[200px] border border-slate-200 bg-white p-4 font-mono text-[0.62rem] leading-[1.6]">
-                    {BLOG_02_SECTION_TWO_HEATMAP_ZONES.map((zone) => {
-                      const zoneClass =
+              <div className="article-attention-figure__grid">
+                <section className="article-attention-panel">
+                  <h4 className="article-attention-panel__title">
+                    Attention sequence
+                  </h4>
+                  <div
+                    className="article-attention-table"
+                    role="table"
+                    aria-label="Resume attention sequence"
+                  >
+                    {BLOG_02_SECTION_TWO_HEATMAP_ZONES.map((zone, index) => {
+                      const levelLabel =
                         zone.level === "hot"
-                          ? "border-l-[3px] border-blue-600 bg-blue-200/60"
+                          ? "Highest"
                           : zone.level === "warm"
-                            ? "border-l-[2px] border-blue-400 bg-blue-100/70"
+                            ? "Medium"
                             : zone.level === "mild"
-                              ? "bg-blue-50"
-                              : "opacity-50";
-                      const badgeClass =
-                        zone.level === "hot"
-                          ? "bg-blue-600 text-white"
-                          : zone.level === "warm"
-                            ? "bg-blue-500/80 text-white"
-                            : "bg-blue-100 text-blue-700";
+                              ? "Low"
+                              : "Rare";
+                      const normalizedText = zone.text
+                        .replace(/Â·/g, "·")
+                        .replace(/\u2014/g, "—");
 
                       return (
                         <div
                           key={zone.text}
-                          className={`relative my-[0.15rem] rounded-[2px] px-2 py-1 ${zoneClass}`}
+                          className={`article-attention-row article-attention-row--${zone.level}`}
+                          role="row"
                         >
-                          {zone.text}
-                          {zone.badge && (
-                            <span
-                              className={`absolute right-[-1px] top-1/2 -translate-y-1/2 rounded-[1px] px-1 py-[2px] text-[0.55rem] uppercase tracking-[0.08em] ${badgeClass}`}
-                            >
-                              {zone.badge}
-                            </span>
-                          )}
+                          <span
+                            className="article-attention-row__index"
+                            role="cell"
+                          >
+                            {String(index + 1).padStart(2, "0")}
+                          </span>
+                          <span
+                            className="article-attention-row__text"
+                            role="cell"
+                          >
+                            {normalizedText}
+                          </span>
+                          <span
+                            className="article-attention-row__level"
+                            role="cell"
+                          >
+                            {levelLabel}
+                          </span>
                         </div>
                       );
                     })}
                   </div>
+                </section>
 
-                  <div className="mt-4 space-y-2">
-                    <div className="flex items-center gap-2 text-[0.75rem] text-slate-600">
-                      <span className="h-3 w-3 rounded-[2px] bg-blue-600/45"></span>
-                      Highest attention (name, contact, current role)
-                    </div>
-                    <div className="flex items-center gap-2 text-[0.75rem] text-slate-600">
-                      <span className="h-3 w-3 rounded-[2px] bg-blue-400/35"></span>
-                      Medium attention (previous roles)
-                    </div>
-                    <div className="flex items-center gap-2 text-[0.75rem] text-slate-600">
-                      <span className="h-3 w-3 rounded-[2px] bg-blue-200/60"></span>
-                      Low attention (older experience)
-                    </div>
-                    <div className="flex items-center gap-2 text-[0.75rem] text-slate-600">
-                      <span className="h-3 w-3 rounded-[2px] bg-slate-200"></span>
-                      Rarely seen (bottom-right content)
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-slate-50 p-6">
-                  <div className="mb-4 text-[0.78rem] font-semibold text-slate-900">
-                    6 fixation points {"\u2014"} 80% of recruiter attention
-                  </div>
-                  <ul className="list-none">
+                <section className="article-attention-panel">
+                  <h4 className="article-attention-panel__title">
+                    Six fixation points
+                  </h4>
+                  <ol className="article-fixation-list">
                     {BLOG_02_SECTION_TWO_FIXATIONS.map((item, index) => (
-                      <li
-                        key={item}
-                        className="flex items-start gap-3 border-b border-slate-200 py-[0.55rem] text-[0.8rem] leading-[1.4] text-slate-600 last:border-b-0"
-                      >
-                        <span className="mono mt-[1px] flex h-5 w-5 shrink-0 items-center justify-center rounded-[2px] bg-slate-900 text-[0.6rem] text-white">
-                          {index + 1}
+                      <li key={item} className="article-fixation-list__item">
+                        <span className="article-fixation-list__index">
+                          {String(index + 1).padStart(2, "0")}
                         </span>
-                        <span>{item}</span>
+                        <span>{item.replace(/\u2014/g, "—")}</span>
                       </li>
                     ))}
-                  </ul>
-                </div>
+                  </ol>
+                </section>
               </div>
-            </div>
+            </figure>
           ),
         },
         {
@@ -2824,9 +3087,9 @@ const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
           body: (
             <>
               Before anything lands on your resume {"\u2014"} a job, a bullet, a
-              skill, a certification, a project {"\u2014"} it passes four
-              tests. Run them in sequence. When something fails one test
-              clearly, stop there.
+              skill, a certification, a project {"\u2014"} it passes four tests.
+              Run them in sequence. When something fails one test clearly, stop
+              there.
             </>
           ),
         },
@@ -2861,9 +3124,9 @@ const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
               question isn&apos;t whether a claim sounds impressive {"\u2014"}
               it&apos;s whether the sentence actually proves it.
               &quot;Results-driven professional&quot; proves nothing.
-              &quot;Rebuilt the onboarding process, cutting
-              time-to-productivity from 90 to 45 days across a 40-person
-              team&quot; proves something specific.
+              &quot;Rebuilt the onboarding process, cutting time-to-productivity
+              from 90 to 45 days across a 40-person team&quot; proves something
+              specific.
             </>
           ),
         },
@@ -2927,9 +3190,9 @@ const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
           body: (
             <>
               The biggest gap between a mediocre and a strong resume isn&apos;t
-              formatting {"\u2014"} it&apos;s the bullets. Specifically:
-              whether bullets show what you <em>made happen</em> versus what you
-              were <em>supposed to do</em>. The job description already tells a
+              formatting {"\u2014"} it&apos;s the bullets. Specifically: whether
+              bullets show what you <em>made happen</em> versus what you were{" "}
+              <em>supposed to do</em>. The job description already tells a
               reader what the role requires. Your bullets should tell them what
               you specifically delivered.
             </>
@@ -2939,30 +3202,35 @@ const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
           type: "custom",
           key: "section-four-formula",
           render: () => (
-            <div className="my-10 overflow-hidden border border-slate-200">
-              <div className="grid gap-px bg-slate-200 md:grid-cols-[1fr_auto_1fr_auto_1.2fr]">
-                <div className="bg-white px-5 py-5 text-center text-[0.9rem] font-semibold text-slate-900">
-                  Action verb
-                </div>
-                <div className="flex items-center justify-center bg-slate-50 px-4 py-5 text-xl font-semibold text-blue-600">
-                  +
-                </div>
-                <div className="bg-white px-5 py-5 text-center text-[0.9rem] font-semibold text-slate-900">
-                  What you did
-                </div>
-                <div className="flex items-center justify-center bg-slate-50 px-4 py-5 text-xl font-semibold text-blue-600">
-                  +
-                </div>
-                <div className="bg-white px-5 py-5 text-center text-[0.9rem] font-semibold text-slate-900">
-                  Result / scope / proof
-                </div>
+            <figure className="article-bullet-formula">
+              <figcaption className="article-bullet-formula__caption">
+                The bullet formula
+              </figcaption>
+              <div className="article-bullet-formula__parts">
+                {["Action verb", "What you did", "Result / scope / proof"].map(
+                  (part, index) => (
+                    <React.Fragment key={part}>
+                      <span className="article-bullet-formula__part">
+                        {part}
+                      </span>
+                      {index < 2 && (
+                        <span
+                          className="article-bullet-formula__operator"
+                          aria-hidden="true"
+                        >
+                          +
+                        </span>
+                      )}
+                    </React.Fragment>
+                  ),
+                )}
               </div>
-              <div className="border-t border-slate-200 bg-slate-50 px-6 py-4 text-[0.84rem] leading-[1.7] text-slate-600">
-                The golden formula. Leading with the outcome is stronger when
-                you have a compelling one. Every bullet should have a full STAR
-                story behind it in case you&apos;re interviewed on it.
-              </div>
-            </div>
+              <p className="article-bullet-formula__note">
+                Leading with the outcome is stronger when you have a compelling
+                one. Every bullet should have a full STAR story behind it in
+                case you&apos;re interviewed on it.
+              </p>
+            </figure>
           ),
         },
         {
@@ -2991,64 +3259,53 @@ const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
           type: "custom",
           key: "section-four-evidence-spectrum",
           render: () => (
-            <div className="my-10 overflow-hidden border border-slate-200">
-              <div className="border-b border-white/10 bg-slate-950 px-6 py-4 text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-white/65">
-                Evidence quality spectrum {"\u2014"} weakest to strongest
-              </div>
-              <div className="grid gap-px bg-slate-200 md:grid-cols-4">
+            <figure className="article-evidence-spectrum">
+              <figcaption className="article-evidence-spectrum__caption">
+                Evidence quality spectrum
+              </figcaption>
+              <div className="article-evidence-spectrum__list">
                 {BLOG_02_SECTION_FOUR_EVIDENCE_TIERS.map((tier) => (
-                  <div key={tier.label} className={`px-5 py-5 ${tier.className}`}>
-                    <div
-                      className={`mb-4 inline-flex rounded-sm px-2 py-1 text-[0.64rem] font-semibold uppercase tracking-[0.12em] ${tier.badgeClassName}`}
-                    >
+                  <div
+                    key={tier.label}
+                    className="article-evidence-spectrum__row"
+                  >
+                    <div className="article-evidence-spectrum__label">
                       {tier.label}
                     </div>
-                    <div className="text-[0.88rem] leading-[1.7]">
+                    <div className="article-evidence-spectrum__copy">
                       {tier.text}
                     </div>
                   </div>
                 ))}
               </div>
-            </div>
+            </figure>
           ),
         },
         {
           type: "custom",
           key: "section-four-do-dont",
           render: () => (
-            <div className="my-10 grid gap-px overflow-hidden border border-slate-200 bg-slate-200 md:grid-cols-2">
-              <div className="bg-blue-50 px-6 py-6">
-                <div className="mb-4 text-[11px] font-black uppercase tracking-[0.12em] text-blue-600">
-                  Do
-                </div>
-                <ul className="space-y-3">
+            <div className="article-bullet-guidance">
+              <section className="article-bullet-guidance__column">
+                <h4 className="article-bullet-guidance__title">Do</h4>
+                <ul className="article-bullet-guidance__list">
                   {BLOG_02_SECTION_FOUR_DO.map((item) => (
-                    <li
-                      key={item}
-                      className="flex items-start gap-3 text-[0.9rem] leading-[1.65] text-slate-700"
-                    >
-                      <span className="mt-[0.45rem] h-1.5 w-1.5 shrink-0 rounded-full bg-blue-600"></span>
-                      <span dangerouslySetInnerHTML={{ __html: item }} />
+                    <li key={item} className="article-bullet-guidance__item">
+                      <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item) }} />
                     </li>
                   ))}
                 </ul>
-              </div>
-              <div className="bg-slate-50 px-6 py-6">
-                <div className="mb-4 text-[11px] font-black uppercase tracking-[0.12em] text-slate-500">
-                  Don&apos;t
-                </div>
-                <ul className="space-y-3">
+              </section>
+              <section className="article-bullet-guidance__column">
+                <h4 className="article-bullet-guidance__title">Don&apos;t</h4>
+                <ul className="article-bullet-guidance__list">
                   {BLOG_02_SECTION_FOUR_DONT.map((item) => (
-                    <li
-                      key={item}
-                      className="flex items-start gap-3 text-[0.9rem] leading-[1.65] text-slate-700"
-                    >
-                      <span className="mt-[0.45rem] h-1.5 w-1.5 shrink-0 rounded-full bg-slate-400"></span>
-                      <span dangerouslySetInnerHTML={{ __html: item }} />
+                    <li key={item} className="article-bullet-guidance__item">
+                      <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item) }} />
                     </li>
                   ))}
                 </ul>
-              </div>
+              </section>
             </div>
           ),
         },
@@ -3061,7 +3318,9 @@ const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
               available or would mislead, show:{" "}
               <strong className="font-semibold text-slate-900">scale</strong>{" "}
               (team size, customer count, system throughput),{" "}
-              <strong className="font-semibold text-slate-900">standards</strong>{" "}
+              <strong className="font-semibold text-slate-900">
+                standards
+              </strong>{" "}
               (compliance, SLA, editorial bar),{" "}
               <strong className="font-semibold text-slate-900">
                 automation
@@ -3232,14 +3491,15 @@ const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
         },
         {
           type: "callout",
-          eyebrow: "Summary elements &mdash; include only what applies and is true",
+          eyebrow:
+            "Summary elements &mdash; include only what applies and is true",
           paragraphs: [
             <>
-              Target role title or domain &middot; Years of experience
-              &middot; Relevant industries or company types &middot; 2&ndash;3
-              specific tools or methodologies &middot; One measurable highlight
-              &middot; Certifications or languages if role-relevant &middot;
-              Keep to 3&ndash;5 lines maximum
+              Target role title or domain &middot; Years of experience &middot;
+              Relevant industries or company types &middot; 2&ndash;3 specific
+              tools or methodologies &middot; One measurable highlight &middot;
+              Certifications or languages if role-relevant &middot; Keep to
+              3&ndash;5 lines maximum
             </>,
             <>
               Critical rule: everything in the summary must be substantiated by
@@ -3322,7 +3582,6 @@ const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
           type: "decisionTable",
           headers: ["Role situation", "What to do"],
           rows: BLOG_02_SECTION_SIX_WORK_ROWS,
-          caption: "Work experience resume guidance",
         },
         {
           type: "subheading",
@@ -3343,8 +3602,8 @@ const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
           type: "paragraph",
           body: (
             <>
-              Hard skills only. This means specific tools, software,
-              programming languages, frameworks, platforms, technical systems,
+              Hard skills only. This means specific tools, software, programming
+              languages, frameworks, platforms, technical systems,
               certifications, and named methodologies. If you list it,
               you&apos;re implying you can defend it in a screening call.
               Don&apos;t list what you can&apos;t back up.
@@ -3381,14 +3640,14 @@ const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
                   key={item.badge}
                   className="article-card article-card--interactive"
                 >
-                  <span className={`article-card__badge ${item.badgeClassName}`}>
+                  <span
+                    className={`article-card__badge ${item.badgeClassName}`}
+                  >
                     {item.badge}
                   </span>
-                  <div className="article-card__title">
-                    {item.title}
-                  </div>
+                  <div className="article-card__title">{item.title}</div>
                   <div className="article-card__copy">
-                    <span dangerouslySetInnerHTML={{ __html: item.body }} />
+                    <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.body) }} />
                   </div>
                 </div>
               ))}
@@ -3436,18 +3695,10 @@ const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
             <div className="article-card-grid article-card-grid--length">
               {BLOG_02_SECTION_SEVEN_LENGTH_CARDS.map((item) => (
                 <div key={item.label} className="article-card">
-                  <div className="article-card__badge">
-                    {item.label}
-                  </div>
-                  <div className="article-card__title">
-                    {item.title}
-                  </div>
-                  <div className="article-card__copy">
-                    {item.body}
-                  </div>
-                  <span className="article-card__value">
-                    {item.value}
-                  </span>
+                  <div className="article-card__badge">{item.label}</div>
+                  <div className="article-card__title">{item.title}</div>
+                  <div className="article-card__copy">{item.body}</div>
+                  <span className="article-card__value">{item.value}</span>
                 </div>
               ))}
             </div>
@@ -3542,12 +3793,11 @@ const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
           className: "article-panel--callout-indigo",
           paragraphs: [
             <>
-              Over 50% of resumes are first opened on a smartphone in 2025.
-              This affects formatting: tiny fonts, dense text blocks, and
-              complex layouts that look clean on a desktop screen become
-              illegible on mobile. Test your resume on your phone before
-              sending. If you can&apos;t read it comfortably in one scroll, it
-              needs work.
+              Over 50% of resumes are first opened on a smartphone in 2025. This
+              affects formatting: tiny fonts, dense text blocks, and complex
+              layouts that look clean on a desktop screen become illegible on
+              mobile. Test your resume on your phone before sending. If you
+              can&apos;t read it comfortably in one scroll, it needs work.
             </>,
           ],
         },
@@ -3607,10 +3857,7 @@ const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
           render: () => (
             <div className="article-workflow-list">
               {BLOG_02_SECTION_NINE_WORKFLOW.map((item) => (
-                <div
-                  key={item.step}
-                  className="article-workflow-step"
-                >
+                <div key={item.step} className="article-workflow-step">
                   <div className="article-workflow-step__marker">
                     {item.step}
                   </div>
@@ -3690,7 +3937,7 @@ const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
                     <strong className="article-info-grid__item-title">
                       {item.title}
                     </strong>
-                    <span dangerouslySetInnerHTML={{ __html: item.body }} />
+                    <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.body) }} />
                   </div>
                 ))}
               </div>
@@ -3790,8 +4037,8 @@ const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
               constructively. Use a factual entry when the gap is material,
               recent, or could confuse the timeline. &quot;Personal leave of
               absence&quot; or &quot;Family caregiving&quot; with dates is
-              enough. No reasons for leaving on the resume {"\u2014"} that&apos;s
-              for the interview.
+              enough. No reasons for leaving on the resume {"\u2014"}{" "}
+              that&apos;s for the interview.
             </>
           ),
         },
@@ -3813,7 +4060,8 @@ const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
     {
       sectionLabel: "Section 12",
       id: "mistakes",
-      title: "Nine fatal mistakes that eliminate otherwise-qualified candidates",
+      title:
+        "Nine fatal mistakes that eliminate otherwise-qualified candidates",
       headingStyle: "kicker",
       headingClassName: "article-section-rule-heading",
       blocks: [
@@ -3833,16 +4081,15 @@ const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
           render: () => (
             <div className="article-card-grid article-card-grid--mistakes">
               {BLOG_02_SECTION_TWELVE_MISTAKES.map((item) => (
-                <div key={item.number} className="article-card article-card--mistake">
+                <div
+                  key={item.number}
+                  className="article-card article-card--mistake"
+                >
                   <div className="article-mistake-number article-card__badge">
                     {item.number}
                   </div>
-                  <div className="article-card__title">
-                    {item.title}
-                  </div>
-                  <div className="article-card__copy">
-                    {item.body}
-                  </div>
+                  <div className="article-card__title">{item.title}</div>
+                  <div className="article-card__copy">{item.body}</div>
                 </div>
               ))}
             </div>
@@ -3872,10 +4119,7 @@ const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
           render: () => (
             <div className="article-workflow-list">
               {BLOG_02_SECTION_THIRTEEN_WORKFLOW.map((item) => (
-                <div
-                  key={item.title}
-                  className="article-workflow-step"
-                >
+                <div key={item.title} className="article-workflow-step">
                   <div className="article-workflow-step__marker">
                     {item.icon}
                   </div>
@@ -3928,6 +4172,806 @@ const RESUME_GUIDE_DOCUMENT: StructuredArticleDocument = {
   ],
 };
 
+const NETWORKING_GUIDE_STATS = [
+  {
+    value: "7",
+    label: "OSI layers used as a troubleshooting map",
+    note: "diagnostic stack",
+    accentClass: "text-blue-400",
+  },
+  {
+    value: "2-3",
+    label: "months to solid fundamentals with consistent labs",
+    note: "beginner range",
+    accentClass: "text-cyan-300",
+  },
+  {
+    value: "5-7",
+    label: "months to CCNA-level foundation from zero",
+    note: "realistic range",
+    accentClass: "text-sky-300",
+  },
+  {
+    value: "0",
+    label: "hardware required before you start practicing",
+    note: "simulators work",
+    accentClass: "text-indigo-300",
+  },
+  {
+    value: "4",
+    label: "steps in the build, break, fix, theory loop",
+    note: "learning engine",
+    accentClass: "text-blue-200",
+  },
+  {
+    value: "6",
+    label: "core topics that break most often in real networks",
+    note: "practice first",
+    accentClass: "text-teal-300",
+  },
+] as const;
+
+const NETWORKING_GUIDE_TESTS = [
+  {
+    step: "Test 01",
+    title: "Can I build it?",
+    description:
+      "Turn the idea into a tiny working topology before you treat it as learned.",
+    note: "If it only exists in notes, it is not skill yet.",
+    accentClass: "bg-blue-500",
+  },
+  {
+    step: "Test 02",
+    title: "Can I break it?",
+    description:
+      "Misconfigure the gateway, unplug the link, block a port, or change the DNS path on purpose.",
+    note: "Controlled failure makes the concept visible.",
+    accentClass: "bg-cyan-400",
+  },
+  {
+    step: "Test 03",
+    title: "Can I diagnose it?",
+    description:
+      "Start at Layer 1 and climb. Guessing feels fast, but ordered troubleshooting is faster.",
+    note: "The OSI model becomes useful only when something fails.",
+    accentClass: "bg-sky-400",
+  },
+  {
+    step: "Test 04",
+    title: "Can I explain it?",
+    description:
+      "Read the theory after the lab so the definition answers a problem you already met.",
+    note: "Theory sticks when it attaches to a real symptom.",
+    accentClass: "bg-indigo-400",
+  },
+] as const;
+
+const NETWORKING_GUIDE_STAGES = [
+  {
+    stage: "Stage 01",
+    icon: "01",
+    title: "Map the failure",
+    body: "Use the OSI model as a bottom-to-top diagnostic checklist, not as trivia to recite.",
+    footer: "Outcome: you know where to look first",
+  },
+  {
+    stage: "Stage 02",
+    icon: "02",
+    title: "Build the lab",
+    body: "Use a home router, Packet Tracer, GNS3, or a small VPN topology before you feel ready.",
+    footer: "Outcome: theory becomes observable",
+  },
+  {
+    stage: "Stage 03",
+    icon: "03",
+    title: "Break the path",
+    body: "Create faults deliberately: wrong subnet, blocked port, DNS error, bad gateway, dead route.",
+    footer: "Outcome: symptoms become patterns",
+  },
+  {
+    stage: "Stage 04",
+    icon: "04",
+    title: "Automate the repeat",
+    body: "Once a manual configuration works, ask how Linux, Python, JSON, YAML, or Ansible would reproduce it.",
+    footer: "Outcome: skills stay current",
+  },
+] as const;
+
+const NETWORKING_LAB_CARDS = [
+  {
+    badge: "Lab 01",
+    title: "Home router subnet",
+    body: "Create a separate subnet and attach two client devices. Watch DHCP, gateway, and routing behavior without buying gear.",
+    badgeClassName: "text-blue-600",
+  },
+  {
+    badge: "Lab 02",
+    title: "Packet Tracer or GNS3",
+    body: "Build two routers, one switch, and a shared network. Then add a second network and make the route explicit.",
+    badgeClassName: "text-cyan-600",
+  },
+  {
+    badge: "Lab 03",
+    title: "DHCP on the wire",
+    body: "Configure DHCP yourself, capture the lease process, and connect the request-offer-ack flow to the theory.",
+    badgeClassName: "text-sky-600",
+  },
+  {
+    badge: "Lab 04",
+    title: "Small VPN tunnel",
+    body: "Use WireGuard to connect two sites and verify reachability through the tunnel with ping and traceroute.",
+    badgeClassName: "text-indigo-600",
+  },
+  {
+    badge: "Lab 05",
+    title: "Domain to server",
+    body: "Point a cheap domain to a server you control. Make SSH work through the name, not only the raw IP.",
+    badgeClassName: "text-blue-700",
+  },
+  {
+    badge: "Lab 06",
+    title: "DNS record practice",
+    body: "Configure A, CNAME, and MX records, then test exactly what each record resolves and where it fails.",
+    badgeClassName: "text-teal-600",
+  },
+] as const;
+
+const NETWORKING_MISTAKES = [
+  {
+    number: "01",
+    title: "Reading before labbing",
+    body: "Theory creates false confidence when it is never tested against a working topology.",
+  },
+  {
+    number: "02",
+    title: "Chasing every certification",
+    body: "Network+, CCNA, and cloud certs in parallel usually means none of them get enough depth.",
+  },
+  {
+    number: "03",
+    title: "Skipping DNS and DHCP",
+    body: "The boring fundamentals are often the first things that break in real support work.",
+  },
+  {
+    number: "04",
+    title: "Guessing under pressure",
+    body: "Random fixes feel fast and usually waste more time than a disciplined layer-by-layer pass.",
+  },
+  {
+    number: "05",
+    title: "Ignoring automation",
+    body: "Pure box-by-box CLI skill is shrinking. Linux, Python, APIs, and Ansible now sit beside networking fundamentals.",
+  },
+  {
+    number: "06",
+    title: "Waiting to feel ready",
+    body: "There is no readiness threshold. A small lab is what creates readiness.",
+  },
+] as const;
+
+const NETWORKING_GUIDE_DOCUMENT: StructuredArticleDocument = {
+  leadBlocks: [
+    {
+      type: "statStrip",
+      items: NETWORKING_GUIDE_STATS.map((stat) => ({ ...stat })),
+    },
+    {
+      type: "insightGrid",
+      eyebrow: "Core learning system",
+      summary:
+        "Treat every networking topic as something to build, break, diagnose, and then explain",
+      items: NETWORKING_GUIDE_TESTS.map((test) => ({ ...test })),
+    },
+    {
+      type: "dropcapIntro",
+      lead: "Most people who set out to learn networking read a chapter, watch a video, and feel like they understand something - right up until a real network breaks and they have no idea where to even start looking.",
+      paragraphs: [
+        'That gap between "I read about it" and "I can fix it" is the entire problem this guide is built to close.',
+        "You do not learn networking by studying more. You learn it by building something small, breaking it on purpose, and troubleshooting your way back - using the OSI model as your map and a certification syllabus as your curriculum, not your goal.",
+      ],
+    },
+    {
+      type: "pullQuote",
+      quote:
+        "Networking sticks when every definition is attached to a fault you can reproduce, diagnose, and fix.",
+      cite: "The learning principle behind this roadmap",
+    },
+  ],
+  sections: [
+    {
+      sectionLabel: "Section 01",
+      id: "why-most-self-taught-learners-stall-out",
+      title: "Why most self-taught learners stall out",
+      blocks: [
+        {
+          type: "paragraph",
+          body: (
+            <>
+              Ask ten people how to learn networking and you will get ten
+              syllabi: OSI model, subnetting, routing protocols, VLANs, DNS, and
+              so on. That list is not wrong. It is just not the thing that is
+              actually holding most people back.
+            </>
+          ),
+        },
+        {
+          type: "paragraph",
+          body: (
+            <>
+              The real failure point is{" "}
+              <strong className="font-semibold text-slate-900">method</strong>,
+              not material. Networking is a physical, hands-on skill wearing a
+              theoretical costume. Understanding forms in your hands, on a
+              keyboard, in a terminal - not on a page.
+            </>
+          ),
+        },
+        {
+          type: "callout",
+          eyebrow: "The correction",
+          paragraphs: [
+            <>
+              Before you pick a course or a certification, fix the method first:
+              less reading, sooner labbing, and a deliberate habit of breaking
+              things so you are forced to understand why they broke.
+            </>,
+          ],
+        },
+        { type: "divider", className: "mt-12" },
+      ],
+    },
+    {
+      sectionLabel: "Section 02",
+      id: "learn-the-osi-model-as-a-tool-not-trivia",
+      title: "Learn the OSI model as a tool, not trivia",
+      headingStyle: "kicker",
+      headingClassName: "article-section-rule-heading",
+      blocks: [
+        {
+          type: "paragraph",
+          body: (
+            <>
+              Everyone tells beginners to learn the OSI model, and then most
+              beginners memorize seven words in order and move on. That is the
+              wrong use of it entirely. The OSI model is a{" "}
+              <strong className="font-semibold text-slate-900">
+                diagnostic checklist
+              </strong>{" "}
+              you reach for the instant something breaks.
+            </>
+          ),
+        },
+        {
+          type: "decisionTable",
+          headers: ["Layer", "Name", "What to check"],
+          rows: [
+            ["7", "Application", "The app itself is broken, not the network."],
+            [
+              "6",
+              "Presentation",
+              "Formatting, encryption, and TLS certificate issues.",
+            ],
+            [
+              "5",
+              "Session",
+              "Sessions dropping, timeouts, and authentication handshakes.",
+            ],
+            [
+              "4",
+              "Transport",
+              "Wrong port, blocked firewall rule, TCP vs UDP behavior.",
+            ],
+            [
+              "3",
+              "Network",
+              "Routing table, gateway, subnet mismatch, and reachability.",
+            ],
+            [
+              "2",
+              "Data Link",
+              "Wrong VLAN, switch port down, MAC or ARP problems.",
+            ],
+            [
+              "1",
+              "Physical",
+              "Cable unplugged, dead port, bad transceiver. Check this first.",
+            ],
+          ],
+        },
+        {
+          type: "callout",
+          eyebrow: "Bottom-up rule",
+          paragraphs: [
+            <>
+              When something is broken, resist the urge to guess at Layer 7
+              first because that is where the symptom appeared. Start at Layer 1
+              and climb. It feels slower early. It becomes instinct after that.
+            </>,
+          ],
+        },
+      ],
+    },
+    {
+      sectionLabel: "Section 03",
+      id: "network-plus-vs-ccna-which-certification-first",
+      title: "Network+ vs. CCNA: which certification first",
+      headingStyle: "kicker",
+      headingClassName: "article-section-rule-heading",
+      blocks: [
+        {
+          type: "paragraph",
+          body: (
+            <>
+              This is one of the most common questions in networking, and the
+              honest answer is: it depends on where you are starting from, not
+              on which cert is better.
+            </>
+          ),
+        },
+        {
+          type: "decisionTable",
+          headers: ["Situation", "Start here", "Why"],
+          rows: [
+            [
+              <strong>Complete beginner with no IT background</strong>,
+              "CompTIA Network+",
+              "Vendor-neutral, broader, and lighter on hands-on configuration.",
+            ],
+            [
+              <strong>Some IT, cloud, or sysadmin experience</strong>,
+              "Cisco CCNA",
+              "You already have the mental scaffolding; CCNA gets you into configuration and troubleshooting.",
+            ],
+            [
+              <strong>Aiming for a Network Engineer or NOC role</strong>,
+              "CCNA, Network+ optional",
+              "CCNA is the stronger filter for networking-specific roles.",
+            ],
+            [
+              <strong>Aiming for general IT or help desk first</strong>,
+              "CompTIA Network+",
+              "Broad, transferable, and recognized across support and junior sysadmin roles.",
+            ],
+          ],
+        },
+        {
+          type: "compare",
+          comparison: {
+            badLabel: "Weak use of certification",
+            badContent: "Study only to pass the exam.",
+            badNote:
+              "This produces recognition without operational confidence.",
+            goodLabel: "Strong use of certification",
+            goodContent:
+              "Use the exam objectives as a syllabus while proving every topic in a lab.",
+            goodNote:
+              "The certificate becomes structure, not a substitute for skill.",
+          },
+        },
+      ],
+    },
+    {
+      sectionLabel: "Section 04",
+      id: "build-a-home-lab-before-you-feel-ready",
+      title: "Build a home lab before you feel ready",
+      headingStyle: "kicker",
+      headingClassName: "article-section-rule-heading",
+      blocks: [
+        {
+          type: "paragraph",
+          body: (
+            <>
+              People wait too long to start labbing because they assume they
+              need to know enough first. That is backwards. The lab is how you
+              get to know enough.
+            </>
+          ),
+        },
+        {
+          type: "custom",
+          key: "networking-lab-cards",
+          render: () => (
+            <div className="article-card-grid article-card-grid--optional">
+              {NETWORKING_LAB_CARDS.map((item) => (
+                <div
+                  key={item.badge}
+                  className="article-card article-card--interactive"
+                >
+                  <span
+                    className={`article-card__badge ${item.badgeClassName}`}
+                  >
+                    {item.badge}
+                  </span>
+                  <div className="article-card__title">{item.title}</div>
+                  <div className="article-card__copy">{item.body}</div>
+                </div>
+              ))}
+            </div>
+          ),
+        },
+        {
+          type: "callout",
+          eyebrow: "Do not overbuild the lab",
+          paragraphs: [
+            <>
+              None of this needs to look production-grade. It just needs to be
+              yours, so that when it breaks, you diagnose it instead of
+              following someone else&apos;s steps.
+            </>,
+          ],
+        },
+      ],
+    },
+    {
+      sectionLabel: "Section 05",
+      id: "the-build-break-fix-theory-loop",
+      title: "The build, break, fix, theory loop",
+      headingStyle: "kicker",
+      headingClassName: "article-section-rule-heading",
+      blocks: [
+        {
+          type: "custom",
+          key: "networking-stage-flow",
+          render: () => (
+            <div className="article-stage-flow">
+              {NETWORKING_GUIDE_STAGES.map((item, index) => (
+                <React.Fragment key={item.stage}>
+                  <div className="article-stage-card">
+                    <div className="article-stage-card__label">
+                      {item.stage}
+                    </div>
+                    <div className="article-stage-card__icon">{item.icon}</div>
+                    <div className="article-stage-card__title">
+                      {item.title}
+                    </div>
+                    <div className="article-stage-card__body">{item.body}</div>
+                    <div className="article-stage-card__footer">
+                      {item.footer}
+                    </div>
+                  </div>
+                  {index < NETWORKING_GUIDE_STAGES.length - 1 && (
+                    <div className="article-stage-flow__arrow">&rarr;</div>
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
+          ),
+        },
+        {
+          type: "paragraph",
+          body: (
+            <>
+              Reading the theory first gives you a false sense of understanding.
+              Struggling with a real, broken thing first means the theory
+              finally answers a question you already have, which is why it
+              sticks the second time around.
+            </>
+          ),
+        },
+        {
+          type: "pullQuote",
+          quote:
+            "Build the smallest version of a concept, sabotage it, fix it using the OSI model, and then read the chapter that explains what you just did.",
+          cite: "The loop that turns vocabulary into skill",
+        },
+      ],
+    },
+    {
+      sectionLabel: "Section 06",
+      id: "troubleshoot-like-an-engineer-not-a-guesser",
+      title: "Troubleshoot like an engineer, not a guesser",
+      headingStyle: "kicker",
+      headingClassName: "article-section-rule-heading",
+      blocks: [
+        {
+          type: "paragraph",
+          body: (
+            <>
+              Systematic troubleshooting is the habit that separates people who
+              know networking vocabulary from people who can operate a network.
+              Start at Layer 1 and climb: cable, interface, address, gateway,
+              DNS, port, application.
+            </>
+          ),
+        },
+        {
+          type: "custom",
+          key: "networking-troubleshooting-workflow",
+          render: () => (
+            <div className="article-workflow-list">
+              {[
+                {
+                  step: "01",
+                  title: "Confirm physical link",
+                  body: "Cable, port, interface state, power, link light, transceiver, and wireless association.",
+                },
+                {
+                  step: "02",
+                  title: "Confirm addressing",
+                  body: "IP address, subnet mask, default gateway, duplicate address, and DHCP lease.",
+                },
+                {
+                  step: "03",
+                  title: "Confirm path",
+                  body: "Ping gateway, trace route, check routing table, verify NAT and firewall rules.",
+                },
+                {
+                  step: "04",
+                  title: "Confirm names and ports",
+                  body: "DNS lookup, service port, TCP vs UDP behavior, TLS, and application health.",
+                },
+              ].map((item) => (
+                <div key={item.step} className="article-workflow-step">
+                  <div className="article-workflow-step__marker">
+                    {item.step}
+                  </div>
+                  <div className="article-workflow-step__content">
+                    <div className="article-workflow-step__title">
+                      {item.title}
+                    </div>
+                    <div className="article-workflow-step__body">
+                      {item.body}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ),
+        },
+      ],
+    },
+    {
+      sectionLabel: "Section 07",
+      id: "do-not-skip-the-boring-fundamentals",
+      title: "Do not skip the boring fundamentals",
+      headingStyle: "kicker",
+      headingClassName: "article-section-rule-heading",
+      blocks: [
+        {
+          type: "custom",
+          key: "networking-fundamentals-grid",
+          render: () => (
+            <div className="article-info-grid">
+              <div className="article-info-grid__header article-info-grid__header--neutral">
+                <div className="article-info-grid__badge article-info-grid__badge--neutral">
+                  L1
+                </div>
+                <div>
+                  <div className="article-info-grid__heading">
+                    Fundamentals that break most often
+                  </div>
+                  <div className="article-info-grid__subheading">
+                    Master these before chasing advanced protocols
+                  </div>
+                </div>
+              </div>
+
+              <div className="article-info-grid__grid">
+                {[
+                  [
+                    "Subnetting",
+                    "Practice until you can do it in your head, no calculator, under time pressure.",
+                  ],
+                  [
+                    "DNS",
+                    "Run your own resolver and watch queries resolve in real time.",
+                  ],
+                  [
+                    "DHCP",
+                    "Understand lease times, scopes, reservations, and renewal behavior by configuring them.",
+                  ],
+                  [
+                    "NAT and port forwarding",
+                    "Trace exactly what happens to a packet as it crosses the boundary.",
+                  ],
+                ].map(([title, body]) => (
+                  <div key={title} className="article-info-grid__item">
+                    <strong className="article-info-grid__item-title">
+                      {title}
+                    </strong>
+                    {body}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ),
+        },
+        {
+          type: "callout",
+          eyebrow: "Why this matters",
+          paragraphs: [
+            <>
+              None of this is advanced. But fluency here is what makes you fast
+              and confident once you move on to topics that feel advanced.
+            </>,
+          ],
+        },
+      ],
+    },
+    {
+      sectionLabel: "Section 08",
+      id: "layer-in-automation-early",
+      title: "Layer in automation early",
+      headingStyle: "kicker",
+      headingClassName: "article-section-rule-heading",
+      blocks: [
+        {
+          type: "paragraph",
+          body: (
+            <>
+              Traditional CLI-driven, box-by-box configuration is shrinking in
+              relative importance. More of the real work now happens through
+              automation, infrastructure-as-code, and cloud-native networking
+              constructs.
+            </>
+          ),
+        },
+        {
+          type: "ruleColumns",
+          columns: [
+            {
+              title: "Add early",
+              variant: "include",
+              items: [
+                "Linux fundamentals",
+                "Python basics",
+                "JSON and YAML",
+                "Ansible playbooks",
+                "Cloud VPC networking",
+                "REST API authentication",
+              ],
+            },
+            {
+              title: "Avoid",
+              variant: "exclude",
+              items: [
+                "Treating automation as someone else's job",
+                "Memorizing commands without understanding state",
+                "Copying scripts you cannot explain",
+                "Skipping manual diagnosis because a tool exists",
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      sectionLabel: "Section 09",
+      id: "resources-and-realistic-timeline",
+      title: "Resources and realistic timeline",
+      headingStyle: "kicker",
+      headingClassName: "article-section-rule-heading",
+      blocks: [
+        {
+          type: "decisionTable",
+          headers: ["Milestone", "Typical timeframe"],
+          rows: [
+            ["OSI model, IP basics, simple subnetting", "3-5 weeks"],
+            ["CompTIA Network+ ready", "2-3 months"],
+            ["Cisco CCNA ready from a technical background", "3-4 months"],
+            ["Cisco CCNA ready starting from zero", "5-7 months"],
+            [
+              "Troubleshooting unfamiliar networks",
+              "Ongoing career-long skill",
+            ],
+          ],
+        },
+        {
+          type: "custom",
+          key: "networking-resource-workflow",
+          render: () => (
+            <div className="article-workflow-list">
+              {[
+                [
+                  "Free video courses",
+                  "Use them for vocabulary and sequencing, not as a substitute for lab time.",
+                ],
+                [
+                  "Free simulators",
+                  "Packet Tracer is friendlier for beginners; GNS3 scales better to realistic labs.",
+                ],
+                [
+                  "Practice exams",
+                  "Use them to expose gaps before certification, not to memorize answers.",
+                ],
+                [
+                  "Official objectives",
+                  "Use CompTIA and Cisco objectives as the most current syllabus reference.",
+                ],
+              ].map(([title, body], index) => (
+                <div key={title} className="article-workflow-step">
+                  <div className="article-workflow-step__marker">
+                    {String(index + 1).padStart(2, "0")}
+                  </div>
+                  <div className="article-workflow-step__content">
+                    <div className="article-workflow-step__title">{title}</div>
+                    <div className="article-workflow-step__body">{body}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ),
+        },
+      ],
+    },
+    {
+      sectionLabel: "Section 10",
+      id: "common-mistakes-that-slow-people-down",
+      title: "Common mistakes that slow people down",
+      headingStyle: "kicker",
+      headingClassName: "article-section-rule-heading",
+      blocks: [
+        {
+          type: "custom",
+          key: "networking-mistakes-grid",
+          render: () => (
+            <div className="article-card-grid article-card-grid--mistakes">
+              {NETWORKING_MISTAKES.map((item) => (
+                <div
+                  key={item.number}
+                  className="article-card article-card--mistake"
+                >
+                  <div className="article-mistake-number article-card__badge">
+                    {item.number}
+                  </div>
+                  <div className="article-card__title">{item.title}</div>
+                  <div className="article-card__copy">{item.body}</div>
+                </div>
+              ))}
+            </div>
+          ),
+        },
+      ],
+    },
+    {
+      sectionLabel: "Section 11",
+      id: "faq",
+      title: "Frequently asked questions",
+      headingStyle: "kicker",
+      headingClassName: "article-section-rule-heading",
+      blocks: [
+        {
+          type: "faq",
+          items: [
+            {
+              question: "What is the fastest way to learn computer networking?",
+              answer:
+                "Lab sooner. Learn the OSI model as a troubleshooting tool, then build small topologies immediately.",
+            },
+            {
+              question: "Should I get Network+ before CCNA?",
+              answer:
+                "If you are completely new, Network+ is smoother. If you already have technical experience, go straight to CCNA.",
+            },
+            {
+              question: "How long does fundamentals take?",
+              answer:
+                "Most learners reach solid fundamentals in 2-3 months with consistent hands-on study.",
+            },
+            {
+              question: "Do I need to buy hardware?",
+              answer:
+                "No. Packet Tracer, GNS3, a home router, and one or two client devices are enough to start.",
+            },
+            {
+              question: "Is networking still worth learning?",
+              answer:
+                "Yes. The strongest path now combines networking fundamentals with Linux, Python, APIs, and automation.",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+  outroBlocks: [
+    {
+      type: "custom",
+      key: "networking-guide-final-prompt",
+      render: () => <NetworkingGuideFinalPrompt />,
+    },
+  ],
+};
+
 function extractStructuredArticleHeadings(
   document: StructuredArticleDocument,
 ): TocHeading[] {
@@ -3954,8 +4998,420 @@ function extractStructuredArticleHeadings(
   return headings;
 }
 
-const ResumeGuideFlagshipContent: React.FC = () => (
-  <StructuredArticleContent document={RESUME_GUIDE_DOCUMENT} />
+const RESUME_GUIDE_TOC_HEADINGS: TocHeading[] = [
+  {
+    id: "core-shift",
+    text: "The core shift that changes every decision",
+    level: "h2",
+  },
+  {
+    id: "how-screened",
+    text: "The science of how resumes are screened",
+    level: "h2",
+  },
+  {
+    id: "eye-tracking",
+    text: "The F-pattern and six fixation points",
+    level: "h2",
+  },
+  {
+    id: "confirmation-bias",
+    text: "The confirmation-bias mechanism",
+    level: "h3",
+  },
+  { id: "four-tests", text: "The four-test decision system", level: "h2" },
+  {
+    id: "bullets",
+    text: "Writing bullets that actually prove things",
+    level: "h2",
+  },
+  { id: "bullet-dos", text: "Do", level: "h3" },
+  { id: "bullet-donts", text: "Don't", level: "h3" },
+  { id: "ownership", text: "The ownership language principle", level: "h2" },
+  { id: "every-section", text: "Every section, decided", level: "h2" },
+  { id: "contact-info", text: "Contact information", level: "h3" },
+  { id: "profile-summary", text: "Profile summary", level: "h3" },
+  { id: "company-context-line", text: "The company context line", level: "h3" },
+  { id: "work-experience", text: "Work experience", level: "h3" },
+  { id: "education", text: "Education", level: "h3" },
+  { id: "skills-section", text: "Skills section", level: "h3" },
+  { id: "length", text: "The length question, answered properly", level: "h2" },
+  {
+    id: "ats",
+    text: "ATS & formatting rules that actually matter",
+    level: "h2",
+  },
+  { id: "file-format", text: "File format decision tree", level: "h3" },
+  { id: "tailoring", text: "Tailoring without keyword stuffing", level: "h2" },
+  { id: "linkedin", text: "LinkedIn as a strategic layer", level: "h2" },
+  {
+    id: "special-cases",
+    text: "Special cases: when the standard rules change",
+    level: "h2",
+  },
+  { id: "early-career", text: "Early career", level: "h3" },
+  { id: "experienced", text: "Experienced (10+ years)", level: "h3" },
+  { id: "career-changer", text: "Career changer", level: "h3" },
+  { id: "employment-gaps", text: "Employment gaps", level: "h3" },
+  {
+    id: "mistakes",
+    text: "Nine fatal mistakes that eliminate qualified candidates",
+    level: "h2",
+  },
+  { id: "checklist", text: "The pre-submit checklist", level: "h2" },
+  { id: "faq", text: "Frequently asked questions", level: "h2" },
+];
+
+const RESUME_GUIDE_ARTICLE_HTML = `
+  <div class="article-markdown article-markdown--webflow article-rich-text article-webflow-static">
+    <p class="article-body lede">Most resume advice is a list of things someone did wrong: <em>don't use tables, don't put your address, don't go two pages.</em> These rules circulate without context and become gospel &mdash; even when they contradict each other. The problem isn't that the rules are wrong. It's that rules without decision logic are nearly useless the moment you sit down to write. This is a framework for thinking, not another list.</p>
+
+    <blockquote class="article-webflow-quote"><p>A resume that answers "What have I done?" will always lose to one that answers "Why am I the right fit for this specific role?"</p></blockquote>
+
+    <section id="core-shift" class="article-section">
+      <h2 class="article-markdown-h2">The core shift that changes every decision</h2>
+      <p class="article-body">Generic guides spend most of their time on aesthetics &mdash; fonts, margins, whether to use a summary. Those details matter at the edges, but they aren't why resumes succeed or fail. Resumes fail because they answer the wrong question.</p>
+      <p class="article-body">Most candidates write a resume that answers <em>what have I done?</em> A strong resume answers <em>why am I the right fit for this specific role?</em> That shift changes almost every decision that follows &mdash; what to include, what to cut, how many bullets to write, which jobs to even mention.</p>
+      <p class="article-body"><strong>Working definitions used throughout this guide:</strong> <em>Relevant</em> means useful for evaluating fit for the target role. <em>Directly related</em> means it uses the same or closely adjacent skills, tools, or responsibilities. <em>Fit</em> is the overall match between your background and the role's requirements. Wherever this guide says "include if it helps," the standard is whether it adds relevant evidence for the target role.</p>
+    </section>
+
+    <section id="how-screened" class="article-section">
+      <h2 class="article-markdown-h2">The science of how resumes are screened</h2>
+      <p class="article-body">Before writing a single word, it helps to understand how resumes are actually read &mdash; because it changes every layout and prioritization decision. A resume doesn't travel one path from submission to interview. It travels three stages, each with its own logic.</p>
+      <ol class="article-list">
+        <li class="article-list__item"><strong>ATS / AI filter.</strong> Roughly 82% of companies run every resume through an ATS before a human opens it. It scans for keywords, qualifications, and structure &mdash; fail here and you never reach a recruiter. This stage eliminates an estimated 60&ndash;70% of applicants.</li>
+        <li class="article-list__item"><strong>Recruiter skim.</strong> About 42% of HR professionals spend under 10 seconds on first review. They scan in an F-pattern for fit signals &mdash; top horizontal, second horizontal, then down the left edge. This stage eliminates roughly 70&ndash;80% of the remaining pool.</li>
+        <li class="article-list__item"><strong>Hiring manager read.</strong> Only the shortlisted few reach this stage. Every claim in your bullets is now tested against what the role requires, and what they'd probe in an interview. This stage typically results in interview offers for about 2&ndash;5% of applicants.</li>
+      </ol>
+      <p class="article-body">The three-stage reality means a resume needs to be three things at once: machine-readable for the ATS, skim-optimized for the recruiter, and evidence-rich for the hiring manager. These constraints don't contradict each other &mdash; they layer.</p>
+    </section>
+
+    <section id="eye-tracking" class="article-section">
+      <h2 class="article-markdown-h2">The F-pattern and six fixation points</h2>
+      <p class="article-body">Eye-tracking research &mdash; including TheLadders' studies (2012, 2018) and a 2025 Wonsulting experiment using recruiters wired with tracking equipment &mdash; shows a consistent, repeatedly replicated pattern in how trained screeners read a resume. In order, the six fixation points are:</p>
+      <ol class="article-list">
+        <li class="article-list__item">Your name &mdash; the first thing seen, every time</li>
+        <li class="article-list__item">Current or most recent job title</li>
+        <li class="article-list__item">Current or most recent company name</li>
+        <li class="article-list__item">Start and end date of the current role</li>
+        <li class="article-list__item">Previous job title, if visible</li>
+        <li class="article-list__item">Education level and institution</li>
+      </ol>
+      <p class="article-body">The implication: the top-left quadrant of page one receives the most attention. Content in the bottom-right &mdash; skills lists, older certifications, interests &mdash; is nearly invisible during first-pass screening. Design for where eyes actually go, not where you think they should.</p>
+      <h3 id="confirmation-bias" class="article-markdown-h3">The confirmation-bias mechanism</h3>
+      <p class="article-body">One of the sharper insights from screening research: your headline creates a confirmation bias that shapes how the entire resume gets read. See "Senior Product Manager &mdash; B2B SaaS" before anything else, and a recruiter starts unconsciously looking for evidence that confirms that frame, becoming predisposed to interpret ambiguous experience positively. Set the wrong frame, or none at all, and they construct their own interpretation, which is rarely as generous as the one you'd have written yourself.</p>
+      <p class="article-body">Put your name, target role title, and single most credible fit signal in the top 20% of page one. Don't bury your strongest credential inside a job from 2019. A short, specific headline under your name &mdash; for example, <em>Senior Product Manager &middot; B2B SaaS &middot; 8 years</em> &mdash; costs one line and earns disproportionate returns.</p>
+    </section>
+
+    <section id="four-tests" class="article-section">
+      <h2 class="article-markdown-h2">The four-test decision system</h2>
+      <p class="article-body">Before anything lands on a resume &mdash; a job, a bullet, a skill, a certification &mdash; it should pass four tests, in sequence. When something clearly fails one, stop there.</p>
+      <ol class="article-list">
+        <li class="article-list__item"><strong>Target-role match.</strong> Does this help a reader evaluate fit for this role, at this company, right now &mdash; not your career in general?</li>
+        <li class="article-list__item"><strong>Strength of evidence.</strong> Does the sentence actually prove the claim, or just assert it? A resume is an evidence document, not a self-description.</li>
+        <li class="article-list__item"><strong>Recency.</strong> Evidence decays. A job from fifteen years ago might warrant one line; a job from last year might warrant six bullets.</li>
+        <li class="article-list__item"><strong>Space efficiency.</strong> Every line displaces something else. Marginal relevance often tips toward cutting once you weigh what it costs.</li>
+      </ol>
+    </section>
+
+    <section id="bullets" class="article-section">
+      <h2 class="article-markdown-h2">Writing bullets that actually prove things</h2>
+      <p class="article-body">The biggest gap between a mediocre and a strong resume isn't formatting &mdash; it's the bullets. Specifically, whether they show what you made happen versus what you were supposed to do. The job description already states the requirements; your bullets should state the delivery.</p>
+      <p class="article-body"><strong>Weak:</strong> "Responsible for managing various projects and coordinating with stakeholders to ensure timely delivery." Tells the reader nothing specific &mdash; any PM could claim this.</p>
+      <p class="article-body"><strong>Strong:</strong> "Managed 6 concurrent product launches across 4 teams; delivered all on schedule with 0 scope-creep incidents over 18 months." Specific, countable, and defensible in an interview.</p>
+      <p class="article-body">Across an evidence-quality spectrum, this is roughly the progression: <em>"Contributed to team success"</em> (weak) &rarr; <em>"Led internal tooling project used by 200+ employees daily"</em> (better) &rarr; <em>"Built data pipeline reducing manual reporting from 8 hrs/week to 20 min"</em> (strong) &rarr; <em>"Sole engineer on CMS migration; launched on schedule, zero downtime, eliminated 3 weekly manual tasks"</em> (strongest).</p>
+      <p class="article-body">Not every role produces clean metrics. When numbers aren't available, show scale (team size, customers, throughput), standards (compliance bar, SLA, editorial quality), automation you created, or the level of ownership you held. Any concrete detail beats a vague assertion.</p>
+      <h3 id="bullet-dos" class="article-markdown-h3">Do</h3>
+      <ul class="article-list">
+        <li class="article-list__item">Start with a strong, specific action verb</li>
+        <li class="article-list__item">Vary the opening verb across bullets</li>
+        <li class="article-list__item">Lead with the outcome when it's compelling</li>
+        <li class="article-list__item">Keep bullets to 1&ndash;2 lines, 3 maximum</li>
+        <li class="article-list__item">Have a full STAR story ready for each bullet</li>
+        <li class="article-list__item">Show scope, standards, or ownership when numbers aren't available</li>
+      </ul>
+      <h3 id="bullet-donts" class="article-markdown-h3">Don't</h3>
+      <ul class="article-list">
+        <li class="article-list__item">Open with "Responsible for" or "Assisted with"</li>
+        <li class="article-list__item">List daily tasks with no outcome or proof of value</li>
+        <li class="article-list__item">Use buzzword filler &mdash; "team player," "results-oriented"</li>
+        <li class="article-list__item">Include metrics you can't defend in an interview</li>
+        <li class="article-list__item">Overload with 10+ bullets per role</li>
+        <li class="article-list__item">Write a bullet that could appear on anyone's resume</li>
+      </ul>
+    </section>
+
+    <section id="ownership" class="article-section">
+      <h2 class="article-markdown-h2">The ownership language principle</h2>
+      <p class="article-body">One of the most consistent signals recruiters use for senior roles is how a candidate describes their work: personal ownership, or collective diffusion. "We launched the product" tells a hiring manager nothing about your contribution. "Led a 4-person team that launched the product to 10,000 users in week one" is evidence.</p>
+      <p class="article-body"><strong>Collective diffusion:</strong> "Collaborated with cross-functional teams to improve the process." / "Was involved in building the new onboarding system." Hides your contribution, with no scope and nothing defendable in an interview.</p>
+      <p class="article-body"><strong>Personal ownership:</strong> "Owned end-to-end delivery of a 6-month platform rebuild; launched 2 weeks early with no critical bugs." Clear contribution, clear agency, and a scoped, defensible claim.</p>
+    </section>
+
+    <section id="every-section" class="article-section">
+      <h2 class="article-markdown-h2">Every section, decided</h2>
+
+      <h3 id="contact-info" class="article-markdown-h3">Contact information</h3>
+      <p class="article-body">Top of the page, plain text only &mdash; no embedded headers or graphics an ATS might skip.</p>
+      <p class="article-body"><strong>Include:</strong> full name (largest element on the page), a one-line headline (role title, domain, years), city and state or metro area, a name-based professional email, a phone number with a professional voicemail, a customized LinkedIn URL, and a portfolio or GitHub link if directly relevant.</p>
+      <p class="article-body"><strong>Exclude:</strong> street address, photo (US/Canada default), age or marital status, government ID or SIN (never, in Canada), labels like "Phone:" before details, messy file names such as "Resume_FINAL_v3," and salary requirements.</p>
+
+      <h3 id="profile-summary" class="article-markdown-h3">Profile summary</h3>
+      <p class="article-body">A summary earns its place only when it meaningfully improves fit perception. For most mid-career candidates in a clearly matching role, it's optional. For career changers, senior candidates, or anyone whose background needs framing, include it &mdash; factual and specific, never a vague paragraph.</p>
+      <p class="article-body"><strong>Bland:</strong> "Results-driven marketing professional with a passion for innovation and a proven track record of driving business growth." No specific claims &mdash; could belong to anyone.</p>
+      <p class="article-body"><strong>Factual:</strong> "Performance marketing manager with 8 years in B2B SaaS. Managed $4M annual ad budget with consistent 3.2x ROAS." Target title, years, and scale &mdash; every claim supportable by the experience below.</p>
+
+      <h3 id="company-context-line" class="article-markdown-h3">The company context line</h3>
+      <p class="article-body">Under each employer, add one line of context &mdash; what the company does and its scale. "Acme Corp" tells a recruiter nothing. "Acme Corp &mdash; B2B logistics SaaS, $200M ARR, 800 employees" gives the whole experience section more weight.</p>
+
+      <h3 id="work-experience" class="article-markdown-h3">Work experience</h3>
+      <p class="article-body">Reverse chronological order. More bullets for recent, directly related roles; fewer for older or lower-relevance ones.</p>
+      <figure class="article-table-frame article-table-frame--elementor wp-block-table table-bf-26"><table class="article-table article-table--legacy has-fixed-layout"><caption class="sr-only">Work experience resume guidance</caption><thead>
+        <tr><th scope="col" class="article-table__head article-table__cell article-table__cell--head has-text-align-center" data-align="center">Role situation</th><th scope="col" class="article-table__head article-table__cell article-table__cell--head has-text-align-center" data-align="center">What to do</th></tr>
+      </thead><tbody>
+        <tr><th scope="row" class="article-table__cell article-table__cell--key has-text-align-center" data-align="center">Strong, recent, directly related</th><td>4&ndash;6 achievement-first bullets, full date range, company context line</td></tr>
+        <tr><th scope="row" class="article-table__cell article-table__cell--key has-text-align-center" data-align="center">Related but older (5&ndash;10 yrs)</th><td>2&ndash;3 bullets, strongest evidence only</td></tr>
+        <tr><th scope="row" class="article-table__cell article-table__cell--key has-text-align-center" data-align="center">Older, not directly related</th><td>1&ndash;2 lines, or consider removing entirely</td></tr>
+        <tr><th scope="row" class="article-table__cell article-table__cell--key has-text-align-center" data-align="center">Multiple roles, one employer</th><td>Group under one header; list each title and date range</td></tr>
+        <tr><th scope="row" class="article-table__cell article-table__cell--key has-text-align-center" data-align="center">Employment gap</th><td>Brief factual entry only if material or timeline-confusing &mdash; no reasons for leaving</td></tr>
+      </tbody></table></figure>
+
+      <h3 id="education" class="article-markdown-h3">Education</h3>
+      <figure class="article-table-frame article-table-frame--elementor wp-block-table table-bf-26"><table class="article-table article-table--legacy has-fixed-layout"><caption class="sr-only">Education placement guidance</caption><thead>
+        <tr><th scope="col" class="article-table__head article-table__cell article-table__cell--head has-text-align-center" data-align="center">Situation</th><th scope="col" class="article-table__head article-table__cell article-table__cell--head has-text-align-center" data-align="center">Placement</th><th scope="col" class="article-table__head article-table__cell article-table__cell--head has-text-align-center" data-align="center">Include</th></tr>
+      </thead><tbody>
+        <tr><th scope="row" class="article-table__cell article-table__cell--key has-text-align-center" data-align="center">Student / recent grad</th><td>Top of resume</td><td>Degree, institution, date, GPA if 3.5+, honors</td></tr>
+        <tr><th scope="row" class="article-table__cell article-table__cell--key has-text-align-center" data-align="center">5+ years experience</th><td>After experience</td><td>Degree, institution, date</td></tr>
+        <tr><th scope="row" class="article-table__cell article-table__cell--key has-text-align-center" data-align="center">Career changer</th><td>After experience</td><td>New-field certifications, prominently</td></tr>
+      </tbody></table></figure>
+
+      <h3 id="skills-section" class="article-markdown-h3">Skills section</h3>
+      <p class="article-body">Hard skills only. If you list it, you're implying you can defend it in a screening call.</p>
+      <p class="article-body"><strong>Include:</strong> exact tool and software names, programming languages and frameworks, named methodologies (Agile, Six Sigma), certifications that are formally recognized, and languages with objective labels.</p>
+      <p class="article-body"><strong>Never include:</strong> soft skills like "teamwork" or "leadership," self-ratings such as stars or percentages, tools you can't discuss credibly, generic software everyone uses, or buzzword lists that carry no information.</p>
+    </section>
+
+    <section id="length" class="article-section">
+      <h2 class="article-markdown-h2">The length question, answered properly</h2>
+      <p class="article-body">One page is the default &mdash; not a rule. A default means start here, and move away only for a clear reason grounded in evidence. For context: 82% of companies use an ATS before any human review, a 2025 Novoresume survey of 418 HR professionals found 68% prefer two pages over one, 92.6% of HR professionals check LinkedIn during evaluation, and over half of resumes are first opened on a smartphone.</p>
+      <figure class="article-table-frame article-table-frame--elementor wp-block-table table-bf-26"><table class="article-table article-table--legacy has-fixed-layout"><caption class="sr-only">Resume length guidance by career stage</caption><thead>
+        <tr><th scope="col" class="article-table__head article-table__cell article-table__cell--head has-text-align-center" data-align="center">Career stage</th><th scope="col" class="article-table__head article-table__cell article-table__cell--head has-text-align-center" data-align="center">Guidance</th></tr>
+      </thead><tbody>
+        <tr><th scope="row" class="article-table__cell article-table__cell--key has-text-align-center" data-align="center">Students / early career</th><td>One page, always. No justification for two pages when experience is limited.</td></tr>
+        <tr><th scope="row" class="article-table__cell article-table__cell--key has-text-align-center" data-align="center">Mid-career (5&ndash;12 yrs)</th><td>One page, usually. Two pages only if cutting to one removes strong, directly relevant evidence.</td></tr>
+        <tr><th scope="row" class="article-table__cell article-table__cell--key has-text-align-center" data-align="center">Senior (12+ yrs)</th><td>Two pages max. A second page is legitimate to show leadership scale and major decisions.</td></tr>
+        <tr><th scope="row" class="article-table__cell article-table__cell--key has-text-align-center" data-align="center">Technical / gov / academia</th><td>Context-dependent. Academia uses a multi-page CV &mdash; a different document type entirely.</td></tr>
+      </tbody></table></figure>
+      <blockquote class="article-webflow-quote"><p>Don't ask "have I worked long enough for a second page?" Ask: "would cutting to one page force me to remove strong evidence that supports my fit for this specific role?"</p></blockquote>
+    </section>
+
+    <section id="ats" class="article-section">
+      <h2 class="article-markdown-h2">ATS &amp; formatting rules that actually matter</h2>
+      <p class="article-body">With 82% of companies using an ATS, optimizing for machine parsing isn't optional. Use a format parsers can read, and keep content out of places parsers skip.</p>
+      <figure class="article-table-frame article-table-frame--elementor wp-block-table table-bf-26"><table class="article-table article-table--legacy has-fixed-layout"><caption class="sr-only">ATS formatting rules</caption><thead>
+        <tr><th scope="col" class="article-table__head article-table__cell article-table__cell--head has-text-align-center" data-align="center">Rule</th><th scope="col" class="article-table__head article-table__cell article-table__cell--head has-text-align-center" data-align="center">Why it matters</th></tr>
+      </thead><tbody>
+        <tr><th scope="row" class="article-table__cell article-table__cell--key has-text-align-center" data-align="center">Standard section headings</th><td>Parsers look for "Work Experience," "Education," "Skills" by name</td></tr>
+        <tr><th scope="row" class="article-table__cell article-table__cell--key has-text-align-center" data-align="center">Single column</th><td>Multi-column layouts often read in the wrong order when parsed</td></tr>
+        <tr><th scope="row" class="article-table__cell article-table__cell--key has-text-align-center" data-align="center">Real text only</th><td>Content in images, headers, or footers is frequently skipped entirely</td></tr>
+        <tr><th scope="row" class="article-table__cell article-table__cell--key has-text-align-center" data-align="center">Standard fonts, 10&ndash;12pt</th><td>Nothing below 10pt; no decorative fonts for content</td></tr>
+        <tr><th scope="row" class="article-table__cell article-table__cell--key has-text-align-center" data-align="center">Avoid tables &amp; text boxes</th><td>Many parsers cannot read content placed inside them</td></tr>
+      </tbody></table></figure>
+      <h3 id="file-format" class="article-markdown-h3">File format decision tree</h3>
+      <figure class="article-table-frame article-table-frame--elementor wp-block-table table-bf-26"><table class="article-table article-table--legacy has-fixed-layout"><caption class="sr-only">Resume file format guidance</caption><thead>
+        <tr><th scope="col" class="article-table__head article-table__cell article-table__cell--head has-text-align-center" data-align="center">Situation</th><th scope="col" class="article-table__head article-table__cell article-table__cell--head has-text-align-center" data-align="center">Format</th></tr>
+      </thead><tbody>
+        <tr><th scope="row" class="article-table__cell article-table__cell--key has-text-align-center" data-align="center">Employer specifies a format</th><td>Whatever they asked for</td></tr>
+        <tr><th scope="row" class="article-table__cell article-table__cell--key has-text-align-center" data-align="center">Uploading to an ATS portal yourself</th><td>.docx</td></tr>
+        <tr><th scope="row" class="article-table__cell article-table__cell--key has-text-align-center" data-align="center">Emailing directly to a human</th><td>.pdf</td></tr>
+      </tbody></table></figure>
+    </section>
+
+    <section id="tailoring" class="article-section">
+      <h2 class="article-markdown-h2">Tailoring without keyword stuffing</h2>
+      <p class="article-body">"Customize every resume" gets repeated so often it becomes noise. Real tailoring means aligning your language and priorities truthfully to the posting.</p>
+      <ol class="article-list">
+        <li class="article-list__item"><strong>Read the posting as a human</strong>, not a keyword scanner. What are the three most important responsibilities?</li>
+        <li class="article-list__item"><strong>Build and maintain a master resume.</strong> Tailor copies from it &mdash; never edit your only document in place.</li>
+        <li class="article-list__item"><strong>Re-order and re-weight</strong> based on what this role needs most.</li>
+        <li class="article-list__item"><strong>Mirror language from the posting</strong>, naturally &mdash; use their exact tool names, match their seniority language.</li>
+        <li class="article-list__item"><strong>Run the 10-second skim test</strong> before sending. Would a recruiter know what you do and why you're credible?</li>
+      </ol>
+    </section>
+
+    <section id="linkedin" class="article-section">
+      <h2 class="article-markdown-h2">LinkedIn as a strategic layer</h2>
+      <p class="article-body">With 92.6% of HR professionals saying LinkedIn is critical or useful to their decisions, your profile is effectively a second resume &mdash; checked independently of your application.</p>
+      <p class="article-body">LinkedIn can expand on your resume &mdash; longer descriptions, testimonials, media &mdash; but it can never contradict it. Titles, dates, and company names must match exactly, or inconsistencies create doubt at exactly the wrong moment.</p>
+    </section>
+
+    <section id="special-cases" class="article-section">
+      <h2 class="article-markdown-h2">Special cases: when the standard rules change</h2>
+      <p class="article-body">The four-test system applies universally. Career stage and situation change how you apply it.</p>
+      <h3 id="early-career" class="article-markdown-h3">Early career</h3>
+      <p class="article-body">Lead with your strongest available evidence. One page, always. Put education first if it's your strongest credential. Use projects to prove skills when formal work history is thin.</p>
+      <h3 id="experienced" class="article-markdown-h3">Experienced (10+ years)</h3>
+      <p class="article-body">Prioritize ruthlessly, not comprehensively. Education moves to the bottom. Older jobs no longer central to fit can be condensed or cut. The resume is a case for this role, not a work history.</p>
+      <h3 id="career-changer" class="article-markdown-h3">Career changer</h3>
+      <p class="article-body">Close the fit gap before the reader has to. A summary earns its place here &mdash; name the transition explicitly. Build a portfolio; proof of skill in the new direction beats any summary.</p>
+      <h3 id="employment-gaps" class="article-markdown-h3">Employment gaps</h3>
+      <p class="article-body">Be honest and be brief. Use a factual entry when the gap is material, recent, or could confuse the timeline. No reasons for leaving on the resume &mdash; that's for the interview.</p>
+    </section>
+
+    <section id="mistakes" class="article-section">
+      <h2 class="article-markdown-h2">Nine fatal mistakes that eliminate qualified candidates</h2>
+      <p class="article-body">Each of these is a common, documentable reason a qualified candidate gets screened out before their experience is ever evaluated.</p>
+      <ol class="article-list">
+        <li class="article-list__item"><strong>ATS-invisible content.</strong> Contact info or skills placed inside headers, footers, or graphics may parse as missing entirely.</li>
+        <li class="article-list__item"><strong>Generic, untailored copy.</strong> The same resume sent everywhere gets eliminated by keyword-matching ATS before a human sees it.</li>
+        <li class="article-list__item"><strong>Responsibility framing.</strong> Every bullet describes the role's requirements instead of what you actually delivered.</li>
+        <li class="article-list__item"><strong>Broken links.</strong> A non-functioning LinkedIn or portfolio link signals carelessness to someone already triaging fast.</li>
+        <li class="article-list__item"><strong>Inconsistent formatting.</strong> Mixed tenses and date formats are the fastest proxy for carelessness in document work.</li>
+        <li class="article-list__item"><strong>LinkedIn contradicts resume.</strong> Different titles or dates between the two create credibility questions at the worst moment.</li>
+        <li class="article-list__item"><strong>Unprofessional contact info.</strong> Amateur email addresses and sloppy filenames signal a lack of professional self-awareness.</li>
+        <li class="article-list__item"><strong>Skills you can't defend.</strong> Every listed skill implies competency, and risk if it can't survive a screening question.</li>
+        <li class="article-list__item"><strong>The top doesn't communicate fit.</strong> If the first seven seconds don't signal your target role, the recruiter moves on.</li>
+      </ol>
+    </section>
+
+    <section id="checklist" class="article-section">
+      <h2 class="article-markdown-h2">The pre-submit checklist</h2>
+      <p class="article-body">Run through this before every serious application. Check items off as you confirm them.</p>
+
+      <div class="article-checklist resume-framework-checklist">
+        <div class="checklist-head">
+          <h3 class="article-h4">Pre-submit checklist</h3>
+          <span class="progress-text" id="progressPill">0 of 20 complete</span>
+        </div>
+        <div class="checklistGroups">
+          <div class="cl-group-title">Strategy &amp; targeting</div>
+          <div class="cl-item"><input type="checkbox" id="c1"><label for="c1">The top of page one immediately communicates my target role and strongest evidence</label></div>
+          <div class="cl-item"><input type="checkbox" id="c2"><label for="c2">This resume is tailored to this specific posting, not a generic copy</label></div>
+          <div class="cl-item"><input type="checkbox" id="c3"><label for="c3">Every element passes the four tests: role match, evidence, recency, space</label></div>
+          <div class="cl-item"><input type="checkbox" id="c4"><label for="c4">I ran the 10-second skim test on the finished draft</label></div>
+
+          <div class="cl-group-title">Content quality</div>
+          <div class="cl-item"><input type="checkbox" id="c5"><label for="c5">Every bullet leads with a strong action verb &mdash; no "Responsible for"</label></div>
+          <div class="cl-item"><input type="checkbox" id="c6"><label for="c6">Every quantified claim is real and defensible in an interview</label></div>
+          <div class="cl-item"><input type="checkbox" id="c7"><label for="c7">Language uses ownership framing &mdash; "I led / built / owned"</label><span class="badge">Default</span></div>
+          <div class="cl-item"><input type="checkbox" id="c8"><label for="c8">Skills section contains only hard skills I can defend</label></div>
+          <div class="cl-item"><input type="checkbox" id="c9"><label for="c9">Everything on this resume is true &mdash; no fabricated claims</label></div>
+
+          <div class="cl-group-title">Formatting &amp; ATS compliance</div>
+          <div class="cl-item"><input type="checkbox" id="c10"><label for="c10">Font, spacing, and tense usage are consistent throughout</label></div>
+          <div class="cl-item"><input type="checkbox" id="c11"><label for="c11">No tables, text boxes, or complex columns for ATS-heavy submissions</label><span class="badge">ATS</span></div>
+          <div class="cl-item"><input type="checkbox" id="c12"><label for="c12">No essential content in headers, footers, or graphics</label><span class="badge">ATS</span></div>
+          <div class="cl-item"><input type="checkbox" id="c13"><label for="c13">Resume tested on mobile &mdash; legible in one scroll</label><span class="badge">Default</span></div>
+
+          <div class="cl-group-title">Contact, file &amp; LinkedIn</div>
+          <div class="cl-item"><input type="checkbox" id="c14"><label for="c14">All links tested and working</label></div>
+          <div class="cl-item"><input type="checkbox" id="c15"><label for="c15">Clean file name: FirstName LastName Resume.pdf</label><span class="badge">Default</span></div>
+          <div class="cl-item"><input type="checkbox" id="c16"><label for="c16">LinkedIn dates, titles, and companies match the resume exactly</label></div>
+          <div class="cl-item"><input type="checkbox" id="c17"><label for="c17">No street address, photo (US/CA), or unnecessary personal info</label><span class="badge">Default</span></div>
+
+          <div class="cl-group-title">Final review</div>
+          <div class="cl-item"><input type="checkbox" id="c18"><label for="c18">Proofread carefully &mdash; contact info errors are fatal and common</label></div>
+          <div class="cl-item"><input type="checkbox" id="c19"><label for="c19">A second reviewer has checked the final version</label></div>
+          <div class="cl-item"><input type="checkbox" id="c20"><label for="c20">File opens correctly and is not a live Google Docs link</label></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="article-final-prompt article-final-question">
+      <div class="k">One question before you send</div>
+      <p>"If a recruiter reads only the first ten seconds of this resume, do they know what role I'm targeting, and why I'm credible for it?"</p>
+    </div>
+
+    <section id="faq" class="article-section article-faq">
+      <h2 class="article-markdown-h2">Frequently asked questions</h2>
+      <details>
+        <summary>How long should a resume be in 2026?</summary>
+        <p>One page is the default for students, early-career candidates, and most mid-career applicants. A second page is justified for senior candidates (12+ years) only when cutting it would remove strong, directly relevant evidence. A 2025 Novoresume survey of 418 HR professionals found 68% consider two pages ideal &mdash; but relevance decides the length, not tenure.</p>
+      </details>
+      <details>
+        <summary>What is the biggest reason qualified candidates get rejected before a human reads their resume?</summary>
+        <p>ATS-invisible content. About 82% of companies run resumes through applicant tracking software first. Contact details, skills, or titles placed inside headers, footers, text boxes, or graphics are frequently skipped by parsers.</p>
+      </details>
+      <details>
+        <summary>Should I include a resume summary?</summary>
+        <p>Optional for mid-career candidates in a clearly matching role; recommended for career changers, senior candidates, or anyone whose background needs framing. Every claim in it must be substantiated by the experience below.</p>
+      </details>
+      <details>
+        <summary>Should soft skills like "team player" go on a resume?</summary>
+        <p>No. List only hard skills you can defend under questioning &mdash; named tools, languages, frameworks, and recognized certifications. Demonstrate soft skills through evidenced bullets instead.</p>
+      </details>
+      <details>
+        <summary>How does an ATS actually read a resume?</summary>
+        <p>It parses for standard section headings, keyword matches, and structural clarity. Single-column, left-aligned, real-text layouts parse most reliably; tables, text boxes, and image-based content are frequently misread.</p>
+      </details>
+      <details>
+        <summary>Does my LinkedIn profile need to match my resume?</summary>
+        <p>Yes. About 92.6% of HR professionals check LinkedIn. Titles, dates, and companies must be consistent across both &mdash; any mismatch raises credibility questions.</p>
+      </details>
+      <details>
+        <summary>What is the four-test system?</summary>
+        <p>Target-role match, strength of evidence, recency, and space efficiency. Every job, bullet, skill, or certification should pass all four before it earns a place on the page.</p>
+      </details>
+    </section>
+
+    <div class="article-link-card article-framework-cta">
+      <h3>Build your resume against this framework</h3>
+      <p>Run your current draft through the four-test system and the pre-submit checklist above before your next application.</p>
+      <a href="#checklist">Use the checklist &rarr;</a>
+    </div>
+  </div>
+`;
+
+const ResumeGuideFlagshipContent: React.FC = () => {
+  const articleRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const root = articleRef.current;
+    if (!root) return;
+
+    const boxes = Array.from(
+      root.querySelectorAll<HTMLInputElement>(
+        '.cl-item input[type="checkbox"]',
+      ),
+    );
+    const pill = root.querySelector<HTMLElement>("#progressPill");
+    const total = boxes.length;
+
+    const updateProgress = () => {
+      const completedCount = boxes.reduce((count, box) => {
+        const item = box.closest(".cl-item");
+        if (box.checked) {
+          item?.classList.add("checked");
+          return count + 1;
+        }
+
+        item?.classList.remove("checked");
+        return count;
+      }, 0);
+
+      if (pill) {
+        pill.textContent = `${completedCount} of ${total} complete`;
+      }
+    };
+
+    boxes.forEach((box) => box.addEventListener("change", updateProgress));
+    updateProgress();
+
+    return () => {
+      boxes.forEach((box) => box.removeEventListener("change", updateProgress));
+    };
+  }, []);
+
+  return (
+    <div
+      ref={articleRef}
+      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(RESUME_GUIDE_ARTICLE_HTML) }}
+    />
+  );
+};
+
+const NetworkingRoadmapFlagshipContent: React.FC = () => (
+  <StructuredArticleContent document={NETWORKING_GUIDE_DOCUMENT} />
 );
 
 const BLOG_BODY_RENDERERS: Record<
@@ -3970,7 +5426,7 @@ const BLOG_BODY_RENDERERS: Record<
     renderBody: (_post, blocks) => <StandardArticleContent blocks={blocks} />,
   },
   resumeGuide: {
-    getHeadings: () => extractStructuredArticleHeadings(RESUME_GUIDE_DOCUMENT),
+    getHeadings: () => RESUME_GUIDE_TOC_HEADINGS,
     renderBody: () => <ResumeGuideFlagshipContent />,
   },
   networkingRoadmap: {
@@ -4119,15 +5575,14 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
 
     if (!articleRoot) return;
 
-    const allRevealElements: HTMLElement[] = [
-      ...(Array.from(
-        articleRoot.querySelectorAll(BLOG_POST_SCROLL_REVEAL_SELECTOR),
-      ) as HTMLElement[]),
+    const revealNodes = [
+      ...Array.from(
+        articleRoot.querySelectorAll<HTMLElement>(
+          BLOG_POST_SCROLL_REVEAL_SELECTOR,
+        ),
+      ),
       ...(relatedRoot ? [relatedRoot] : []),
-    ];
-    const revealNodes = allRevealElements.filter(
-      (node, index, list) => list.indexOf(node) === index,
-    );
+    ].filter((node, index, list) => list.indexOf(node) === index);
 
     if (revealNodes.length === 0) return;
 
@@ -4210,8 +5665,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
     const itemBottom = itemTop + activeBtn.offsetHeight;
     const visibleTop = nav.scrollTop;
     const visibleBottom = visibleTop + nav.clientHeight;
-    const isFullyVisible =
-      itemTop >= visibleTop && itemBottom <= visibleBottom;
+    const isFullyVisible = itemTop >= visibleTop && itemBottom <= visibleBottom;
 
     if (!isFullyVisible) {
       const centeredTop = Math.max(
@@ -4410,15 +5864,11 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
             </div>
 
             {/* H1: Webflow-exact — extrabold 800, tight -0.03em tracking, scaled to 56px lg */}
-            <h1 className="blog-post-hero__title">
-              {post.title}
-            </h1>
+            <h1 className="blog-post-hero__title">{post.title}</h1>
 
             {/* Excerpt: 16px, medium weight, core theme color */}
             {post.excerpt && (
-              <p className="blog-post-hero__excerpt">
-                {post.excerpt}
-              </p>
+              <p className="blog-post-hero__excerpt">{post.excerpt}</p>
             )}
           </div>
 
@@ -4442,10 +5892,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
       <div className="blog-post-detail__container blog-post-detail__section">
         <div className="blog-post-detail__layout">
           {/* ── MAIN CONTENT ── */}
-          <article
-            ref={contentRef}
-            className="blog-post-detail__main"
-          >
+          <article ref={contentRef} className="blog-post-detail__main">
             <ArticleAuthorMeta post={post} items={articleMetaItems} />
             {articleBody}
 
@@ -4540,10 +5987,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
                       overscrollBehaviorY: "contain",
                     }}
                   >
-                    <div
-                      aria-hidden="true"
-                      className="blog-post-toc__track"
-                    />
+                    <div aria-hidden="true" className="blog-post-toc__track" />
                     <motion.div
                       aria-hidden="true"
                       className="blog-post-toc__indicator"
@@ -4572,9 +6016,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
                             isH3
                               ? "blog-post-toc__item--subsection"
                               : "blog-post-toc__item--section"
-                          } ${
-                            isActive ? "blog-post-toc__item--active" : ""
-                          }`}
+                          } ${isActive ? "blog-post-toc__item--active" : ""}`}
                         >
                           {h.text}
                         </button>
@@ -4633,10 +6075,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
                   aria-label="Share on X"
                   className="blog-post-share__link blog-post-share__link--x"
                 >
-                  <svg
-                    className="blog-post-share__icon"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg className="blog-post-share__icon" viewBox="0 0 24 24">
                     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                   </svg>
                 </a>
@@ -4648,10 +6087,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
                   aria-label="Share on Facebook"
                   className="blog-post-share__link blog-post-share__link--facebook article-share-link--facebook"
                 >
-                  <svg
-                    className="blog-post-share__icon"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg className="blog-post-share__icon" viewBox="0 0 24 24">
                     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                   </svg>
                 </a>
@@ -4663,10 +6099,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
                   aria-label="Share on LinkedIn"
                   className="blog-post-share__link blog-post-share__link--linkedin article-share-link--linkedin"
                 >
-                  <svg
-                    className="blog-post-share__icon"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg className="blog-post-share__icon" viewBox="0 0 24 24">
                     <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
                   </svg>
                 </a>
@@ -4715,9 +6148,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
                     )}
                   </button>
                   {copiedLink && (
-                    <span className="blog-post-share__tooltip">
-                      Copied!
-                    </span>
+                    <span className="blog-post-share__tooltip">Copied!</span>
                   )}
                 </div>
               </div>
@@ -4729,9 +6160,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
         {relatedPosts.length > 0 && (
           <div className="blog-post-related">
             <div className="blog-post-related__header">
-              <h2 className="blog-post-related__title">
-                Read next
-              </h2>
+              <h2 className="blog-post-related__title">Read next</h2>
               <button
                 onClick={navigateBack}
                 className="blog-post-related__browse"
@@ -4783,13 +6212,14 @@ const BlogCard: React.FC<{
     <article className="h-full">
       <a
         href={`/blog/${post.id}`}
+        aria-label={`Read article: ${post.title}`}
         onClick={(event) => handleBlogPostLinkClick(event, post.id)}
         className="blog-index-card group flex h-full flex-col overflow-hidden rounded-xl border shadow-sm outline-none transition-all duration-300 focus:outline-none focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100 focus-visible:ring-offset-2"
       >
         <div className="blog-index-card__media aspect-[16/10] shrink-0 overflow-hidden border-b">
           <img
             src={post.image || BLOG_HERO_FALLBACK_IMAGE}
-            alt={post.title}
+            alt=""
             className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
             loading="lazy"
           />
@@ -5045,10 +6475,7 @@ const BlogSeries: React.FC = () => {
   }, [filteredPosts, latestPosts, usesCuratedLatest]);
 
   const showLatestSection = usesCuratedLatest && currentPage === 1;
-  const totalPages = Math.max(
-    1,
-    Math.ceil(gridPosts.length / POSTS_PER_PAGE),
-  );
+  const totalPages = Math.max(1, Math.ceil(gridPosts.length / POSTS_PER_PAGE));
   const pagedPosts = gridPosts.slice(
     (currentPage - 1) * POSTS_PER_PAGE,
     currentPage * POSTS_PER_PAGE,
@@ -5104,24 +6531,44 @@ const BlogSeries: React.FC = () => {
     }
   };
 
+  const selectedCanonicalPostId = selectedPostId
+    ? resolveBlogPostRouteId(selectedPostId)
+    : null;
+
+  useEffect(() => {
+    if (!selectedPostId || selectedPostId === selectedCanonicalPostId) {
+      return;
+    }
+
+    const hasCanonicalPost = BLOG_POSTS.some(
+      (post) => post.id === selectedCanonicalPostId,
+    );
+
+    if (!hasCanonicalPost) {
+      return;
+    }
+
+    window.history.replaceState({}, "", `/blog/${selectedCanonicalPostId}`);
+    setSelectedPostId(selectedCanonicalPostId);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }, [selectedCanonicalPostId, selectedPostId]);
+
   const selectedPost = useMemo(
-    () => BLOG_POSTS.find((p) => p.id === selectedPostId),
-    [selectedPostId],
+    () => BLOG_POSTS.find((p) => p.id === selectedCanonicalPostId),
+    [selectedCanonicalPostId],
   );
 
-  if (selectedPostId) {
-    if (!selectedPost) {
-      return (
-        <div className="min-h-screen bg-slate-950 text-white flex flex-col items-center justify-center p-6 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">Blog post not found</h1>
-          <p className="text-slate-400 mb-8 max-w-md">The blog article you are looking for does not exist or has been moved.</p>
-          <a href="/blog" className="px-6 py-3 bg-blue-600 hover:bg-blue-700 font-semibold rounded-lg transition-colors">
-            Back to Blog Index
-          </a>
-        </div>
-      );
-    }
+  if (selectedPost) {
     return <BlogPostDetail post={selectedPost} />;
+  }
+
+  if (selectedPostId) {
+    return (
+      <NotFoundPage
+        title="Blog Post Not Found"
+        message="This article URL is not available. Browse the blog index for current posts."
+      />
+    );
   }
 
   return (
@@ -5171,8 +6618,14 @@ const BlogSeries: React.FC = () => {
           <div className="flex flex-col lg:flex-row justify-between gap-12 lg:gap-20 lg:items-end">
             <div className="flex-1 max-w-[800px]">
               <p className="text-white font-semibold text-base mb-4">Blog</p>
-              <h1 className="text-4xl md:text-5xl lg:text-[64px] font-bold tracking-tight text-white leading-[1.1]">
-                The Journal: Ideas, Guides, Resources, Articles and Notes
+              <h1
+                aria-label="The Journal: Ideas, Guides, Resources, Articles and Notes"
+                className="text-4xl md:text-5xl lg:text-[64px] font-bold tracking-tight text-white leading-[1.1]"
+              >
+                <span className="block">The Journal: Ideas,</span>
+                <span className="block">Guides,</span>
+                <span className="block">Resources, Articles</span>
+                <span className="block">and Notes</span>
               </h1>
             </div>
 
@@ -5213,7 +6666,11 @@ const BlogSeries: React.FC = () => {
                     onSubmit={handleSubscribeSubmit}
                     className="bg-white p-1.5 rounded-xl flex items-center shadow-sm w-full focus-within:ring-4 ring-white/20 transition-all"
                   >
+                    <label htmlFor="blog-subscribe-email" className="sr-only">
+                      Email address
+                    </label>
                     <input
+                      id="blog-subscribe-email"
                       type="email"
                       value={subscriberEmail}
                       onChange={handleSubscriberEmailChange}
@@ -5341,6 +6798,7 @@ const BlogSeries: React.FC = () => {
 
                 <a
                   href={`/blog/${featured.id}`}
+                  aria-label={`Read article: ${featured.title}`}
                   onClick={(event) =>
                     handleBlogPostLinkClick(event, featured.id)
                   }
@@ -5349,7 +6807,8 @@ const BlogSeries: React.FC = () => {
                   <div className="blog-index-card__media aspect-[4/3] overflow-hidden border-b md:aspect-auto md:border-b-0 md:border-r">
                     <img
                       src={featured.image || BLOG_HERO_FALLBACK_IMAGE}
-                      alt={featured.title}
+                      alt=""
+                      role="presentation"
                       className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700"
                     />
                   </div>

@@ -9,6 +9,7 @@ import Footer from './components/Footer';
 import About from './components/About';
 import ScrollToTop from './components/ScrollToTop';
 import ErrorBoundary from './components/ErrorBoundary';
+import NotFoundPage from './components/NotFoundPage';
 import PersonaCTA from './components/PersonaCTA';
 import PersonaBanner from './components/PersonaBanner';
 import BottomCTA from './components/BottomCTA';
@@ -30,12 +31,10 @@ const Certifications = lazyLoadPage(() => import('./components/Certifications'))
 
 // Below-the-fold components - lazy load for better initial load
 const ExperienceTimeline = lazyLoad(() => import('./components/ExperienceTimeline'));
-const Capabilities = lazyLoad(() => import('./components/CapabilitiesPremium'));
-const ReliabilityStandards = lazyLoad(() => import('./components/ReliabilityStandards'));
 const AdministrativeRoiFramework = lazyLoad(() => import('./components/AdministrativeRoiFramework'));
 const Contact = lazyLoad(() => import('./components/Contact'));
+const HomeBlogPreview = lazyLoad(() => import('./components/HomeBlogPreview'));
 const Endorsements = lazyLoad(() => import('./components/Endorsements'));
-const SuccessStories = lazyLoad(() => import('./components/SuccessStories'));
 const Work = lazyLoad(() => import('./components/Work'));
 import { motion, AnimatePresence } from 'framer-motion';
 import { updatePageMetadata, generateWebSiteSchema, generateFAQSchema, generateBreadcrumbSchema, injectSchema, removeSchema } from './utils/seo-utils';
@@ -101,7 +100,6 @@ function getBreadcrumbsForRoute(currentPath: string): Array<{ name: string; url:
         '/governance': 'Governance',
         '/blog': 'Blog',
         '/for': 'For',
-        '/success-stories': 'Success Stories',
         // '/certifications': 'Certifications',
         '/privacy': 'Privacy Policy',
         '/cookies': 'Cookie Policy'
@@ -218,8 +216,14 @@ function App() {
         }
 
         if (currentPath.startsWith('/work/')) {
-            // Fallback for outdated links: Redirect to Work library
-            return <div className="pt-20"><ErrorBoundary><Work /></ErrorBoundary></div>;
+            return (
+                <ErrorBoundary>
+                    <NotFoundPage
+                        title="Case Study Not Found"
+                        message="This case study URL is not available. Browse the work library for current project pages."
+                    />
+                </ErrorBoundary>
+            );
         }
 
         if (currentPath.startsWith('/persona/')) {
@@ -243,8 +247,6 @@ function App() {
                         <ErrorBoundary><PersonaDirectory /></ErrorBoundary>
                     </div>
                 );
-            case '/success-stories':
-                return <div className="pt-20"><ErrorBoundary><SuccessStories /></ErrorBoundary><ErrorBoundary><Endorsements /></ErrorBoundary></div>;
             case '/about':
                 return (
                     <div className="pt-20">
@@ -265,20 +267,24 @@ function App() {
                 return <ErrorBoundary><AccessibilityStatement /></ErrorBoundary>;
             case '/conduct':
                 return <ErrorBoundary><CodeOfConduct /></ErrorBoundary>;
-            default:
+            case '/':
                 return (
                     <>
                         <ErrorBoundary><Hero /></ErrorBoundary>
                         <ErrorBoundary><About showStrategicPillars={false} /></ErrorBoundary>
                         <ErrorBoundary><ExperienceTimeline /></ErrorBoundary>
-                        <ErrorBoundary><SuccessStories /></ErrorBoundary>
                         <ErrorBoundary><Endorsements /></ErrorBoundary>
                         <ErrorBoundary><Work /></ErrorBoundary>
-                        <ErrorBoundary><Capabilities /></ErrorBoundary>
-                        <ErrorBoundary><ReliabilityStandards /></ErrorBoundary>
                         <ErrorBoundary><AdministrativeRoiFramework /></ErrorBoundary>
                         <ErrorBoundary><Contact /></ErrorBoundary>
+                        <ErrorBoundary><HomeBlogPreview /></ErrorBoundary>
                     </>
+                );
+            default:
+                return (
+                    <ErrorBoundary>
+                        <NotFoundPage />
+                    </ErrorBoundary>
                 );
         }
     };

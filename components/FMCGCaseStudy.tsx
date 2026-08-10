@@ -179,14 +179,14 @@ const FMCGCaseStudy: React.FC = () => {
 
         // Step 2: Observe all elements (observer fires immediately for those in viewport,
         // marking them with .in BEFORE we hide anything)
-        elements.forEach(el => observer.observe(el));
+        elements.forEach((el: any) => observer.observe(el));
 
         // Step 3: After observer's first synchronous sweep, hide only elements
         // that are NOT yet marked .in (these are the below-fold ones)
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 // Double rAF ensures the observer's initial callback has completed
-                elements.forEach(el => {
+                elements.forEach((el: any) => {
                     if (!el.classList.contains('in')) {
                         hide(el);
                     }

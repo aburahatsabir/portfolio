@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { TESTIMONIALS, PROJECTS } from '../constants';
 import { getWorkRoutePath } from '../content/work-route-titles';
 import OptimizedImage from './OptimizedImage';
+import NotFoundPage from './NotFoundPage';
 import SectionLabel from './shared/SectionLabel';
 
 const revealVariants = {
@@ -675,13 +676,10 @@ const PersonaSpecificContent: React.FC<PersonaSpecificContentProps> = ({ persona
 
     if (!persona) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-white">
-                <div className="text-center space-y-6">
-                    <p className="mono text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold">Error 404</p>
-                    <h1 className="text-3xl font-[900] text-slate-900 text-tighter">Persona Not Found</h1>
-                    <a href="/" className="inline-block text-blue-600 hover:text-blue-700 text-[11px] font-bold tracking-widest uppercase border-b border-blue-600/30 pb-1">Return to Index</a>
-                </div>
-            </div>
+            <NotFoundPage
+                title="Persona Not Found"
+                message="This audience page is not available. Browse the audience directory or return to the portfolio index."
+            />
         );
     }
 

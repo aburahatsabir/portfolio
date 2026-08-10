@@ -10,6 +10,7 @@ const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isDarkThemePage, setIsDarkThemePage] = useState(false);
+  const [isBlogIndexPage, setIsBlogIndexPage] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
@@ -18,6 +19,7 @@ const Navbar: React.FC = () => {
     // Check if we are on a page with a dark hero (only /blog listing, not individual posts)
     const checkTheme = () => {
       const path = window.location.pathname;
+      setIsBlogIndexPage(path === '/blog');
       setIsDarkThemePage(path === '/blog' || path === '/privacy' || path === '/cookies' || path === '/accessibility' || path === '/conduct' || path === '/governance');
     };
     checkTheme();
@@ -42,6 +44,8 @@ const Navbar: React.FC = () => {
   ];
 
   const resumeUrl = "./AbuRahatSabir-Resume.pdf";
+  const navbarLogoUrl = `${import.meta.env.BASE_URL}${!isScrolled && !isOpen && isBlogIndexPage ? 'White.png' : 'Blue.png'}`;
+  const navbarLogoHoverUrl = `${import.meta.env.BASE_URL}Black.png`;
 
   const handleResumeClick = (source: string) => {
     trackResumeDownload(source);
@@ -78,7 +82,25 @@ const Navbar: React.FC = () => {
       <nav className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-500 ${isScrolled || isOpen ? 'glass-nav border-b border-slate-100 py-4 shadow-sm' : 'bg-transparent py-8'}`}>
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           <a href="/" className="flex items-center gap-4 group" onClick={handleLinkClick}>
-            <div className={`w-11 h-11 rounded-[1.25rem] flex items-center justify-center font-black group-hover:rotate-[10deg] transition-all shadow-xl group-hover:bg-blue-600 group-hover:text-white ${!isScrolled && isDarkThemePage ? 'bg-white text-blue-600' : 'bg-slate-900 text-white'}`}>AR</div>
+            <div className="relative w-[42px] h-[42px] flex items-center justify-center overflow-visible bg-transparent">
+              <img
+                src={navbarLogoUrl}
+                alt="Abu Rahat Sabir logo"
+                width={42}
+                height={42}
+                className="h-full w-full object-contain transition-opacity duration-300 ease-out group-hover:opacity-0"
+                loading="eager"
+              />
+              <img
+                src={navbarLogoHoverUrl}
+                alt=""
+                aria-hidden="true"
+                width={42}
+                height={42}
+                className="absolute inset-0 h-full w-full object-contain opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100"
+                loading="eager"
+              />
+            </div>
             <div className="flex flex-col">
               <span className={`text-xl font-black tracking-tighter leading-none transition-colors ${!isScrolled && isDarkThemePage ? 'text-white' : 'text-slate-900'}`}>ABU RAHAT SABIR</span>
               <span className={`text-[9px] font-black uppercase tracking-widest mt-1.5 flex items-center gap-2 transition-colors ${!isScrolled && isDarkThemePage ? 'text-blue-200' : 'text-blue-600'}`}>

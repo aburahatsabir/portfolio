@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence, useScroll, useSpring, useTransform } from 'framer-motion';
+import { Activity } from 'lucide-react';
 import { EDUCATION } from '../constants';
-import { generateAvatar } from '../utils/avatar-generator';
-import BentoCard from './shared/BentoCard';
 import SectionLabel from './shared/SectionLabel';
-import OptimizedImage from './OptimizedImage';
+import './About.css';
 
 
 const FAQItem: React.FC<{ question: string; answer: string; isOpen: boolean; onClick: () => void; index: string }> = ({ question, answer, isOpen, onClick, index }) => {
@@ -73,8 +72,130 @@ const staggerContainer = {
   }
 };
 
+const profileLogoUrl = `${import.meta.env.BASE_URL}favicon-192.png`;
+const profileIconBase = `${import.meta.env.BASE_URL}images/profile/`;
+
+type CounterSegment =
+  | { type: 'up' | 'down'; digits: string[] }
+  | { type: 'static'; value: string };
+
+const makeCounterUpStack = (finalDigit: string) => [
+  '0',
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  finalDigit,
+  '8',
+  '9',
+];
+
+const makeCounterDownStack = (finalDigit: string) => [
+  '9',
+  '8',
+  '7',
+  finalDigit,
+  '5',
+  '4',
+  '3',
+  '2',
+  '1',
+  '0',
+];
+
+const useAboutCardScrollMotion = (targetRef: React.RefObject<HTMLDivElement | null>) => {
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+    offset: ['start end', 'end start'],
+  });
+
+  const smoothedProgress = useSpring(scrollYProgress, {
+    stiffness: 90,
+    damping: 34,
+    mass: 0.2,
+  });
+
+  const card1X = useTransform(smoothedProgress, [0, 0.2, 0.5, 1], ['50%', '50%', '0%', '0%']);
+  const card1Y = useTransform(smoothedProgress, [0, 0.2, 0.5, 1], ['50%', '50%', '0%', '0%']);
+  const card2X = useTransform(smoothedProgress, [0, 0.2, 0.5, 1], ['-50%', '-50%', '0%', '0%']);
+  const card2Y = useTransform(smoothedProgress, [0, 0.2, 0.5, 1], ['50%', '50%', '0%', '0%']);
+  const card3X = useTransform(smoothedProgress, [0, 0.2, 0.5, 1], ['50%', '50%', '0%', '0%']);
+  const card3Y = useTransform(smoothedProgress, [0, 0.2, 0.5, 1], ['-50%', '-50%', '0%', '0%']);
+  const card4X = useTransform(smoothedProgress, [0, 0.2, 0.5, 1], ['-50%', '-50%', '0%', '0%']);
+  const card4Y = useTransform(smoothedProgress, [0, 0.2, 0.5, 1], ['-50%', '-50%', '0%', '0%']);
+
+  return [
+    { x: card1X, y: card1Y },
+    { x: card2X, y: card2Y },
+    { x: card3X, y: card3Y },
+    { x: card4X, y: card4Y },
+  ];
+};
+
+const RollingCounter: React.FC<{ label: string; segments: CounterSegment[] }> = ({ label, segments }) => {
+  const counterRef = useRef<HTMLDivElement | null>(null);
+  const [hasAnimated, setHasAnimated] = useState(false);
+
+  useEffect(() => {
+    const node = counterRef.current;
+
+    if (!node || hasAnimated) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting || entry.intersectionRatio >= 0.15) {
+          setHasAnimated(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(node);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [hasAnimated]);
+
+  return (
+    <div ref={counterRef} className="profile-about__summary-counter-wrap summery-counter-wrap" aria-label={label}>
+      {segments.map((segment, index) => {
+        if (segment.type === 'up' || segment.type === 'down') {
+          const stackClass = segment.type === 'up' ? '_1' : '_2';
+
+          return (
+            <div
+              key={`${segment.type}-${index}`}
+              className={`profile-about__single-counter-wrap single-counter-wrap ${stackClass}${hasAnimated ? ' is-animated' : ''}`}
+            >
+              {segment.digits.map((item, digitIndex) => (
+                <h3 className="profile-about__number-digit number-digit" key={`${item}-${digitIndex}`} aria-hidden="true">
+                  {item}
+                </h3>
+              ))}
+            </div>
+          );
+        }
+
+        return (
+          <h3 className="profile-about__number-digit number-digit" key={`${segment.value}-${index}`} aria-hidden="true">
+            {segment.value}
+          </h3>
+        );
+      })}
+    </div>
+  );
+};
+
 const About: React.FC<AboutProps> = ({ showStrategicPillars = true }) => {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+  const aboutCardsGridRef = useRef<HTMLDivElement | null>(null);
+  const aboutCardScrollMotion = useAboutCardScrollMotion(aboutCardsGridRef);
 
   const faqs = [
     {
@@ -99,67 +220,179 @@ const About: React.FC<AboutProps> = ({ showStrategicPillars = true }) => {
     }
   ];
 
+  const profileStats = [
+    {
+      value: '7+',
+      counterSegments: [
+        { type: 'up' as const, digits: makeCounterUpStack('7') },
+        { type: 'static' as const, value: '+' },
+      ],
+      description: 'Experience you can count on',
+      iconSrc: `${profileIconBase}about-card-icon-1.svg`,
+      iconWidth: 48,
+      iconHeight: 48,
+    },
+    {
+      value: '80%',
+      counterSegments: [
+        { type: 'up' as const, digits: makeCounterUpStack('8') },
+        { type: 'down' as const, digits: makeCounterDownStack('0') },
+        { type: 'static' as const, value: '%' },
+      ],
+      description: 'Faster processing through internal systems',
+      iconSrc: `${profileIconBase}about-card-icon-2.svg`,
+      iconWidth: 48,
+      iconHeight: 48,
+    },
+    {
+      value: '0',
+      counterSegments: [
+        { type: 'up' as const, digits: makeCounterUpStack('0') },
+      ],
+      description: 'Zero-error reliability for critical workflows',
+      iconSrc: `${profileIconBase}about-card-icon-3.svg`,
+      iconWidth: 52,
+      iconHeight: 49,
+    },
+    {
+      value: '90',
+      counterSegments: [
+        { type: 'up' as const, digits: makeCounterUpStack('9') },
+        { type: 'down' as const, digits: makeCounterDownStack('0') },
+      ],
+      description: 'Day post-launch support after handoff',
+      iconSrc: `${profileIconBase}about-card-icon-4.svg`,
+      iconWidth: 53,
+      iconHeight: 48,
+    },
+  ];
+
   return (
-    <section id="about" className="py-16 md:py-32 bg-white relative">
-      <div className="max-w-7xl mx-auto px-6">
-        <div>
-          <div className="max-w-3xl mb-20">
+    <section id="about" className="bg-white relative">
+      <div className="profile-about">
+        <div className="profile-about__container">
+          <motion.div
+            variants={revealVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-10%" }}
+            className="profile-about__title-wrapper"
+          >
+            <div className="profile-about__subtitle-wrap">
+              <div className="profile-about__subtitle-single">
+                <img src={profileLogoUrl} alt="" width={14} height={14} className="profile-about__subtitle-icon" aria-hidden="true" />
+                <div className="profile-about__subtitle">About Me</div>
+              </div>
+            </div>
+            <h2 className="profile-about__title">Who I Am. Learn About Me</h2>
+            <p className="profile-about__description">
+              Operations architect specializing in <span>institutional stability</span> and bespoke automation that eliminates operational friction.
+            </p>
+          </motion.div>
+
+          <div className="profile-about__content">
             <motion.div
               variants={revealVariants}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-10%" }}
+              className="profile-about__image-wrapper"
             >
-              <div className="flex items-center gap-4 mb-8">
-                <SectionLabel>Profile</SectionLabel>
-                <div className="h-px bg-slate-100 flex-1" />
+              <motion.img
+                src="./images/hero/Abu Rahat Hero 02.webp"
+                alt="Abu Rahat Sabir"
+                width={584}
+                height={516}
+                loading="lazy"
+                initial={{ scale: 1.04 }}
+                whileInView={{ scale: 1 }}
+                viewport={{ once: true, margin: "-10%" }}
+                transition={{ duration: 1.05, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className="profile-about__image"
+              />
+              <div className="profile-about__image-overlay" aria-hidden="true">
+                <motion.div
+                  initial={{ y: '0%' }}
+                  whileInView={{ y: '-102%' }}
+                  viewport={{ once: true, margin: "-10%" }}
+                  transition={{ duration: 0.85, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                  className="profile-about__image-overlay-left"
+                />
+                <motion.div
+                  initial={{ y: '0%' }}
+                  whileInView={{ y: '102%' }}
+                  viewport={{ once: true, margin: "-10%" }}
+                  transition={{ duration: 0.85, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                  className="profile-about__image-overlay-right"
+                />
               </div>
             </motion.div>
-          </div>
 
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-10%" }}
-            className="grid lg:grid-cols-2 gap-16 items-end"
-          >
-            {/* Left: Name + Descriptor */}
-            <motion.div variants={revealVariants} className="space-y-10">
-              <h2 className="text-5xl md:text-8xl font-[900] tracking-tighter leading-[0.92] text-slate-900">
-                Abu Rahat <br />
-                <span className="text-slate-400">Sabir.</span>
-              </h2>
-
-              <p className="text-xl md:text-2xl text-slate-600 font-medium leading-relaxed max-w-xl">
-                Operations architect specializing in <span className="text-slate-900 font-bold">institutional stability</span> and bespoke automation that eliminates operational friction.
-              </p>
-            </motion.div>
-
-            {/* Right: Structured Metadata (Profile 02 Telemetry Style) */}
             <motion.div
-              variants={revealVariants}
-              className="flex flex-wrap gap-x-14 gap-y-10 lg:justify-end pb-4 max-w-xs ml-auto"
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-10%" }}
+              className="profile-about__typography"
             >
-              <div className="space-y-2 group/meta">
-                <p className="text-[9px] font-black uppercase tracking-[0.5em] text-slate-400 group-hover/meta:text-blue-600 transition-colors">Location</p>
-                <p className="text-base font-black text-slate-900 tracking-tight">Dhaka, BD</p>
-              </div>
-              <div className="space-y-2 group/meta">
-                <p className="text-[9px] font-black uppercase tracking-[0.5em] text-slate-400 group-hover/meta:text-blue-600 transition-colors">Tenure</p>
-                <p className="text-base font-black text-slate-900 tracking-tight">7+ Years</p>
-              </div>
-              <div className="space-y-2 group/meta">
-                <p className="text-[9px] font-black uppercase tracking-[0.5em] text-slate-400 group-hover/meta:text-blue-600 transition-colors">Status</p>
-                <div className="flex items-center gap-2">
-                  <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]"></span>
-                  <p className="text-base font-black text-slate-900 tracking-tight">Active</p>
+              <div className="profile-about__top-content">
+                <div ref={aboutCardsGridRef} className="profile-about__top-grid about-us-top-grid">
+                  {profileStats.map((item, index) => {
+                    return (
+                      <motion.div
+                        key={item.description}
+                        style={aboutCardScrollMotion[index]}
+                        className={`profile-about__card about-us-card _0${index + 1}`}
+                      >
+                        <div className="profile-about__card-icon-wrap">
+                          <img
+                            src={item.iconSrc}
+                            alt=""
+                            width={item.iconWidth}
+                            height={item.iconHeight}
+                            loading="lazy"
+                            className="profile-about__card-icon"
+                          />
+                        </div>
+                        <div className="profile-about__card-typography">
+                          <div className="profile-about__card-counter-wrap">
+                            <RollingCounter label={item.value} segments={item.counterSegments} />
+                          </div>
+                          <p className="profile-about__card-description">{item.description}</p>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
                 </div>
               </div>
-            </motion.div>
-          </motion.div>
-        </div>
 
+              <motion.div variants={revealVariants} className="profile-about__bottom-content">
+                <a href="/about" className="profile-about__primary-button">
+                  <span className="profile-about__primary-button-inner">
+                    <span className="profile-about__primary-button-text-wrap" aria-hidden="true">
+                      <span className="profile-about__primary-button-text">More About Me</span>
+                      <span className="profile-about__primary-button-text profile-about__primary-button-text--absolute">More About Me</span>
+                    </span>
+                    <span className="sr-only">More About Me</span>
+                  </span>
+                </a>
+
+                <a href="/contact" className="profile-about__contact-link">
+                  <span className="profile-about__contact-icon-wrap" aria-hidden="true">
+                    <Activity className="profile-about__contact-icon" strokeWidth={1.9} />
+                  </span>
+                  <span className="profile-about__contact-title-number">
+                    <span className="profile-about__contact-title">Status</span>
+                    <span className="profile-about__contact-number">Active for Systems Work</span>
+                  </span>
+                </a>
+              </motion.div>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+
+      <div className="profile-about__container">
         {/* Integrated Architectural Grid: Sections 01 & 02 */}
         <div className="grid grid-cols-1 lg:grid-cols-12 border-t border-slate-100 mt-20 relative group/grid">
           {/* Section Vertical Axis */}
@@ -267,8 +500,9 @@ const About: React.FC<AboutProps> = ({ showStrategicPillars = true }) => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-10%" }}
+          className="profile-about__briefing-section"
         >
-          <BentoCard className="md:col-span-12 overflow-visible" title="" subtitle="" badge="">
+          <div>
             <div className="grid md:grid-cols-12 gap-12 lg:gap-24 items-start relative">
               {/* Left Column: Briefing Meta */}
               <div className="md:col-span-4 space-y-10 lg:sticky lg:top-10">
@@ -323,7 +557,7 @@ const About: React.FC<AboutProps> = ({ showStrategicPillars = true }) => {
                 </div>
               </div>
             </div>
-          </BentoCard>
+          </div>
         </motion.div>
       </div>
 

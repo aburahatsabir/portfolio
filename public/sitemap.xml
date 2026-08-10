@@ -1,123 +1,135 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://aburahatsabir.github.io/portfolio/</loc>
-    <lastmod>2026-02-05</lastmod>
+    <loc>https://aburahatsabir.vercel.app/</loc>
+    <lastmod>2026-08-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://aburahatsabir.github.io/portfolio/about</loc>
-    <lastmod>2026-02-05</lastmod>
+    <loc>https://aburahatsabir.vercel.app/about</loc>
+    <lastmod>2026-08-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://aburahatsabir.github.io/portfolio/work</loc>
-    <lastmod>2026-02-05</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://aburahatsabir.vercel.app/contact</loc>
+    <lastmod>2026-08-10</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://aburahatsabir.github.io/portfolio/solutions</loc>
-    <lastmod>2026-02-05</lastmod>
+    <loc>https://aburahatsabir.vercel.app/solutions</loc>
+    <lastmod>2026-08-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://aburahatsabir.github.io/portfolio/governance</loc>
-    <lastmod>2026-02-05</lastmod>
+    <loc>https://aburahatsabir.vercel.app/governance</loc>
+    <lastmod>2026-08-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://aburahatsabir.github.io/portfolio/blog</loc>
-    <lastmod>2026-02-05</lastmod>
+    <loc>https://aburahatsabir.vercel.app/blog</loc>
+    <lastmod>2026-08-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://aburahatsabir.github.io/portfolio/for</loc>
-    <lastmod>2026-02-05</lastmod>
+    <loc>https://aburahatsabir.vercel.app/for</loc>
+    <lastmod>2026-08-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://aburahatsabir.github.io/portfolio/contact</loc>
-    <lastmod>2026-02-05</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://aburahatsabir.vercel.app/work</loc>
+    <lastmod>2026-08-10</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://aburahatsabir.github.io/portfolio/post-mortems</loc>
-    <lastmod>2026-02-05</lastmod>
+    <loc>https://aburahatsabir.vercel.app/privacy</loc>
+    <lastmod>2026-08-10</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.vercel.app/cookies</loc>
+    <lastmod>2026-08-10</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.vercel.app/accessibility</loc>
+    <lastmod>2026-08-10</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.vercel.app/conduct</loc>
+    <lastmod>2026-08-10</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.vercel.app/certifications</loc>
+    <lastmod>2026-08-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://aburahatsabir.github.io/portfolio/success-stories</loc>
-    <lastmod>2026-02-05</lastmod>
+    <loc>https://aburahatsabir.vercel.app/persona/executive-assistants</loc>
+    <lastmod>2026-08-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.vercel.app/persona/operations-leaders</loc>
+    <lastmod>2026-08-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.vercel.app/persona/founders</loc>
+    <lastmod>2026-08-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.vercel.app/persona/hiring-managers</loc>
+    <lastmod>2026-08-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.vercel.app/work/fmcg-erp</loc>
+    <lastmod>2026-08-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.vercel.app/work/mocs</loc>
+    <lastmod>2026-08-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.vercel.app/work/hr-documentation-control-system</loc>
+    <lastmod>2026-08-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aburahatsabir.vercel.app/blog/resume-writing-guide-getting-shortlisted</loc>
+    <lastmod>2026-04-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://aburahatsabir.github.io/portfolio/privacy</loc>
-    <lastmod>2026-02-05</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://aburahatsabir.github.io/portfolio/cookies</loc>
-    <lastmod>2026-02-05</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://aburahatsabir.github.io/portfolio/persona/executive-assistants</loc>
-    <lastmod>2026-02-05</lastmod>
+    <loc>https://aburahatsabir.vercel.app/blog/how-to-learn-computer-networking</loc>
+    <lastmod>2026-08-02</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://aburahatsabir.github.io/portfolio/persona/operations-leaders</loc>
-    <lastmod>2026-02-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://aburahatsabir.github.io/portfolio/persona/founders</loc>
-    <lastmod>2026-02-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://aburahatsabir.github.io/portfolio/persona/hiring-managers</loc>
-    <lastmod>2026-02-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://aburahatsabir.github.io/portfolio/work/fmcg-distribution-erp</loc>
-    <lastmod>2026-02-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://aburahatsabir.github.io/portfolio/work/medical-ops-control</loc>
-    <lastmod>2026-02-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://aburahatsabir.github.io/portfolio/work/payroll-engine</loc>
-    <lastmod>2026-02-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://aburahatsabir.github.io/portfolio/work/trade-finance-ledger</loc>
-    <lastmod>2026-02-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
 </urlset>

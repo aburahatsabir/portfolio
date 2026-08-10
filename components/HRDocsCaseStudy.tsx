@@ -1,2041 +1,2344 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { TESTIMONIALS } from '../content';
+import React, { useState, useEffect, useRef } from "react";
+import { TESTIMONIALS } from "../content";
 
-type FlutedGlassWindow = Window & typeof globalThis & {
+type FlutedGlassWindow = Window &
+  typeof globalThis & {
     initializeOptimizedShaders?: () => void;
     __hrDocsGlassRuntime?: Promise<void>;
     __hrDocsGlassInitScheduled?: Promise<void> | null;
-};
+  };
 
 function loadScriptOnce(id: string, src: string) {
-    return new Promise<void>((resolve, reject) => {
-        const existingScript = document.getElementById(id) as HTMLScriptElement | null;
+  return new Promise<void>((resolve, reject) => {
+    const existingScript = document.getElementById(
+      id,
+    ) as HTMLScriptElement | null;
 
-        if (existingScript) {
-            if (existingScript.dataset.loaded === 'true') {
-                resolve();
-                return;
-            }
+    if (existingScript) {
+      if (existingScript.dataset.loaded === "true") {
+        resolve();
+        return;
+      }
 
-            existingScript.addEventListener('load', () => resolve(), { once: true });
-            existingScript.addEventListener('error', () => reject(new Error(`Failed to load ${src}`)), { once: true });
-            return;
-        }
+      existingScript.addEventListener("load", () => resolve(), { once: true });
+      existingScript.addEventListener(
+        "error",
+        () => reject(new Error(`Failed to load ${src}`)),
+        { once: true },
+      );
+      return;
+    }
 
-        const script = document.createElement('script');
-        script.id = id;
-        script.src = src;
-        script.async = true;
+    const script = document.createElement("script");
+    script.id = id;
+    script.src = src;
+    script.async = true;
 
-        script.addEventListener('load', () => {
-            script.dataset.loaded = 'true';
-            resolve();
-        }, { once: true });
+    script.addEventListener(
+      "load",
+      () => {
+        script.dataset.loaded = "true";
+        resolve();
+      },
+      { once: true },
+    );
 
-        script.addEventListener('error', () => reject(new Error(`Failed to load ${src}`)), { once: true });
-        document.head.appendChild(script);
-    });
+    script.addEventListener(
+      "error",
+      () => reject(new Error(`Failed to load ${src}`)),
+      { once: true },
+    );
+    document.head.appendChild(script);
+  });
 }
 
 function ensureHrDocsGlassRuntime() {
-    const runtimeWindow = window as FlutedGlassWindow;
+  const runtimeWindow = window as FlutedGlassWindow;
 
-    if (!runtimeWindow.__hrDocsGlassRuntime) {
-        runtimeWindow.__hrDocsGlassRuntime = loadScriptOnce(
-            'hr-docs-glass-three',
-            '/glass-hero-runtime/three.r128.min.js'
-        )
-            .then(() => loadScriptOnce(
-                'hr-docs-fluted-glass',
-                '/glass-hero-runtime/fluted-glass-op.min.js'
-            ));
+  if (!runtimeWindow.__hrDocsGlassRuntime) {
+    runtimeWindow.__hrDocsGlassRuntime = loadScriptOnce(
+      "hr-docs-glass-three",
+      "/glass-hero-runtime/three.r128.min.js",
+    ).then(() =>
+      loadScriptOnce(
+        "hr-docs-fluted-glass",
+        "/glass-hero-runtime/fluted-glass-op.min.js",
+      ),
+    );
+  }
+
+  return runtimeWindow.__hrDocsGlassRuntime.then(() => {
+    if (!runtimeWindow.__hrDocsGlassInitScheduled) {
+      runtimeWindow.__hrDocsGlassInitScheduled = new Promise<void>(
+        (resolve) => {
+          window.requestAnimationFrame(() => {
+            try {
+              if (
+                typeof runtimeWindow.initializeOptimizedShaders === "function"
+              ) {
+                runtimeWindow.initializeOptimizedShaders();
+              }
+            } finally {
+              runtimeWindow.__hrDocsGlassInitScheduled = null;
+              resolve();
+            }
+          });
+        },
+      );
     }
 
-    return runtimeWindow.__hrDocsGlassRuntime.then(() => {
-        if (!runtimeWindow.__hrDocsGlassInitScheduled) {
-            runtimeWindow.__hrDocsGlassInitScheduled = new Promise<void>((resolve) => {
-                window.requestAnimationFrame(() => {
-                    try {
-                        if (typeof runtimeWindow.initializeOptimizedShaders === 'function') {
-                            runtimeWindow.initializeOptimizedShaders();
-                        }
-                    } finally {
-                        runtimeWindow.__hrDocsGlassInitScheduled = null;
-                        resolve();
-                    }
-                });
-            });
-        }
-
-        return runtimeWindow.__hrDocsGlassInitScheduled;
-    });
+    return runtimeWindow.__hrDocsGlassInitScheduled;
+  });
 }
 
 const NativeHrDocsHero: React.FC = () => {
-    const glassRef = useRef<HTMLDivElement>(null);
-    const observerRef = useRef<MutationObserver | null>(null);
-    const [mounted, setMounted] = useState(false);
-    const [glassReady, setGlassReady] = useState(false);
+  const glassRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<MutationObserver | null>(null);
+  const [mounted, setMounted] = useState(false);
+  const [glassReady, setGlassReady] = useState(false);
 
-    useEffect(() => {
-        const frame = window.requestAnimationFrame(() => setMounted(true));
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => setMounted(true));
 
-        let cancelled = false;
+    let cancelled = false;
 
-        const watchForCanvas = () => {
-            const host = glassRef.current;
-            if (!host) return;
+    const watchForCanvas = () => {
+      const host = glassRef.current;
+      if (!host) return;
 
-            if (host.querySelector('canvas')) {
-                setGlassReady(true);
-                return;
-            }
+      if (host.querySelector("canvas")) {
+        setGlassReady(true);
+        return;
+      }
 
-            observerRef.current?.disconnect();
-            observerRef.current = new MutationObserver(() => {
-                if (host.querySelector('canvas')) {
-                    setGlassReady(true);
-                    observerRef.current?.disconnect();
-                    observerRef.current = null;
-                }
-            });
+      observerRef.current?.disconnect();
+      observerRef.current = new MutationObserver(() => {
+        if (host.querySelector("canvas")) {
+          setGlassReady(true);
+          observerRef.current?.disconnect();
+          observerRef.current = null;
+        }
+      });
 
-            observerRef.current.observe(host, { childList: true, subtree: true });
-        };
+      observerRef.current.observe(host, { childList: true, subtree: true });
+    };
 
-        ensureHrDocsGlassRuntime()
-            .then(() => {
-                if (cancelled) return;
+    ensureHrDocsGlassRuntime()
+      .then(() => {
+        if (cancelled) return;
 
-                window.setTimeout(() => {
-                    if (cancelled) return;
-                    watchForCanvas();
-                }, 80);
-            })
-            .catch(() => {
-                if (!cancelled) {
-                    setGlassReady(false);
-                }
-            });
+        window.setTimeout(() => {
+          if (cancelled) return;
+          watchForCanvas();
+        }, 80);
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setGlassReady(false);
+        }
+      });
 
-        return () => {
-            cancelled = true;
-            window.cancelAnimationFrame(frame);
-            observerRef.current?.disconnect();
-            observerRef.current = null;
-        };
-    }, []);
+    return () => {
+      cancelled = true;
+      window.cancelAnimationFrame(frame);
+      observerRef.current?.disconnect();
+      observerRef.current = null;
+    };
+  }, []);
 
-    return (
-        <header id="hero" aria-labelledby="hrdocs-hero-title" className={`hrdocs-hero-section ${mounted ? 'is-mounted' : ''}`}>
-            <div className="max-w-7xl mx-auto px-6 w-full hrdocs-hero__container">
-                <div className="hrdocs-hero__row">
-                    <div className="hrdocs-hero__copy-col">
-                        <div className="hrdocs-hero__copy">
-                            <div className="hrdocs-hero__heading-wrap">
-                                <h1 id="hrdocs-hero-title" className="hrdocs-hero__heading">HR Documentation & Control System</h1>
-                            </div>
+  return (
+    <header
+      id="hero"
+      aria-labelledby="hrdocs-hero-title"
+      className={`hrdocs-hero-section ${mounted ? "is-mounted" : ""}`}
+    >
+      <div className="max-w-7xl mx-auto px-6 w-full hrdocs-hero__container">
+        <div className="hrdocs-hero__row">
+          <div className="hrdocs-hero__copy-col">
+            <div className="hrdocs-hero__copy">
+              <div className="hrdocs-hero__heading-wrap">
+                <h1 id="hrdocs-hero-title" className="hrdocs-hero__heading">
+                  HR Documentation & Control System
+                </h1>
+              </div>
 
-                            <div className="hrdocs-hero__body-wrap">
-                                <p className="hrdocs-hero__body">
-                                    A compliance-focused HR platform unifying records, payroll, and documentation.
-                                </p>
-                            </div>
+              <div className="hrdocs-hero__body-wrap">
+                <p className="hrdocs-hero__body">
+                  A compliance-focused HR platform unifying records, payroll,
+                  and documentation.
+                </p>
+              </div>
 
-                            <div className="hrdocs-hero__button-wrap">
-                                <a className="hrdocs-hero__button" href="/contact">
-                                    <span className="hrdocs-hero__button-text">Get in touch</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="hrdocs-hero__spacer" aria-hidden="true" />
-
-                <div className="hrdocs-hero__media-block">
-                    <div className="hrdocs-hero__card">
-                        <div className={`hrdocs-hero__glass-layer ${glassReady ? 'is-ready' : ''}`}>
-                            <div className="hrdocs-hero__glass-fallback" aria-hidden="true" />
-                            <div
-                                ref={glassRef}
-                                data-distortion="0.25"
-                                data-shape-type-one="0"
-                                data-size-two="1"
-                                data-shininess="800"
-                                data-use-blob-two="true"
-                                data-gloss="0.3"
-                                data-shape-type-two="0"
-                                data-width-variation="1.8"
-                                data-use-three-color="true"
-                                data-sensitivity-three="0.15"
-                                data-color-three="#002A6A"
-                                data-sensitivity-one="0.15"
-                                data-size-three="1.3"
-                                data-fluted-glass="true"
-                                data-noise="0.40"
-                                data-hover="true"
-                                data-color-one="#146ef5"
-                                data-columns="6"
-                                data-shape-type-three="0"
-                                data-sensitivity-two="0.15"
-                                data-size-one="0.85"
-                                data-bg-color=""
-                                data-hover-intensity="2.0"
-                                data-color-two="#ffffff"
-                                data-use-blob-one="true"
-                                data-background-image=""
-                                className="hrdocs-hero__glass-canvas fluted-glass-canvas"
-                            />
-                        </div>
-
-                        <div className="hrdocs-hero__image-frame">
-                            <img
-                                src="/images/hr-docs/hero-canvas-preview.avif"
-                                alt="HR document control screen showing version history, expiry tracking, and document status controls."
-                                loading="eager"
-                                fetchPriority="high"
-                                className="hrdocs-hero__image"
-                            />
-                        </div>
-                    </div>
-                </div>
+              <div className="hrdocs-hero__button-wrap">
+                <a className="hrdocs-hero__button" href="/contact">
+                  <span className="hrdocs-hero__button-text">Get in touch</span>
+                </a>
+              </div>
             </div>
-        </header>
-    );
+          </div>
+        </div>
+
+        <div className="hrdocs-hero__spacer" aria-hidden="true" />
+
+        <div className="hrdocs-hero__media-block">
+          <div className="hrdocs-hero__card">
+            <div
+              className={`hrdocs-hero__glass-layer ${glassReady ? "is-ready" : ""}`}
+            >
+              <div className="hrdocs-hero__glass-fallback" aria-hidden="true" />
+              <div
+                ref={glassRef}
+                data-distortion="0.25"
+                data-shape-type-one="0"
+                data-size-two="1"
+                data-shininess="800"
+                data-use-blob-two="true"
+                data-gloss="0.3"
+                data-shape-type-two="0"
+                data-width-variation="1.8"
+                data-use-three-color="true"
+                data-sensitivity-three="0.15"
+                data-color-three="#002A6A"
+                data-sensitivity-one="0.15"
+                data-size-three="1.3"
+                data-fluted-glass="true"
+                data-noise="0.40"
+                data-hover="true"
+                data-color-one="#146ef5"
+                data-columns="6"
+                data-shape-type-three="0"
+                data-sensitivity-two="0.15"
+                data-size-one="0.85"
+                data-bg-color=""
+                data-hover-intensity="2.0"
+                data-color-two="#ffffff"
+                data-use-blob-one="true"
+                data-background-image=""
+                className="hrdocs-hero__glass-canvas fluted-glass-canvas"
+              />
+            </div>
+
+            <div className="hrdocs-hero__image-frame">
+              <img
+                src="/images/hr-docs/hero-canvas-preview.avif"
+                alt="HR document control screen showing version history, expiry tracking, and document status controls."
+                loading="eager"
+                fetchPriority="high"
+                className="hrdocs-hero__image"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
 };
 
 type HrDocsCmsTabCta = {
-    label: string;
-    href: string;
+  label: string;
+  href: string;
 };
 
 type HrDocsCmsTab = {
-    title: string;
-    body: string;
-    imageSrc: string;
-    imageAlt: string;
-    ctas: HrDocsCmsTabCta[];
+  title: string;
+  body: string;
+  imageSrc: string;
+  imageAlt: string;
+  ctas: HrDocsCmsTabCta[];
 };
 
 type HrDocsWhyFeature = {
-    anchorId: string;
-    title: string;
-    body: string[];
-    imageSrc: string;
-    imageAlt: string;
-    imageObjectPosition: string;
-    ctas?: HrDocsCmsTabCta[];
+  anchorId: string;
+  title: string;
+  body: string[];
+  imageSrc: string;
+  imageAlt: string;
+  imageObjectPosition: string;
+  ctas?: HrDocsCmsTabCta[];
 };
 
 type HrDocsTestimonial = {
-    name: string;
-    title: string;
-    company: string;
-    quote: string;
-    imageSrc: string;
-    imageAlt: string;
+  name: string;
+  title: string;
+  company: string;
+  quote: string;
+  imageSrc: string;
+  imageAlt: string;
 };
 
-type HrDocsComparisonIcon = 'no' | 'minus' | 'check';
+type HrDocsComparisonIcon = "no" | "minus" | "check";
 
 type HrDocsComparisonCell = {
-    icon: HrDocsComparisonIcon;
-    detail?: React.ReactNode;
+  icon: HrDocsComparisonIcon;
+  detail?: React.ReactNode;
 };
 
 type HrDocsComparisonRow = {
-    feature: string;
-    legacyProcess: HrDocsComparisonCell;
-    standardApp: HrDocsComparisonCell;
-    erpLite: HrDocsComparisonCell;
+  feature: string;
+  legacyProcess: HrDocsComparisonCell;
+  standardApp: HrDocsComparisonCell;
+  erpLite: HrDocsComparisonCell;
 };
 
 type HrDocsG2Tab = {
-    title: string;
-    imageSrc: string;
-    imageAlt: string;
+  title: string;
+  imageSrc: string;
+  imageAlt: string;
 };
 
 type HrDocsFaqItem = {
-    question: string;
-    answer: React.ReactNode[];
+  question: string;
+  answer: React.ReactNode[];
 };
 
 type HrDocsDemoSupportItem = React.ReactNode;
 
 const HR_DOCS_CMS_TABS_AUTOPLAY_MS = 6000;
-const HR_DOCS_CMS_TABS_DESKTOP_QUERY = '(min-width: 768px)';
+const HR_DOCS_CMS_TABS_DESKTOP_QUERY = "(min-width: 768px)";
 const hrDocsCmsTabs: HrDocsCmsTab[] = [
-    {
-        title: 'Why this system',
-        body: 'This system is not a broad enterprise suite. It is a focused HR control system built for SMEs - prioritizing records, workflows, and traceable approvals without unnecessary complexity.',
-        imageSrc: '/images/hr-docs/cms-tab-why-lite.avif',
-        imageAlt: 'HR documentation system overview screen showing employee records, approvals, and compliance workflows in one focused HR system.',
-        ctas: [],
-    },
-    {
-        title: 'Connected Modules',
-        body: 'Modules work as one system. Records drive workflows, workflows drive payroll, and every action feeds auditability - creating a connected operating model across HR processes.',
-        imageSrc: '/images/hr-docs/cms-tab-connected-modules.avif',
-        imageAlt: 'HR documentation system modules view showing how employee records, workflows, payroll, and audit history operate as one system.',
-        ctas: [],
-    },
-    {
-        title: 'Controls First',
-        body: 'Compliance is built into the architecture. Retention, document expiry, payroll locking, and audit trails are enforced by design - ensuring consistent control without manual oversight.',
-        imageSrc: '/images/hr-docs/cms-tab-controls-first.avif',
-        imageAlt: 'HR documentation control screen showing document expiry checks, payroll locking, and audit enforcement across HR operations.',
-        ctas: [],
-    },
-    {
-        title: 'API-Level Access',
-        body: 'Access is enforced at the API layer, not just the interface. Every action follows strict permissions, ensuring unauthorized operations are structurally impossible across the system.',
-        imageSrc: '/images/hr-docs/cms-tab-api-level-access.avif',
-        imageAlt: 'HR documentation system access control screen showing API-level permissions and restricted actions by user role.',
-        ctas: [],
-    },
+  {
+    title: "Why this system",
+    body: "This system is not a broad enterprise suite. It is a focused HR control system built for SMEs - prioritizing records, workflows, and traceable approvals without unnecessary complexity.",
+    imageSrc: "/images/hr-docs/cms-tab-why-lite.avif",
+    imageAlt:
+      "HR documentation system overview screen showing employee records, approvals, and compliance workflows in one focused HR system.",
+    ctas: [],
+  },
+  {
+    title: "Connected Modules",
+    body: "Modules work as one system. Records drive workflows, workflows drive payroll, and every action feeds auditability - creating a connected operating model across HR processes.",
+    imageSrc: "/images/hr-docs/cms-tab-connected-modules.avif",
+    imageAlt:
+      "HR documentation system modules view showing how employee records, workflows, payroll, and audit history operate as one system.",
+    ctas: [],
+  },
+  {
+    title: "Controls First",
+    body: "Compliance is built into the architecture. Retention, document expiry, payroll locking, and audit trails are enforced by design - ensuring consistent control without manual oversight.",
+    imageSrc: "/images/hr-docs/cms-tab-controls-first.avif",
+    imageAlt:
+      "HR documentation control screen showing document expiry checks, payroll locking, and audit enforcement across HR operations.",
+    ctas: [],
+  },
+  {
+    title: "API-Level Access",
+    body: "Access is enforced at the API layer, not just the interface. Every action follows strict permissions, ensuring unauthorized operations are structurally impossible across the system.",
+    imageSrc: "/images/hr-docs/cms-tab-api-level-access.avif",
+    imageAlt:
+      "HR documentation system access control screen showing API-level permissions and restricted actions by user role.",
+    ctas: [],
+  },
 ];
 
 const hrDocsMojibakeFixes: Array<[string, string]> = [
-    ['\u00e2\u20ac\u201d', '\u2014'],
-    ['\u00e2\u20ac\u2122', '\u2019'],
-    ['\u00c2\u00a0', '\u00a0'],
+  ["\u00e2\u20ac\u201d", "\u2014"],
+  ["\u00e2\u20ac\u2122", "\u2019"],
+  ["\u00c2\u00a0", "\u00a0"],
 ];
 
 function repairHrDocsCopy(value: string) {
-    return hrDocsMojibakeFixes.reduce(
-        (fixedValue, [from, to]) => fixedValue.split(from).join(to),
-        value
-    );
+  return hrDocsMojibakeFixes.reduce(
+    (fixedValue, [from, to]) => fixedValue.split(from).join(to),
+    value,
+  );
 }
 
 const hrDocsWhyFeatures: HrDocsWhyFeature[] = [
-    {
-        anchorId: 'sticky-scroll-1',
-        title: 'Payroll cannot be run with pending approvals',
-        body: [
-            'In legacy setups, payroll is often run while leave requests sit unapproved in an inbox, requiring retroactive corrections next month.',
-            'The system structurally blocks the payroll lock action if there are any unhandled attendance anomalies, missing document updates, or pending leave requests in the current cycle. The system forces operational hygiene.',
-        ],
-        imageSrc: '/images/hr-docs/g2-approval-workflows.webp',
-        imageAlt: 'HR approval workflow screen showing pending requests, status indicators, and approval controls.',
-        imageObjectPosition: '0% 0%',
-    },
-    {
-        anchorId: 'sticky-scroll-2',
-        title: 'Expired documents freeze associated actions',
-        body: [
-            'If an employee\'s mandatory visa or certification expires, they cannot be scheduled or approved for specific operational tasks.',
-            'The document control module isn\'t just a storage drive; it is an active state machine that feeds real-time compliance status to the attendance and payroll engines.',
-        ],
-        imageSrc: '/images/hr-docs/g2-document-control.webp',
-        imageAlt: 'HR document control screen showing version status, expiry tracking, and compliance-related record states.',
-        imageObjectPosition: '0% 0%',
-    },
-    {
-        anchorId: 'sticky-scroll-3',
-        title: 'Immutable event logs for every state change',
-        body: [
-            'Accountability requires traceability. When a leave request is approved, or an attendance record is overridden, the system creates a permanent cryptographic-style log.',
-            'It records the exact timestamp, the user ID of the actor, the original state, and the new state. If a manager questions an anomaly three months later, the truth is indisputable.',
-        ],
-        imageSrc: '/images/hr-docs/g2-audit-trail.webp',
-        imageAlt: 'HR audit trail screen showing timestamps, user actions, and record-level state changes.',
-        imageObjectPosition: '0% 100%',
-    },
-    {
-        anchorId: 'sticky-scroll-4',
-        title: 'Role-based access enforced at the API layer',
-        body: [
-            'Security by hiding UI elements is insufficient. If a user inspects the network traffic, they should not be able to forge an approval request.',
-            'The system enforces all state-machine rules and role validations at the core server level, ensuring that even if an interface is bypassed, the system remains mathematically secure.',
-        ],
-        imageSrc: '/images/hr-docs/cms-tab-api-level-access.avif',
-        imageAlt: 'HR documentation system access diagram showing API-level permission enforcement for sensitive HR actions.',
-        imageObjectPosition: '0% 0%',
-    },
+  {
+    anchorId: "sticky-scroll-1",
+    title: "Payroll cannot be run with pending approvals",
+    body: [
+      "In legacy setups, payroll is often run while leave requests sit unapproved in an inbox, requiring retroactive corrections next month.",
+      "The system structurally blocks the payroll lock action if there are any unhandled attendance anomalies, missing document updates, or pending leave requests in the current cycle. The system forces operational hygiene.",
+    ],
+    imageSrc: "/images/hr-docs/g2-approval-workflows.webp",
+    imageAlt:
+      "HR approval workflow screen showing pending requests, status indicators, and approval controls.",
+    imageObjectPosition: "0% 0%",
+  },
+  {
+    anchorId: "sticky-scroll-2",
+    title: "Expired documents freeze associated actions",
+    body: [
+      "If an employee's mandatory visa or certification expires, they cannot be scheduled or approved for specific operational tasks.",
+      "The document control module isn't just a storage drive; it is an active state machine that feeds real-time compliance status to the attendance and payroll engines.",
+    ],
+    imageSrc: "/images/hr-docs/g2-document-control.webp",
+    imageAlt:
+      "HR document control screen showing version status, expiry tracking, and compliance-related record states.",
+    imageObjectPosition: "0% 0%",
+  },
+  {
+    anchorId: "sticky-scroll-3",
+    title: "Immutable event logs for every state change",
+    body: [
+      "Accountability requires traceability. When a leave request is approved, or an attendance record is overridden, the system creates a permanent cryptographic-style log.",
+      "It records the exact timestamp, the user ID of the actor, the original state, and the new state. If a manager questions an anomaly three months later, the truth is indisputable.",
+    ],
+    imageSrc: "/images/hr-docs/g2-audit-trail.webp",
+    imageAlt:
+      "HR audit trail screen showing timestamps, user actions, and record-level state changes.",
+    imageObjectPosition: "0% 100%",
+  },
+  {
+    anchorId: "sticky-scroll-4",
+    title: "Role-based access enforced at the API layer",
+    body: [
+      "Security by hiding UI elements is insufficient. If a user inspects the network traffic, they should not be able to forge an approval request.",
+      "The system enforces all state-machine rules and role validations at the core server level, ensuring that even if an interface is bypassed, the system remains mathematically secure.",
+    ],
+    imageSrc: "/images/hr-docs/cms-tab-api-level-access.avif",
+    imageAlt:
+      "HR documentation system access diagram showing API-level permission enforcement for sensitive HR actions.",
+    imageObjectPosition: "0% 0%",
+  },
 ];
 
-const hrDocsAnonymousAvatar = "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' rx='24' fill='%23edf2f7'/%3E%3Ccircle cx='48' cy='36' r='18' fill='%2394a3b8'/%3E%3Cpath d='M20 82c4-16 18-24 28-24s24 8 28 24' fill='%2394a3b8'/%3E%3C/svg%3E";
+const hrDocsAnonymousAvatar =
+  "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' rx='24' fill='%23edf2f7'/%3E%3Ccircle cx='48' cy='36' r='18' fill='%2394a3b8'/%3E%3Cpath d='M20 82c4-16 18-24 28-24s24 8 28 24' fill='%2394a3b8'/%3E%3C/svg%3E";
 
 const hrDocsTestimonials: HrDocsTestimonial[] = [
-    {
-        name: TESTIMONIALS[0]?.name ?? 'Md Tanvir Morshed',
-        title: 'Executive Oversight',
-        company: 'SME Leadership',
-        quote: '\u201CWe needed a single source of truth. Approvals were happening on WhatsApp and there was no way to trace them later. The lack of operational controls was creating real compliance risks.\u201D',
-        imageSrc: TESTIMONIALS[0]?.avatar ?? '/images/testimonial/Md Tanvir Morshed.webp',
-        imageAlt: TESTIMONIALS[0]?.name ?? 'Md Tanvir Morshed',
-    },
-    {
-        name: TESTIMONIALS[1]?.name ?? 'Md. Moshiur Rahman',
-        title: 'HR & Payroll',
-        company: 'Core Operations',
-        quote: '\u201CPayroll prep was a three-day ordeal of cross-referencing spreadsheets with leave balances and WhatsApp attendance drops. It was manually exhausting and prone to constant errors.\u201D',
-        imageSrc: TESTIMONIALS[1]?.avatar ?? '/images/testimonial/Md.Moshiur Rahman.webp',
-        imageAlt: TESTIMONIALS[1]?.name ?? 'Md. Moshiur Rahman',
-    },
-    {
-        name: TESTIMONIALS[2]?.name ?? 'Muntasir Mahmood',
-        title: 'Department Head',
-        company: 'Team Leadership',
-        quote: '\u201CIt was impossible to pull cross-department reports. I couldn\'t tell who was on leave without messaging HR directly. We needed self-service visibility, not just another spreadsheet.\u201D',
-        imageSrc: TESTIMONIALS[2]?.avatar ?? '/images/testimonial/Muntasir Mahmood.webp',
-        imageAlt: TESTIMONIALS[2]?.name ?? 'Muntasir Mahmood',
-    },
-    {
-        name: 'Anonymous',
-        title: 'Team Member',
-        company: 'Field Operations',
-        quote: '\u201CI just wanted to know my leave balance and get my payslip without having to email someone every month. Basic transparency was missing from our daily workflow.\u201D',
-        imageSrc: hrDocsAnonymousAvatar,
-        imageAlt: 'Anonymous team member',
-    },
+  {
+    name: TESTIMONIALS[0]?.name ?? "Md Tanvir Morshed",
+    title: "Executive Oversight",
+    company: "SME Leadership",
+    quote:
+      "\u201CWe needed a single source of truth. Approvals were happening on WhatsApp and there was no way to trace them later. The lack of operational controls was creating real compliance risks.\u201D",
+    imageSrc:
+      TESTIMONIALS[0]?.avatar ?? "/images/testimonial/Md Tanvir Morshed.webp",
+    imageAlt: TESTIMONIALS[0]?.name ?? "Md Tanvir Morshed",
+  },
+  {
+    name: TESTIMONIALS[1]?.name ?? "Md. Moshiur Rahman",
+    title: "HR & Payroll",
+    company: "Core Operations",
+    quote:
+      "\u201CPayroll prep was a three-day ordeal of cross-referencing spreadsheets with leave balances and WhatsApp attendance drops. It was manually exhausting and prone to constant errors.\u201D",
+    imageSrc:
+      TESTIMONIALS[1]?.avatar ?? "/images/testimonial/Md.Moshiur Rahman.webp",
+    imageAlt: TESTIMONIALS[1]?.name ?? "Md. Moshiur Rahman",
+  },
+  {
+    name: TESTIMONIALS[2]?.name ?? "Muntasir Mahmood",
+    title: "Department Head",
+    company: "Team Leadership",
+    quote:
+      "\u201CIt was impossible to pull cross-department reports. I couldn't tell who was on leave without messaging HR directly. We needed self-service visibility, not just another spreadsheet.\u201D",
+    imageSrc:
+      TESTIMONIALS[2]?.avatar ?? "/images/testimonial/Muntasir Mahmood.webp",
+    imageAlt: TESTIMONIALS[2]?.name ?? "Muntasir Mahmood",
+  },
+  {
+    name: "Anonymous",
+    title: "Team Member",
+    company: "Field Operations",
+    quote:
+      "\u201CI just wanted to know my leave balance and get my payslip without having to email someone every month. Basic transparency was missing from our daily workflow.\u201D",
+    imageSrc: hrDocsAnonymousAvatar,
+    imageAlt: "Anonymous team member",
+  },
 ];
 
 const hrDocsComparisonRows: HrDocsComparisonRow[] = [
-    {
-        feature: 'Document Compliance',
-        legacyProcess: {
-            icon: 'minus',
-            detail: 'Stored in personal Google Drives. Renewals tracked by memory.',
-        },
-        standardApp: {
-            icon: 'minus',
-            detail: 'Central repository with simple reminder notifications.',
-        },
-        erpLite: {
-            icon: 'check',
-            detail: 'Strict expiry tracking. Expired statuses automatically freeze associated operations.',
-        },
+  {
+    feature: "Document Compliance",
+    legacyProcess: {
+      icon: "minus",
+      detail: "Stored in personal Google Drives. Renewals tracked by memory.",
     },
-    {
-        feature: 'Leave & Attendance',
-        legacyProcess: {
-            icon: 'minus',
-            detail: 'WhatsApp requests compiled into a master spreadsheet.',
-        },
-        standardApp: {
-            icon: 'minus',
-            detail: 'Independent portal requiring manual export for payroll processing.',
-        },
-        erpLite: {
-            icon: 'check',
-            detail: 'Integrated leave engine dynamically calculates accurate payroll inputs based on policies.',
-        },
+    standardApp: {
+      icon: "minus",
+      detail: "Central repository with simple reminder notifications.",
     },
-    {
-        feature: 'Approval Audits',
-        legacyProcess: {
-            icon: 'no',
-            detail: '"Approved" text message from management. Zero traceability.',
-        },
-        standardApp: {
-            icon: 'minus',
-            detail: 'Simple state changes with basic timestamping.',
-        },
-        erpLite: {
-            icon: 'check',
-            detail: 'Immutable audit log capturing actor, time, and exact record state for every decision.',
-        },
+    erpLite: {
+      icon: "check",
+      detail:
+        "Strict expiry tracking. Expired statuses automatically freeze associated operations.",
     },
-    {
-        feature: 'System Access',
-        legacyProcess: {
-            icon: 'no',
-            detail: 'Shared credentials leading to zero accountability.',
-        },
-        standardApp: {
-            icon: 'minus',
-            detail: 'Basic UI-level feature toggles.',
-        },
-        erpLite: {
-            icon: 'check',
-            detail: 'Role-based access strictly enforced at the core API layer, preventing unauthorized bypasses.',
-        },
-    }];
+  },
+  {
+    feature: "Leave & Attendance",
+    legacyProcess: {
+      icon: "minus",
+      detail: "WhatsApp requests compiled into a master spreadsheet.",
+    },
+    standardApp: {
+      icon: "minus",
+      detail:
+        "Independent portal requiring manual export for payroll processing.",
+    },
+    erpLite: {
+      icon: "check",
+      detail:
+        "Integrated leave engine dynamically calculates accurate payroll inputs based on policies.",
+    },
+  },
+  {
+    feature: "Approval Audits",
+    legacyProcess: {
+      icon: "no",
+      detail: '"Approved" text message from management. Zero traceability.',
+    },
+    standardApp: {
+      icon: "minus",
+      detail: "Simple state changes with basic timestamping.",
+    },
+    erpLite: {
+      icon: "check",
+      detail:
+        "Immutable audit log capturing actor, time, and exact record state for every decision.",
+    },
+  },
+  {
+    feature: "System Access",
+    legacyProcess: {
+      icon: "no",
+      detail: "Shared credentials leading to zero accountability.",
+    },
+    standardApp: {
+      icon: "minus",
+      detail: "Basic UI-level feature toggles.",
+    },
+    erpLite: {
+      icon: "check",
+      detail:
+        "Role-based access strictly enforced at the core API layer, preventing unauthorized bypasses.",
+    },
+  },
+];
 
 const hrDocsG2Tabs: HrDocsG2Tab[] = [
-    {
-        title: 'Leave Management',
-        imageSrc: '/images/hr-docs/g2-document-control.webp',
-        imageAlt: 'HR Docs document library demo showing version history, expiry tracking, and document status controls.',
-    },
-    {
-        title: 'Payroll Processing',
-        imageSrc: '/images/hr-docs/g2-approval-workflows.webp',
-        imageAlt: 'HR Docs approval queue demo showing pending requests, SLA indicators, and approve or reject actions.',
-    },
-    {
-        title: 'Document Control',
-        imageSrc: '/images/hr-docs/g2-audit-trail.webp',
-        imageAlt: 'HR Docs audit log demo showing immutable event history, actors, and record-level change traces.',
-    },
-    {
-        title: 'Attendance Tracking',
-        imageSrc: '/images/hr-docs/g2-document-control.webp',
-        imageAlt: 'HR Docs attendance module showing daily logs, anomaly flags, and correction workflows.',
-    },
+  {
+    title: "Leave Management",
+    imageSrc: "/images/hr-docs/g2-document-control.webp",
+    imageAlt:
+      "HR Docs document library demo showing version history, expiry tracking, and document status controls.",
+  },
+  {
+    title: "Payroll Processing",
+    imageSrc: "/images/hr-docs/g2-approval-workflows.webp",
+    imageAlt:
+      "HR Docs approval queue demo showing pending requests, SLA indicators, and approve or reject actions.",
+  },
+  {
+    title: "Document Control",
+    imageSrc: "/images/hr-docs/g2-audit-trail.webp",
+    imageAlt:
+      "HR Docs audit log demo showing immutable event history, actors, and record-level change traces.",
+  },
+  {
+    title: "Attendance Tracking",
+    imageSrc: "/images/hr-docs/g2-document-control.webp",
+    imageAlt:
+      "HR Docs attendance module showing daily logs, anomaly flags, and correction workflows.",
+  },
 ];
 
 const hrDocsFaqItems: HrDocsFaqItem[] = [
-    {
-        question: "What's the difference between the system and spreadsheets?",
-        answer: [
-            'Spreadsheets store data but don\'t govern it. The system connects records, approvals, payroll, and documents into one system - ensuring every action is structured, traceable, and operationally consistent.',
-        ],
-    },
-    {
-        question: 'Does the system include document management?',
-        answer: [
-            'Yes. The system includes a governed document layer with versioning, expiry tracking, and employee linkage - ensuring documents actively support compliance, payroll readiness, and operational control.',
-        ],
-    },
-    {
-        question: 'Why move from fragmented HR operations to a governed system?',
-        answer: [
-            'Fragmented systems create delays, errors, and blind spots. The system connects attendance, leave, payroll, and approvals - removing coordination overhead and delivering consistent, visible operations.',
-        ],
-    },
-    {
-        question: 'Will the system reduce flexibility in handling exceptions?',
-        answer: [
-            'No. The system structures exceptions without removing flexibility. Edge cases are processed through defined workflows - making them visible, traceable, and governed without relying on informal handling.',
-        ],
-    },
-    {
-        question: 'Can the system support different policies and workflows?',
-        answer: [
-            'Yes. The system supports configurable roles, approval paths, and policy rules - allowing teams to model real operational variation while maintaining system-level consistency and control.',
-        ],
-    },
-    {
-        question: 'How is the system different from standalone HR tools?',
-        answer: [
-            'Standalone tools solve isolated problems. The system connects records, approvals, payroll, and documents - eliminating handoff gaps and creating one continuous operational system.',
-        ],
-    },
-    {
-        question: 'What happens after payroll is locked?',
-        answer: [
-            'Locked payroll remains unchanged. Corrections are recorded as new adjustment entries - preserving the original state while maintaining a clear and auditable history.',
-        ],
-    },
-    {
-        question: 'How does the system ensure compliance?',
-        answer: [
-            'Compliance is enforced by system rules. Invalid data, missing approvals, or expired documents automatically block actions - ensuring operations meet requirements before progressing.',
-        ],
-    },
-    {
-        question: 'Can employees access their own information?',
-        answer: [
-            'Yes. Employees can view leave, attendance, payslips, and document status - improving transparency while reducing dependency on HR teams.',
-        ],
-    },
-    {
-        question: 'Is the system suitable for growing SMEs?',
-        answer: [
-            'Yes. The system is built for SMEs moving beyond manual processes - delivering structured workflows and control without the complexity of enterprise systems.',
-        ],
-    },
+  {
+    question: "What's the difference between the system and spreadsheets?",
+    answer: [
+      "Spreadsheets store data but don't govern it. The system connects records, approvals, payroll, and documents into one system - ensuring every action is structured, traceable, and operationally consistent.",
+    ],
+  },
+  {
+    question: "Does the system include document management?",
+    answer: [
+      "Yes. The system includes a governed document layer with versioning, expiry tracking, and employee linkage - ensuring documents actively support compliance, payroll readiness, and operational control.",
+    ],
+  },
+  {
+    question: "Why move from fragmented HR operations to a governed system?",
+    answer: [
+      "Fragmented systems create delays, errors, and blind spots. The system connects attendance, leave, payroll, and approvals - removing coordination overhead and delivering consistent, visible operations.",
+    ],
+  },
+  {
+    question: "Will the system reduce flexibility in handling exceptions?",
+    answer: [
+      "No. The system structures exceptions without removing flexibility. Edge cases are processed through defined workflows - making them visible, traceable, and governed without relying on informal handling.",
+    ],
+  },
+  {
+    question: "Can the system support different policies and workflows?",
+    answer: [
+      "Yes. The system supports configurable roles, approval paths, and policy rules - allowing teams to model real operational variation while maintaining system-level consistency and control.",
+    ],
+  },
+  {
+    question: "How is the system different from standalone HR tools?",
+    answer: [
+      "Standalone tools solve isolated problems. The system connects records, approvals, payroll, and documents - eliminating handoff gaps and creating one continuous operational system.",
+    ],
+  },
+  {
+    question: "What happens after payroll is locked?",
+    answer: [
+      "Locked payroll remains unchanged. Corrections are recorded as new adjustment entries - preserving the original state while maintaining a clear and auditable history.",
+    ],
+  },
+  {
+    question: "How does the system ensure compliance?",
+    answer: [
+      "Compliance is enforced by system rules. Invalid data, missing approvals, or expired documents automatically block actions - ensuring operations meet requirements before progressing.",
+    ],
+  },
+  {
+    question: "Can employees access their own information?",
+    answer: [
+      "Yes. Employees can view leave, attendance, payslips, and document status - improving transparency while reducing dependency on HR teams.",
+    ],
+  },
+  {
+    question: "Is the system suitable for growing SMEs?",
+    answer: [
+      "Yes. The system is built for SMEs moving beyond manual processes - delivering structured workflows and control without the complexity of enterprise systems.",
+    ],
+  },
 ];
 
 const hrDocsDemoSupportItems: HrDocsDemoSupportItem[] = [
-    'Relational database schema diagrams',
-    'State machine definitions for all 8 modules',
-    'Role-based API access control rules',
-    'WhatsApp integration sequence diagrams',
+  "Relational database schema diagrams",
+  "State machine definitions for all 8 modules",
+  "Role-based API access control rules",
+  "WhatsApp integration sequence diagrams",
 ];
 
 const NativeHrDocsCmsTabs: React.FC = () => {
-    const [activeTab, setActiveTab] = useState(0);
-    const tabsListRef = useRef<HTMLDivElement>(null);
-    const interactiveInnerRefs = useRef<Array<HTMLDivElement | null>>([]);
-    const autoplayTimeoutRef = useRef<number | null>(null);
-    const autoplayStartTimeRef = useRef<number | null>(null);
-    const autoplayRemainingTimeRef = useRef(HR_DOCS_CMS_TABS_AUTOPLAY_MS);
-    const isInViewRef = useRef(false);
-    const activeTabRef = useRef(0);
-    const [desktopInteractiveHeight, setDesktopInteractiveHeight] = useState<number | null>(null);
-    const [isDesktop, setIsDesktop] = useState(() => {
-        if (typeof window === 'undefined') {
-            return true;
-        }
+  const [activeTab, setActiveTab] = useState(0);
+  const tabsListRef = useRef<HTMLDivElement>(null);
+  const interactiveInnerRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const autoplayTimeoutRef = useRef<number | null>(null);
+  const autoplayStartTimeRef = useRef<number | null>(null);
+  const autoplayRemainingTimeRef = useRef(HR_DOCS_CMS_TABS_AUTOPLAY_MS);
+  const isInViewRef = useRef(false);
+  const activeTabRef = useRef(0);
+  const [desktopInteractiveHeight, setDesktopInteractiveHeight] = useState<
+    number | null
+  >(null);
+  const [isDesktop, setIsDesktop] = useState(() => {
+    if (typeof window === "undefined") {
+      return true;
+    }
 
-        return window.matchMedia(HR_DOCS_CMS_TABS_DESKTOP_QUERY).matches;
+    return window.matchMedia(HR_DOCS_CMS_TABS_DESKTOP_QUERY).matches;
+  });
+  const [isInView, setIsInView] = useState(false);
+
+  const clearAutoplayTimer = () => {
+    if (autoplayTimeoutRef.current !== null) {
+      window.clearTimeout(autoplayTimeoutRef.current);
+      autoplayTimeoutRef.current = null;
+    }
+
+    autoplayStartTimeRef.current = null;
+  };
+
+  const activateTab = (nextTab: number) => {
+    if (nextTab === activeTabRef.current) {
+      return;
+    }
+
+    activeTabRef.current = nextTab;
+    setActiveTab(nextTab);
+  };
+
+  const scheduleAutoplay = (delay: number) => {
+    clearAutoplayTimer();
+    autoplayStartTimeRef.current = window.performance.now();
+    autoplayTimeoutRef.current = window.setTimeout(() => {
+      autoplayRemainingTimeRef.current = HR_DOCS_CMS_TABS_AUTOPLAY_MS;
+      autoplayStartTimeRef.current = null;
+      activateTab((activeTabRef.current + 1) % hrDocsCmsTabs.length);
+    }, delay);
+  };
+
+  useEffect(() => {
+    activeTabRef.current = activeTab;
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const mediaQueryList = window.matchMedia(HR_DOCS_CMS_TABS_DESKTOP_QUERY);
+    const updateIsDesktop = (event: MediaQueryList | MediaQueryListEvent) => {
+      setIsDesktop(event.matches);
+    };
+
+    updateIsDesktop(mediaQueryList);
+
+    if (typeof mediaQueryList.addEventListener === "function") {
+      mediaQueryList.addEventListener("change", updateIsDesktop);
+
+      return () => {
+        mediaQueryList.removeEventListener("change", updateIsDesktop);
+      };
+    }
+
+    mediaQueryList.addListener(updateIsDesktop);
+
+    return () => {
+      mediaQueryList.removeListener(updateIsDesktop);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    hrDocsCmsTabs.forEach((tab) => {
+      const image = new window.Image();
+      image.decoding = "async";
+      image.src = tab.imageSrc;
     });
-    const [isInView, setIsInView] = useState(false);
+  }, []);
 
-    const clearAutoplayTimer = () => {
-        if (autoplayTimeoutRef.current !== null) {
-            window.clearTimeout(autoplayTimeoutRef.current);
-            autoplayTimeoutRef.current = null;
-        }
+  useEffect(() => {
+    if (!isDesktop || typeof window === "undefined") {
+      setDesktopInteractiveHeight(null);
+      return;
+    }
 
-        autoplayStartTimeRef.current = null;
+    let frameId = 0;
+    let resizeObserver: ResizeObserver | null = null;
+
+    const measureInteractiveHeight = () => {
+      frameId = 0;
+
+      const nextHeight = interactiveInnerRefs.current.reduce(
+        (maxHeight, element) => {
+          if (!element) {
+            return maxHeight;
+          }
+
+          return Math.max(maxHeight, Math.ceil(element.scrollHeight));
+        },
+        0,
+      );
+
+      setDesktopInteractiveHeight((currentHeight) =>
+        currentHeight === nextHeight ? currentHeight : nextHeight,
+      );
     };
 
-    const activateTab = (nextTab: number) => {
-        if (nextTab === activeTabRef.current) {
-            return;
-        }
+    const requestMeasure = () => {
+      if (frameId !== 0) {
+        return;
+      }
 
-        activeTabRef.current = nextTab;
-        setActiveTab(nextTab);
+      frameId = window.requestAnimationFrame(measureInteractiveHeight);
     };
 
-    const scheduleAutoplay = (delay: number) => {
-        clearAutoplayTimer();
-        autoplayStartTimeRef.current = window.performance.now();
-        autoplayTimeoutRef.current = window.setTimeout(() => {
-            autoplayRemainingTimeRef.current = HR_DOCS_CMS_TABS_AUTOPLAY_MS;
-            autoplayStartTimeRef.current = null;
-            activateTab((activeTabRef.current + 1) % hrDocsCmsTabs.length);
-        }, delay);
+    requestMeasure();
+    window.addEventListener("resize", requestMeasure);
+
+    if (typeof ResizeObserver === "function") {
+      resizeObserver = new ResizeObserver(requestMeasure);
+
+      interactiveInnerRefs.current.forEach((element) => {
+        if (element) {
+          resizeObserver?.observe(element);
+        }
+      });
+    }
+
+    return () => {
+      if (frameId !== 0) {
+        window.cancelAnimationFrame(frameId);
+      }
+
+      resizeObserver?.disconnect();
+      window.removeEventListener("resize", requestMeasure);
     };
+  }, [isDesktop]);
 
-    useEffect(() => {
-        activeTabRef.current = activeTab;
-    }, [activeTab]);
+  useEffect(() => {
+    if (!isDesktop) {
+      isInViewRef.current = false;
+      setIsInView(false);
+      return;
+    }
 
-    useEffect(() => {
-        if (typeof window === 'undefined') {
+    const listElement = tabsListRef.current;
+    if (!listElement || typeof IntersectionObserver === "undefined") {
+      isInViewRef.current = true;
+      setIsInView(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.target !== listElement) {
             return;
-        }
+          }
 
-        const mediaQueryList = window.matchMedia(HR_DOCS_CMS_TABS_DESKTOP_QUERY);
-        const updateIsDesktop = (event: MediaQueryList | MediaQueryListEvent) => {
-            setIsDesktop(event.matches);
-        };
-
-        updateIsDesktop(mediaQueryList);
-
-        if (typeof mediaQueryList.addEventListener === 'function') {
-            mediaQueryList.addEventListener('change', updateIsDesktop);
-
-            return () => {
-                mediaQueryList.removeEventListener('change', updateIsDesktop);
-            };
-        }
-
-        mediaQueryList.addListener(updateIsDesktop);
-
-        return () => {
-            mediaQueryList.removeListener(updateIsDesktop);
-        };
-    }, []);
-
-    useEffect(() => {
-        if (typeof window === 'undefined') {
-            return;
-        }
-
-        hrDocsCmsTabs.forEach(tab => {
-            const image = new window.Image();
-            image.decoding = 'async';
-            image.src = tab.imageSrc;
+          const nextIsInView =
+            entry.isIntersecting && entry.intersectionRatio > 0;
+          isInViewRef.current = nextIsInView;
+          setIsInView(nextIsInView);
         });
-    }, []);
-
-    useEffect(() => {
-        if (!isDesktop || typeof window === 'undefined') {
-            setDesktopInteractiveHeight(null);
-            return;
-        }
-
-        let frameId = 0;
-        let resizeObserver: ResizeObserver | null = null;
-
-        const measureInteractiveHeight = () => {
-            frameId = 0;
-
-            const nextHeight = interactiveInnerRefs.current.reduce((maxHeight, element) => {
-                if (!element) {
-                    return maxHeight;
-                }
-
-                return Math.max(maxHeight, Math.ceil(element.scrollHeight));
-            }, 0);
-
-            setDesktopInteractiveHeight(currentHeight => (
-                currentHeight === nextHeight ? currentHeight : nextHeight
-            ));
-        };
-
-        const requestMeasure = () => {
-            if (frameId !== 0) {
-                return;
-            }
-
-            frameId = window.requestAnimationFrame(measureInteractiveHeight);
-        };
-
-        requestMeasure();
-        window.addEventListener('resize', requestMeasure);
-
-        if (typeof ResizeObserver === 'function') {
-            resizeObserver = new ResizeObserver(requestMeasure);
-
-            interactiveInnerRefs.current.forEach(element => {
-                if (element) {
-                    resizeObserver?.observe(element);
-                }
-            });
-        }
-
-        return () => {
-            if (frameId !== 0) {
-                window.cancelAnimationFrame(frameId);
-            }
-
-            resizeObserver?.disconnect();
-            window.removeEventListener('resize', requestMeasure);
-        };
-    }, [isDesktop]);
-
-    useEffect(() => {
-        if (!isDesktop) {
-            isInViewRef.current = false;
-            setIsInView(false);
-            return;
-        }
-
-        const listElement = tabsListRef.current;
-        if (!listElement || typeof IntersectionObserver === 'undefined') {
-            isInViewRef.current = true;
-            setIsInView(true);
-            return;
-        }
-
-        const observer = new IntersectionObserver(
-            entries => {
-                entries.forEach(entry => {
-                    if (entry.target !== listElement) {
-                        return;
-                    }
-
-                    const nextIsInView = entry.isIntersecting && entry.intersectionRatio > 0;
-                    isInViewRef.current = nextIsInView;
-                    setIsInView(nextIsInView);
-                });
-            },
-            {
-                threshold: [0, 0.2, 0.5, 1],
-                rootMargin: '0px 0px -20% 0px',
-            }
-        );
-
-        observer.observe(listElement);
-
-        return () => {
-            observer.disconnect();
-        };
-    }, [isDesktop]);
-
-    useEffect(() => {
-        autoplayRemainingTimeRef.current = HR_DOCS_CMS_TABS_AUTOPLAY_MS;
-        clearAutoplayTimer();
-
-        if (!isDesktop || !isInViewRef.current) {
-            return;
-        }
-
-        scheduleAutoplay(HR_DOCS_CMS_TABS_AUTOPLAY_MS);
-
-        return () => {
-            clearAutoplayTimer();
-        };
-    }, [activeTab, isDesktop]);
-
-    useEffect(() => {
-        if (!isDesktop) {
-            autoplayRemainingTimeRef.current = HR_DOCS_CMS_TABS_AUTOPLAY_MS;
-            clearAutoplayTimer();
-            return;
-        }
-
-        if (!isInView) {
-            if (autoplayStartTimeRef.current !== null) {
-                const elapsed = window.performance.now() - autoplayStartTimeRef.current;
-                autoplayRemainingTimeRef.current = Math.max(0, autoplayRemainingTimeRef.current - elapsed);
-            }
-
-            clearAutoplayTimer();
-            return;
-        }
-
-        if (autoplayRemainingTimeRef.current <= 0) {
-            autoplayRemainingTimeRef.current = HR_DOCS_CMS_TABS_AUTOPLAY_MS;
-        }
-
-        scheduleAutoplay(autoplayRemainingTimeRef.current);
-
-        return () => {
-            clearAutoplayTimer();
-        };
-    }, [isInView, isDesktop]);
-
-    useEffect(() => {
-        return () => {
-            clearAutoplayTimer();
-        };
-    }, []);
-
-    return (
-        <section className="hrdocs-cms-tabs-section" aria-labelledby="hrdocs-cms-tabs-title">
-            <div className="max-w-7xl mx-auto px-6 w-full">
-                <div className="hrdocs-cms-tabs">
-                    <div className="hrdocs-cms-tabs__spacer" aria-hidden="true" />
-
-                    <div className="hrdocs-cms-tabs__menu">
-                        <div className="hrdocs-cms-tabs__content">
-                            <h3 id="hrdocs-cms-tabs-title" className="hrdocs-cms-tabs__title">Focused scope, connected operations</h3>
-                            <p className="hrdocs-cms-tabs__intro">
-                                {'The system is designed for teams that need structured HR control without enterprise complexity.'}
-                            </p>
-                        </div>
-
-                        <div ref={tabsListRef} className="hrdocs-cms-tabs__list" role="list">
-                            {hrDocsCmsTabs.map((tab, index) => {
-                                const isActive = index === activeTab;
-                                const buttonId = `hrdocs-cms-tab-button-${index}`;
-                                const panelId = `hrdocs-cms-tab-panel-${index}`;
-
-                                return (
-                                    <article
-                                        key={tab.title}
-                                        className={`hrdocs-cms-tabs__item ${isActive ? 'cc-active' : ''}`}
-                                        role="listitem"
-                                    >
-                                        <div className="hrdocs-cms-tabs__link-wrapper">
-                                            <div className="hrdocs-cms-tabs__trigger">
-                                                <button
-                                                    id={buttonId}
-                                                    type="button"
-                                                    className="hrdocs-cms-tabs__button"
-                                                    aria-controls={panelId}
-                                                    aria-expanded={isDesktop ? isActive : true}
-                                                    onClick={() => activateTab(index)}
-                                                >
-                                                    <span className="hrdocs-hero__sr-only">Select tab</span>
-                                                </button>
-
-                                                <div className="hrdocs-cms-tabs__progress-track" aria-hidden="true">
-                                                    <div
-                                                        className="hrdocs-cms-tabs__progress-bar"
-                                                        style={isActive && isDesktop
-                                                            ? {
-                                                                animationName: 'hrdocsCmsTabsProgress',
-                                                                animationDuration: `${HR_DOCS_CMS_TABS_AUTOPLAY_MS}ms`,
-                                                                animationTimingFunction: 'linear',
-                                                                animationFillMode: 'forwards',
-                                                                animationPlayState: isInView ? 'running' : 'paused',
-                                                            }
-                                                            : undefined}
-                                                    />
-                                                </div>
-
-                                                <div className="hrdocs-cms-tabs__menu-text">
-                                                    <h3 className="hrdocs-cms-tabs__tab-title">{tab.title}</h3>
-                                                </div>
-                                            </div>
-
-                                            <div
-                                                id={panelId}
-                                                className="hrdocs-cms-tabs__interactive-content"
-                                                aria-labelledby={buttonId}
-                                                style={isDesktop && desktopInteractiveHeight !== null
-                                                    ? {
-                                                        height: isActive ? `${desktopInteractiveHeight}px` : '0px',
-                                                        opacity: isActive ? 1 : 0,
-                                                    }
-                                                    : undefined}
-                                            >
-                                                <div
-                                                    ref={element => {
-                                                        interactiveInnerRefs.current[index] = element;
-                                                    }}
-                                                    className="hrdocs-cms-tabs__interactive-inner"
-                                                >
-                                                    <p className="hrdocs-cms-tabs__body">{repairHrDocsCopy(tab.body)}</p>
-
-                                                    <div className="hrdocs-cms-tabs__cta-row">
-                                                        {tab.ctas.map(cta => (
-                                                            <div
-                                                                key={cta.label}
-                                                                className="hrdocs-cms-tabs__cta-shell"
-                                                            >
-                                                                <div aria-hidden="true" className="hrdocs-cms-tabs__cta-text">{cta.label}</div>
-                                                                <div className="hrdocs-cms-tabs__cta-icon" aria-hidden="true">
-                                                                    <span className="hrdocs-cms-tabs__cta-icon-glyph is-arrow-right">&rarr;</span>
-                                                                </div>
-                                                                <a
-                                                                    className="hrdocs-cms-tabs__cta-link"
-                                                                    href={cta.href}
-                                                                >
-                                                                    <span className="hrdocs-hero__sr-only">{cta.label}</span>
-                                                                </a>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div
-                                            className="hrdocs-cms-tabs__stage"
-                                            aria-hidden={isDesktop ? !isActive : undefined}
-                                            style={isDesktop
-                                                ? {
-                                                    opacity: isActive ? 1 : 0,
-                                                    zIndex: isActive ? 2 : 1,
-                                                }
-                                                : undefined}
-                                        >
-                                            <div className="hrdocs-cms-tabs__image-frame">
-                                                <img
-                                                    src={tab.imageSrc}
-                                                    alt={tab.imageAlt}
-                                                    loading="lazy"
-                                                    decoding="async"
-                                                    className="hrdocs-cms-tabs__image"
-                                                />
-                                            </div>
-                                        </div>
-                                    </article>
-                                );
-                            })}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+      },
+      {
+        threshold: [0, 0.2, 0.5, 1],
+        rootMargin: "0px 0px -20% 0px",
+      },
     );
+
+    observer.observe(listElement);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [isDesktop]);
+
+  useEffect(() => {
+    autoplayRemainingTimeRef.current = HR_DOCS_CMS_TABS_AUTOPLAY_MS;
+    clearAutoplayTimer();
+
+    if (!isDesktop || !isInViewRef.current) {
+      return;
+    }
+
+    scheduleAutoplay(HR_DOCS_CMS_TABS_AUTOPLAY_MS);
+
+    return () => {
+      clearAutoplayTimer();
+    };
+  }, [activeTab, isDesktop]);
+
+  useEffect(() => {
+    if (!isDesktop) {
+      autoplayRemainingTimeRef.current = HR_DOCS_CMS_TABS_AUTOPLAY_MS;
+      clearAutoplayTimer();
+      return;
+    }
+
+    if (!isInView) {
+      if (autoplayStartTimeRef.current !== null) {
+        const elapsed = window.performance.now() - autoplayStartTimeRef.current;
+        autoplayRemainingTimeRef.current = Math.max(
+          0,
+          autoplayRemainingTimeRef.current - elapsed,
+        );
+      }
+
+      clearAutoplayTimer();
+      return;
+    }
+
+    if (autoplayRemainingTimeRef.current <= 0) {
+      autoplayRemainingTimeRef.current = HR_DOCS_CMS_TABS_AUTOPLAY_MS;
+    }
+
+    scheduleAutoplay(autoplayRemainingTimeRef.current);
+
+    return () => {
+      clearAutoplayTimer();
+    };
+  }, [isInView, isDesktop]);
+
+  useEffect(() => {
+    return () => {
+      clearAutoplayTimer();
+    };
+  }, []);
+
+  return (
+    <section
+      className="hrdocs-cms-tabs-section"
+      aria-labelledby="hrdocs-cms-tabs-title"
+    >
+      <div className="max-w-7xl mx-auto px-6 w-full">
+        <div className="hrdocs-cms-tabs">
+          <div className="hrdocs-cms-tabs__spacer" aria-hidden="true" />
+
+          <div className="hrdocs-cms-tabs__menu">
+            <div className="hrdocs-cms-tabs__content">
+              <h3 id="hrdocs-cms-tabs-title" className="hrdocs-cms-tabs__title">
+                Focused scope, connected operations
+              </h3>
+              <p className="hrdocs-cms-tabs__intro">
+                {
+                  "The system is designed for teams that need structured HR control without enterprise complexity."
+                }
+              </p>
+            </div>
+
+            <div
+              ref={tabsListRef}
+              className="hrdocs-cms-tabs__list"
+              role="list"
+            >
+              {hrDocsCmsTabs.map((tab, index) => {
+                const isActive = index === activeTab;
+                const buttonId = `hrdocs-cms-tab-button-${index}`;
+                const panelId = `hrdocs-cms-tab-panel-${index}`;
+
+                return (
+                  <article
+                    key={tab.title}
+                    className={`hrdocs-cms-tabs__item ${isActive ? "cc-active" : ""}`}
+                    role="listitem"
+                  >
+                    <div className="hrdocs-cms-tabs__link-wrapper">
+                      <div className="hrdocs-cms-tabs__trigger">
+                        <button
+                          id={buttonId}
+                          type="button"
+                          className="hrdocs-cms-tabs__button"
+                          aria-controls={panelId}
+                          aria-expanded={isDesktop ? isActive : true}
+                          onClick={() => activateTab(index)}
+                        >
+                          <span className="hrdocs-sr-only">{`Select ${tab.title}`}</span>
+                        </button>
+
+                        <div
+                          className="hrdocs-cms-tabs__progress-track"
+                          aria-hidden="true"
+                        >
+                          <div
+                            className="hrdocs-cms-tabs__progress-bar"
+                            style={
+                              isActive && isDesktop
+                                ? {
+                                    animationName: "hrdocsCmsTabsProgress",
+                                    animationDuration: `${HR_DOCS_CMS_TABS_AUTOPLAY_MS}ms`,
+                                    animationTimingFunction: "linear",
+                                    animationFillMode: "forwards",
+                                    animationPlayState: isInView
+                                      ? "running"
+                                      : "paused",
+                                  }
+                                : undefined
+                            }
+                          />
+                        </div>
+
+                        <div className="hrdocs-cms-tabs__menu-text">
+                          <h3 className="hrdocs-cms-tabs__tab-title">
+                            {tab.title}
+                          </h3>
+                        </div>
+                      </div>
+
+                      <div
+                        id={panelId}
+                        className="hrdocs-cms-tabs__interactive-content"
+                        aria-labelledby={buttonId}
+                        style={
+                          isDesktop && desktopInteractiveHeight !== null
+                            ? {
+                                height: isActive
+                                  ? `${desktopInteractiveHeight}px`
+                                  : "0px",
+                                opacity: isActive ? 1 : 0,
+                              }
+                            : undefined
+                        }
+                      >
+                        <div
+                          ref={(element) => {
+                            interactiveInnerRefs.current[index] = element;
+                          }}
+                          className="hrdocs-cms-tabs__interactive-inner"
+                        >
+                          <p className="hrdocs-cms-tabs__body">
+                            {repairHrDocsCopy(tab.body)}
+                          </p>
+
+                          <div className="hrdocs-cms-tabs__cta-row">
+                            {tab.ctas.map((cta) => (
+                              <div
+                                key={cta.label}
+                                className="hrdocs-cms-tabs__cta-shell"
+                              >
+                                <div
+                                  aria-hidden="true"
+                                  className="hrdocs-cms-tabs__cta-text"
+                                >
+                                  {cta.label}
+                                </div>
+                                <div
+                                  className="hrdocs-cms-tabs__cta-icon"
+                                  aria-hidden="true"
+                                >
+                                  <span className="hrdocs-cms-tabs__cta-icon-glyph is-arrow-right">
+                                    &rarr;
+                                  </span>
+                                </div>
+                                <a
+                                  className="hrdocs-cms-tabs__cta-link"
+                                  href={cta.href}
+                                >
+                                  <span className="hrdocs-sr-only">
+                                    {cta.label}
+                                  </span>
+                                </a>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      className="hrdocs-cms-tabs__stage"
+                      aria-hidden={isDesktop ? !isActive : undefined}
+                      style={
+                        isDesktop
+                          ? {
+                              opacity: isActive ? 1 : 0,
+                              zIndex: isActive ? 2 : 1,
+                            }
+                          : undefined
+                      }
+                    >
+                      <div className="hrdocs-cms-tabs__image-frame">
+                        <img
+                          src={tab.imageSrc}
+                          alt={tab.imageAlt}
+                          loading="lazy"
+                          decoding="async"
+                          className="hrdocs-cms-tabs__image"
+                        />
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 const NativeHrDocsWhySection: React.FC = () => {
-    const rowRefs = useRef<Array<HTMLDivElement | null>>([]);
-    const [activeFeature, setActiveFeature] = useState(0);
-    const [isDesktop, setIsDesktop] = useState(() => {
-        if (typeof window === 'undefined') {
-            return true;
+  const rowRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const [activeFeature, setActiveFeature] = useState(0);
+  const [isDesktop, setIsDesktop] = useState(() => {
+    if (typeof window === "undefined") {
+      return true;
+    }
+
+    return window.matchMedia(HR_DOCS_CMS_TABS_DESKTOP_QUERY).matches;
+  });
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const mediaQueryList = window.matchMedia(HR_DOCS_CMS_TABS_DESKTOP_QUERY);
+    const updateIsDesktop = (event: MediaQueryList | MediaQueryListEvent) => {
+      setIsDesktop(event.matches);
+    };
+
+    updateIsDesktop(mediaQueryList);
+
+    if (typeof mediaQueryList.addEventListener === "function") {
+      mediaQueryList.addEventListener("change", updateIsDesktop);
+
+      return () => {
+        mediaQueryList.removeEventListener("change", updateIsDesktop);
+      };
+    }
+
+    mediaQueryList.addListener(updateIsDesktop);
+
+    return () => {
+      mediaQueryList.removeListener(updateIsDesktop);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isDesktop || typeof window === "undefined") {
+      setActiveFeature(0);
+      return;
+    }
+
+    let frameId = 0;
+
+    const updateActiveFeature = () => {
+      frameId = 0;
+
+      const viewportCenter = window.innerHeight / 2;
+      let nextIndex = rowRefs.current.findIndex((row) => {
+        if (!row) {
+          return false;
         }
 
-        return window.matchMedia(HR_DOCS_CMS_TABS_DESKTOP_QUERY).matches;
-    });
+        const rect = row.getBoundingClientRect();
+        return rect.top <= viewportCenter && rect.bottom >= viewportCenter;
+      });
 
-    useEffect(() => {
-        if (typeof window === 'undefined') {
+      if (nextIndex === -1) {
+        let closestDistance = Number.POSITIVE_INFINITY;
+
+        rowRefs.current.forEach((row, index) => {
+          if (!row) {
             return;
-        }
+          }
 
-        const mediaQueryList = window.matchMedia(HR_DOCS_CMS_TABS_DESKTOP_QUERY);
-        const updateIsDesktop = (event: MediaQueryList | MediaQueryListEvent) => {
-            setIsDesktop(event.matches);
-        };
+          const rect = row.getBoundingClientRect();
+          const rowCenter = rect.top + rect.height / 2;
+          const distance = Math.abs(rowCenter - viewportCenter);
 
-        updateIsDesktop(mediaQueryList);
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            nextIndex = index;
+          }
+        });
+      }
 
-        if (typeof mediaQueryList.addEventListener === 'function') {
-            mediaQueryList.addEventListener('change', updateIsDesktop);
+      if (nextIndex !== -1) {
+        setActiveFeature((currentIndex) =>
+          currentIndex === nextIndex ? currentIndex : nextIndex,
+        );
+      }
+    };
 
-            return () => {
-                mediaQueryList.removeEventListener('change', updateIsDesktop);
-            };
-        }
+    const requestUpdate = () => {
+      if (frameId !== 0) {
+        return;
+      }
 
-        mediaQueryList.addListener(updateIsDesktop);
+      frameId = window.requestAnimationFrame(updateActiveFeature);
+    };
 
-        return () => {
-            mediaQueryList.removeListener(updateIsDesktop);
-        };
-    }, []);
+    requestUpdate();
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate);
 
-    useEffect(() => {
-        if (!isDesktop || typeof window === 'undefined') {
-            setActiveFeature(0);
-            return;
-        }
+    return () => {
+      if (frameId !== 0) {
+        window.cancelAnimationFrame(frameId);
+      }
 
-        let frameId = 0;
+      window.removeEventListener("scroll", requestUpdate);
+      window.removeEventListener("resize", requestUpdate);
+    };
+  }, [isDesktop]);
 
-        const updateActiveFeature = () => {
-            frameId = 0;
+  return (
+    <section className="hrdocs-why-section">
+      <div className="max-w-7xl mx-auto px-6 w-full">
+        <div className="hrdocs-why__intro">
+          <h2 className="hrdocs-why__heading">Controls, not just features</h2>
+          <p className="hrdocs-why__summary">
+            Compliance isn&apos;t achieved by writing policies; it&apos;s
+            achieved by making non-compliant operations structurally impossible.
+          </p>
+        </div>
 
-            const viewportCenter = window.innerHeight / 2;
-            let nextIndex = rowRefs.current.findIndex(row => {
-                if (!row) {
-                    return false;
-                }
+        <div className="hrdocs-why__rows">
+          {hrDocsWhyFeatures.map((feature, index) => {
+            const isCurrent = !isDesktop || activeFeature === index;
 
-                const rect = row.getBoundingClientRect();
-                return rect.top <= viewportCenter && rect.bottom >= viewportCenter;
-            });
+            return (
+              <div
+                key={feature.anchorId}
+                id={feature.anchorId}
+                ref={(element) => {
+                  rowRefs.current[index] = element;
+                }}
+                data-index={index}
+                className="hrdocs-why__row"
+              >
+                <div className="hrdocs-why__copy-col">
+                  <h3 className="hrdocs-why__row-title">{feature.title}</h3>
 
-            if (nextIndex === -1) {
-                let closestDistance = Number.POSITIVE_INFINITY;
+                  <div className="hrdocs-why__copy">
+                    {feature.body.map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
+                    ))}
+                  </div>
 
-                rowRefs.current.forEach((row, index) => {
-                    if (!row) {
-                        return;
-                    }
-
-                    const rect = row.getBoundingClientRect();
-                    const rowCenter = rect.top + (rect.height / 2);
-                    const distance = Math.abs(rowCenter - viewportCenter);
-
-                    if (distance < closestDistance) {
-                        closestDistance = distance;
-                        nextIndex = index;
-                    }
-                });
-            }
-
-            if (nextIndex !== -1) {
-                setActiveFeature(currentIndex => (currentIndex === nextIndex ? currentIndex : nextIndex));
-            }
-        };
-
-        const requestUpdate = () => {
-            if (frameId !== 0) {
-                return;
-            }
-
-            frameId = window.requestAnimationFrame(updateActiveFeature);
-        };
-
-        requestUpdate();
-        window.addEventListener('scroll', requestUpdate, { passive: true });
-        window.addEventListener('resize', requestUpdate);
-
-        return () => {
-            if (frameId !== 0) {
-                window.cancelAnimationFrame(frameId);
-            }
-
-            window.removeEventListener('scroll', requestUpdate);
-            window.removeEventListener('resize', requestUpdate);
-        };
-    }, [isDesktop]);
-
-    return (
-        <section className="hrdocs-why-section">
-            <div className="max-w-7xl mx-auto px-6 w-full">
-                <div className="hrdocs-why__intro">
-                    <h2 className="hrdocs-why__heading">Controls, not just features</h2>
-                    <p className="hrdocs-why__summary">
-                        Compliance isn&apos;t achieved by writing policies; it&apos;s achieved by making non-compliant operations structurally impossible.
-                    </p>
+                  {feature.ctas && feature.ctas.length > 0 ? (
+                    <div className="hrdocs-why__cta-row">
+                      {feature.ctas.map((cta) => (
+                        <a
+                          key={cta.label}
+                          className="hrdocs-why__cta"
+                          href={cta.href}
+                          target={
+                            cta.href.startsWith("http") ? "_blank" : undefined
+                          }
+                          rel={
+                            cta.href.startsWith("http")
+                              ? "noreferrer"
+                              : undefined
+                          }
+                        >
+                          <span className="hrdocs-why__cta-text">
+                            {cta.label}
+                          </span>
+                          <span
+                            className="hrdocs-why__cta-arrow"
+                            aria-hidden="true"
+                          >
+                            {"\u2192"}
+                          </span>
+                        </a>
+                      ))}
+                    </div>
+                  ) : null}
                 </div>
 
-                <div className="hrdocs-why__rows">
-                    {hrDocsWhyFeatures.map((feature, index) => {
-                        const isCurrent = !isDesktop || activeFeature === index;
-
-                        return (
-                            <div
-                                key={feature.anchorId}
-                                id={feature.anchorId}
-                                ref={element => {
-                                    rowRefs.current[index] = element;
-                                }}
-                                data-index={index}
-                                className="hrdocs-why__row"
-                            >
-                                <div className="hrdocs-why__copy-col">
-                                    <h3 className="hrdocs-why__row-title">{feature.title}</h3>
-
-                                    <div className="hrdocs-why__copy">
-                                        {feature.body.map(paragraph => (
-                                            <p key={paragraph}>{paragraph}</p>
-                                        ))}
-                                    </div>
-
-                                    {feature.ctas && feature.ctas.length > 0 ? (
-                                        <div className="hrdocs-why__cta-row">
-                                            {feature.ctas.map(cta => (
-                                                <a
-                                                    key={cta.label}
-                                                    className="hrdocs-why__cta"
-                                                    href={cta.href}
-                                                    target={cta.href.startsWith('http') ? '_blank' : undefined}
-                                                    rel={cta.href.startsWith('http') ? 'noreferrer' : undefined}
-                                                >
-                                                    <span className="hrdocs-why__cta-text">{cta.label}</span>
-                                                    <span className="hrdocs-why__cta-arrow" aria-hidden="true">
-                                                        {'\u2192'}
-                                                    </span>
-                                                </a>
-                                            ))}
-                                        </div>
-                                    ) : null}
-                                </div>
-
-                                <div className="hrdocs-why__image-position" aria-hidden="true">
-                                    <div className="hrdocs-why__image-track">
-                                        <div className="hrdocs-why__image-sticky">
-                                            <div className="hrdocs-why__image-wrap">
-                                                <div className="hrdocs-why__image-frame">
-                                                    <img
-                                                        src={feature.imageSrc}
-                                                        alt={feature.imageAlt}
-                                                        loading="lazy"
-                                                        className="hrdocs-why__image"
-                                                        style={{ objectPosition: feature.imageObjectPosition }}
-                                                    />
-                                                </div>
-                                                <a
-                                                    aria-hidden="true"
-                                                    tabIndex={-1}
-                                                    href={`#${feature.anchorId}`}
-                                                    className={`hrdocs-why__image-link ${isCurrent ? 'w--current' : ''}`}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        );
-                    })}
+                <div className="hrdocs-why__image-position" aria-hidden="true">
+                  <div className="hrdocs-why__image-track">
+                    <div className="hrdocs-why__image-sticky">
+                      <div className="hrdocs-why__image-wrap">
+                        <div className="hrdocs-why__image-frame">
+                          <img
+                            src={feature.imageSrc}
+                            alt={feature.imageAlt}
+                            loading="lazy"
+                            className="hrdocs-why__image"
+                            style={{
+                              objectPosition: feature.imageObjectPosition,
+                            }}
+                          />
+                        </div>
+                        <a
+                          aria-hidden="true"
+                          tabIndex={-1}
+                          href={`#${feature.anchorId}`}
+                          className={`hrdocs-why__image-link ${isCurrent ? "w--current" : ""}`}
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            </div>
-        </section>
-    );
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
 };
 
 const NativeHrDocsMigrationCta: React.FC = () => {
-    const glassRef = useRef<HTMLDivElement>(null);
-    const observerRef = useRef<MutationObserver | null>(null);
-    const [glassReady, setGlassReady] = useState(false);
+  const glassRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<MutationObserver | null>(null);
+  const [glassReady, setGlassReady] = useState(false);
 
-    useEffect(() => {
-        let cancelled = false;
+  useEffect(() => {
+    let cancelled = false;
 
-        const watchForCanvas = () => {
-            const host = glassRef.current;
-            if (!host) return;
+    const watchForCanvas = () => {
+      const host = glassRef.current;
+      if (!host) return;
 
-            if (host.querySelector('canvas')) {
-                setGlassReady(true);
-                return;
-            }
+      if (host.querySelector("canvas")) {
+        setGlassReady(true);
+        return;
+      }
 
-            observerRef.current?.disconnect();
-            observerRef.current = new MutationObserver(() => {
-                if (host.querySelector('canvas')) {
-                    setGlassReady(true);
-                    observerRef.current?.disconnect();
-                    observerRef.current = null;
-                }
-            });
+      observerRef.current?.disconnect();
+      observerRef.current = new MutationObserver(() => {
+        if (host.querySelector("canvas")) {
+          setGlassReady(true);
+          observerRef.current?.disconnect();
+          observerRef.current = null;
+        }
+      });
 
-            observerRef.current.observe(host, { childList: true, subtree: true });
-        };
+      observerRef.current.observe(host, { childList: true, subtree: true });
+    };
 
-        ensureHrDocsGlassRuntime()
-            .then(() => {
-                if (cancelled) return;
+    ensureHrDocsGlassRuntime()
+      .then(() => {
+        if (cancelled) return;
 
-                window.setTimeout(() => {
-                    if (cancelled) return;
-                    watchForCanvas();
-                }, 80);
-            })
-            .catch(() => {
-                if (!cancelled) {
-                    setGlassReady(false);
-                }
-            });
+        window.setTimeout(() => {
+          if (cancelled) return;
+          watchForCanvas();
+        }, 80);
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setGlassReady(false);
+        }
+      });
 
-        return () => {
-            cancelled = true;
-            observerRef.current?.disconnect();
-            observerRef.current = null;
-        };
-    }, []);
+    return () => {
+      cancelled = true;
+      observerRef.current?.disconnect();
+      observerRef.current = null;
+    };
+  }, []);
 
-    return (
-        <section className="hrdocs-migration-section">
-            <div className="max-w-7xl mx-auto px-6 w-full">
-                <div className="hrdocs-migration-card">
-                    <div className={`hrdocs-migration-card__glass ${glassReady ? 'is-ready' : ''}`}>
-                        <div className="hrdocs-migration-card__glass-fallback" aria-hidden="true" />
-                        <div
-                            ref={glassRef}
-                            data-distortion="0.25"
-                            data-shape-type-one="0"
-                            data-size-two="1"
-                            data-shininess="800"
-                            data-use-blob-two="true"
-                            data-gloss="0.3"
-                            data-shape-type-two="3"
-                            data-width-variation="1.8"
-                            data-use-three-color="false"
-                            data-sensitivity-three="0.15"
-                            data-color-three="#002A6A"
-                            data-sensitivity-one="0.15"
-                            data-size-three="1.3"
-                            data-fluted-glass="true"
-                            data-noise="0.40"
-                            data-hover="true"
-                            data-color-one="#146ef5"
-                            data-columns="4"
-                            data-shape-type-three="0"
-                            data-sensitivity-two="0.15"
-                            data-size-one="0.85"
-                            data-bg-color=""
-                            data-hover-intensity=".2"
-                            data-color-two="#146ef5"
-                            data-use-blob-one="true"
-                            data-background-image=""
-                            className="hrdocs-migration-card__glass-canvas fluted-glass-canvas"
-                        />
-                    </div>
+  return (
+    <section className="hrdocs-migration-section">
+      <div className="max-w-7xl mx-auto px-6 w-full">
+        <div className="hrdocs-migration-card">
+          <div
+            className={`hrdocs-migration-card__glass ${glassReady ? "is-ready" : ""}`}
+          >
+            <div
+              className="hrdocs-migration-card__glass-fallback"
+              aria-hidden="true"
+            />
+            <div
+              ref={glassRef}
+              data-distortion="0.25"
+              data-shape-type-one="0"
+              data-size-two="1"
+              data-shininess="800"
+              data-use-blob-two="true"
+              data-gloss="0.3"
+              data-shape-type-two="3"
+              data-width-variation="1.8"
+              data-use-three-color="false"
+              data-sensitivity-three="0.15"
+              data-color-three="#002A6A"
+              data-sensitivity-one="0.15"
+              data-size-three="1.3"
+              data-fluted-glass="true"
+              data-noise="0.40"
+              data-hover="true"
+              data-color-one="#146ef5"
+              data-columns="4"
+              data-shape-type-three="0"
+              data-sensitivity-two="0.15"
+              data-size-one="0.85"
+              data-bg-color=""
+              data-hover-intensity=".2"
+              data-color-two="#146ef5"
+              data-use-blob-one="true"
+              data-background-image=""
+              className="hrdocs-migration-card__glass-canvas fluted-glass-canvas"
+            />
+          </div>
 
-                    <div className="hrdocs-migration-card__body">
-                        <div className="hrdocs-migration-card__content">
-                            <div className="hrdocs-migration-card__copy-group">
-                                <h2 className="hrdocs-migration-card__title">How to move from fragmented HR ops to one governed system</h2>
-                                <p className="hrdocs-migration-card__body-copy">
-                                    Growing teams need to unplug from spreadsheet sprawl, chat-based approvals, missing document controls, and payroll bottlenecks that drain time and create compliance risk. Explore the system story to see why and how the system reconnects records, workflows, and auditability so HR teams can refocus on operational clarity, decision speed, and control.
-                                </p>
-                            </div>
+          <div className="hrdocs-migration-card__body">
+            <div className="hrdocs-migration-card__content">
+              <div className="hrdocs-migration-card__copy-group">
+                <h2 className="hrdocs-migration-card__title">
+                  How to move from fragmented HR ops to one governed system
+                </h2>
+                <p className="hrdocs-migration-card__body-copy">
+                  Growing teams need to unplug from spreadsheet sprawl,
+                  chat-based approvals, missing document controls, and payroll
+                  bottlenecks that drain time and create compliance risk.
+                  Explore the system story to see why and how the system
+                  reconnects records, workflows, and auditability so HR teams
+                  can refocus on operational clarity, decision speed, and
+                  control.
+                </p>
+              </div>
 
-                            <a className="hrdocs-migration-card__button" href="/blog/blog-07">
-                                <span className="hrdocs-migration-card__button-text">Get the story</span>
-                            </a>
-                        </div>
-
-                        <div className="hrdocs-migration-card__cover-col">
-                            <div className="hrdocs-migration-card__cover-wrap">
-                                <img
-                                    src="/images/hr-docs/resources_ebook.avif"
-                                    alt="Cover art for the HR documentation system guide"
-                                    loading="lazy"
-                                    className="hrdocs-migration-card__cover"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              <a className="hrdocs-migration-card__button" href="/blog">
+                <span className="hrdocs-migration-card__button-text">
+                  Get the story
+                </span>
+              </a>
             </div>
-        </section>
-    );
+
+            <div className="hrdocs-migration-card__cover-col">
+              <div className="hrdocs-migration-card__cover-wrap">
+                <img
+                  src="/images/hr-docs/resources_ebook.avif"
+                  alt="Cover art for the HR documentation system guide"
+                  loading="lazy"
+                  className="hrdocs-migration-card__cover"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 const NativeHrDocsCustomersSection: React.FC = () => {
-    const [activeSlide, setActiveSlide] = useState(1);
+  const [activeSlide, setActiveSlide] = useState(1);
 
-    const goToSlide = (targetIndex: number) => {
-        const totalSlides = hrDocsTestimonials.length;
-        const clampedIndex = Math.max(0, Math.min(targetIndex, totalSlides - 1));
-        setActiveSlide(clampedIndex);
-    };
+  const goToSlide = (targetIndex: number) => {
+    const totalSlides = hrDocsTestimonials.length;
+    const clampedIndex = Math.max(0, Math.min(targetIndex, totalSlides - 1));
+    setActiveSlide(clampedIndex);
+  };
 
-    return (
-        <>
-            <section className="hrdocs-customers-section">
-                <div className="max-w-7xl mx-auto px-6 w-full">
-                    <div className="hrdocs-customers__intro-row">
-                        <div className="hrdocs-customers__intro-col">
-                            <h2 className="hrdocs-customers__heading">Built for real HR operations</h2>
-                            <p className="hrdocs-customers__summary">
-                                See the workflows, controls, and operational patterns demonstrated across real HR processes.
-                            </p>
-                        </div>
-                    </div>
+  return (
+    <>
+      <section className="hrdocs-customers-section">
+        <div className="max-w-7xl mx-auto px-6 w-full">
+          <div className="hrdocs-customers__intro-row">
+            <div className="hrdocs-customers__intro-col">
+              <h2 className="hrdocs-customers__heading">
+                Built for real HR operations
+              </h2>
+              <p className="hrdocs-customers__summary">
+                See the workflows, controls, and operational patterns
+                demonstrated across real HR processes.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="hrdocs-customers-slider-section">
+        <div className="max-w-7xl mx-auto px-6 w-full">
+          <div className="hrdocs-customers-slider">
+            <div className="hrdocs-customers-slider__controls">
+              <button
+                type="button"
+                className={`hrdocs-customers-slider__control circle-btn${activeSlide === 0 ? " swiper-button-disabled" : ""}`}
+                data-direction="previous"
+                aria-label="Previous testimonial"
+                aria-disabled={activeSlide === 0}
+                onClick={() => goToSlide(activeSlide - 1)}
+                disabled={activeSlide === 0}
+              >
+                <div
+                  data-wf--button-icon--variant="arrow-left"
+                  className="button-icon-wrap"
+                >
+                  <div className="accordion-line-wrap">
+                    <div className="accordion-icon_line cc-horizontal cc-accordion-card"></div>
+                    <div className="accordion-icon_line cc-vertical cc-accordion-card"></div>
+                  </div>
+                  <div
+                    className="button-icon cc-arrow-right"
+                    aria-hidden="true"
+                  ></div>
+                  <div
+                    className="button-icon cc-arrow-up-right"
+                    aria-hidden="true"
+                  ></div>
+                  <div className="button-icon cc-play" aria-hidden="true"></div>
+                  <div
+                    className="button-icon cc-arrow-down"
+                    aria-hidden="true"
+                  ></div>
+                  <div
+                    className="button-icon cc-arrow-left"
+                    aria-hidden="true"
+                  ></div>
+                  <div
+                    className="button-icon cc-arrow-up"
+                    aria-hidden="true"
+                  ></div>
                 </div>
-            </section>
+              </button>
+              <button
+                type="button"
+                className={`hrdocs-customers-slider__control circle-btn${activeSlide === hrDocsTestimonials.length - 1 ? " swiper-button-disabled" : ""}`}
+                data-direction="next"
+                aria-label="Next testimonial"
+                aria-disabled={activeSlide === hrDocsTestimonials.length - 1}
+                onClick={() => goToSlide(activeSlide + 1)}
+                disabled={activeSlide === hrDocsTestimonials.length - 1}
+              >
+                <div
+                  data-wf--button-icon--variant="arrow-right"
+                  className="button-icon-wrap"
+                >
+                  <div className="accordion-line-wrap">
+                    <div className="accordion-icon_line cc-horizontal cc-accordion-card"></div>
+                    <div className="accordion-icon_line cc-vertical cc-accordion-card"></div>
+                  </div>
+                  <div
+                    className="button-icon cc-arrow-right"
+                    aria-hidden="true"
+                  ></div>
+                  <div
+                    className="button-icon cc-arrow-up-right"
+                    aria-hidden="true"
+                  ></div>
+                  <div className="button-icon cc-play" aria-hidden="true"></div>
+                  <div
+                    className="button-icon cc-arrow-down"
+                    aria-hidden="true"
+                  ></div>
+                  <div
+                    className="button-icon cc-arrow-left"
+                    aria-hidden="true"
+                  ></div>
+                  <div
+                    className="button-icon cc-arrow-up"
+                    aria-hidden="true"
+                  ></div>
+                </div>
+              </button>
+            </div>
 
-            <section className="hrdocs-customers-slider-section">
-                <div className="max-w-7xl mx-auto px-6 w-full">
-                    <div className="hrdocs-customers-slider">
-                        <div className="hrdocs-customers-slider__controls">
-                            <button
-                                type="button"
-                                className={`hrdocs-customers-slider__control circle-btn${activeSlide === 0 ? ' swiper-button-disabled' : ''}`}
-                                data-direction="previous"
-                                aria-label="Previous testimonial"
-                                aria-disabled={activeSlide === 0}
-                                onClick={() => goToSlide(activeSlide - 1)}
-                                disabled={activeSlide === 0}
-                            >
-                                <div data-wf--button-icon--variant="arrow-left" className="button-icon-wrap">
-                                    <div className="accordion-line-wrap">
-                                        <div className="accordion-icon_line cc-horizontal cc-accordion-card"></div>
-                                        <div className="accordion-icon_line cc-vertical cc-accordion-card"></div>
-                                    </div>
-                                    <div className="button-icon cc-arrow-right" aria-hidden="true"></div>
-                                    <div className="button-icon cc-arrow-up-right" aria-hidden="true"></div>
-                                    <div className="button-icon cc-play" aria-hidden="true"></div>
-                                    <div className="button-icon cc-arrow-down" aria-hidden="true"></div>
-                                    <div className="button-icon cc-arrow-left" aria-hidden="true"></div>
-                                    <div className="button-icon cc-arrow-up" aria-hidden="true"></div>
-                                </div>
-                            </button>
-                            <button
-                                type="button"
-                                className={`hrdocs-customers-slider__control circle-btn${activeSlide === hrDocsTestimonials.length - 1 ? ' swiper-button-disabled' : ''}`}
-                                data-direction="next"
-                                aria-label="Next testimonial"
-                                aria-disabled={activeSlide === hrDocsTestimonials.length - 1}
-                                onClick={() => goToSlide(activeSlide + 1)}
-                                disabled={activeSlide === hrDocsTestimonials.length - 1}
-                            >
-                                <div data-wf--button-icon--variant="arrow-right" className="button-icon-wrap">
-                                    <div className="accordion-line-wrap">
-                                        <div className="accordion-icon_line cc-horizontal cc-accordion-card"></div>
-                                        <div className="accordion-icon_line cc-vertical cc-accordion-card"></div>
-                                    </div>
-                                    <div className="button-icon cc-arrow-right" aria-hidden="true"></div>
-                                    <div className="button-icon cc-arrow-up-right" aria-hidden="true"></div>
-                                    <div className="button-icon cc-play" aria-hidden="true"></div>
-                                    <div className="button-icon cc-arrow-down" aria-hidden="true"></div>
-                                    <div className="button-icon cc-arrow-left" aria-hidden="true"></div>
-                                    <div className="button-icon cc-arrow-up" aria-hidden="true"></div>
-                                </div>
-                            </button>
-                        </div>
-
-                        <div className="hrdocs-customers-slider__offset">
-                            <div
-                                className="hrdocs-customers-slider__track"
-                                data-active-slide={activeSlide}
-                                role="list"
-                                aria-label="Customer testimonials"
-                            >
-                                {hrDocsTestimonials.map((testimonial, index) => (
-                                    <div
-                                        key={testimonial.name}
-                                        data-index={index}
-                                        className="hrdocs-customers-slider__slide"
-                                        role="listitem"
-                                        aria-current={activeSlide === index ? 'true' : undefined}
-                                    >
-                                        <div className="hrdocs-customers-slider__card">
-                                            <div className="hrdocs-customers-slider__card-body">
-                                                <div className="hrdocs-customers-slider__meta-col">
-                                                    <div className="hrdocs-customers-slider__avatar-row">
-                                                        <div className="hrdocs-customers-slider__avatar-shell">
-                                                            <img
-                                                                src={testimonial.imageSrc}
-                                                                alt={testimonial.imageAlt}
-                                                                loading="lazy"
-                                                                className="hrdocs-customers-slider__avatar-image"
-                                                            />
-                                                        </div>
-
-                                                        <div className="hrdocs-customers-slider__person">
-                                                            <div className="hrdocs-customers-slider__name">{testimonial.name}</div>
-                                                            <div className="hrdocs-customers-slider__title-wrap">
-                                                                <span>{testimonial.title}</span>
-                                                                <span>, </span>
-                                                                <span>{testimonial.company}</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="hrdocs-customers-slider__quote-col">
-                                                    <blockquote className="hrdocs-customers-slider__quote">
-                                                        <p>{testimonial.quote}</p>
-                                                    </blockquote>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
+            <div className="hrdocs-customers-slider__offset">
+              <div
+                className="hrdocs-customers-slider__track"
+                data-active-slide={activeSlide}
+                role="list"
+                aria-label="Customer testimonials"
+              >
+                {hrDocsTestimonials.map((testimonial, index) => (
+                  <div
+                    key={testimonial.name}
+                    data-index={index}
+                    className="hrdocs-customers-slider__slide"
+                    role="listitem"
+                    aria-current={activeSlide === index ? "true" : undefined}
+                  >
+                    <div className="hrdocs-customers-slider__card">
+                      <div className="hrdocs-customers-slider__card-body">
+                        <div className="hrdocs-customers-slider__meta-col">
+                          <div className="hrdocs-customers-slider__avatar-row">
+                            <div className="hrdocs-customers-slider__avatar-shell">
+                              <img
+                                src={testimonial.imageSrc}
+                                alt={testimonial.imageAlt}
+                                loading="lazy"
+                                className="hrdocs-customers-slider__avatar-image"
+                              />
                             </div>
+
+                            <div className="hrdocs-customers-slider__person">
+                              <div className="hrdocs-customers-slider__name">
+                                {testimonial.name}
+                              </div>
+                              <div className="hrdocs-customers-slider__title-wrap">
+                                <span>{testimonial.title}</span>
+                                <span>, </span>
+                                <span>{testimonial.company}</span>
+                              </div>
+                            </div>
+                          </div>
                         </div>
+
+                        <div className="hrdocs-customers-slider__quote-col">
+                          <blockquote className="hrdocs-customers-slider__quote">
+                            <p>{testimonial.quote}</p>
+                          </blockquote>
+                        </div>
+                      </div>
                     </div>
-                </div>
-            </section>
-        </>
-    );
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
 };
 
 const hrDocsComparisonIconSrc: Record<HrDocsComparisonIcon, string> = {
-    no: 'https://dhygzobemt712.cloudfront.net/Icons/Light/24px/CircleNo.svg',
-    minus: 'https://dhygzobemt712.cloudfront.net/Icons/Light/24px/CircleMinus.svg',
-    check: 'https://dhygzobemt712.cloudfront.net/Icons/Light/24px/CircleCheckYes.svg',
+  no: "https://dhygzobemt712.cloudfront.net/Icons/Light/24px/CircleNo.svg",
+  minus:
+    "https://dhygzobemt712.cloudfront.net/Icons/Light/24px/CircleMinus.svg",
+  check:
+    "https://dhygzobemt712.cloudfront.net/Icons/Light/24px/CircleCheckYes.svg",
 };
 
 const NativeHrDocsComparisonTable: React.FC = () => {
-    const [openRows, setOpenRows] = useState<number[]>([]);
+  const [openRows, setOpenRows] = useState<number[]>([]);
 
-    const toggleRow = (rowIndex: number) => {
-        setOpenRows(currentRows =>
-            currentRows.includes(rowIndex)
-                ? currentRows.filter(index => index !== rowIndex)
-                : [...currentRows, rowIndex]
-        );
-    };
-
-    const isRowOpen = (rowIndex: number) => openRows.includes(rowIndex);
-
-    return (
-        <section className="hrdocs-compare-section">
-            <div className="max-w-7xl mx-auto px-6 w-full">
-                <div className="hrdocs-compare__intro-row">
-                    <div className="hrdocs-compare__intro-col">
-                        <h2 className="hrdocs-compare__heading">
-                            Before (Chaos) vs. After
-                            <br className="hrdocs-compare__heading-break" />
-                            (Governed System)
-                        </h2>
-                    </div>
-                </div>
-
-                <div className="hrdocs-compare__spacer" aria-hidden="true" />
-
-                <div
-                    className="hrdocs-compare__table-shell"
-                    role="table"
-                    aria-label="Before vs After: Legacy HR Process vs Governed HR System"
-                    aria-colcount={4}
-                    aria-rowcount={hrDocsComparisonRows.length + 1}
-                >
-                    <div className="hrdocs-compare__table-slot" role="rowgroup">
-                        <div className="hrdocs-compare__row hrdocs-compare__row--header">
-                            <div role="row" className="hrdocs-compare__row-slot">
-                                <div className="hrdocs-compare__cell hrdocs-compare__cell--header" role="columnheader">
-                                    <div className="hrdocs-compare__cell-slot hrdocs-compare__cell-slot--feature">
-                                        <div className="hrdocs-compare__rich-text hrdocs-compare__rich-text--header">
-                                            <p>
-                                                <strong>Workflow</strong>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="hrdocs-compare__cell hrdocs-compare__cell--header-value" role="columnheader">
-                                    <div className="hrdocs-compare__cell-slot hrdocs-compare__cell-slot--header-value">
-                                        <div className="hrdocs-compare__rich-text hrdocs-compare__rich-text--header">
-                                            <p>
-                                                <strong>Legacy Process</strong>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="hrdocs-compare__cell hrdocs-compare__cell--header-value" role="columnheader">
-                                    <div className="hrdocs-compare__cell-slot hrdocs-compare__cell-slot--header-value">
-                                        <div className="hrdocs-compare__rich-text hrdocs-compare__rich-text--header">
-                                            <p>
-                                                <strong>Standard App</strong>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="hrdocs-compare__cell hrdocs-compare__cell--header-value is-highlighted" role="columnheader">
-                                    <div className="hrdocs-compare__cell-slot hrdocs-compare__cell-slot--header-value">
-                                        <div className="hrdocs-compare__rich-text hrdocs-compare__rich-text--header">
-                                            <p>
-                                                <strong>Governed System</strong>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {hrDocsComparisonRows.map((row, rowIndex) => {
-                            const rowOpen = isRowOpen(rowIndex);
-                            const cells = [
-                                row.legacyProcess,
-                                row.standardApp,
-                                row.erpLite,
-                            ];
-
-                            return (
-                                <div
-                                    key={row.feature}
-                                    className={`hrdocs-compare__row ${rowOpen ? 'is-open' : ''}`}
-                                    data-interaction="tooltip-parent"
-                                >
-                                    <div role="row" className="hrdocs-compare__row-slot">
-                                        <div className="hrdocs-compare__cell hrdocs-compare__cell--feature" role="cell">
-                                            <div className="hrdocs-compare__cell-slot hrdocs-compare__cell-slot--feature">
-                                                <div className="hrdocs-compare__rich-text">
-                                                    <p>{row.feature}</p>
-                                                </div>
-                                                <div className="hrdocs-compare__tooltip-expand">
-                                                    <button
-                                                        type="button"
-                                                        data-interaction="expand-tooltip"
-                                                        className="hrdocs-compare__toggle"
-                                                        aria-label="Tooltip"
-                                                        aria-expanded={rowOpen}
-                                                        onClick={() => toggleRow(rowIndex)}
-                                                    >
-                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 15" fill="none" className="hrdocs-compare__toggle-icon" aria-hidden="true">
-                                                            <path d="M7 0.181641C3.1402 0.181641 0 3.32188 0 7.18168C0 11.0414 3.1402 14.1816 7 14.1816C10.8598 14.1816 14 11.0414 14 7.18168C14 3.32188 10.8598 0.181641 7 0.181641ZM7 12.9089C3.84194 12.9089 1.27273 10.3397 1.27273 7.18168C1.27273 4.02366 3.84194 1.45437 7 1.45437C10.1581 1.45437 12.7273 4.02366 12.7273 7.18168C12.7273 10.3397 10.158 12.9089 7 12.9089Z" fill="currentColor" />
-                                                            <path d="M7.00066 3.15137C6.53289 3.15137 6.15234 3.53217 6.15234 4.00023C6.15234 4.46788 6.53289 4.84834 7.00066 4.84834C7.46843 4.84834 7.84897 4.46788 7.84897 4.00023C7.84897 3.53217 7.46843 3.15137 7.00066 3.15137Z" fill="currentColor" />
-                                                            <path d="M6.99964 6.12109C6.6482 6.12109 6.36328 6.40601 6.36328 6.75746V10.5756C6.36328 10.927 6.6482 11.212 6.99964 11.212C7.35108 11.212 7.636 10.927 7.636 10.5756V6.75746C7.636 6.40601 7.35108 6.12109 6.99964 6.12109Z" fill="currentColor" />
-                                                        </svg>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {cells.map((cell, cellIndex) => {
-                                            const isHighlightedColumn = cellIndex === 2;
-                                            const hasDetail = Boolean(cell.detail);
-
-                                            return (
-                                                <div
-                                                    key={`${row.feature}-${cellIndex}`}
-                                                    className={`hrdocs-compare__cell hrdocs-compare__cell--value ${isHighlightedColumn ? 'is-highlighted' : ''}`}
-                                                    role="cell"
-                                                >
-                                                    <div className="hrdocs-compare__cell-slot hrdocs-compare__cell-slot--value">
-                                                        <img
-                                                            src={hrDocsComparisonIconSrc[cell.icon]}
-                                                            alt=""
-                                                            role="presentation"
-                                                            className={`hrdocs-compare__icon hrdocs-compare__icon--${cell.icon}`}
-                                                        />
-
-                                                        {hasDetail ? (
-                                                            <div className="hrdocs-compare__tooltip-expand">
-                                                                <div
-                                                                    role="tooltip"
-                                                                    data-interaction="tooltip-pane"
-                                                                    aria-hidden={!rowOpen}
-                                                                    className={`hrdocs-compare__tooltip-pane ${rowOpen ? 'is-active' : ''}`}
-                                                                >
-                                                                    <div className="hrdocs-compare__tooltip-pane-inner">
-                                                                        <div className="hrdocs-compare__tooltip-copy">
-                                                                            <p>{cell.detail}</p>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        ) : null}
-                                                    </div>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-            </div>
-        </section>
+  const toggleRow = (rowIndex: number) => {
+    setOpenRows((currentRows) =>
+      currentRows.includes(rowIndex)
+        ? currentRows.filter((index) => index !== rowIndex)
+        : [...currentRows, rowIndex],
     );
+  };
+
+  const isRowOpen = (rowIndex: number) => openRows.includes(rowIndex);
+
+  return (
+    <section className="hrdocs-compare-section">
+      <div className="max-w-7xl mx-auto px-6 w-full">
+        <div className="hrdocs-compare__intro-row">
+          <div className="hrdocs-compare__intro-col">
+            <h2 className="hrdocs-compare__heading">
+              Before (Chaos) vs. After
+              <br className="hrdocs-compare__heading-break" />
+              (Governed System)
+            </h2>
+          </div>
+        </div>
+
+        <div className="hrdocs-compare__spacer" aria-hidden="true" />
+
+        <div
+          className="hrdocs-compare__table-shell"
+          role="table"
+          aria-label="Before vs After: Legacy HR Process vs Governed HR System"
+          aria-colcount={4}
+          aria-rowcount={hrDocsComparisonRows.length + 1}
+        >
+          <div className="hrdocs-compare__table-slot" role="rowgroup">
+            <div className="hrdocs-compare__row hrdocs-compare__row--header">
+              <div role="row" className="hrdocs-compare__row-slot">
+                <div
+                  className="hrdocs-compare__cell hrdocs-compare__cell--header"
+                  role="columnheader"
+                >
+                  <div className="hrdocs-compare__cell-slot hrdocs-compare__cell-slot--feature">
+                    <div className="hrdocs-compare__rich-text hrdocs-compare__rich-text--header">
+                      <p>
+                        <strong>Workflow</strong>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="hrdocs-compare__cell hrdocs-compare__cell--header-value"
+                  role="columnheader"
+                >
+                  <div className="hrdocs-compare__cell-slot hrdocs-compare__cell-slot--header-value">
+                    <div className="hrdocs-compare__rich-text hrdocs-compare__rich-text--header">
+                      <p>
+                        <strong>Legacy Process</strong>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="hrdocs-compare__cell hrdocs-compare__cell--header-value"
+                  role="columnheader"
+                >
+                  <div className="hrdocs-compare__cell-slot hrdocs-compare__cell-slot--header-value">
+                    <div className="hrdocs-compare__rich-text hrdocs-compare__rich-text--header">
+                      <p>
+                        <strong>Standard App</strong>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="hrdocs-compare__cell hrdocs-compare__cell--header-value is-highlighted"
+                  role="columnheader"
+                >
+                  <div className="hrdocs-compare__cell-slot hrdocs-compare__cell-slot--header-value">
+                    <div className="hrdocs-compare__rich-text hrdocs-compare__rich-text--header">
+                      <p>
+                        <strong>Governed System</strong>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {hrDocsComparisonRows.map((row, rowIndex) => {
+              const rowOpen = isRowOpen(rowIndex);
+              const cells = [row.legacyProcess, row.standardApp, row.erpLite];
+
+              return (
+                <div
+                  key={row.feature}
+                  className={`hrdocs-compare__row ${rowOpen ? "is-open" : ""}`}
+                  data-interaction="tooltip-parent"
+                >
+                  <div role="row" className="hrdocs-compare__row-slot">
+                    <div
+                      className="hrdocs-compare__cell hrdocs-compare__cell--feature"
+                      role="cell"
+                    >
+                      <div className="hrdocs-compare__cell-slot hrdocs-compare__cell-slot--feature">
+                        <div className="hrdocs-compare__rich-text">
+                          <p>{row.feature}</p>
+                        </div>
+                        <div className="hrdocs-compare__tooltip-expand">
+                          <button
+                            type="button"
+                            data-interaction="expand-tooltip"
+                            className="hrdocs-compare__toggle"
+                            aria-label="Tooltip"
+                            aria-expanded={rowOpen}
+                            onClick={() => toggleRow(rowIndex)}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 14 15"
+                              fill="none"
+                              className="hrdocs-compare__toggle-icon"
+                              aria-hidden="true"
+                            >
+                              <path
+                                d="M7 0.181641C3.1402 0.181641 0 3.32188 0 7.18168C0 11.0414 3.1402 14.1816 7 14.1816C10.8598 14.1816 14 11.0414 14 7.18168C14 3.32188 10.8598 0.181641 7 0.181641ZM7 12.9089C3.84194 12.9089 1.27273 10.3397 1.27273 7.18168C1.27273 4.02366 3.84194 1.45437 7 1.45437C10.1581 1.45437 12.7273 4.02366 12.7273 7.18168C12.7273 10.3397 10.158 12.9089 7 12.9089Z"
+                                fill="currentColor"
+                              />
+                              <path
+                                d="M7.00066 3.15137C6.53289 3.15137 6.15234 3.53217 6.15234 4.00023C6.15234 4.46788 6.53289 4.84834 7.00066 4.84834C7.46843 4.84834 7.84897 4.46788 7.84897 4.00023C7.84897 3.53217 7.46843 3.15137 7.00066 3.15137Z"
+                                fill="currentColor"
+                              />
+                              <path
+                                d="M6.99964 6.12109C6.6482 6.12109 6.36328 6.40601 6.36328 6.75746V10.5756C6.36328 10.927 6.6482 11.212 6.99964 11.212C7.35108 11.212 7.636 10.927 7.636 10.5756V6.75746C7.636 6.40601 7.35108 6.12109 6.99964 6.12109Z"
+                                fill="currentColor"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {cells.map((cell, cellIndex) => {
+                      const isHighlightedColumn = cellIndex === 2;
+                      const hasDetail = Boolean(cell.detail);
+
+                      return (
+                        <div
+                          key={`${row.feature}-${cellIndex}`}
+                          className={`hrdocs-compare__cell hrdocs-compare__cell--value ${isHighlightedColumn ? "is-highlighted" : ""}`}
+                          role="cell"
+                        >
+                          <div className="hrdocs-compare__cell-slot hrdocs-compare__cell-slot--value">
+                            <img
+                              src={hrDocsComparisonIconSrc[cell.icon]}
+                              alt=""
+                              role="presentation"
+                              className={`hrdocs-compare__icon hrdocs-compare__icon--${cell.icon}`}
+                            />
+
+                            {hasDetail ? (
+                              <div className="hrdocs-compare__tooltip-expand">
+                                <div
+                                  role="tooltip"
+                                  data-interaction="tooltip-pane"
+                                  aria-hidden={!rowOpen}
+                                  className={`hrdocs-compare__tooltip-pane ${rowOpen ? "is-active" : ""}`}
+                                >
+                                  <div className="hrdocs-compare__tooltip-pane-inner">
+                                    <div className="hrdocs-compare__tooltip-copy">
+                                      <p>{cell.detail}</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            ) : null}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 const NativeHrDocsBusinessImpactSection: React.FC = () => {
-    const glassRef = useRef<HTMLDivElement>(null);
-    const observerRef = useRef<MutationObserver | null>(null);
-    const [glassReady, setGlassReady] = useState(false);
+  const glassRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<MutationObserver | null>(null);
+  const [glassReady, setGlassReady] = useState(false);
 
-    useEffect(() => {
-        let cancelled = false;
+  useEffect(() => {
+    let cancelled = false;
 
-        const watchForCanvas = () => {
-            const host = glassRef.current;
-            if (!host) return;
+    const watchForCanvas = () => {
+      const host = glassRef.current;
+      if (!host) return;
 
-            if (host.querySelector('canvas')) {
-                setGlassReady(true);
-                return;
-            }
+      if (host.querySelector("canvas")) {
+        setGlassReady(true);
+        return;
+      }
 
-            observerRef.current?.disconnect();
-            observerRef.current = new MutationObserver(() => {
-                if (host.querySelector('canvas')) {
-                    setGlassReady(true);
-                    observerRef.current?.disconnect();
-                    observerRef.current = null;
-                }
-            });
+      observerRef.current?.disconnect();
+      observerRef.current = new MutationObserver(() => {
+        if (host.querySelector("canvas")) {
+          setGlassReady(true);
+          observerRef.current?.disconnect();
+          observerRef.current = null;
+        }
+      });
 
-            observerRef.current.observe(host, { childList: true, subtree: true });
-        };
+      observerRef.current.observe(host, { childList: true, subtree: true });
+    };
 
-        ensureHrDocsGlassRuntime()
-            .then(() => {
-                if (cancelled) return;
+    ensureHrDocsGlassRuntime()
+      .then(() => {
+        if (cancelled) return;
 
-                window.setTimeout(() => {
-                    if (cancelled) return;
-                    watchForCanvas();
-                }, 80);
-            })
-            .catch(() => {
-                if (!cancelled) {
-                    setGlassReady(false);
-                }
-            });
+        window.setTimeout(() => {
+          if (cancelled) return;
+          watchForCanvas();
+        }, 80);
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setGlassReady(false);
+        }
+      });
 
-        return () => {
-            cancelled = true;
-            observerRef.current?.disconnect();
-            observerRef.current = null;
-        };
-    }, []);
+    return () => {
+      cancelled = true;
+      observerRef.current?.disconnect();
+      observerRef.current = null;
+    };
+  }, []);
 
-    return (
-        <section className="hrdocs-business-impact-section">
-            <div className="max-w-7xl mx-auto px-6 w-full">
-                <div className="hrdocs-business-impact__card">
-                    <div className={`hrdocs-business-impact__glass ${glassReady ? 'is-ready' : ''}`}>
-                        <div className="hrdocs-business-impact__glass-fallback" aria-hidden="true" />
-                        <div
-                            ref={glassRef}
-                            data-distortion="0.25"
-                            data-shape-type-one="0"
-                            data-size-two="1"
-                            data-shininess="800"
-                            data-use-blob-two="false"
-                            data-gloss="0.3"
-                            data-shape-type-two="0"
-                            data-width-variation="1.8"
-                            data-use-three-color="false"
-                            data-sensitivity-three="0.15"
-                            data-color-three="#FF6B00"
-                            data-sensitivity-one="0.15"
-                            data-size-three="1.3"
-                            data-fluted-glass="true"
-                            data-noise="0.40"
-                            data-hover="false"
-                            data-color-one="#146ef5"
-                            data-columns="6"
-                            data-shape-type-three="0"
-                            data-sensitivity-two="0.15"
-                            data-size-one="0.85"
-                            data-bg-color="#000000"
-                            data-hover-intensity="2.0"
-                            data-color-two="#ffffff"
-                            data-use-blob-one="true"
-                            data-background-image=""
-                            className="hrdocs-business-impact__glass-canvas fluted-glass-canvas"
-                        />
-                    </div>
+  return (
+    <section className="hrdocs-business-impact-section">
+      <div className="max-w-7xl mx-auto px-6 w-full">
+        <div className="hrdocs-business-impact__card">
+          <div
+            className={`hrdocs-business-impact__glass ${glassReady ? "is-ready" : ""}`}
+          >
+            <div
+              className="hrdocs-business-impact__glass-fallback"
+              aria-hidden="true"
+            />
+            <div
+              ref={glassRef}
+              data-distortion="0.25"
+              data-shape-type-one="0"
+              data-size-two="1"
+              data-shininess="800"
+              data-use-blob-two="false"
+              data-gloss="0.3"
+              data-shape-type-two="0"
+              data-width-variation="1.8"
+              data-use-three-color="false"
+              data-sensitivity-three="0.15"
+              data-color-three="#FF6B00"
+              data-sensitivity-one="0.15"
+              data-size-three="1.3"
+              data-fluted-glass="true"
+              data-noise="0.40"
+              data-hover="false"
+              data-color-one="#146ef5"
+              data-columns="6"
+              data-shape-type-three="0"
+              data-sensitivity-two="0.15"
+              data-size-one="0.85"
+              data-bg-color="#000000"
+              data-hover-intensity="2.0"
+              data-color-two="#ffffff"
+              data-use-blob-one="true"
+              data-background-image=""
+              className="hrdocs-business-impact__glass-canvas fluted-glass-canvas"
+            />
+          </div>
 
-                    <div className="hrdocs-business-impact__body">
-                        <div className="hrdocs-business-impact__copy-col">
-                            <h2 className="hrdocs-business-impact__title">
-                                <span className="hrdocs-business-impact__title-line">See the operational</span>
-                                <span className="hrdocs-business-impact__title-line">impact of the system</span>
-                            </h2>
-                            <p className="hrdocs-business-impact__body-copy">
-                                <span className="hrdocs-business-impact__copy-line">
-                                    The implementation transformed HR from an administrative bottleneck{' '}
-                                </span>
-                                <span className="hrdocs-business-impact__copy-line">
-                                    into an auditable, self-service operation, eliminating weeks{' '}
-                                </span>
-                                <span className="hrdocs-business-impact__copy-line">
-                                    of manual payroll processing.
-                                </span>
-                            </p>
-                            <a data-wf--button--variant="primary" className="hrdocs-business-impact__button btn" href="/contact">
-                                <div className="hrdocs-business-impact__button-text btn-text">
-                                    Get in touch
-                                </div>
-                                <div className="hrdocs-business-impact__button-icon btn-icon" aria-hidden="true">
-                                    <div data-wf--button-icon--variant="arrow-right" className="button-icon-wrap">
-                                        <div className="accordion-line-wrap">
-                                            <div className="accordion-icon_line cc-horizontal cc-accordion-card"></div>
-                                            <div className="accordion-icon_line cc-vertical cc-accordion-card"></div>
-                                        </div>
-                                        <div className="button-icon cc-arrow-right" aria-hidden="true"></div>
-                                        <div className="button-icon cc-arrow-up-right" aria-hidden="true"></div>
-                                        <div className="button-icon cc-play" aria-hidden="true"></div>
-                                        <div className="button-icon cc-arrow-down" aria-hidden="true"></div>
-                                        <div className="button-icon cc-arrow-left" aria-hidden="true"></div>
-                                        <div className="button-icon cc-arrow-up" aria-hidden="true"></div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div className="hrdocs-business-impact__media-col">
-                            <div className="hrdocs-business-impact__image-offset">
-                                <div className="hrdocs-business-impact__image-frame">
-                                    <img
-                                        src="/images/hr-docs/g2-audit-trail.webp"
-                                        alt="HR audit log showing recorded HR events and payroll status changes"
-                                        loading="lazy"
-                                        className="hrdocs-business-impact__image"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+          <div className="hrdocs-business-impact__body">
+            <div className="hrdocs-business-impact__copy-col">
+              <h2 className="hrdocs-business-impact__title">
+                <span className="hrdocs-business-impact__title-line">
+                  See the operational
+                </span>
+                <span className="hrdocs-business-impact__title-line">
+                  impact of the system
+                </span>
+              </h2>
+              <p className="hrdocs-business-impact__body-copy">
+                <span className="hrdocs-business-impact__copy-line">
+                  The implementation transformed HR from an administrative
+                  bottleneck{" "}
+                </span>
+                <span className="hrdocs-business-impact__copy-line">
+                  into an auditable, self-service operation, eliminating
+                  weeks{" "}
+                </span>
+                <span className="hrdocs-business-impact__copy-line">
+                  of manual payroll processing.
+                </span>
+              </p>
+              <a
+                data-wf--button--variant="primary"
+                className="hrdocs-business-impact__button btn"
+                href="/contact"
+              >
+                <div className="hrdocs-business-impact__button-text btn-text">
+                  Get in touch
                 </div>
+                <div
+                  className="hrdocs-business-impact__button-icon btn-icon"
+                  aria-hidden="true"
+                >
+                  <div
+                    data-wf--button-icon--variant="arrow-right"
+                    className="button-icon-wrap"
+                  >
+                    <div className="accordion-line-wrap">
+                      <div className="accordion-icon_line cc-horizontal cc-accordion-card"></div>
+                      <div className="accordion-icon_line cc-vertical cc-accordion-card"></div>
+                    </div>
+                    <div
+                      className="button-icon cc-arrow-right"
+                      aria-hidden="true"
+                    ></div>
+                    <div
+                      className="button-icon cc-arrow-up-right"
+                      aria-hidden="true"
+                    ></div>
+                    <div
+                      className="button-icon cc-play"
+                      aria-hidden="true"
+                    ></div>
+                    <div
+                      className="button-icon cc-arrow-down"
+                      aria-hidden="true"
+                    ></div>
+                    <div
+                      className="button-icon cc-arrow-left"
+                      aria-hidden="true"
+                    ></div>
+                    <div
+                      className="button-icon cc-arrow-up"
+                      aria-hidden="true"
+                    ></div>
+                  </div>
+                </div>
+              </a>
             </div>
-        </section>
-    );
+
+            <div className="hrdocs-business-impact__media-col">
+              <div className="hrdocs-business-impact__image-offset">
+                <div className="hrdocs-business-impact__image-frame">
+                  <img
+                    src="/images/hr-docs/g2-audit-trail.webp"
+                    alt="HR audit log showing recorded HR events and payroll status changes"
+                    loading="lazy"
+                    className="hrdocs-business-impact__image"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 const NativeHrDocsG2Section: React.FC = () => {
-    const [activeTab, setActiveTab] = useState(0);
-    const [isDesktop, setIsDesktop] = useState(() => {
-        if (typeof window === 'undefined') {
-            return true;
-        }
+  const [activeTab, setActiveTab] = useState(0);
+  const [isDesktop, setIsDesktop] = useState(() => {
+    if (typeof window === "undefined") {
+      return true;
+    }
 
-        return window.matchMedia(HR_DOCS_CMS_TABS_DESKTOP_QUERY).matches;
-    });
+    return window.matchMedia(HR_DOCS_CMS_TABS_DESKTOP_QUERY).matches;
+  });
 
-    useEffect(() => {
-        if (typeof window === 'undefined') {
-            return;
-        }
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
 
-        const mediaQueryList = window.matchMedia(HR_DOCS_CMS_TABS_DESKTOP_QUERY);
-        const updateIsDesktop = (event: MediaQueryList | MediaQueryListEvent) => {
-            setIsDesktop(event.matches);
-        };
+    const mediaQueryList = window.matchMedia(HR_DOCS_CMS_TABS_DESKTOP_QUERY);
+    const updateIsDesktop = (event: MediaQueryList | MediaQueryListEvent) => {
+      setIsDesktop(event.matches);
+    };
 
-        updateIsDesktop(mediaQueryList);
+    updateIsDesktop(mediaQueryList);
 
-        if (typeof mediaQueryList.addEventListener === 'function') {
-            mediaQueryList.addEventListener('change', updateIsDesktop);
+    if (typeof mediaQueryList.addEventListener === "function") {
+      mediaQueryList.addEventListener("change", updateIsDesktop);
 
-            return () => {
-                mediaQueryList.removeEventListener('change', updateIsDesktop);
-            };
-        }
+      return () => {
+        mediaQueryList.removeEventListener("change", updateIsDesktop);
+      };
+    }
 
-        mediaQueryList.addListener(updateIsDesktop);
+    mediaQueryList.addListener(updateIsDesktop);
 
-        return () => {
-            mediaQueryList.removeListener(updateIsDesktop);
-        };
-    }, []);
+    return () => {
+      mediaQueryList.removeListener(updateIsDesktop);
+    };
+  }, []);
 
-    useEffect(() => {
-        if (!isDesktop) {
-            return;
-        }
+  useEffect(() => {
+    if (!isDesktop) {
+      return;
+    }
 
-        const timeoutId = window.setTimeout(() => {
-            setActiveTab(currentTab => (currentTab + 1) % hrDocsG2Tabs.length);
-        }, HR_DOCS_CMS_TABS_AUTOPLAY_MS);
+    const timeoutId = window.setTimeout(() => {
+      setActiveTab((currentTab) => (currentTab + 1) % hrDocsG2Tabs.length);
+    }, HR_DOCS_CMS_TABS_AUTOPLAY_MS);
 
-        return () => {
-            window.clearTimeout(timeoutId);
-        };
-    }, [activeTab, isDesktop]);
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [activeTab, isDesktop]);
 
-    return (
-        <section className="hrdocs-g2-section">
-            <div className="max-w-7xl mx-auto px-6 w-full">
-                <div className="hrdocs-g2-tabs">
-                    <div className="hrdocs-g2-tabs__menu">
-                        <div className="hrdocs-g2-tabs__content">
-                            <h2 className="hrdocs-g2-tabs__title">Workflows and rules</h2>
-                            <p className="hrdocs-g2-tabs__intro">
-                                Each module enforces specific operational rules. Hover over the tabs below to inspect how Leave, Payroll, Documents, and Attendance are systematically governed.
-                            </p>
-                        </div>
+  return (
+    <section className="hrdocs-g2-section">
+      <div className="max-w-7xl mx-auto px-6 w-full">
+        <div className="hrdocs-g2-tabs">
+          <div className="hrdocs-g2-tabs__menu">
+            <div className="hrdocs-g2-tabs__content">
+              <h2 className="hrdocs-g2-tabs__title">Workflows and rules</h2>
+              <p className="hrdocs-g2-tabs__intro">
+                Each module enforces specific operational rules. Hover over the
+                tabs below to inspect how Leave, Payroll, Documents, and
+                Attendance are systematically governed.
+              </p>
+            </div>
 
-                        <div className="hrdocs-g2-tabs__list" role="list">
-                            {hrDocsG2Tabs.map((tab, index) => {
-                                const isActive = index === activeTab;
+            <div className="hrdocs-g2-tabs__list" role="list">
+              {hrDocsG2Tabs.map((tab, index) => {
+                const isActive = index === activeTab;
 
-                                return (
-                                    <article
-                                        key={tab.title}
-                                        className={`hrdocs-g2-tabs__item ${isActive ? 'cc-active' : ''}`}
-                                        role="listitem"
-                                    >
-                                        <div className="hrdocs-g2-tabs__link-wrapper">
-                                            <button
-                                                type="button"
-                                                className="hrdocs-g2-tabs__button"
-                                                aria-label={`Select ${tab.title} tab`}
-                                                aria-pressed={isActive}
-                                                onClick={() => setActiveTab(index)}
-                                            />
+                return (
+                  <article
+                    key={tab.title}
+                    className={`hrdocs-g2-tabs__item ${isActive ? "cc-active" : ""}`}
+                    role="listitem"
+                  >
+                    <div className="hrdocs-g2-tabs__link-wrapper">
+                      <button
+                        type="button"
+                        className="hrdocs-g2-tabs__button"
+                        aria-label={`Select ${tab.title} tab`}
+                        aria-pressed={isActive}
+                        onClick={() => setActiveTab(index)}
+                      />
 
-                                            <div className="hrdocs-g2-tabs__progress-track" aria-hidden="true">
-                                                <div
-                                                    className="hrdocs-g2-tabs__progress-bar"
-                                                    style={isActive && isDesktop
-                                                        ? { animation: `hrdocsCmsTabsProgress ${HR_DOCS_CMS_TABS_AUTOPLAY_MS}ms linear forwards` }
-                                                        : undefined}
-                                                />
-                                            </div>
+                      <div
+                        className="hrdocs-g2-tabs__progress-track"
+                        aria-hidden="true"
+                      >
+                        <div
+                          className="hrdocs-g2-tabs__progress-bar"
+                          style={
+                            isActive && isDesktop
+                              ? {
+                                  animation: `hrdocsCmsTabsProgress ${HR_DOCS_CMS_TABS_AUTOPLAY_MS}ms linear forwards`,
+                                }
+                              : undefined
+                          }
+                        />
+                      </div>
 
-                                            <div className="hrdocs-g2-tabs__menu-text">
-                                                <h3 className="hrdocs-g2-tabs__tab-title">{tab.title}</h3>
-                                            </div>
-                                        </div>
-
-                                        <div
-                                            className="hrdocs-g2-tabs__stage"
-                                            aria-hidden={isDesktop ? !isActive : undefined}
-                                        >
-                                            <div className="hrdocs-g2-tabs__frame">
-                                                <img
-                                                    src={tab.imageSrc}
-                                                    alt={tab.imageAlt}
-                                                    loading="lazy"
-                                                    className="hrdocs-g2-tabs__image"
-                                                />
-                                            </div>
-                                        </div>
-                                    </article>
-                                );
-                            })}
-                        </div>
+                      <div className="hrdocs-g2-tabs__menu-text">
+                        <h3 className="hrdocs-g2-tabs__tab-title">
+                          {tab.title}
+                        </h3>
+                      </div>
                     </div>
 
-                    <div className="hrdocs-g2-tabs__spacer" aria-hidden="true" />
-                </div>
+                    <div
+                      className="hrdocs-g2-tabs__stage"
+                      aria-hidden={isDesktop ? !isActive : undefined}
+                    >
+                      <div className="hrdocs-g2-tabs__frame">
+                        <img
+                          src={tab.imageSrc}
+                          alt={tab.imageAlt}
+                          loading="lazy"
+                          className="hrdocs-g2-tabs__image"
+                        />
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
             </div>
-        </section>
-    );
+          </div>
+
+          <div className="hrdocs-g2-tabs__spacer" aria-hidden="true" />
+        </div>
+      </div>
+    </section>
+  );
 };
 
 const NativeHrDocsFaqSection: React.FC = () => {
-    const [openItems, setOpenItems] = useState<number[]>([]);
+  const [openItems, setOpenItems] = useState<number[]>([]);
 
-    const toggleItem = (itemIndex: number) => {
-        setOpenItems(currentItems =>
-            currentItems.includes(itemIndex)
-                ? currentItems.filter(index => index !== itemIndex)
-                : [...currentItems, itemIndex]
-        );
-    };
-
-    return (
-        <section className="hrdocs-faq-section">
-            <div className="max-w-7xl mx-auto px-6 w-full">
-                <div className="hrdocs-faq__spacer" aria-hidden="true" />
-                <div className="hrdocs-faq__row">
-                    <div className="hrdocs-faq__heading-col">
-                        <div className="hrdocs-faq__heading-sticky">
-                            <h2 className="hrdocs-faq__heading">About the system</h2>
-                        </div>
-                    </div>
-
-                    <div className="hrdocs-faq__list-col">
-                        <div className="hrdocs-faq__list">
-                            {hrDocsFaqItems.map((item, index) => {
-                                const isOpen = openItems.includes(index);
-                                const contentId = `hrdocs-faq-panel-${index}`;
-                                const triggerId = `hrdocs-faq-trigger-${index}`;
-
-                                return (
-                                    <details
-                                        key={item.question}
-                                        className="hrdocs-faq__item"
-                                        open={isOpen}
-                                    >
-                                        <summary
-                                            id={triggerId}
-                                            className="hrdocs-faq__trigger"
-                                            aria-controls={contentId}
-                                            onClick={(event) => {
-                                                event.preventDefault();
-                                                toggleItem(index);
-                                            }}
-                                        >
-                                            <div className="hrdocs-faq__title-icon-wrap">
-                                                <span className="hrdocs-faq__question">{item.question}</span>
-                                            </div>
-                                            <div className="hrdocs-faq__icon-wrap" aria-hidden="true">
-                                                <span className="hrdocs-faq__icon-line hrdocs-faq__icon-line--horizontal" />
-                                                <span className="hrdocs-faq__icon-line hrdocs-faq__icon-line--vertical" />
-                                            </div>
-                                        </summary>
-
-                                        <div
-                                            id={contentId}
-                                            className="hrdocs-faq__content"
-                                            aria-labelledby={triggerId}
-                                            data-overflow-focus
-                                        >
-                                            <div className="hrdocs-faq__content-spacer">
-                                                <div className="hrdocs-faq__answer">
-                                                    {item.answer.map((paragraph, paragraphIndex) => (
-                                                        <p key={`${item.question}-${paragraphIndex}`}>{paragraph}</p>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </details>
-                                );
-                            })}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+  const toggleItem = (itemIndex: number) => {
+    setOpenItems((currentItems) =>
+      currentItems.includes(itemIndex)
+        ? currentItems.filter((index) => index !== itemIndex)
+        : [...currentItems, itemIndex],
     );
+  };
+
+  return (
+    <section className="hrdocs-faq-section">
+      <div className="max-w-7xl mx-auto px-6 w-full">
+        <div className="hrdocs-faq__spacer" aria-hidden="true" />
+        <div className="hrdocs-faq__row">
+          <div className="hrdocs-faq__heading-col">
+            <div className="hrdocs-faq__heading-sticky">
+              <h2 className="hrdocs-faq__heading">About the system</h2>
+            </div>
+          </div>
+
+          <div className="hrdocs-faq__list-col">
+            <div className="hrdocs-faq__list">
+              {hrDocsFaqItems.map((item, index) => {
+                const isOpen = openItems.includes(index);
+                const contentId = `hrdocs-faq-panel-${index}`;
+                const triggerId = `hrdocs-faq-trigger-${index}`;
+
+                return (
+                  <details
+                    key={item.question}
+                    className="hrdocs-faq__item"
+                    open={isOpen}
+                  >
+                    <summary
+                      id={triggerId}
+                      className="hrdocs-faq__trigger"
+                      aria-controls={contentId}
+                      onClick={(event) => {
+                        event.preventDefault();
+                        toggleItem(index);
+                      }}
+                    >
+                      <div className="hrdocs-faq__title-icon-wrap">
+                        <span className="hrdocs-faq__question">
+                          {item.question}
+                        </span>
+                      </div>
+                      <div className="hrdocs-faq__icon-wrap" aria-hidden="true">
+                        <span className="hrdocs-faq__icon-line hrdocs-faq__icon-line--horizontal" />
+                        <span className="hrdocs-faq__icon-line hrdocs-faq__icon-line--vertical" />
+                      </div>
+                    </summary>
+
+                    <div
+                      id={contentId}
+                      className="hrdocs-faq__content"
+                      aria-labelledby={triggerId}
+                      data-overflow-focus
+                    >
+                      <div className="hrdocs-faq__content-spacer">
+                        <div className="hrdocs-faq__answer">
+                          {item.answer.map((paragraph, paragraphIndex) => (
+                            <p key={`${item.question}-${paragraphIndex}`}>
+                              {paragraph}
+                            </p>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </details>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 const NativeHrDocsScheduleDemoSection: React.FC = () => {
-    const glassRef = useRef<HTMLDivElement>(null);
-    const observerRef = useRef<MutationObserver | null>(null);
-    const [glassReady, setGlassReady] = useState(false);
+  const glassRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<MutationObserver | null>(null);
+  const [glassReady, setGlassReady] = useState(false);
 
-    useEffect(() => {
-        let cancelled = false;
+  useEffect(() => {
+    let cancelled = false;
 
-        const watchForCanvas = () => {
-            const host = glassRef.current;
-            if (!host) return;
+    const watchForCanvas = () => {
+      const host = glassRef.current;
+      if (!host) return;
 
-            if (host.querySelector('canvas')) {
-                setGlassReady(true);
-                return;
-            }
+      if (host.querySelector("canvas")) {
+        setGlassReady(true);
+        return;
+      }
 
-            observerRef.current?.disconnect();
-            observerRef.current = new MutationObserver(() => {
-                if (host.querySelector('canvas')) {
-                    setGlassReady(true);
-                    observerRef.current?.disconnect();
-                    observerRef.current = null;
-                }
-            });
+      observerRef.current?.disconnect();
+      observerRef.current = new MutationObserver(() => {
+        if (host.querySelector("canvas")) {
+          setGlassReady(true);
+          observerRef.current?.disconnect();
+          observerRef.current = null;
+        }
+      });
 
-            observerRef.current.observe(host, { childList: true, subtree: true });
-        };
+      observerRef.current.observe(host, { childList: true, subtree: true });
+    };
 
-        ensureHrDocsGlassRuntime()
-            .then(() => {
-                if (cancelled) return;
+    ensureHrDocsGlassRuntime()
+      .then(() => {
+        if (cancelled) return;
 
-                window.setTimeout(() => {
-                    if (cancelled) return;
-                    watchForCanvas();
-                }, 80);
-            })
-            .catch(() => {
-                if (!cancelled) {
-                    setGlassReady(false);
-                }
-            });
+        window.setTimeout(() => {
+          if (cancelled) return;
+          watchForCanvas();
+        }, 80);
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setGlassReady(false);
+        }
+      });
 
-        return () => {
-            cancelled = true;
-            observerRef.current?.disconnect();
-            observerRef.current = null;
-        };
-    }, []);
+    return () => {
+      cancelled = true;
+      observerRef.current?.disconnect();
+      observerRef.current = null;
+    };
+  }, []);
 
-    return (
-        <section className="hrdocs-demo-section">
-            <div className="max-w-7xl mx-auto px-6 w-full hrdocs-demo-container">
-                <div className={`hrdocs-demo-shell__glass fluted-glass-component u-bg-mode ${glassReady ? 'is-ready' : ''}`}>
-                    <div className="hrdocs-demo-shell__glass-fallback" aria-hidden="true" />
-                    <div
-                        ref={glassRef}
-                        data-distortion="0.25"
-                        data-shape-type-one="0"
-                        data-size-two="1"
-                        data-shininess="800"
-                        data-use-blob-two="false"
-                        data-gloss="0.3"
-                        data-shape-type-two="3"
-                        data-width-variation="1.8"
-                        data-use-three-color="true"
-                        data-sensitivity-three="0.15"
-                        data-color-three="#6BBE4D"
-                        data-sensitivity-one="0.15"
-                        data-size-three="1.3"
-                        data-fluted-glass="true"
-                        data-noise="0.40"
-                        data-hover="true"
-                        data-color-one="#146ef5"
-                        data-columns="5"
-                        data-shape-type-three="0"
-                        data-sensitivity-two="0.15"
-                        data-size-one="0.85"
-                        data-bg-color=""
-                        data-hover-intensity="2.0"
-                        data-color-two="#6BBE4D"
-                        data-use-blob-one="false"
-                        data-background-image=""
-                        className="hrdocs-demo-shell__glass-canvas fluted-glass-canvas"
-                    />
+  return (
+    <section className="hrdocs-demo-section">
+      <div className="max-w-7xl mx-auto px-6 w-full hrdocs-demo-container">
+        <div
+          className={`hrdocs-demo-shell__glass fluted-glass-component u-bg-mode ${glassReady ? "is-ready" : ""}`}
+        >
+          <div
+            className="hrdocs-demo-shell__glass-fallback"
+            aria-hidden="true"
+          />
+          <div
+            ref={glassRef}
+            data-distortion="0.25"
+            data-shape-type-one="0"
+            data-size-two="1"
+            data-shininess="800"
+            data-use-blob-two="false"
+            data-gloss="0.3"
+            data-shape-type-two="3"
+            data-width-variation="1.8"
+            data-use-three-color="true"
+            data-sensitivity-three="0.15"
+            data-color-three="#6BBE4D"
+            data-sensitivity-one="0.15"
+            data-size-three="1.3"
+            data-fluted-glass="true"
+            data-noise="0.40"
+            data-hover="true"
+            data-color-one="#146ef5"
+            data-columns="5"
+            data-shape-type-three="0"
+            data-sensitivity-two="0.15"
+            data-size-one="0.85"
+            data-bg-color=""
+            data-hover-intensity="2.0"
+            data-color-two="#6BBE4D"
+            data-use-blob-one="false"
+            data-background-image=""
+            className="hrdocs-demo-shell__glass-canvas fluted-glass-canvas"
+          />
+        </div>
+
+        <div className="hrdocs-demo-row">
+          <div className="hrdocs-demo-shell__copy-col">
+            <h2 className="hrdocs-demo-shell__title">
+              View the full architecture
+            </h2>
+
+            <p className="hrdocs-demo-shell__subheading">
+              System Architecture &amp; API Specs
+            </p>
+
+            <p className="hrdocs-demo-shell__body-copy">
+              Explore the complete database schema, module relationships, and
+              API specifications behind the system.
+            </p>
+
+            <div className="hrdocs-demo-shell__spacer" aria-hidden="true" />
+
+            <ul className="hrdocs-demo-shell__support-list">
+              {hrDocsDemoSupportItems.map((item, index) => (
+                <li key={index} className="hrdocs-demo-shell__support-item">
+                  {item}
+                </li>
+              ))}
+            </ul>
+
+            <div className="hrdocs-demo-shell__spacer" aria-hidden="true" />
+
+            <a
+              data-wf--button--variant="primary"
+              className="hrdocs-demo-shell__button btn"
+              href="/contact"
+            >
+              <div className="hrdocs-demo-shell__button-text btn-text">
+                Request details
+              </div>
+              <div
+                className="hrdocs-demo-shell__button-icon btn-icon"
+                aria-hidden="true"
+              >
+                <div
+                  data-wf--button-icon--variant="arrow-right"
+                  className="button-icon-wrap"
+                >
+                  <div className="accordion-line-wrap">
+                    <div className="accordion-icon_line cc-horizontal cc-accordion-card"></div>
+                    <div className="accordion-icon_line cc-vertical cc-accordion-card"></div>
+                  </div>
+                  <div
+                    className="button-icon cc-arrow-right"
+                    aria-hidden="true"
+                  ></div>
+                  <div
+                    className="button-icon cc-arrow-up-right"
+                    aria-hidden="true"
+                  ></div>
+                  <div className="button-icon cc-play" aria-hidden="true"></div>
+                  <div
+                    className="button-icon cc-arrow-down"
+                    aria-hidden="true"
+                  ></div>
+                  <div
+                    className="button-icon cc-arrow-left"
+                    aria-hidden="true"
+                  ></div>
+                  <div
+                    className="button-icon cc-arrow-up"
+                    aria-hidden="true"
+                  ></div>
                 </div>
+              </div>
+            </a>
+          </div>
 
-                <div className="hrdocs-demo-row">
-                    <div className="hrdocs-demo-shell__copy-col">
-                        <h2 className="hrdocs-demo-shell__title">View the full architecture</h2>
+          <div className="hrdocs-demo-shell__media-col">
+            <div className="hrdocs-demo-shell__media-wrap">
+              <div className="hrdocs-demo-shell__base-image-wrap">
+                <img
+                  src="/images/hr-docs/cms-tab-connected-modules.avif"
+                  alt="HR documentation system architecture view showing connected HR modules and system relationships"
+                  loading="lazy"
+                  className="hrdocs-demo-shell__base-image"
+                />
+              </div>
 
-                        <p className="hrdocs-demo-shell__subheading">System Architecture &amp; API Specs</p>
-
-                        <p className="hrdocs-demo-shell__body-copy">
-                            Explore the complete database schema, module relationships, and API specifications behind the system.
-                        </p>
-
-                        <div className="hrdocs-demo-shell__spacer" aria-hidden="true" />
-
-                        <ul className="hrdocs-demo-shell__support-list">
-                            {hrDocsDemoSupportItems.map((item, index) => (
-                                <li key={index} className="hrdocs-demo-shell__support-item">
-                                    {item}
-                                </li>
-                            ))}
-                        </ul>
-
-                        <div className="hrdocs-demo-shell__spacer" aria-hidden="true" />
-
-                        <a data-wf--button--variant="primary" className="hrdocs-demo-shell__button btn" href="/contact">
-                            <div className="hrdocs-demo-shell__button-text btn-text">
-                                Request details
-                            </div>
-                            <div className="hrdocs-demo-shell__button-icon btn-icon" aria-hidden="true">
-                                <div data-wf--button-icon--variant="arrow-right" className="button-icon-wrap">
-                                    <div className="accordion-line-wrap">
-                                        <div className="accordion-icon_line cc-horizontal cc-accordion-card"></div>
-                                        <div className="accordion-icon_line cc-vertical cc-accordion-card"></div>
-                                    </div>
-                                    <div className="button-icon cc-arrow-right" aria-hidden="true"></div>
-                                    <div className="button-icon cc-arrow-up-right" aria-hidden="true"></div>
-                                    <div className="button-icon cc-play" aria-hidden="true"></div>
-                                    <div className="button-icon cc-arrow-down" aria-hidden="true"></div>
-                                    <div className="button-icon cc-arrow-left" aria-hidden="true"></div>
-                                    <div className="button-icon cc-arrow-up" aria-hidden="true"></div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div className="hrdocs-demo-shell__media-col">
-                        <div className="hrdocs-demo-shell__media-wrap">
-                            <div className="hrdocs-demo-shell__base-image-wrap">
-                                <img
-                                    src="/images/hr-docs/cms-tab-connected-modules.avif"
-                                    alt="HR documentation system architecture view showing connected HR modules and system relationships"
-                                    loading="lazy"
-                                    className="hrdocs-demo-shell__base-image"
-                                />
-                            </div>
-
-                            <div className="hrdocs-demo-shell__floating-image-wrap" aria-hidden="true">
-                                <img
-                                    src="/images/hr-docs/cms-tab-api-level-access.avif"
-                                    alt=""
-                                    loading="lazy"
-                                    className="hrdocs-demo-shell__floating-image"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              <div
+                className="hrdocs-demo-shell__floating-image-wrap"
+                aria-hidden="true"
+              >
+                <img
+                  src="/images/hr-docs/cms-tab-api-level-access.avif"
+                  alt=""
+                  loading="lazy"
+                  className="hrdocs-demo-shell__floating-image"
+                />
+              </div>
             </div>
-        </section>
-    );
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 const HRDocsCaseStudy: React.FC = () => {
-    return (
-        <div className="hr-docs-case-study">
-            <style>{`
-                @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap');
+  useEffect(() => {
+    return () => {
+      const runtimeWindow = window as FlutedGlassWindow;
+      runtimeWindow.__hrDocsGlassRuntime = undefined;
+      runtimeWindow.__hrDocsGlassInitScheduled = null;
+    };
+  }, []);
+
+  return (
+    <div className="hr-docs-case-study">
+      <style>{`
                 @font-face {
                     font-family: 'HR Docs Display Sans';
                     src: url('https://cdn.prod.website-files.com/686294e263eb7e215bd232f7/68c092dccb7bd070430a0910_WFVisualSans%5Bwght%2Copsz%5D.woff2') format('woff2');
@@ -2222,7 +2525,7 @@ const HRDocsCaseStudy: React.FC = () => {
                     pointer-events: none;
                     position: relative;
                 }
-                .hr-docs-case-study .hrdocs-hero__sr-only {
+                .hr-docs-case-study .hrdocs-sr-only {
                     position: absolute;
                     width: 1px;
                     height: 1px;
@@ -4560,50 +4863,58 @@ const HRDocsCaseStudy: React.FC = () => {
                     .hr-docs-case-study .hrdocs-overview-row { row-gap: 1.25rem; }
                 }
             `}</style>
-            <NativeHrDocsHero />
+      <NativeHrDocsHero />
 
-            <div id="main" className="hrdocs-page-main">
-                <section className="hrdocs-overview-section">
-                    <div className="max-w-7xl mx-auto px-6 w-full">
-                        <div className="hrdocs-overview-row">
-                            <div className="hrdocs-overview-col">
-                                <h2 className="hrdocs-overview-heading">Build systems with control, clarity, and precision</h2>
-                            </div>
-                            <div className="hrdocs-overview-col">
-                                <div className="hrdocs-overview-copy">
-                                    <p>
-                                        A 90-employee SME was running HR through spreadsheets, chat threads, and personal folders. Payroll was slow, approvals were untraceable, and compliance readiness depended on memory.
-                                    </p>
-                                    <p>
-                                        This system introduces a centralized model where employee records, workflows, and documentation operate in one controlled environment. Teams can manage, track, and validate actions with clarity - ensuring faster operations, stronger compliance, and full visibility.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <NativeHrDocsCmsTabs />
-
-                <NativeHrDocsWhySection />
-
-                <NativeHrDocsMigrationCta />
-
-                <NativeHrDocsCustomersSection />
-
-                <NativeHrDocsComparisonTable />
-
-                <NativeHrDocsBusinessImpactSection />
-
-                <NativeHrDocsG2Section />
-
-                <NativeHrDocsFaqSection />
-
-                <NativeHrDocsScheduleDemoSection />
+      <div className="hrdocs-page-main">
+        <section className="hrdocs-overview-section">
+          <div className="max-w-7xl mx-auto px-6 w-full">
+            <div className="hrdocs-overview-row">
+              <div className="hrdocs-overview-col">
+                <h2 className="hrdocs-overview-heading">
+                  Build systems with control, clarity, and precision
+                </h2>
+              </div>
+              <div className="hrdocs-overview-col">
+                <div className="hrdocs-overview-copy">
+                  <p>
+                    A 90-employee SME was running HR through spreadsheets, chat
+                    threads, and personal folders. Payroll was slow, approvals
+                    were untraceable, and compliance readiness depended on
+                    memory.
+                  </p>
+                  <p>
+                    This system introduces a centralized model where employee
+                    records, workflows, and documentation operate in one
+                    controlled environment. Teams can manage, track, and
+                    validate actions with clarity - ensuring faster operations,
+                    stronger compliance, and full visibility.
+                  </p>
+                </div>
+              </div>
             </div>
-        </div>
-    );
+          </div>
+        </section>
+
+        <NativeHrDocsCmsTabs />
+
+        <NativeHrDocsWhySection />
+
+        <NativeHrDocsMigrationCta />
+
+        <NativeHrDocsCustomersSection />
+
+        <NativeHrDocsComparisonTable />
+
+        <NativeHrDocsBusinessImpactSection />
+
+        <NativeHrDocsG2Section />
+
+        <NativeHrDocsFaqSection />
+
+        <NativeHrDocsScheduleDemoSection />
+      </div>
+    </div>
+  );
 };
 
 export default HRDocsCaseStudy;
-

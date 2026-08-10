@@ -107,7 +107,7 @@ const AccessibilityStatement: React.FC = () => {
                 </p>
               </div>
               <p className="text-[14px] text-[#464646] leading-[1.6]">
-                This portfolio, <strong>aburahatsabir.com</strong>, is operated by Abu Rahat Sabir. I am committed to ensuring digital accessibility for all visitors — including those using assistive technologies, screen magnifiers, or keyboard-only navigation. This statement describes the measures I have taken and my approach to continuous improvement.
+                This portfolio, <strong>aburahatsabir.vercel.app</strong>, is operated by Abu Rahat Sabir. I am committed to ensuring digital accessibility for all visitors — including those using assistive technologies, screen magnifiers, or keyboard-only navigation. This statement describes the measures I have taken and my approach to continuous improvement.
               </p>
             </motion.div>
 

@@ -1,4 +1,4 @@
-# Case Study Build Core Spec
+\# Case Study Build Core Spec
 
 This file is the practical build spec for creating a new case study using the current `HRDocsCaseStudy.tsx` system only.
 

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>The Journal | Abu Rahat Sabir</title>
+    <link>https://aburahatsabir.vercel.app/blog</link>
+    <description>Ideas, guides, resources, articles, and notes from Abu Rahat Sabir.</description>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 01 Apr 2026 00:00:00 GMT</lastBuildDate>
+    <image>
+      <url>https://aburahatsabir.vercel.app/favicon-512.png</url>
+      <title>The Journal | Abu Rahat Sabir</title>
+      <link>https://aburahatsabir.vercel.app/blog</link>
+    </image>
+    <atom:link href="https://aburahatsabir.vercel.app/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>The Science of Getting Shortlisted</title>
+      <link>https://aburahatsabir.vercel.app/blog/resume-writing-guide-getting-shortlisted</link>
+      <guid isPermaLink="true">https://aburahatsabir.vercel.app/blog/resume-writing-guide-getting-shortlisted</guid>
+      <pubDate>Wed, 01 Apr 2026 00:00:00 GMT</pubDate>
+      <description>A practical resume writing guide for getting shortlisted faster, with recruiter-backed rules for ATS optimization, resume bullets, formatting, and common mistakes.</description>
+      <category>Career</category>
+    </item>
+    <item>
+      <title>How to Learn Computer Networking: A Complete Roadmap (2026)</title>
+      <link>https://aburahatsabir.vercel.app/blog/how-to-learn-computer-networking</link>
+      <guid isPermaLink="true">https://aburahatsabir.vercel.app/blog/how-to-learn-computer-networking</guid>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 GMT</pubDate>
+      <description>Learn computer networking with a practical 2026 roadmap covering the OSI model, home labs, subnetting, Network+ vs CCNA, troubleshooting, Linux, Python, and automation.</description>
+      <category>Networking</category>
+    </item>
+  </channel>
+</rss>

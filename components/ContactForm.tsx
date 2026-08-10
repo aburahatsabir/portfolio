@@ -53,9 +53,14 @@ const ContactForm: React.FC = () => {
         setIsSubmitting(true);
 
         try {
-            const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_test';
-            const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_test';
-            const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'key_test';
+            const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+            const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+            const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+            if (!serviceId || !templateId || !publicKey) {
+                alert('Configuration error. Please contact directly via email.');
+                return;
+            }
 
             await emailjs.send(serviceId, templateId, {
                 from_name: formData.name,

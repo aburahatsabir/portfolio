@@ -1,10 +1,35 @@
-
 import React from 'react';
 import SocialLinks from './shared/SocialLinks';
+import './Footer.css';
+
+const footerLogoUrl = `${import.meta.env.BASE_URL}Blue.png`;
+
+type FooterLink = {
+  name: string;
+  path: string;
+};
+
+type FooterColumnProps = {
+  title: string;
+  links: FooterLink[];
+};
+
+const FooterColumn: React.FC<FooterColumnProps> = ({ title, links }) => (
+  <div className="portfolio-footer__column">
+    <h4 className="portfolio-footer__heading">{title}</h4>
+    <ul className="portfolio-footer__list">
+      {links.map((link) => (
+        <li key={link.name}>
+          <a href={link.path} className="portfolio-footer__link">
+            {link.name}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+);
 
 const Footer: React.FC = () => {
-  const currentYear = new Date().getFullYear();
-
   const footerLinks = {
     explore: [
       { name: 'About', path: '/about' },
@@ -22,81 +47,40 @@ const Footer: React.FC = () => {
       { name: 'Certifications', path: '/certifications' },
     ],
     evidence: [
-      { name: 'Success Stories', path: '/success-stories' },
       { name: 'Blog', path: '/blog' },
-    ]
+    ],
   };
 
   return (
-    <footer className="bg-white border-t border-slate-100 pt-32 pb-12 overflow-hidden relative">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-16 mb-24">
-          <div className="lg:col-span-1 space-y-8">
-            <div className="flex flex-col gap-4">
-              <a href="/" className="flex items-center gap-3 group">
-                <div className="w-10 h-10 bg-slate-900 text-white rounded-xl flex items-center justify-center font-black group-hover:bg-blue-600 transition-colors shadow-lg">AR</div>
-                <span className="text-xl font-black tracking-tighter text-slate-900 leading-none">ABU RAHAT SABIR</span>
-              </a>
-              <p className="text-slate-500 leading-relaxed text-sm font-medium pr-4">
-                Executive – Administration & Workflow Automation Specialist based in Gulshan, Dhaka.
-              </p>
-            </div>
+    <footer className="portfolio-footer">
+      <div className="portfolio-footer__inner">
+        <div className="portfolio-footer__grid">
+          <div className="portfolio-footer__brand">
+            <a href="/" className="portfolio-footer__brand-link" aria-label="Abu Rahat Sabir home">
+              <img src={footerLogoUrl} alt="" width={714} height={630} className="portfolio-footer__logo" />
+              <span className="portfolio-footer__wordmark">Rahat</span>
+            </a>
           </div>
 
-          <div>
-            <p className="font-black text-[10px] uppercase tracking-[0.3em] text-slate-600 mb-8">EXPLORE</p>
-            <ul className="space-y-4">
-              {footerLinks.explore.map(link => (
-                <li key={link.name}>
-                  <a href={link.path} className="text-slate-600 hover:text-blue-600 font-bold text-sm transition-colors block py-0.5">{link.name}</a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-blue-600 mb-8">WHO THIS HELPS</h4>
-            <ul className="space-y-4">
-              {footerLinks.whoThisHelps.map(link => (
-                <li key={link.name}>
-                  <a href={link.path} className="text-slate-600 hover:text-blue-600 font-bold text-sm transition-colors block py-0.5">{link.name}</a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <p className="font-black text-[10px] uppercase tracking-[0.3em] text-slate-600 mb-8">RESOURCES</p>
-            <ul className="space-y-4">
-              {footerLinks.resources.map(link => (
-                <li key={link.name}>
-                  <a href={link.path} className="text-slate-600 hover:text-blue-600 font-bold text-sm transition-colors block py-0.5">{link.name}</a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <p className="font-black text-[10px] uppercase tracking-[0.3em] text-slate-600 mb-8">EVIDENCE</p>
-            <ul className="space-y-4">
-              {footerLinks.evidence.map(link => (
-                <li key={link.name}>
-                  <a href={link.path} className="text-slate-600 hover:text-blue-600 font-bold text-sm transition-colors block py-0.5">{link.name}</a>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <FooterColumn title="Explore" links={footerLinks.explore} />
+          <FooterColumn title="Who This Helps" links={footerLinks.whoThisHelps} />
+          <FooterColumn title="Resources" links={footerLinks.resources} />
+          <FooterColumn title="Evidence" links={footerLinks.evidence} />
         </div>
 
-        <div className="pt-12 border-t border-slate-50 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
-          <div className="flex flex-col md:flex-row gap-6 items-center text-center md:text-left">
-            <p>© {currentYear} Abu Rahat Sabir</p>
-            <SocialLinks variant="inline" size="sm" className="text-slate-400" />
+        <div className="portfolio-footer__bottom">
+          <div className="portfolio-footer__copyright-social">
+            <p className="portfolio-footer__copyright">&copy; 2026 Abu Rahat Sabir. All rights reserved</p>
+            <SocialLinks variant="inline" size="sm" className="portfolio-footer__socials" />
           </div>
 
-          <div className="flex gap-8 items-center">
-            <a href="/privacy" className="hover:text-blue-600 transition-colors">PRIVACY POLICY</a>
-            <a href="/cookies" className="hover:text-blue-600 transition-colors">COOKIE POLICY</a>
+          <div className="portfolio-footer__legal">
+            <a href="/privacy" className="portfolio-footer__legal-link">
+              PRIVACY POLICY
+            </a>
+            <a href="/cookies" className="portfolio-footer__legal-link">
+              COOKIE POLICY
+            </a>
           </div>
         </div>
       </div>

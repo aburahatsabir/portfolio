@@ -189,7 +189,6 @@ portfolio/
 │   ├── projects.ts         # Portfolio projects data
 │   ├── testimonials.ts     # Client testimonials
 │   ├── experiences.ts      # Work experience timeline
-│   ├── success-stories.ts  # Case studies
 │   ├── tech-stack.ts       # Technology expertise
 │   └── index.ts            # Content exports
 │

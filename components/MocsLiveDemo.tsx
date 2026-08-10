@@ -124,15 +124,15 @@ return {
         if (name === "__mocsDispose" || typeof value !== "function") {
           return;
         }
-        previousGlobals.set(name, (window as Record<string, unknown>)[name]);
-        (window as Record<string, unknown>)[name] = value;
+        previousGlobals.set(name, (window as unknown as Record<string, unknown>)[name]);
+        (window as unknown as Record<string, unknown>)[name] = value;
       });
     } catch (error) {
       const runtimeError =
         error instanceof Error
           ? `${error.name}: ${error.message}\n${error.stack ?? ""}`
           : String(error);
-      (window as Record<string, unknown>).__mocsRuntimeError = runtimeError;
+      (window as unknown as Record<string, unknown>).__mocsRuntimeError = runtimeError;
       console.error("MocsLiveDemo runtime init failed\n" + runtimeError);
     }
 
@@ -192,10 +192,10 @@ return {
 
       previousGlobals.forEach((oldValue, name) => {
         if (typeof oldValue === "undefined") {
-          delete (window as Record<string, unknown>)[name];
+          delete (window as unknown as Record<string, unknown>)[name];
           return;
         }
-        (window as Record<string, unknown>)[name] = oldValue;
+        (window as unknown as Record<string, unknown>)[name] = oldValue;
       });
 
       root.innerHTML = "";

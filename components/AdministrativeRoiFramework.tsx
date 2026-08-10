@@ -1,157 +1,178 @@
+import React, { useEffect, useRef, useState } from 'react';
+import { motion, type MotionValue, useScroll, useSpring, useTransform } from 'framer-motion';
+import './AdministrativeRoiFramework.css';
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import SectionLabel from './shared/SectionLabel';
+const subtitleLogoUrl = `${import.meta.env.BASE_URL}favicon-192.png`;
 
-interface Pillar {
-  id: string;
-  index: string;
+interface ProcessStep {
+  number: string;
   title: string;
-  subtitle: string;
   description: string;
-  kpi: string;
-  kpiLabel: string;
   icon: React.ReactNode;
-  metrics: string[];
 }
 
-const RoiCard: React.FC<{ pillar: Pillar; index: number }> = ({ pillar, index }) => {
-  return (
-    <motion.article
-      initial={{ opacity: 0, y: 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="group relative flex flex-col h-full bg-white border border-slate-200/60 rounded-2xl p-8 transition-all duration-500 hover:border-slate-300/80 hover:shadow-[0_12px_40px_-12px_rgba(0,0,0,0.04)] overflow-hidden"
-    >
-      <div className="relative z-10 flex flex-col h-full">
-        {/* Header Stack */}
-        <div className="flex items-center gap-4 mb-8">
-          <div className="w-11 h-11 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 [&>svg]:text-slate-400 group-hover:bg-white group-hover:text-blue-600 group-hover:[&>svg]:text-blue-600 group-hover:border-blue-200 transition-all duration-500">
-            {pillar.icon}
-          </div>
-          <div className="flex flex-col">
-            <span className="text-[10px] font-bold text-blue-600 uppercase tracking-[0.2em] leading-none mb-1.5">
-              {pillar.id.replace('-', ' ')}
-            </span>
-            <span className="text-[11px] font-medium text-slate-400">
-              {pillar.subtitle}
-            </span>
-          </div>
-        </div>
+const useDesktopProcessMotion = () => {
+  const [isDesktop, setIsDesktop] = useState(() => {
+    if (typeof window === 'undefined') {
+      return true;
+    }
 
-        {/* Core Content */}
-        <div className="flex-1 space-y-5 mb-8">
-          <h3 className="text-xl font-bold text-slate-900 tracking-tight leading-snug">
-            {pillar.title}
-          </h3>
-          <p className="text-sm text-slate-600 leading-relaxed font-medium">
-            {pillar.description}
-          </p>
-        </div>
+    return window.matchMedia('(min-width: 992px)').matches;
+  });
 
-        {/* Minimalist Multi-Metric */}
-        <div className="pt-6 border-t border-slate-100 flex items-center justify-between mb-8">
-          <div>
-            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.1em] mb-1">
-              Performance Yield
-            </p>
-            <p className="text-sm font-bold text-slate-900">
-              {pillar.kpiLabel}
-            </p>
-          </div>
-          <div className="text-xl font-bold text-slate-900 tabular-nums">
-            {pillar.kpi}
-          </div>
-        </div>
+  useEffect(() => {
+    const media = window.matchMedia('(min-width: 992px)');
+    const update = () => setIsDesktop(media.matches);
 
-        {/* Operational Components List */}
-        <div className="pt-6 border-t border-slate-100">
-          <p className="text-[9px] font-bold text-slate-300 uppercase tracking-[0.2em] mb-4">
-            Operational Components
-          </p>
+    update();
+    media.addEventListener('change', update);
 
-          <div className="grid grid-cols-1 gap-2.5">
-            {pillar.metrics.map((metric) => (
-              <div key={metric} className="flex items-center gap-3 group/item">
-                <div className="w-1 h-1 rounded-full bg-slate-200 group-hover/item:bg-blue-500 transition-all" />
-                <span className="text-[11px] font-bold text-slate-500 group-hover/item:text-slate-900 transition-colors">
-                  {metric}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+    return () => media.removeEventListener('change', update);
+  }, []);
 
-      {/* Subtle hover indicator */}
-      <div className="absolute top-6 right-6 w-1 h-1 rounded-full bg-slate-200 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-    </motion.article>
-  );
+  return isDesktop;
 };
 
+const iconProps = {
+  width: 60,
+  height: 60,
+  viewBox: '0 0 60 60',
+  fill: 'none',
+  xmlns: 'http://www.w3.org/2000/svg',
+  className: 'working-process-card-icon',
+  'aria-hidden': true,
+} as const;
+
+const AuditIcon: React.FC = () => (
+  <svg {...iconProps}>
+    <ellipse cx="21" cy="20.5" rx="21" ry="20.5" fill="#494852" fillOpacity="0.1" />
+    <path
+      d="M16.5 42.5C16.5 43.0523 16.9477 43.5 17.5 43.5C18.0523 43.5 18.5 43.0523 18.5 42.5H16.5ZM18.5 30C18.5 29.4477 18.0523 29 17.5 29C16.9477 29 16.5 29.4477 16.5 30H18.5ZM26.5 42.5C26.5 43.0523 26.9477 43.5 27.5 43.5C28.0523 43.5 28.5 43.0523 28.5 42.5H26.5ZM28.5 37.5C28.5 36.9477 28.0523 36.5 27.5 36.5C26.9477 36.5 26.5 36.9477 26.5 37.5H28.5ZM51.7929 38.2071C52.1834 38.5976 52.8166 38.5976 53.2071 38.2071C53.5976 37.8166 53.5976 37.1834 53.2071 36.7929L51.7929 38.2071ZM46.1321 29.7179C45.7416 29.3274 45.1084 29.3274 44.7179 29.7179C44.3274 30.1084 44.3274 30.7416 44.7179 31.1321L46.1321 29.7179ZM43.5 42.5C43.5 41.9477 43.0523 41.5 42.5 41.5C41.9477 41.5 41.5 41.9477 41.5 42.5H43.5ZM7.5 50H6.5H7.5ZM10 7.5V6.5V7.5ZM40 8.5C40.5523 8.5 41 8.05228 41 7.5C41 6.94772 40.5523 6.5 40 6.5V8.5ZM47.5 25H46.5C46.5 28.5898 43.5898 31.5 40 31.5V32.5V33.5C44.6944 33.5 48.5 29.6944 48.5 25H47.5ZM40 32.5V31.5C36.4101 31.5 33.5 28.5898 33.5 25H32.5H31.5C31.5 29.6944 35.3056 33.5 40 33.5V32.5ZM32.5 25H33.5C33.5 21.4101 36.4101 18.5 40 18.5V17.5V16.5C35.3056 16.5 31.5 20.3056 31.5 25H32.5ZM40 17.5V18.5C43.5898 18.5 46.5 21.4101 46.5 25H47.5H48.5C48.5 20.3056 44.6944 16.5 40 16.5V17.5ZM17.5 42.5H18.5V30H17.5H16.5V42.5H17.5ZM27.5 42.5H28.5V37.5H27.5H26.5V42.5H27.5ZM52.5 37.5L53.2071 36.7929L46.1321 29.7179L45.425 30.425L44.7179 31.1321L51.7929 38.2071L52.5 37.5ZM32.5 25H31.5C31.5 26.6811 31.9985 28.3245 32.9325 29.7223L33.764 29.1668L34.5954 28.6112C33.8812 27.5423 33.5 26.2856 33.5 25H32.5ZM33.764 29.1668L32.9325 29.7223C33.8665 31.1202 35.194 32.2096 36.7472 32.853L37.1299 31.9291L37.5126 31.0052C36.3248 30.5132 35.3097 29.6801 34.5954 28.6112L33.764 29.1668ZM37.1299 31.9291L36.7472 32.853C38.3004 33.4963 40.0094 33.6646 41.6583 33.3367L41.4632 32.3559L41.2681 31.3751C40.0072 31.6259 38.7003 31.4972 37.5126 31.0052L37.1299 31.9291ZM41.4632 32.3559L41.6583 33.3367C43.3071 33.0087 44.8217 32.1991 46.0104 31.0104L45.3033 30.3033L44.5962 29.5962C43.6871 30.5052 42.529 31.1243 41.2681 31.3751L41.4632 32.3559ZM45.3033 30.3033L46.0104 31.0104C47.1992 29.8217 48.0087 28.3071 48.3367 26.6583L47.3559 26.4632L46.3751 26.2681C46.1243 27.529 45.5052 28.6871 44.5962 29.5962L45.3033 30.3033ZM47.3559 26.4632L48.3367 26.6583C48.6646 25.0094 48.4963 23.3004 47.853 21.7472L46.9291 22.1299L46.0052 22.5126C46.4972 23.7003 46.6259 25.0072 46.3751 26.2681L47.3559 26.4632ZM46.9291 22.1299L47.853 21.7472C47.2096 20.194 46.1202 18.8665 44.7223 17.9325L44.1668 18.764L43.6112 19.5954C44.6801 20.3097 45.5132 21.3248 46.0052 22.5126L46.9291 22.1299ZM44.1668 18.764L44.7223 17.9325C43.3245 16.9985 41.6811 16.5 40 16.5V17.5V18.5C41.2856 18.5 42.5423 18.8812 43.6112 19.5954L44.1668 18.764ZM40 17.5V16.5C37.7457 16.5 35.5836 17.3955 33.9896 18.9896L34.6967 19.6967L35.4038 20.4038C36.6228 19.1848 38.2761 18.5 40 18.5V17.5ZM34.6967 19.6967L33.9896 18.9896C32.3955 20.5836 31.5 22.7457 31.5 25H32.5H33.5C33.5 23.2761 34.1848 21.6228 35.4038 20.4038L34.6967 19.6967ZM42.5 42.5H41.5V50H42.5H43.5V42.5H42.5ZM42.5 50H41.5C41.5 50.3978 41.342 50.7794 41.0607 51.0607L41.7678 51.7678L42.4749 52.4749C43.1313 51.8185 43.5 50.9283 43.5 50H42.5ZM41.7678 51.7678L41.0607 51.0607C40.7794 51.342 40.3978 51.5 40 51.5V52.5V53.5C40.9283 53.5 41.8185 53.1313 42.4749 52.4749L41.7678 51.7678ZM40 52.5V51.5H10V52.5V53.5H40V52.5ZM10 52.5V51.5C9.60217 51.5 9.22064 51.342 8.93934 51.0607L8.23223 51.7678L7.52513 52.4749C8.1815 53.1313 9.07174 53.5 10 53.5V52.5ZM8.23223 51.7678L8.93934 51.0607C8.65804 50.7794 8.5 50.3978 8.5 50H7.5H6.5C6.5 50.9283 6.86875 51.8185 7.52513 52.4749L8.23223 51.7678ZM7.5 50H8.5V10H7.5H6.5V50H7.5ZM7.5 10H8.5C8.5 9.60217 8.65804 9.22064 8.93934 8.93934L8.23223 8.23223L7.52513 7.52513C6.86875 8.1815 6.5 9.07174 6.5 10H7.5ZM8.23223 8.23223L8.93934 8.93934C9.22064 8.65804 9.60217 8.5 10 8.5V7.5V6.5C9.07174 6.5 8.1815 6.86875 7.52513 7.52513L8.23223 8.23223ZM10 7.5V8.5H40V7.5V6.5H10V7.5Z"
+      fill="#141414"
+    />
+  </svg>
+);
+
+const BuildIcon: React.FC = () => (
+  <svg {...iconProps}>
+    <ellipse cx="21" cy="20.5" rx="21" ry="20.5" fill="#494852" fillOpacity="0.1" />
+    <path
+      d="M30.2837 22.0965L17.4697 9.28232C16.5237 8.33631 16.0507 7.86331 15.5052 7.68608C15.0255 7.53019 14.5087 7.53019 14.0289 7.68608C13.4835 7.86331 13.0105 8.33631 12.0644 9.2823L10.7132 10.6336C9.76715 11.5796 9.29414 12.0526 9.11692 12.598C8.96103 13.0778 8.96103 13.5946 9.11692 14.0744C9.29414 14.6198 9.76715 15.0928 10.7132 16.0388L23.5273 28.8531M37.0404 28.8531L49.8539 41.6666C50.7999 42.6125 51.2728 43.0855 51.4501 43.6311C51.6061 44.1108 51.6061 44.6277 51.4501 45.1074C51.2728 45.6527 50.7999 46.1257 49.8539 47.0719L48.5026 48.423C47.5566 49.3692 47.0836 49.8422 46.5383 50.0194C46.0584 50.1752 45.5417 50.1752 45.0618 50.0194C44.5164 49.8422 44.0434 49.3692 43.0975 48.423L30.2837 35.6095M20.9912 17.055L23.1154 14.928M42.4902 38.5547L44.6265 36.4392M38.9061 13.4774L45.6625 20.2339M9.04667 50.5032L9.16001 49.7096C9.56112 46.9018 9.76168 45.4982 10.2179 44.1875C10.6227 43.0244 11.1757 41.9183 11.8632 40.8967C12.638 39.7455 13.6408 38.7427 15.6463 36.7371L43.4708 8.91251C45.3367 7.04675 48.3616 7.04675 50.2275 8.91249C52.0932 10.7783 52.0932 13.8032 50.2275 15.669L21.8922 44.0042C20.0728 45.8235 19.1631 46.7334 18.1269 47.4568C17.2072 48.0989 16.2153 48.6308 15.1715 49.0417C13.9955 49.5047 12.7344 49.7591 10.2122 50.2679L9.04667 50.5032Z"
+      stroke="#141414"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const HandoverIcon: React.FC = () => (
+  <svg {...iconProps}>
+    <ellipse cx="21" cy="20.5" rx="21" ry="20.5" fill="#494852" fillOpacity="0.1" />
+    <path
+      d="M20.3816 21.1283C27.6294 13.8804 48.2456 2.36436 53.0775 7.11573C57.9094 11.9476 45.9101 32.0806 38.5817 39.3284M43.9774 32.9664C43.8968 33.7717 42.7694 49.717 32.3808 54.71C32.3808 54.71 23.7639 43.7577 19.8178 39.8922C15.8718 35.9461 23.7639 43.7577 19.3347 39.3284C14.9054 34.8992 5 27.3292 5 27.3292C10.3151 17.1017 27.2268 15.6521 27.2268 15.6521M24.9719 45.6099C23.4418 47.14 29.2401 58.2534 15.3081 44.4019C1.37607 30.4699 12.57 36.2682 14.1001 34.7381M40.5145 7.92105L51.95 19.4371M34.5552 33.047C32.3808 35.2213 28.8374 35.2213 26.663 33.047C24.4887 30.8726 24.4887 27.3292 26.663 25.1548C28.8374 22.9805 35.2799 20.0008 37.4543 22.1752C39.6287 24.3495 36.7295 30.8726 34.5552 33.047Z"
+      stroke="#141414"
+      strokeWidth="1.875"
+    />
+  </svg>
+);
+
+const steps: ProcessStep[] = [
+  {
+    number: '01',
+    title: 'Audit & Strategy',
+    description: 'I start by mapping the real workflow, the manual handoffs, and the hidden exceptions before any system design begins.',
+    icon: <AuditIcon />,
+  },
+  {
+    number: '02',
+    title: 'Design & Automation',
+    description: 'I turn the process into owned dashboards, scripts, approvals, and controls using the tools already inside the business.',
+    icon: <BuildIcon />,
+  },
+  {
+    number: '03',
+    title: 'Handover & Governance',
+    description: 'I document, train, and harden the system so your team can operate it cleanly without vendor lock-in or fragile dependency.',
+    icon: <HandoverIcon />,
+  },
+];
+
+const ProcessCard: React.FC<{ step: ProcessStep; index: number; style?: { y: MotionValue<string> } }> = ({ step, index, style }) => (
+  <motion.div className={`working-process-card _0${index + 1}`} style={style}>
+    <div className="working-process-card-icon-number-wrapper">
+      <div className="working-process-card-icon-wrap">{step.icon}</div>
+      <div className="working-process-card-number-wrap">
+        <div className="working-process-card-number">{step.number}</div>
+      </div>
+    </div>
+    <div className="working-process-card-title-description">
+      <h3 className="working-process-card-title">{step.title}</h3>
+      <div className="working-process-card-description">{step.description}</div>
+    </div>
+  </motion.div>
+);
+
 const AdministrativeRoiFramework: React.FC = () => {
-  const pillars: Pillar[] = [
-    {
-      id: 'financial-yield',
-      index: '01',
-      title: 'Revenue Recovery',
-      subtitle: 'Capital Recovery Yield',
-      description: 'Transforming fragmented processes into high-yield assets. I stop revenue leakage and reclaim lost capital through forensic administrative oversight and structural cost avoidance.',
-      kpi: '15%',
-      kpiLabel: 'Recovered Revenue Leakage',
-      icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
-      metrics: ['Revenue Leakage Recovery', 'Cost Avoidance Modeling', 'Asset Multiplier Yield', 'Multi-currency reconciliation clarity']
-    },
-    {
-      id: 'decision-velocity',
-      index: '02',
-      title: 'Executive Velocity',
-      subtitle: 'Leadership Time Recovery',
-      description: 'Eliminating the "Administrative Noise" that slows down the C-Suite. I reclaim hundreds of hours annually for strategic decision-making, business growth, and executive focus.',
-      kpi: '450+',
-      kpiLabel: 'Hrs Reclaimed/Yr',
-      icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>,
-      metrics: ['Calendar conflict reduction', 'Board-prep turnaround discipline', 'Decision-Support Clarity', 'Silent-Reporting Systems']
-    },
-    {
-      id: 'cycle-compression',
-      index: '03',
-      title: 'Process Acceleration',
-      subtitle: 'Structured Pipelines',
-      description: 'Manual administrative workflows are redesigned into structured execution pipelines, cutting processing delays while improving consistency, control, and operational precision.',
-      kpi: '5D→2H',
-      kpiLabel: 'Processing Cycle',
-      icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
-      metrics: ['Payroll cycle redesign', 'Invoicing workflow automation', 'Approval queue reduction', 'Knowledge Transfer Velocity']
-    }
-  ];
+  const sectionRef = useRef<HTMLElement>(null);
+  const isDesktop = useDesktopProcessMotion();
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start 78%', 'end 38%'],
+  });
+  const smoothedProgress = useSpring(scrollYProgress, {
+    stiffness: 55,
+    damping: 24,
+    mass: 0.9,
+    restDelta: 0.0006,
+  });
+  const secondY = useTransform(smoothedProgress, [0, 0.2, 0.4, 1], ['-100%', '-100%', '0%', '0%']);
+  const thirdY = useTransform(smoothedProgress, [0, 0.2, 0.4, 0.6, 1], ['-210%', '-210%', '-110%', '0%', '0%']);
 
   return (
-    <section id="roi-framework" className="py-32 md:py-48 bg-white relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Standardized Section Header */}
-        <div className="max-w-4xl w-full space-y-8 mb-24">
-          <div className="flex items-center gap-4">
-            <SectionLabel>Performance Metrics</SectionLabel>
-            <div className="h-px bg-slate-100 flex-1"></div>
+    <section ref={sectionRef} id="roi-framework" className="section working-process administrative-working-process">
+      <div className="container">
+        <div className="working-process-content">
+          <motion.div
+            className="working-process-typography"
+            initial={{ opacity: 0, x: -48 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="section-subtitle-wrap left-alignment">
+              <div className="section-subtitle-single">
+                <img src={subtitleLogoUrl} loading="lazy" alt="" className="section-subtitle-icon" />
+                <div className="section-subtitle">Working Process</div>
+              </div>
+            </div>
+            <div className="working-process-section-title">
+              <h2 className="section-title working-process-main-title mb0">Explore My 3 Step Working Process</h2>
+            </div>
+            <div className="working-process-button-wrapper">
+              <a href="#contact" className="primary-button" aria-label="Start a discussion">
+                <div className="primary-button-inner">
+                  <div className="primary-button-text-wrap">
+                    <div className="primary-button-text-block">Start Discussion</div>
+                    <div className="primary-button-text-block is-text-absolute">Start Discussion</div>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </motion.div>
+
+          <div className="working-process-card-wrapper">
+            <div className="working-process-card-single">
+              {steps.map((step, index) => (
+                <ProcessCard
+                  key={step.number}
+                  step={step}
+                  index={index}
+                  style={isDesktop && index === 1 ? { y: secondY } : isDesktop && index === 2 ? { y: thirdY } : undefined}
+                />
+              ))}
+            </div>
           </div>
-
-          <h2 className="text-5xl md:text-8xl font-[900] tracking-tighter leading-[0.92] text-slate-950">
-            Strategic <br />
-            <span className="text-slate-400">ROI.</span>
-          </h2>
-
-          <p className="text-xl md:text-2xl text-slate-500 font-medium leading-relaxed max-w-2xl pt-2">
-            I architect institutional-grade operations infrastructure that transforms administrative overhead into strategic leverage—optimizing financial capital and executive time.
-          </p>
-        </div>
-
-        {/* Pillars Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-          {pillars.map((pillar, idx) => (
-            <RoiCard key={pillar.id} pillar={pillar} index={idx} />
-          ))}
         </div>
       </div>
     </section>

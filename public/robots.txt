@@ -3,4 +3,4 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://aburahatsabir.github.io/portfolio/sitemap.xml
+Sitemap: https://aburahatsabir.vercel.app/sitemap.xml

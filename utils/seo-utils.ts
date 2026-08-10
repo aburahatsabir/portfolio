@@ -72,12 +72,7 @@ const ROUTE_METADATA: Record<string, PageMetadata> = {
         ogType: 'website'
     },
 
-    '/post-mortems': {
-        title: 'Post-Mortems & Incident Analysis | Abu Rahat Sabir',
-        description: 'Forensic analysis of operational incidents and system failures with preventative architecture solutions.',
-        ogImage: '/images/og-postmortems.webp',
-        ogType: 'website'
-    },
+
 
     '/success-stories': {
         title: 'Success Stories & Endorsements | Abu Rahat Sabir',

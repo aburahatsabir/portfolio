@@ -12,15 +12,18 @@ export interface PostMortemEntry {
 }
 
 export type BlogTemplate = 'standard' | 'flagship';
-export type BlogBodyRenderer = 'markdown' | 'resumeGuide';
+export type BlogBodyRenderer = 'markdown' | 'resumeGuide' | 'networkingRoadmap';
 
 export interface BlogPost {
   id: string;
   title: string;
+  seoTitle?: string;
   date: string;
   publishedAt?: string;
+  dateModified?: string;
   readTime: string;
   excerpt: string;
+  seoDescription?: string;
   category: string;
   tags?: string[];
   featuredRank?: number;

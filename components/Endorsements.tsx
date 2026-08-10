@@ -1,281 +1,137 @@
-
-
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { TESTIMONIALS } from '../constants';
-import BentoCard from './shared/BentoCard';
-import SectionLabel from './shared/SectionLabel';
-import OptimizedImage from './OptimizedImage';
+import { TESTIMONIALS } from '../content';
 import { Testimonial } from '../types';
+import './Endorsements.css';
 
-const LinkedInIcon = () => (
-  <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+const subtitleLogoUrl = `${import.meta.env.BASE_URL}favicon-192.png`;
+
+const revealVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.9,
+      delay: 0.3,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+};
+
+const ReviewStar: React.FC<{ muted?: boolean }> = ({ muted = false }) => (
+  <svg
+    width={muted ? 17 : 18}
+    height={muted ? 16 : 17}
+    viewBox={muted ? '0 0 17 16' : '0 0 18 17'}
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className="testimonial-card-review-icon"
+    aria-hidden="true"
+  >
+    {muted ? (
+      <path d="M7.939 0.245745C7.97552 0.171962 8.03193 0.109855 8.10188 0.0664324C8.17182 0.0230097 8.25251 0 8.33483 0C8.41716 0 8.49785 0.0230097 8.56779 0.0664324C8.63773 0.109855 8.69415 0.171962 8.73067 0.245745L10.6557 4.14491C10.7825 4.40155 10.9697 4.62359 11.2012 4.79196C11.4327 4.96033 11.7016 5.07001 11.9848 5.11158L16.2898 5.74158C16.3714 5.7534 16.448 5.7878 16.5111 5.84091C16.5741 5.89402 16.621 5.9637 16.6465 6.04208C16.672 6.12047 16.6751 6.20442 16.6553 6.28444C16.6356 6.36447 16.5938 6.43737 16.5348 6.49491L13.4215 9.52658C13.2162 9.72666 13.0626 9.97365 12.9739 10.2463C12.8852 10.5189 12.8641 10.809 12.9123 11.0916L13.6473 15.3749C13.6617 15.4564 13.6529 15.5404 13.6219 15.6171C13.5909 15.6939 13.5389 15.7604 13.472 15.8091C13.405 15.8577 13.3256 15.8866 13.2431 15.8923C13.1605 15.8981 13.0779 15.8805 13.0048 15.8416L9.1565 13.8182C8.90293 13.6851 8.62082 13.6155 8.33442 13.6155C8.04802 13.6155 7.7659 13.6851 7.51233 13.8182L3.66483 15.8416C3.59178 15.8803 3.50933 15.8977 3.42688 15.8918C3.34442 15.8859 3.26527 15.857 3.19841 15.8084C3.13156 15.7598 3.07969 15.6934 3.04871 15.6168C3.01773 15.5401 3.00888 15.4563 3.02317 15.3749L3.75733 11.0924C3.80583 10.8097 3.78482 10.5194 3.69611 10.2466C3.60741 9.97382 3.45367 9.72671 3.24817 9.52658L0.134833 6.49575C0.075328 6.43827 0.0331608 6.36524 0.0131351 6.28497C-0.00689053 6.20471 -0.00396948 6.12043 0.0215654 6.04174C0.0471003 5.96305 0.0942223 5.89311 0.157564 5.8399C0.220905 5.78668 0.297919 5.75233 0.379833 5.74074L4.684 5.11158C4.96755 5.07033 5.23682 4.96079 5.46865 4.7924C5.70048 4.62401 5.88792 4.4018 6.01483 4.14491L7.939 0.245745Z" fill="#D2D2D4" />
+    ) : (
+      <path d="M8.60416 0.912737C8.64068 0.838954 8.69709 0.776847 8.76704 0.733425C8.83698 0.690002 8.91767 0.666992 8.99999 0.666992C9.08232 0.666992 9.16301 0.690002 9.23295 0.733425C9.30289 0.776847 9.35931 0.838954 9.39583 0.912737L11.3208 4.8119C11.4476 5.06854 11.6348 5.29058 11.8663 5.45895C12.0979 5.62732 12.3668 5.737 12.65 5.77857L16.955 6.40857C17.0366 6.42039 17.1132 6.4548 17.1762 6.5079C17.2393 6.56101 17.2862 6.63069 17.3117 6.70908C17.3372 6.78746 17.3402 6.87141 17.3205 6.95143C17.3007 7.03146 17.259 7.10436 17.2 7.1619L14.0867 10.1936C13.8813 10.3937 13.7277 10.6406 13.639 10.9133C13.5503 11.1859 13.5292 11.476 13.5775 11.7586L14.3125 16.0419C14.3269 16.1234 14.3181 16.2074 14.2871 16.2841C14.2561 16.3609 14.2041 16.4274 14.1371 16.4761C14.0701 16.5247 13.9908 16.5536 13.9082 16.5593C13.8256 16.5651 13.7431 16.5475 13.67 16.5086L9.82166 14.4852C9.56809 14.3521 9.28598 14.2825 8.99958 14.2825C8.71318 14.2825 8.43106 14.3521 8.17749 14.4852L4.32999 16.5086C4.25694 16.5472 4.17449 16.5646 4.09204 16.5588C4.00958 16.5529 3.93043 16.524 3.86357 16.4754C3.79672 16.4268 3.74485 16.3604 3.71387 16.2838C3.68289 16.2071 3.67404 16.1233 3.68833 16.0419L4.42249 11.7594C4.47099 11.4767 4.44998 11.1864 4.36128 10.9136C4.27257 10.6408 4.11883 10.3937 3.91333 10.1936L0.799994 7.16274C0.740489 7.10526 0.698322 7.03223 0.678296 6.95197C0.658271 6.8717 0.661192 6.78742 0.686727 6.70873C0.712261 6.63004 0.759383 6.56011 0.822725 6.50689C0.886066 6.45367 0.96308 6.41932 1.04499 6.40774L5.34916 5.77857C5.63271 5.73732 5.90199 5.62779 6.13381 5.45939C6.36564 5.291 6.55308 5.0688 6.67999 4.8119L8.60416 0.912737Z" fill="#141414" />
+    )}
   </svg>
 );
 
-const EndorsementCard: React.FC<{ testimonial: Testimonial, index: number }> = ({ testimonial, index }) => {
+const ReviewRow: React.FC<{ index: number }> = ({ index }) => {
+  const mutedLastStar = index === 0 || index === 3;
+
   return (
-    <BentoCard
-      variant="compact"
-      hoverEffect="lift"
-      animationDelay={index * 0.1}
-      showPattern={false}
-      className="flex-none w-full md:w-[400px] snap-start h-full bg-white border border-slate-200/60 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:border-slate-300/80 hover:shadow-[0_20px_50px_rgba(0,0,0,0.06)] transition-all duration-500 overflow-visible"
-    >
-      <div className="flex flex-col h-full relative p-6">
-        {/* Floating Quote Icon - More subtle and premium */}
-        <div className="absolute -top-4 -right-1 text-blue-600/5 pointer-events-none group-hover:text-blue-600/8 transition-colors duration-700">
-          <svg className="w-20 h-20 rotate-6" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H16.017C14.9124 8 14.017 7.10457 14.017 6V5C14.017 3.89543 14.9124 3 16.017 3H19.017C21.2261 3 23.017 4.79086 23.017 7V15C23.017 18.3137 20.3307 21 17.017 21H14.017ZM1.017 21L1.017 18C1.017 16.8954 1.91243 16 3.017 16H6.017C6.56928 16 7.017 15.5523 7.017 15V9C7.017 8.44772 6.56928 8 6.017 8H3.017C1.91243 8 1.017 7.10457 1.017 6V5C1.017 3.89543 1.91243 3 3.017 3H6.017C8.22614 3 10.017 4.79086 10.017 7V15C10.017 18.3137 7.33071 21 4.017 21H1.017Z" />
-          </svg>
-        </div>
-
-        {/* Quote Content */}
-        <div className="flex-1 mb-8">
-          <p className="text-lg font-medium text-slate-900 leading-relaxed tracking-tight relative z-10 antialiased">
-            <span className="text-blue-600/20 mr-1.5 font-serif text-2xl italic">"</span>
-            {testimonial.content}
-            <span className="text-blue-600/20 ml-1.5 font-serif text-2xl italic">"</span>
-          </p>
-        </div>
-
-        {/* Footer */}
-        <footer className="pt-6 border-t border-slate-100 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            {/* Avatar */}
-            <div className="relative group/avatar">
-              <div className="w-12 h-12 rounded-xl overflow-hidden border border-slate-200/50 bg-slate-50 relative z-10 shadow-sm ring-2 ring-white group-hover/avatar:ring-blue-50 transition-all duration-300">
-                <OptimizedImage
-                  src={testimonial.avatar}
-                  alt={testimonial.name}
-                  width={48}
-                  height={48}
-                  className="w-full h-full object-cover grayscale-[0.3] group-hover/avatar:grayscale-0 transition-all duration-500"
-                  loading="lazy"
-                />
-              </div>
-              <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 bg-slate-900 rounded-md flex items-center justify-center text-white z-20 shadow-sm ring-2 ring-white group-hover/avatar:bg-blue-600 transition-colors duration-300">
-                <LinkedInIcon />
-              </div>
-            </div>
-
-            {/* Name and Position */}
-            <div className="flex flex-col gap-1">
-              {testimonial.linkedInProfile ? (
-                <a
-                  href={testimonial.linkedInProfile}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm font-bold text-slate-900 hover:text-blue-600 transition-colors leading-tight"
-                >
-                  {testimonial.name}
-                </a>
-              ) : (
-                <h4 className="text-sm font-bold text-slate-900 leading-tight">{testimonial.name}</h4>
-              )}
-
-              {testimonial.companyLinkedIn ? (
-                <a
-                  href={testimonial.companyLinkedIn}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider hover:text-blue-600 transition-colors"
-                >
-                  {testimonial.position}
-                </a>
-              ) : (
-                <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">{testimonial.position}</p>
-              )}
-            </div>
-          </div>
-        </footer>
-      </div>
-    </BentoCard>
+    <div className="testimonial-card-review-wrapper" aria-label={mutedLastStar ? '4 out of 5 stars' : '5 out of 5 stars'}>
+      <ReviewStar />
+      <ReviewStar />
+      <ReviewStar />
+      <ReviewStar />
+      <ReviewStar muted={mutedLastStar} />
+    </div>
   );
 };
 
-const BrandLogo: React.FC<{ name: string; logo: string }> = ({ name, logo }) => (
-  <div className="flex items-center justify-center px-10 shrink-0 group/logo cursor-default">
-    <div className="h-10 md:h-12 flex items-center justify-center opacity-20 group-hover/logo:opacity-100 transition-all duration-700 grayscale group-hover/logo:grayscale-0 scale-90 group-hover/logo:scale-100">
-      <OptimizedImage
-        src={logo}
-        alt={name}
-        width={160}
-        height={48}
-        className="h-full w-auto object-contain max-w-[160px] filter drop-shadow-sm"
-        loading="lazy"
-      />
+const TestimonialCard: React.FC<{ testimonial: Testimonial; index: number }> = ({ testimonial, index }) => (
+  <article className="testimonial-card">
+    <ReviewRow index={index} />
+
+    <div className="testimonial-card-description-wrapper">
+      <p className="testimonial-card-description-text">{testimonial.content}</p>
     </div>
+
+    <div className="testimonial-card-author-wrapper">
+      <div className="testimonial-card-author-image-wrapper">
+        <img src={testimonial.avatar} loading="lazy" alt={testimonial.name} className="testimonial-card-author-image" />
+      </div>
+      <div className="testimonial-card-author-name-bio-wrapper">
+        {testimonial.linkedInProfile ? (
+          <a href={testimonial.linkedInProfile} target="_blank" rel="noopener noreferrer" className="testimonial-card-author-name">
+            {testimonial.name}
+          </a>
+        ) : (
+          <h6 className="testimonial-card-author-name">{testimonial.name}</h6>
+        )}
+        {testimonial.companyLinkedIn ? (
+          <a href={testimonial.companyLinkedIn} target="_blank" rel="noopener noreferrer" className="testimonial-card-author-bio">
+            {testimonial.position}
+          </a>
+        ) : (
+          <div className="testimonial-card-author-bio">{testimonial.position}</div>
+        )}
+      </div>
+    </div>
+  </article>
+);
+
+const TickerSet: React.FC<{ copyIndex: number }> = ({ copyIndex }) => (
+  <div className="testimonial-inner-ticker-wrapper" aria-hidden={copyIndex > 0}>
+    {TESTIMONIALS.map((testimonial, index) => (
+      <TestimonialCard key={`${copyIndex}-${testimonial.name}`} testimonial={testimonial} index={index} />
+    ))}
   </div>
 );
 
 const Endorsements: React.FC = () => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [isPaused, setIsPaused] = useState(false);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
-  const [showAll, setShowAll] = useState(false);
-
-  const displayedTestimonials = showAll ? TESTIMONIALS : TESTIMONIALS.slice(0, 3);
-
-  const checkScroll = useCallback(() => {
-    if (scrollRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-      setCanScrollLeft(scrollLeft > 10);
-      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
-    }
-  }, []);
-
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (el) {
-      el.addEventListener('scroll', checkScroll);
-      checkScroll();
-      return () => el.removeEventListener('scroll', checkScroll);
-    }
-  }, [checkScroll]);
-
-  const scroll = useCallback((direction: 'left' | 'right') => {
-    if (scrollRef.current) {
-      const cardWidth = 400; // Consistent card width
-      const gap = 24; // gap-6 = 24px
-      const scrollAmount = cardWidth + gap;
-      const { scrollLeft } = scrollRef.current;
-
-      const scrollTo = direction === 'left'
-        ? scrollLeft - scrollAmount
-        : scrollLeft + scrollAmount;
-
-      scrollRef.current.scrollTo({ left: scrollTo, behavior: 'smooth' });
-    }
-  }, []);
-
-  const brands = [
-    { name: 'Prominent Tec', logo: './images/logos/logo-prominent-tec.webp' },
-    { name: 'Texicon BD', logo: './images/logos/logo-texicon-bd.webp' },
-    { name: 'Greenotex', logo: './images/logos/logo-greenotex.webp' },
-    { name: 'Greenosoft', logo: './images/logos/logo-greenosoft.webp' },
-  ];
-
-  const marqueeBrands = [...brands, ...brands, ...brands, ...brands];
-
   return (
-    <section id="endorsements" className="py-24 md:py-32 bg-white relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-
-        <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-12 mb-20">
-          <div className="max-w-3xl space-y-10">
-            <div className="flex items-center gap-4">
-              <SectionLabel>Executive Endorsements</SectionLabel>
-              <div className="h-px bg-slate-100 flex-1"></div>
+    <section id="endorsements" className="section testimonial endorsements-testimonial">
+      <motion.div
+        variants={revealVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        className="testimonial-top-content"
+      >
+        <div className="container">
+          <div className="section-title-wrapper">
+            <div className="section-subtitle-wrap">
+              <div className="section-subtitle-single">
+                <img src={subtitleLogoUrl} loading="lazy" alt="" className="section-subtitle-icon" />
+                <div className="section-subtitle">Testimonial</div>
+              </div>
             </div>
-
-            <div className="space-y-8">
-              <h2 className="text-5xl md:text-8xl font-[900] tracking-tighter leading-[0.92] text-slate-900">
-                Executive <br />
-                <span className="text-slate-400">Validation.</span>
-              </h2>
-
-              <p className="text-xl md:text-2xl text-slate-600 font-medium leading-relaxed max-w-2xl">
-                Strategic impact and operational excellence validated by <br className="hidden md:block" />
-                C-suite leaders across the enterprise ecosystems.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3 pb-2">
-            <button
-              type="button"
-              onClick={() => { scroll('left'); setIsPaused(true); }}
-              disabled={!canScrollLeft}
-              className={`group relative w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300 ${canScrollLeft
-                ? 'bg-white border border-slate-200 text-slate-700 shadow-sm hover:border-slate-300 hover:shadow-md hover:scale-105 active:scale-95'
-                : 'bg-slate-50 border border-slate-100 text-slate-300 cursor-not-allowed'
-                }`}
-              aria-label="Scroll left"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
-            </button>
-            <button
-              type="button"
-              onClick={() => { scroll('right'); setIsPaused(true); }}
-              disabled={!canScrollRight}
-              className={`group relative w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300 ${canScrollRight
-                ? 'bg-white border border-slate-200 text-slate-700 shadow-sm hover:border-slate-300 hover:shadow-md hover:scale-105 active:scale-95'
-                : 'bg-slate-50 border border-slate-100 text-slate-300 cursor-not-allowed'
-                }`}
-              aria-label="Scroll right"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
-            </button>
-          </div>
-        </header>
-
-        <div
-          ref={scrollRef}
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-          className="flex gap-6 overflow-x-auto pb-12 hide-scrollbar snap-x snap-mandatory scroll-smooth -mx-6 px-6"
-        >
-          {displayedTestimonials.map((testimonial, idx) => (
-            <EndorsementCard key={idx} testimonial={testimonial} index={idx} />
-          ))}
-        </div>
-
-        {/* Show More/Less Button */}
-        {TESTIMONIALS.length > 3 && (
-          <div className="flex justify-center mt-12">
-            <button
-              onClick={() => setShowAll(!showAll)}
-              className="group relative px-10 py-5 bg-white border border-slate-200 rounded-2xl text-slate-900 font-bold text-sm shadow-sm hover:border-slate-300 hover:shadow-md hover:-translate-y-1 active:translate-y-0 transition-all duration-300 flex items-center gap-3 tracking-tight"
-            >
-              <span>{showAll ? 'Collapse' : `View All ${TESTIMONIALS.length} Endorsements`}</span>
-              <svg
-                className={`w-4 h-4 transition-transform duration-300 group-hover:text-blue-600 ${showAll ? 'rotate-180' : ''}`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                strokeWidth="3"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-          </div>
-        )}
-
-        {/* Minimal Brand Credits */}
-        <div className="mt-24 pt-16 border-t border-slate-50 -mx-6 relative">
-          <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
-          <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
-
-          <div className="overflow-hidden">
-            <motion.div
-              className="flex items-center gap-16 px-6"
-              animate={{ x: [0, -1920] }}
-              transition={{
-                duration: 60,
-                repeat: Infinity,
-                ease: "linear"
-              }}
-            >
-              {marqueeBrands.map((brand, idx) => (
-                <BrandLogo key={idx} {...brand} />
-              ))}
-            </motion.div>
+            <h2 className="section-title">What My Clients are Saying</h2>
+            <p className="section-description about-us">
+              Hear directly from my clients about their experiences and the results I've delivered. Explore Client Feedback
+            </p>
           </div>
         </div>
-      </div>
+      </motion.div>
 
-      <style>{`
-        .hide-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-        .hide-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-      `}</style>
+      <motion.div
+        variants={revealVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        className="testimonial-bottom-content"
+      >
+        <div className="testimonial-ticker">
+          <div className="ticker-testimonial">
+            <TickerSet copyIndex={0} />
+            <TickerSet copyIndex={1} />
+            <TickerSet copyIndex={2} />
+          </div>
+        </div>
+      </motion.div>
     </section>
   );
 };

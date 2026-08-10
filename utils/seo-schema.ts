@@ -249,7 +249,8 @@ export function generateBlogPostingSchema(
     title: string,
     description: string,
     datePublished: string,
-    imageUrl?: string
+    imageUrl?: string,
+    dateModified?: string
 ): BlogPostingSchema {
     const baseUrl = 'https://aburahatsabir.vercel.app';
 
@@ -263,7 +264,7 @@ export function generateBlogPostingSchema(
             name: 'Abu Rahat Sabir'
         },
         datePublished: datePublished,
-        dateModified: datePublished,
+        dateModified: dateModified || datePublished,
         image: imageUrl ? (imageUrl.startsWith('http') ? imageUrl : `${baseUrl}${imageUrl}`) : undefined,
         publisher: {
             '@type': 'Person',

@@ -1,0 +1,390 @@
+.administrative-working-process {
+  --process-primary: #141414;
+  --process-gray: #494852;
+  --process-light-gray: #f6f6f9;
+  --process-white: #ffffff;
+  --process-accent: var(--brand-blue, #4f46e5);
+
+  font-family: inherit;
+  letter-spacing: 0;
+}
+
+.administrative-working-process *,
+.administrative-working-process *::before,
+.administrative-working-process *::after {
+  box-sizing: border-box;
+  letter-spacing: 0;
+}
+
+.administrative-working-process {
+  background-color: var(--process-light-gray);
+  padding-top: 110px;
+  padding-bottom: 110px;
+  overflow: visible;
+}
+
+.administrative-working-process .container {
+  width: 100%;
+  max-width: 1320px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.administrative-working-process .working-process-content {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 60px;
+}
+
+.administrative-working-process .working-process-typography {
+  width: 100%;
+  max-width: 405px;
+  position: sticky;
+  top: 120px;
+}
+
+.administrative-working-process .section-subtitle-wrap {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.administrative-working-process .section-subtitle-wrap.left-alignment {
+  align-items: flex-start;
+}
+
+.administrative-working-process .section-subtitle-single {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border-radius: 4px;
+  background-color: var(--process-white);
+  padding: 4px 6px;
+}
+
+.administrative-working-process .section-subtitle-icon {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  object-fit: contain;
+}
+
+.administrative-working-process .section-subtitle {
+  color: var(--process-primary);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 100%;
+}
+
+.administrative-working-process .working-process-section-title {
+  margin-bottom: 48px;
+}
+
+.administrative-working-process .section-title {
+  display: inline-block;
+  margin: 0 0 12px;
+  color: var(--process-primary);
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 150%;
+}
+
+.administrative-working-process .section-title.mb0 {
+  margin-bottom: 0;
+}
+
+.administrative-working-process .working-process-main-title {
+  letter-spacing: 0 !important;
+  word-spacing: normal;
+  font-kerning: normal;
+  font-stretch: normal;
+  line-height: 1.16;
+  text-rendering: optimizeLegibility;
+}
+
+.administrative-working-process .working-process-button-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.administrative-working-process .primary-button {
+  display: inline-block;
+  color: var(--process-white);
+  text-decoration: none;
+}
+
+.administrative-working-process .primary-button-inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  overflow: hidden;
+  border-radius: 5px;
+  background-color: var(--process-primary);
+  color: var(--process-white);
+  padding: 14px 24px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 150%;
+}
+
+.administrative-working-process .primary-button-inner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--process-accent);
+  transform: translate3d(-101%, 0, 0);
+  transition: transform 500ms ease;
+}
+
+.administrative-working-process .primary-button-text-wrap {
+  position: relative;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  min-width: max-content;
+  height: 27px;
+  overflow: hidden;
+}
+
+.administrative-working-process .primary-button-text-block {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: flex-start;
+  transform: translate3d(0, 0, 0);
+  transition: transform 500ms cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.administrative-working-process .primary-button-text-block.is-text-absolute {
+  position: absolute;
+  transform: translate3d(0, 250%, 0);
+}
+
+.administrative-working-process .primary-button:hover .primary-button-inner::before,
+.administrative-working-process .primary-button:focus-visible .primary-button-inner::before {
+  transform: translate3d(0, 0, 0);
+}
+
+.administrative-working-process .primary-button:hover .primary-button-text-block,
+.administrative-working-process .primary-button:focus-visible .primary-button-text-block {
+  transform: translate3d(0, -250%, 0);
+}
+
+.administrative-working-process .primary-button:hover .primary-button-text-block.is-text-absolute,
+.administrative-working-process .primary-button:focus-visible .primary-button-text-block.is-text-absolute {
+  transform: translate3d(0, 0, 0);
+}
+
+.administrative-working-process .primary-button:focus-visible {
+  outline: 2px solid var(--process-accent);
+  outline-offset: 4px;
+  border-radius: 7px;
+}
+
+.administrative-working-process .working-process-card-wrapper {
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+  max-width: 610px;
+  overflow: hidden;
+}
+
+.administrative-working-process .working-process-card-single {
+  display: flex;
+  flex-flow: column;
+  justify-content: flex-start;
+  gap: 24px;
+}
+
+.administrative-working-process .working-process-card {
+  position: relative;
+  border: 1px solid rgba(23, 23, 23, 0.1);
+  border-radius: 20px;
+  background-color: var(--process-white);
+  padding: 20px 20px 32px 32px;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.administrative-working-process .working-process-card._02 {
+  z-index: 9;
+}
+
+.administrative-working-process .working-process-card._03 {
+  z-index: 8;
+}
+
+.administrative-working-process .working-process-card-icon-number-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.administrative-working-process .working-process-card-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.administrative-working-process .working-process-card-icon {
+  display: block;
+  width: 100%;
+  max-width: 60px;
+}
+
+.administrative-working-process .working-process-card-number {
+  color: rgba(20, 20, 20, 0.2);
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 150%;
+}
+
+.administrative-working-process .working-process-card-title {
+  margin: 0 0 8px;
+  color: var(--process-primary);
+  font-size: 33px;
+  font-weight: 700;
+  line-height: 150%;
+}
+
+.administrative-working-process .working-process-card-description {
+  color: var(--process-gray);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 150%;
+}
+
+@media screen and (max-width: 991px) {
+  .administrative-working-process {
+    padding-top: 100px;
+    padding-bottom: 100px;
+  }
+
+  .administrative-working-process .working-process-content {
+    flex-flow: column;
+    gap: 40px;
+  }
+
+  .administrative-working-process .working-process-typography {
+    position: static;
+    max-width: 405px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+  .administrative-working-process .section-subtitle-wrap.left-alignment {
+    align-items: center;
+  }
+
+  .administrative-working-process .working-process-button-wrapper {
+    justify-content: center;
+  }
+
+  .administrative-working-process .working-process-card-wrapper {
+    max-width: 100%;
+  }
+
+  .administrative-working-process .working-process-card-single {
+    align-items: stretch;
+  }
+
+  .administrative-working-process .working-process-card {
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .administrative-working-process {
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+
+  .administrative-working-process .working-process-section-title {
+    margin-bottom: 20px;
+  }
+
+  .administrative-working-process .section-title {
+    font-size: 40px;
+    line-height: 1.16;
+  }
+
+  .administrative-working-process .working-process-card {
+    padding: 20px;
+  }
+
+  .administrative-working-process .working-process-card-icon-number-wrapper {
+    margin-bottom: 20px;
+  }
+
+  .administrative-working-process .working-process-card-title {
+    font-size: 28px;
+  }
+
+  .administrative-working-process .working-process-card-description {
+    font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  .administrative-working-process {
+    padding-top: 60px;
+    padding-bottom: 60px;
+  }
+
+  .administrative-working-process .container {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .administrative-working-process .working-process-typography {
+    max-width: 280px;
+  }
+
+  .administrative-working-process .section-subtitle-wrap {
+    margin-bottom: 10px;
+  }
+
+  .administrative-working-process .section-title {
+    font-size: 34px;
+  }
+
+  .administrative-working-process .working-process-card {
+    padding: 16px;
+  }
+
+  .administrative-working-process .working-process-card-icon-number-wrapper {
+    margin-bottom: 12px;
+  }
+
+  .administrative-working-process .working-process-card-icon {
+    max-width: 48px;
+  }
+
+  .administrative-working-process .working-process-card-number {
+    font-size: 24px;
+  }
+
+  .administrative-working-process .working-process-card-title {
+    font-size: 24px;
+  }
+
+  .administrative-working-process .working-process-card-description {
+    font-size: 13px;
+  }
+}

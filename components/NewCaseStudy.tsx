@@ -21,6 +21,16 @@ const CS_MK = ['Sep 22','Oct 22','Nov 22','Dec 22','Jan 23','Feb 23','Mar 23','A
 const CS_MR = [57640,213170,231246,307205,397325,547170,1237775,1130650,2727150,3064550,2142300,4451500,3324056,3870740];
 const CS_MP = [59510,166200,182132,280342,515703,547475,1010680,1225595,3032364,3170390,1938850,4637350,3319535,4549324];
 
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+};
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 }
+};
+
 const NewCaseStudy: React.FC = () => {
   const [activeMandate, setActiveMandate] = useState<'sovereignty' | 'efficiency'>('sovereignty');
 const content: Record<'sovereignty' | 'efficiency', HeroContent> = {

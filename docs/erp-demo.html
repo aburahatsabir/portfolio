@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+  --brand:#4F46E5;--brand-hover:#4338CA;--brand-light:#EEF2FF;--brand-border:#C7D2FE;
+  --w:#FFFFFF;--off:#F8FAFC;--off2:#F1F5F9;
+  --ink:#0F172A;--ink2:#1E293B;--ink3:#64748B;--ink4:#94A3B8;
+  --ln:#E2E8F0;--ln2:#CBD5E1;
+  --gm:#059669;--gbg:#ECFDF5;--gdk:#065F46;
+  --rm:#DC2626;--rbg:#FEF2F2;
+  --am:#D97706;--abg:#FFFBEB;
+  --bm:#2563EB;--bbg:#EFF6FF;
+  --serif:'Plus Jakarta Sans',system-ui,sans-serif;
+  --sans:'Plus Jakarta Sans',system-ui,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+  body{font-family:var(--sans);background:transparent;color:var(--ink);-webkit-font-smoothing:antialiased;overflow-x:hidden;margin:0;padding:0}
+  .erp-embed{font-family:var(--sans);background:var(--off);color:var(--ink);-webkit-font-smoothing:antialiased}
+
+/* ══ LAYOUT ══ */
+.app{display:flex;flex-direction:column;height:100%}
+.topbar{height:48px;background:var(--w);border-bottom:1px solid var(--ln);display:flex;align-items:center;flex-shrink:0}
+.tb-brand{width:228px;display:flex;align-items:center;gap:10px;padding:0 16px;border-right:1px solid var(--ln);height:100%;flex-shrink:0}
+.tb-mark{width:26px;height:26px;background:var(--brand);border-radius:6px;display:flex;align-items:center;justify-content:center}
+.tb-mark svg{width:13px;height:13px}
+.tb-name{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--ink);line-height:1.2}
+.tb-sub{font-family:var(--mono);font-size:9px;color:var(--ink4)}
+.tb-nav{flex:1;display:flex;align-items:center;gap:4px;padding:0 16px}
+.tb-bc{font-family:var(--mono);font-size:11px;color:var(--ink4)}
+.tb-sep{color:var(--ln2);margin:0 4px;font-size:12px}
+.tb-cur{font-family:var(--mono);font-size:11px;color:var(--ink);font-weight:500}
+.tb-right{display:flex;align-items:center;gap:12px;padding:0 16px}
+.tb-badge{font-family:var(--mono);font-size:9px;background:var(--rbg);color:var(--rm);padding:2px 6px;border-radius:3px;font-weight:500}
+.tb-user{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;color:var(--ink3)}
+.tb-avatar{width:24px;height:24px;border-radius:50%;background:var(--off2);border:1px solid var(--ln);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;color:var(--ink3)}
+
+.body{display:flex;flex:1;overflow:hidden}
+
+/* ══ SIDEBAR ══ */
+.sb{width:228px;background:var(--w);border-right:1px solid var(--ln);flex-shrink:0;overflow-y:auto;display:flex;flex-direction:column}
+.sb-grp{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink4);padding:14px 14px 4px}
+.sb-item{display:flex;align-items:center;gap:8px;padding:7px 14px;font-size:12px;color:var(--ink3);cursor:pointer;transition:all .12s;user-select:none}
+.sb-item:hover{color:var(--ink);background:var(--off)}
+.sb-item.on{background:var(--ink);color:#FFFFFF;margin:1px 8px;border-radius:6px;padding:7px 10px}
+.sb-dot{width:5px;height:5px;border-radius:50%;background:var(--ln2);flex-shrink:0}
+.sb-item.on .sb-dot{background:rgba(255,255,255,.3)}
+.sb-badge{margin-left:auto;font-family:var(--mono);font-size:9px;background:var(--rbg);color:var(--rm);padding:1px 5px;border-radius:3px}
+.sb-item.on .sb-badge{background:rgba(255,255,255,.15);color:rgba(255,255,255,.7)}
+.sb-hr{height:1px;background:var(--ln);margin:5px 0}
+.sb-foot{margin-top:auto;padding:12px;border-top:1px solid var(--ln)}
+.sb-stat{display:flex;align-items:center;gap:8px;background:var(--off);border:1px solid var(--ln);border-radius:7px;padding:8px 10px}
+.sb-stat-dot{width:5px;height:5px;border-radius:50%;background:var(--gm)}
+.sb-stat-txt{font-family:var(--mono);font-size:9px;color:var(--ink3)}
+
+/* ══ MAIN ══ */
+.main{flex:1;overflow-y:auto}
+.pg{display:none;padding:24px 28px}
+.pg.on{display:block}
+.pg-head{margin-bottom:20px}
+.pg-title{font-family:var(--serif);font-size:24px;color:var(--ink);line-height:1.1}
+.pg-sub{font-family:var(--mono);font-size:10px;color:var(--ink4);margin-top:3px;letter-spacing:.3px}
+
+/* ══ KPI STRIP ══ */
+.kpis{display:grid;gap:10px;margin-bottom:18px}
+.k4{grid-template-columns:repeat(4,1fr)}
+.k5{grid-template-columns:repeat(5,1fr)}
+.k3{grid-template-columns:repeat(3,1fr)}
+.kpi{background:var(--w);border:1px solid var(--ln);border-radius:9px;padding:14px 16px;position:relative;overflow:hidden}
+.kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:9px 9px 0 0}
+.k-ink::after{background:var(--ink)}.k-g::after{background:var(--gm)}.k-r::after{background:var(--rm)}.k-a::after{background:var(--am)}.k-b::after{background:var(--bm)}
+.kpi-l{font-family:var(--mono);font-size:9px;color:var(--ink4);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:6px}
+.kpi-v{font-family:var(--serif);font-size:24px;color:var(--ink);line-height:1}
+.kpi-v.red{color:var(--rm)}.kpi-v.grn{color:var(--gdk)}.kpi-v.blu{color:var(--bm)}
+.kpi-s{font-family:var(--mono);font-size:9px;color:var(--ink4);margin-top:4px}
+.kpi-delta{font-family:var(--mono);font-size:9px;margin-top:6px}
+.kpi-delta.up{color:var(--gm)}.kpi-delta.dn{color:var(--rm)}.kpi-delta.warn{color:var(--am)}
+
+/* ══ GRID ══ */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.g13{display:grid;grid-template-columns:1fr 320px;gap:14px;margin-bottom:14px}
+.g31{display:grid;grid-template-columns:320px 1fr;gap:14px;margin-bottom:14px}
+.mb{margin-bottom:14px}
+
+/* ══ CARD ══ */
+.card{background:var(--w);border:1px solid var(--ln);border-radius:9px;overflow:hidden}
+.ch{padding:11px 16px;border-bottom:1px solid var(--ln);display:flex;align-items:center;justify-content:space-between;background:var(--w)}
+.ct{font-size:12px;font-weight:500;color:var(--ink)}
+.cs{font-family:var(--mono);font-size:10px;color:var(--ink4)}
+.cv{padding:14px 16px;position:relative}
+.cv.h140{height:154px}.cv.h160{height:174px}.cv.h180{height:194px}.cv.h200{height:214px}
+
+/* ══ TABLE ══ */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{font-family:var(--mono);font-size:9px;color:var(--ink4);text-transform:uppercase;letter-spacing:1px;padding:8px 12px;border-bottom:1px solid var(--ln);text-align:left;font-weight:400;background:var(--off)}
+.tbl td{padding:8px 12px;font-size:11px;color:var(--ink2);border-bottom:1px solid var(--ln);font-weight:300;vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:var(--off)}
+.stbl{overflow-y:auto;max-height:280px}
+.m{font-family:var(--mono)}
+
+/* ══ PILLS ══ */
+.pill{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:4px;white-space:nowrap;font-weight:500}
+.p-ok{background:var(--gbg);color:var(--gdk)}
+.p-due{background:var(--abg);color:var(--am)}
+.p-over{background:var(--rbg);color:var(--rdk)}
+.p-blu{background:var(--bbg);color:var(--bm)}
+.p-gray{background:var(--off2);color:var(--ink3)}
+.p-adv{background:#e8f4ee;color:#065F46}
+
+/* ══ BAR CELL ══ */
+.bc{height:4px;background:var(--off2);border-radius:2px;overflow:hidden;min-width:50px}
+.bf{height:100%;background:var(--brand);border-radius:2px}
+.bf.g{background:var(--gm)}.bf.r{background:var(--rm)}
+
+/* ══ LEGEND ══ */
+.leg{display:flex;flex-direction:column;gap:8px}
+.li{display:flex;align-items:center;justify-content:space-between}
+.ll{display:flex;align-items:center;gap:8px}
+.lsq{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.ln{font-size:12px;color:var(--ink2);font-weight:300}
+.lv{font-family:var(--mono);font-size:11px;color:var(--ink)}
+.lp{font-family:var(--mono);font-size:9px;color:var(--ink4);margin-left:3px}
+
+/* ══ TIMELINE ══ */
+.tl-item{display:flex;gap:12px;padding:10px 16px;border-bottom:1px solid var(--ln);align-items:flex-start}
+.tl-item:last-child{border-bottom:none}
+.tl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.tl-body{flex:1;min-width:0}
+.tl-t{font-size:12px;font-weight:500;color:var(--ink)}
+.tl-m{font-family:var(--mono);font-size:9px;color:var(--ink4);margin:2px 0 4px}
+.tl-n{font-size:11px;color:var(--ink3);line-height:1.5;font-weight:300}
+.tl-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}
+
+/* ══ ACTIVITY FEED ══ */
+.af-item{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--ln)}
+.af-item:last-child{border-bottom:none}
+.af-icon{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px}
+.af-icon.ord{background:var(--bbg);color:var(--bm)}
+.af-icon.pay{background:var(--gbg);color:var(--gdk)}
+.af-icon.ret{background:var(--rbg);color:var(--rdk)}
+.af-body{flex:1;min-width:0}
+.af-t{font-size:12px;font-weight:400;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.af-m{font-family:var(--mono);font-size:9px;color:var(--ink4);margin-top:1px}
+.af-amt{font-family:var(--mono);font-size:12px;white-space:nowrap;text-align:right}
+.af-amt.pos{color:var(--gm)}.af-amt.neg{color:var(--rm)}.af-amt.neu{color:var(--ink3)}
+
+/* ══ MINI STATS ══ */
+.mstat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px 16px}
+.mstat{background:var(--off);border-radius:7px;padding:11px 13px}
+.mstat-l{font-family:var(--mono);font-size:9px;color:var(--ink4);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.mstat-v{font-family:var(--serif);font-size:19px;color:var(--ink)}
+
+/* ══ ORDER / INVOICE ══ */
+.ord-shell{display:grid;grid-template-columns:1fr 380px;gap:14px}
+.form-row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.form-lbl{font-family:var(--mono);font-size:9px;color:var(--ink3);letter-spacing:.8px;text-transform:uppercase;margin-bottom:4px;display:block}
+input,select,textarea{border:1px solid var(--ln);border-radius:6px;font-family:var(--sans);font-size:12px;color:var(--ink);background:var(--w);outline:none;transition:border-color .15s}
+input:focus,select:focus,textarea:focus{border-color:var(--ink)}
+input[type=text],input[type=number]{width:100%;padding:7px 10px}
+select{width:100%;padding:7px 10px;cursor:pointer}
+.sku-wrap{border:1px solid var(--ln);border-radius:8px;overflow:hidden;margin-bottom:10px}
+.sku-hd{display:grid;grid-template-columns:2fr 90px 70px 80px 28px;background:var(--off);border-bottom:1px solid var(--ln);padding:6px 12px;font-family:var(--mono);font-size:9px;color:var(--ink4);text-transform:uppercase;letter-spacing:1px}
+.sku-row{display:grid;grid-template-columns:2fr 90px 70px 80px 28px;gap:5px;padding:7px 12px;border-bottom:1px solid var(--ln);align-items:center}
+.sku-row:last-child{border-bottom:none}
+.sku-row select,.sku-row input{padding:5px 7px;font-family:var(--mono);font-size:11px}
+.del-btn{background:none;border:none;cursor:pointer;color:var(--ink4);font-size:14px;line-height:1;border-radius:3px;padding:2px 4px;width:28px;text-align:center}
+.del-btn:hover{color:var(--rm);background:var(--rbg)}
+.add-sku{width:100%;border:1px dashed var(--ln2);background:none;border-radius:6px;padding:7px;font-family:var(--mono);font-size:10px;color:var(--ink4);cursor:pointer;transition:all .15s}
+.add-sku:hover{border-color:var(--ink);color:var(--ink)}
+.save-btn{width:100%;background:var(--ink);color:#FFFFFF;border:none;border-radius:7px;padding:10px;font-family:var(--mono);font-size:11px;cursor:pointer;transition:opacity .15s;letter-spacing:.3px;margin-top:8px}
+.save-btn:hover{background:var(--brand-hover)}
+.toast{display:none;background:var(--gbg);border:1px solid var(--gm);border-radius:7px;padding:10px 14px;font-size:11px;color:var(--gdk);margin-top:8px;text-align:center;font-family:var(--mono)}
+
+/* ══ INVOICE ══ */
+.invoice{background:var(--w);border:1px solid var(--ln);border-radius:10px;overflow:hidden}
+.inv-header{padding:18px 22px 14px;border-bottom:1px solid var(--ln);display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start}
+.inv-co-name{font-family:var(--serif);font-size:20px;color:var(--ink);line-height:1;margin-bottom:4px}
+.inv-co-sub{font-family:var(--mono);font-size:9px;color:var(--ink4);letter-spacing:.8px;line-height:1.6}
+.inv-memo-block{text-align:right}
+.inv-memo-label{font-family:var(--mono);font-size:8px;color:var(--ink4);letter-spacing:2px;text-transform:uppercase;margin-bottom:5px}
+.inv-memo-num{font-family:var(--mono);font-size:17px;color:var(--ink);font-weight:500;letter-spacing:-.3px}
+.inv-meta{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--ln)}
+.inv-meta-col{padding:12px 18px}
+.inv-meta-col:first-child{border-right:1px solid var(--ln)}
+.inv-field-lbl{font-family:var(--mono);font-size:8px;color:var(--ink4);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:4px}
+.inv-field-val{font-size:12px;color:var(--ink);font-weight:400;line-height:1.4}
+.inv-field-sub{font-family:var(--mono);font-size:10px;color:var(--ink3);margin-top:2px}
+.inv-balance-strip{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--ln);background:var(--off)}
+.inv-balance-cell{padding:9px 18px}
+.inv-balance-cell:first-child{border-right:1px solid var(--ln)}
+.inv-balance-lbl{font-family:var(--mono);font-size:8px;color:var(--ink4);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
+.inv-balance-val{font-size:13px;color:var(--ink)}
+.inv-lines-hd{display:grid;grid-template-columns:2fr 56px 70px 78px;background:var(--off);border-bottom:1px solid var(--ln);padding:7px 18px;font-family:var(--mono);font-size:8px;color:var(--ink4);text-transform:uppercase;letter-spacing:1.2px}
+.inv-lines-hd span:not(:first-child){text-align:right}
+.inv-line{display:grid;grid-template-columns:2fr 56px 70px 78px;padding:9px 18px;border-bottom:1px solid var(--ln);font-size:12px;align-items:baseline}
+.inv-line span:not(:first-child){font-family:var(--mono);font-size:11px;text-align:right;color:var(--ink3)}
+.inv-line .p-name{color:var(--ink);font-weight:400;line-height:1.4}
+.inv-line .p-total{color:var(--ink);font-weight:500}
+.inv-empty{padding:20px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--ink4)}
+.inv-totals{padding:13px 18px;display:flex;flex-direction:column;gap:4px;border-bottom:1px solid var(--ln)}
+.inv-total-row{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--mono);font-size:10px;color:var(--ink3)}
+.inv-total-row.main{font-size:11px;color:var(--ink);padding-top:8px;margin-top:4px;border-top:1px solid var(--ln2)}
+.inv-total-row.main .lbl{font-weight:500}
+.inv-total-row.main .val{font-family:var(--serif);font-size:20px;color:var(--ink)}
+.inv-net-bar{padding:11px 18px;display:flex;justify-content:space-between;align-items:center;background:var(--off)}
+.inv-net-lbl{font-family:var(--mono);font-size:8px;color:var(--ink4);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
+.inv-net-val{font-family:var(--mono);font-size:12px;font-weight:500}
+.inv-vol-line{font-family:var(--mono);font-size:9px;color:var(--ink4)}
+
+/* ══ FILTERS ══ */
+.frow{display:flex;align-items:center;gap:6px;padding:9px 14px;border-bottom:1px solid var(--ln);background:var(--off);flex-wrap:wrap}
+.flbl{font-family:var(--mono);font-size:9px;color:var(--ink4)}
+.fbtn{font-family:var(--mono);font-size:10px;padding:3px 9px;border-radius:4px;border:1px solid var(--ln);background:var(--w);color:var(--ink3);cursor:pointer;transition:all .12s}
+.fbtn:hover{border-color:var(--ink);color:var(--ink)}
+.fbtn.on{background:var(--ink);color:#FFFFFF;border-color:var(--ink)}
+.srch{font-family:var(--mono);font-size:10px;border:1px solid var(--ln);border-radius:5px;padding:4px 9px;outline:none;background:var(--w);color:var(--ink);margin-left:auto;width:160px}
+.srch:focus{border-color:var(--ink)}
+
+/* ══ PRODUCT CARDS ══ */
+.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--ln)}
+.prod-card{background:var(--w);padding:16px 18px;transition:background .15s}
+.prod-card:hover{background:var(--off)}
+.prod-name{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:1px}
+.prod-code{font-family:var(--mono);font-size:9px;color:var(--ink4);letter-spacing:.5px;margin-bottom:10px}
+.prod-bar{height:3px;background:var(--off2);border-radius:2px;margin-bottom:8px;overflow:hidden}
+.prod-fill{height:100%;border-radius:2px}
+.prod-stats{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.prod-kg{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--ink)}
+.prod-pct{font-family:var(--mono);font-size:10px;color:var(--ink4)}
+.prod-sizes{display:flex;flex-wrap:wrap;gap:4px}
+.sz{font-family:var(--mono);font-size:9px;color:var(--ink3);background:var(--off2);padding:2px 5px;border-radius:3px}
+
+/* ══ STAFF ══ */
+.staff-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.staff-card{background:var(--w);border:1px solid var(--ln);border-radius:9px;padding:14px 16px}
+.staff-av{width:32px;height:32px;border-radius:50%;background:var(--off2);border:1px solid var(--ln);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:500;color:var(--ink3);margin-bottom:10px}
+.staff-name{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:1px}
+.staff-role{font-family:var(--mono);font-size:9px;color:var(--ink4);letter-spacing:.5px;margin-bottom:8px}
+.staff-info{font-family:var(--mono);font-size:10px;color:var(--ink3);line-height:1.7}
+
+/* ══ ANALYTICS TABS ══ */
+.atabs{display:flex;gap:2px;background:var(--off2);border-radius:7px;padding:3px;width:fit-content;margin-bottom:16px}
+.atab{padding:5px 14px;border-radius:5px;font-family:var(--mono);font-size:10px;color:var(--ink3);cursor:pointer;border:none;background:transparent;transition:all .15s}
+.atab.on{background:var(--w);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.07)}
+
+/* ══ NOTE CELL ══ */
+.nc{font-size:10px;color:var(--ink4);max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ══ LEDGER ══ */
+.ldg-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.ls{background:var(--off);border:1px solid var(--ln);border-radius:8px;padding:12px 14px}
+.ls-l{font-family:var(--mono);font-size:9px;color:var(--ink4);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.ls-v{font-family:var(--serif);font-size:19px;color:var(--ink)}
+.ls-v.red{color:var(--rm)}.ls-v.grn{color:var(--gdk)}.ls-v.blu{color:var(--bm)}
+
+/* ══ PAYMENT CHANNELS ══ */
+.pc-item{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--ln)}
+.pc-item:last-child{border-bottom:none}
+.pc-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;font-weight:500;flex-shrink:0}
+.pc-name{font-size:12px;color:var(--ink);font-weight:400}
+.pc-sub{font-family:var(--mono);font-size:9px;color:var(--ink4);margin-top:1px}
+.pc-amt{font-family:var(--mono);font-size:12px;color:var(--ink);margin-left:auto;font-weight:500}
+
+/* ══ ALERT BANNER ══ */
+.alert-row{display:flex;gap:10px;margin-bottom:18px}
+.alert{border-radius:8px;padding:10px 14px;display:flex;align-items:flex-start;gap:10px;flex:1}
+.alert.warn{background:var(--abg);border:1px solid #f9c96540}
+.alert.danger{background:var(--rbg);border:1px solid #f0959540}
+.alert.info{background:var(--bbg);border:1px solid #85b7eb40}
+.alert-icon{font-family:var(--mono);font-size:11px;flex-shrink:0;margin-top:1px}
+.alert.warn .alert-icon{color:var(--am)}.alert.danger .alert-icon{color:var(--rm)}.alert.info .alert-icon{color:var(--bm)}
+.alert-body{flex:1}
+.alert-title{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.3px}
+.alert.warn .alert-title{color:var(--am)}.alert.danger .alert-title{color:var(--rdk)}.alert.info .alert-title{color:var(--bm)}
+.alert-msg{font-size:11px;color:var(--ink2);margin-top:2px;font-weight:300}
+
+/* ══ FADE ══ */
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.fade{animation:fadeIn .3s ease both}
+
+.erp-embed{height:720px;overflow:hidden}
+.erp-embed .app{height:100%!important}
+  </style>
+</head>
+<body>
+  <div id="erp-container"></div>
+  <script>
+(function(){
+  var el=document.getElementById('erp-container');
+  if(el)el.innerHTML="<div class=\"erp-embed\" style=\"height:720px;overflow:hidden;border-radius:0 0 12px 12px\">\n<div class=\"app\">\n\n<!-- TOPBAR -->\n<div class=\"topbar\">\n  <div class=\"tb-brand\">\n    <div class=\"tb-mark\"><svg viewBox=\"0 0 13 13\" fill=\"none\"><rect x=\"1\" y=\"1\" width=\"5\" height=\"5\" rx=\"1.2\" fill=\"white\" opacity=\".9\"/><rect x=\"7\" y=\"1\" width=\"5\" height=\"5\" rx=\"1.2\" fill=\"white\" opacity=\".4\"/><rect x=\"1\" y=\"7\" width=\"5\" height=\"5\" rx=\"1.2\" fill=\"white\" opacity=\".4\"/><rect x=\"7\" y=\"7\" width=\"5\" height=\"5\" rx=\"1.2\" fill=\"white\" opacity=\".9\"/><\/svg><\/div>\n    <div><div class=\"tb-name\">R Group ERP<\/div><div class=\"tb-sub\">DOHA Brand \u00b7 Sylhet Division<\/div><\/div>\n  <\/div>\n  <div class=\"tb-nav\">\n    <span class=\"tb-bc\" id=\"tb-sec\">Core<\/span>\n    <span class=\"tb-sep\">/<\/span>\n    <span class=\"tb-cur\" id=\"tb-pg\">Dashboard<\/span>\n  <\/div>\n  <div class=\"tb-right\">\n    <span class=\"tb-badge\">10 dues<\/span>\n    <div class=\"tb-user\">\n      <div class=\"tb-avatar\">RS<\/div>\n      Abu Rahat Sabir \u00b7 Admin\n    <\/div>\n  <\/div>\n<\/div>\n\n<div class=\"body\">\n<!-- SIDEBAR -->\n<nav class=\"sb\">\n  <div class=\"sb-grp\">Core<\/div>\n  <div class=\"sb-item on\" data-p=\"dashboard\" data-s=\"Core\"><div class=\"sb-dot\"><\/div>Dashboard<\/div>\n  <div class=\"sb-item\" data-p=\"orders\" data-s=\"Core\"><div class=\"sb-dot\"><\/div>Orders<\/div>\n  <div class=\"sb-item\" data-p=\"dealers\" data-s=\"Core\"><div class=\"sb-dot\"><\/div>Dealers / CRM<\/div>\n  <div class=\"sb-item\" data-p=\"products\" data-s=\"Core\"><div class=\"sb-dot\"><\/div>Products & SKUs<\/div>\n  <div class=\"sb-hr\"><\/div>\n  <div class=\"sb-grp\">Finance<\/div>\n  <div class=\"sb-item\" data-p=\"ledger\" data-s=\"Finance\"><div class=\"sb-dot\"><\/div>Ledger<\/div>\n  <div class=\"sb-item\" data-p=\"payments\" data-s=\"Finance\"><div class=\"sb-dot\"><\/div>Payments<\/div>\n  <div class=\"sb-item\" data-p=\"commissions\" data-s=\"Finance\"><div class=\"sb-dot\"><\/div>Commissions<\/div>\n  <div class=\"sb-hr\"><\/div>\n  <div class=\"sb-grp\">Operations<\/div>\n  <div class=\"sb-item\" data-p=\"inventory\" data-s=\"Operations\"><div class=\"sb-dot\"><\/div>Inventory<\/div>\n  <div class=\"sb-item\" data-p=\"dispatch\" data-s=\"Operations\"><div class=\"sb-dot\"><\/div>Dispatch Log<\/div>\n  <div class=\"sb-item\" data-p=\"returns\" data-s=\"Operations\"><div class=\"sb-dot\"><\/div>Returns <span class=\"sb-badge\">18<\/span><\/div>\n  <div class=\"sb-item\" data-p=\"damage\" data-s=\"Operations\"><div class=\"sb-dot\"><\/div>Damage Tracker<\/div>\n  <div class=\"sb-hr\"><\/div>\n  <div class=\"sb-grp\">Reports<\/div>\n  <div class=\"sb-item\" data-p=\"analytics\" data-s=\"Reports\"><div class=\"sb-dot\"><\/div>Analytics<\/div>\n  <div class=\"sb-item\" data-p=\"hr\" data-s=\"Reports\"><div class=\"sb-dot\"><\/div>HR & Payroll<\/div>\n  <div class=\"sb-foot\">\n    <div class=\"sb-stat\">\n      <div class=\"sb-stat-dot\"><\/div>\n      <div class=\"sb-stat-txt\">Live \u00b7 Sep 2022 \u2013 Oct 2023<\/div>\n    <\/div>\n  <\/div>\n<\/nav>\n\n<!-- MAIN -->\n<div class=\"main\" id=\"main\">\n\n<!-- \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 DASHBOARD \u2550\u2550\u2550 -->\n<div class=\"pg on fade\" id=\"pg-dashboard\">\n  <div class=\"pg-head\">\n    <div class=\"pg-title\">Dashboard<\/div>\n    <div class=\"pg-sub\">R Group \u00b7 DOHA Brand FMCG Distribution \u00b7 Sylhet \u00b7 Sep 2022 \u2013 Oct 2023 \u00b7 14 months live data<\/div>\n  <\/div>\n\n  <!-- Alerts -->\n  <div class=\"alert-row\">\n    <div class=\"alert danger\">\n      <div class=\"alert-icon\">!<\/div>\n      <div class=\"alert-body\">\n        <div class=\"alert-title\">Outstanding Dues \u2014 \u09f315,46,032 across 9 accounts<\/div>\n        <div class=\"alert-msg\">Dealers 977, 974, 975, 976 each carry \u09f32.1L\u2013\u09f34.6L unpaid from Aug 2023 deliveries. Immediate follow-up required.<\/div>\n      <\/div>\n    <\/div>\n    <div class=\"alert warn\">\n      <div class=\"alert-icon\">~<\/div>\n      <div class=\"alert-body\">\n        <div class=\"alert-title\">18 Return Events \u00b7 ~2,100 kg unresolved stock<\/div>\n        <div class=\"alert-msg\">3 returns from Aug\u2013Oct 2023 still pending credit settlement in next challan.<\/div>\n      <\/div>\n    <\/div>\n    <div class=\"alert info\">\n      <div class=\"alert-icon\">\u2191<\/div>\n      <div class=\"alert-body\">\n        <div class=\"alert-title\">Revenue 66\u00d7 growth \u2014 Sep 2022 to Oct 2023<\/div>\n        <div class=\"alert-msg\">Monthly order value grew from \u09f357,640 to \u09f338,70,740. Oct 2023 is the highest month on record.<\/div>\n      <\/div>\n    <\/div>\n  <\/div>\n\n  <!-- KPIs -->\n  <div class=\"kpis k5\">\n    <div class=\"kpi k-ink\">\n      <div class=\"kpi-l\">Total Order Value<\/div>\n      <div class=\"kpi-v\">\u09f32,37,02,478<\/div>\n      <div class=\"kpi-s\">109 delivery memos \u00b7 14 months<\/div>\n      <div class=\"kpi-delta up\">\u2191 Avg \u09f32,17,454 per memo<\/div>\n    <\/div>\n    <div class=\"kpi k-g\">\n      <div class=\"kpi-l\">Total Payments Received<\/div>\n      <div class=\"kpi-v grn\">\u09f32,49,24,450<\/div>\n      <div class=\"kpi-s\">Bank \u09f31,40,98,273 \u00b7 Other \u09f31,04,63,927<\/div>\n      <div class=\"kpi-delta up\">\u2191 \u09f312,21,972 overpayment (advance)<\/div>\n    <\/div>\n    <div class=\"kpi k-b\">\n      <div class=\"kpi-l\">Volume Dispatched<\/div>\n      <div class=\"kpi-v blu\">88,699 kg<\/div>\n      <div class=\"kpi-s\">Avg 813.8 kg / delivery<\/div>\n      <div class=\"kpi-delta up\">\u2191 Peak: 16,180 kg in Aug 2023<\/div>\n    <\/div>\n    <div class=\"kpi k-r\">\n      <div class=\"kpi-l\">Outstanding Dues<\/div>\n      <div class=\"kpi-v red\">\u09f315,46,032<\/div>\n      <div class=\"kpi-s\">9 accounts \u00b7 \u09f31,26,988 advance credit<\/div>\n      <div class=\"kpi-delta warn\">\u26a0 6 accounts overdue since Aug 2023<\/div>\n    <\/div>\n    <div class=\"kpi k-a\">\n      <div class=\"kpi-l\">Active Dealers<\/div>\n      <div class=\"kpi-v\">14<\/div>\n      <div class=\"kpi-s\">Across Sylhet division<\/div>\n      <div class=\"kpi-delta up\">\u2191 9 new onboarded Feb\u2013Aug 2023<\/div>\n    <\/div>\n  <\/div>\n\n  <!-- Charts row -->\n  <div class=\"g2\">\n    <div class=\"card\">\n      <div class=\"ch\">\n        <div class=\"ct\">Monthly revenue & payments<\/div>\n        <div style=\"display:flex;gap:12px\">\n          <span style=\"display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9px;color:var(--ink3)\"><span style=\"width:8px;height:8px;border-radius:2px;background:#0F172A;display:inline-block\"><\/span>Order value<\/span>\n          <span style=\"display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9px;color:var(--ink3)\"><span style=\"width:8px;height:8px;border-radius:2px;background:var(--gm);display:inline-block\"><\/span>Payments received<\/span>\n        <\/div>\n      <\/div>\n      <div class=\"cv h180\"><canvas id=\"c-dual\"><\/canvas><\/div>\n    <\/div>\n    <div class=\"card\">\n      <div class=\"ch\"><div class=\"ct\">Recent activity<\/div><div class=\"cs\">Last 8 transactions<\/div><\/div>\n      <div id=\"activity-feed\"><\/div>\n    <\/div>\n  <\/div>\n\n  <!-- Dealer + product row -->\n  <div class=\"g13\">\n    <div class=\"card\">\n      <div class=\"ch\"><div class=\"ct\">Dealer account overview<\/div><div class=\"cs\">All 14 \u00b7 click row \u2192 ledger<\/div><\/div>\n      <table class=\"tbl\">\n        <thead><tr><th>Dealer<\/th><th>Code<\/th><th>Orders<\/th><th>Revenue<\/th><th>Volume kg<\/th><th>First \u2192 Last<\/th><th>Balance<\/th><\/tr><\/thead>\n        <tbody id=\"dash-dealers\"><\/tbody>\n      <\/table>\n    <\/div>\n    <div>\n      <div class=\"card mb\">\n        <div class=\"ch\"><div class=\"ct\">Product mix<\/div><div class=\"cs\">by kg dispatched<\/div><\/div>\n        <div class=\"cv\" style=\"height:110px\"><canvas id=\"c-donut\"><\/canvas><\/div>\n        <div style=\"padding:8px 16px 14px\"><div class=\"leg\">\n          <div class=\"li\"><div class=\"ll\"><div class=\"lsq\" style=\"background:#0F172A\"><\/div><div class=\"ln\">Chili (Morich)<\/div><\/div><div><span class=\"lv\">45,785 kg<\/span><span class=\"lp\">51.6%<\/span><\/div><\/div>\n          <div class=\"li\"><div class=\"ll\"><div class=\"lsq\" style=\"background:#64748B\"><\/div><div class=\"ln\">Turmeric (Holud)<\/div><\/div><div><span class=\"lv\">24,821 kg<\/span><span class=\"lp\">28.0%<\/span><\/div><\/div>\n          <div class=\"li\"><div class=\"ll\"><div class=\"lsq\" style=\"background:#94A3B8\"><\/div><div class=\"ln\">Coriander (Dhania)<\/div><\/div><div><span class=\"lv\">16,454 kg<\/span><span class=\"lp\">18.6%<\/span><\/div><\/div>\n          <div class=\"li\"><div class=\"ll\"><div class=\"lsq\" style=\"background:#E2E8F0\"><\/div><div class=\"ln\">Tea + Others<\/div><\/div><div><span class=\"lv\">1,639 kg<\/span><span class=\"lp\">1.8%<\/span><\/div><\/div>\n        <\/div><\/div>\n      <\/div>\n      <div class=\"card\">\n        <div class=\"ch\"><div class=\"ct\">Outstanding dues<\/div><div class=\"cs\">per dealer<\/div><\/div>\n        <div class=\"cv\" style=\"height:120px\"><canvas id=\"c-dues\"><\/canvas><\/div>\n      <\/div>\n    <\/div>\n  <\/div>\n<\/div>\n\n<!-- \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 ORDERS \u2550\u2550\u2550 -->\n<div class=\"pg fade\" id=\"pg-orders\">\n  <div class=\"pg-head\"><div class=\"pg-title\">New Order Entry<\/div><div class=\"pg-sub\">Create a delivery memo \u2014 live invoice preview \u00b7 auto-calculates totals \u00b7 all fields validated<\/div><\/div>\n  <div class=\"ord-shell\">\n    <!-- Form -->\n    <div>\n      <div class=\"card mb\">\n        <div class=\"ch\"><div class=\"ct\">Delivery details<\/div><div class=\"cs\">Memo auto-numbered on save<\/div><\/div>\n        <div style=\"padding:14px 16px\">\n          <div class=\"form-row2\">\n            <div><label class=\"form-lbl\">Dealer account<\/label>\n              <select id=\"o-dlr\" onchange=\"updPrev()\">\n                <option value=\"965\">965 \u2014 Tasneem Enterprises (Madhavpur)<\/option>\n                <option value=\"971\">971 \u2014 Shaon Enterprises (Sunamganj)<\/option>\n                <option value=\"966\">966 \u2014 Nishikant Store (Pagla)<\/option>\n                <option value=\"967\">967 \u2014 Sufia Enterprises (Bishwanath)<\/option>\n                <option value=\"968\">968 \u2014 Rubel Enterprises<\/option>\n                <option value=\"969\">969 \u2014 Abdul Hannan & Sons<\/option>\n                <option value=\"970\">970 \u2014 Ma Enterprises (Rajnagar)<\/option>\n              <\/select>\n            <\/div>\n            <div><label class=\"form-lbl\">Delivery date<\/label><input type=\"text\" id=\"o-date\" value=\"31 Oct 2023\" oninput=\"updPrev()\"/><\/div>\n          <\/div>\n          <div class=\"form-row2\">\n            <div><label class=\"form-lbl\">Manager / SR name<\/label><input type=\"text\" id=\"o-mgr\" value=\"Shahin Ahmed\" oninput=\"updPrev()\"/><\/div>\n            <div><label class=\"form-lbl\">Transport (pickup rent)<\/label><input type=\"text\" id=\"o-trans\" placeholder=\"e.g. Pickup \u2014 \u09f34,500\" oninput=\"updPrev()\"/><\/div>\n          <\/div>\n          <div class=\"form-row2\">\n            <div><label class=\"form-lbl\">Previous balance (\u09f3)<\/label><input type=\"number\" id=\"o-prevbal\" value=\"0\" oninput=\"updPrev()\"/><\/div>\n            <div><label class=\"form-lbl\">Payment received (\u09f3)<\/label><input type=\"number\" id=\"o-payment\" value=\"0\" oninput=\"updPrev()\"/><\/div>\n          <\/div>\n        <\/div>\n      <\/div>\n      <div class=\"card mb\">\n        <div class=\"ch\"><div class=\"ct\">Order lines<\/div><div class=\"cs\">Product \u00d7 Size \u00d7 Qty \u00d7 Rate<\/div><\/div>\n        <div style=\"padding:12px 16px\">\n          <div class=\"sku-wrap\">\n            <div class=\"sku-hd\"><span>Product<\/span><span>Size<\/span><span>Qty<\/span><span>Rate \u09f3<\/span><span><\/span><\/div>\n            <div id=\"sku-rows\"><\/div>\n          <\/div>\n          <button class=\"add-sku\" onclick=\"addSKU()\">+ Add product line<\/button>\n        <\/div>\n      <\/div>\n      <div class=\"card\">\n        <div class=\"ch\"><div class=\"ct\">Memo notes<\/div><\/div>\n        <div style=\"padding:12px 16px\">\n          <textarea id=\"o-note\" style=\"width:100%;border:1px solid var(--ln);border-radius:6px;padding:8px 10px;font-family:var(--sans);font-size:12px;resize:none;height:52px;outline:none;color:var(--ink)\" placeholder=\"Bank deposit details, commission payments, return notes, offer adjustments\u2026\"><\/textarea>\n          <button class=\"save-btn\" onclick=\"saveOrder()\">Save Delivery Memo \u2192<\/button>\n          <div class=\"toast\" id=\"o-toast\">\u2713 Memo #10111 saved \u00b7 Ledger updated \u00b7 Commission queued \u00b7 Stock adjusted<\/div>\n        <\/div>\n      <\/div>\n    <\/div>\n\n    <!-- Invoice -->\n    <div class=\"invoice\" style=\"align-self:start\">\n      <div class=\"inv-header\">\n        <div>\n          <div class=\"inv-co-name\">R Group<\/div>\n          <div class=\"inv-co-sub\">DOHA BRAND FMCG \u00b7 SYLHET DIVISION<\/div>\n        <\/div>\n        <div class=\"inv-memo-block\">\n          <div class=\"inv-memo-label\">Delivery Memo<\/div>\n          <div class=\"inv-memo-num\">#10111<\/div>\n        <\/div>\n      <\/div>\n      <div class=\"inv-meta\">\n        <div class=\"inv-meta-col\">\n          <div class=\"inv-field-lbl\">Bill To<\/div>\n          <div class=\"inv-field-val\" id=\"inv-dealer\">Tasneem Enterprises<\/div>\n          <div class=\"inv-field-sub\" id=\"inv-code\">Code: 965 \u00b7 Madhavpur, Habiganj<\/div>\n        <\/div>\n        <div class=\"inv-meta-col\">\n          <div class=\"inv-field-lbl\">Delivery Date<\/div>\n          <div class=\"inv-field-val\" id=\"inv-date\">31 Oct 2023<\/div>\n          <div class=\"inv-field-sub\" id=\"inv-mgr\">SR: Shahin Ahmed<\/div>\n        <\/div>\n      <\/div>\n      <div class=\"inv-balance-strip\">\n        <div class=\"inv-balance-cell\">\n          <div class=\"inv-balance-lbl\">Previous Balance<\/div>\n          <div class=\"inv-balance-val\" id=\"inv-prevbal\">\u09f30<\/div>\n        <\/div>\n        <div class=\"inv-balance-cell\">\n          <div class=\"inv-balance-lbl\">Payment Received<\/div>\n          <div class=\"inv-balance-val\" style=\"color:var(--gdk)\" id=\"inv-payment\">\u09f30<\/div>\n        <\/div>\n      <\/div>\n      <div class=\"inv-lines-hd\"><span>Product<\/span><span>Qty<\/span><span>Rate<\/span><span>Amount<\/span><\/div>\n      <div id=\"inv-lines\"><div class=\"inv-empty\">Add product lines to see invoice<\/div><\/div>\n      <div class=\"inv-totals\">\n        <div class=\"inv-total-row\"><span class=\"lbl\">Order value<\/span><span class=\"val\" id=\"inv-order-val\">\u09f30<\/span><\/div>\n        <div class=\"inv-total-row\"><span class=\"lbl\">Previous balance<\/span><span class=\"val\" id=\"inv-prev-sub\">\u09f30<\/span><\/div>\n        <div class=\"inv-total-row\"><span class=\"lbl\">Payment received<\/span><span class=\"val\" style=\"color:var(--gdk)\" id=\"inv-pay-sub\">\u09f30<\/span><\/div>\n        <div class=\"inv-total-row main\"><span class=\"lbl\">Order Total<\/span><span class=\"val\" id=\"inv-total\">\u09f30<\/span><\/div>\n      <\/div>\n      <div class=\"inv-net-bar\">\n        <div>\n          <div class=\"inv-net-lbl\">Net Outstanding<\/div>\n          <div class=\"inv-net-val\" id=\"inv-net\">\u09f30<\/div>\n        <\/div>\n        <div class=\"inv-vol-line\" id=\"inv-vol\">0 kg<\/div>\n      <\/div>\n    <\/div>\n  <\/div>\n<\/div>\n\n<!-- \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 DEALERS \u2550\u2550\u2550 -->\n<div class=\"pg fade\" id=\"pg-dealers\">\n  <div class=\"pg-head\"><div class=\"pg-title\">Dealers / CRM<\/div><div class=\"pg-sub\">14 active accounts \u00b7 Sep 2022 \u2013 Oct 2023 \u00b7 Sylhet Division \u00b7 click row to open ledger<\/div><\/div>\n  <div class=\"kpis k4\">\n    <div class=\"kpi k-ink\"><div class=\"kpi-l\">Total Dealers<\/div><div class=\"kpi-v\">14<\/div><div class=\"kpi-s\">Active accounts<\/div><\/div>\n    <div class=\"kpi k-g\"><div class=\"kpi-l\">Total Revenue<\/div><div class=\"kpi-v grn\">\u09f32,37,02,478<\/div><div class=\"kpi-s\">All 14 dealers combined<\/div><\/div>\n    <div class=\"kpi k-b\"><div class=\"kpi-l\">Top Dealer (965)<\/div><div class=\"kpi-v blu\">\u09f31,29,81,196<\/div><div class=\"kpi-s\">Tasneem Ent. \u00b7 58 orders \u00b7 48,533 kg<\/div><\/div>\n    <div class=\"kpi k-r\"><div class=\"kpi-l\">Overdue Accounts<\/div><div class=\"kpi-v red\">9<\/div><div class=\"kpi-s\">Total \u09f315,46,032 outstanding<\/div><\/div>\n  <\/div>\n  <div class=\"card\">\n    <div class=\"ch\"><div class=\"ct\">All dealer accounts<\/div><div class=\"cs\">Ranked by total order value \u00b7 Click row \u2192 ledger view<\/div><\/div>\n    <table class=\"tbl\">\n      <thead><tr><th>Dealer Name<\/th><th>Code<\/th><th>Manager<\/th><th>Location<\/th><th>Phone<\/th><th>Orders<\/th><th>Revenue<\/th><th>Paid<\/th><th>Volume kg<\/th><th>Revenue share<\/th><th>Balance<\/th><\/tr><\/thead>\n      <tbody id=\"full-dealers\"><\/tbody>\n    <\/table>\n  <\/div>\n<\/div>\n\n<!-- \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 PRODUCTS \u2550\u2550\u2550 -->\n<div class=\"pg fade\" id=\"pg-products\">\n  <div class=\"pg-head\"><div class=\"pg-title\">Products & SKUs<\/div><div class=\"pg-sub\">DOHA Brand \u00b7 6 product lines \u00b7 32+ SKU variants \u00b7 Multi-size packaging \u00b7 Versioned pricing<\/div><\/div>\n  <div class=\"kpis k4\">\n    <div class=\"kpi k-ink\"><div class=\"kpi-l\">Product Lines<\/div><div class=\"kpi-v\">6<\/div><div class=\"kpi-s\">DOHA brand FMCG<\/div><\/div>\n    <div class=\"kpi k-g\"><div class=\"kpi-l\">SKU Variants<\/div><div class=\"kpi-v\">32+<\/div><div class=\"kpi-s\">Size \u00d7 product combinations<\/div><\/div>\n    <div class=\"kpi k-a\"><div class=\"kpi-l\">Top SKU by Volume<\/div><div class=\"kpi-v\">5 kg Chili<\/div><div class=\"kpi-s\">\u09f3345\u2013\u09f3385 \u00b7 Highest lifetime kg<\/div><\/div>\n    <div class=\"kpi k-b\"><div class=\"kpi-l\">Price Range<\/div><div class=\"kpi-v\">\u09f33\u2013\u09f3385<\/div><div class=\"kpi-s\">Per unit across all SKUs<\/div><\/div>\n  <\/div>\n  <div class=\"card mb\">\n    <div class=\"ch\"><div class=\"ct\">Product catalog<\/div><div class=\"cs\">Lifetime dispatch \u00b7 all dealers \u00b7 real rates observed in data<\/div><\/div>\n    <div class=\"prod-grid\" id=\"prod-catalog\"><\/div>\n  <\/div>\n  <div class=\"card\">\n    <div class=\"ch\"><div class=\"ct\">Price history \u2014 key SKUs<\/div><div class=\"cs\">Rate changes observed across dispatch records Sep 2022 \u2013 Oct 2023<\/div><\/div>\n    <table class=\"tbl\">\n      <thead><tr><th>Product<\/th><th>Size<\/th><th>Sep\u2013Dec 2022<\/th><th>Jan\u2013Jul 2023<\/th><th>Aug\u2013Oct 2023<\/th><th>% Change<\/th><th>Reason<\/th><\/tr><\/thead>\n      <tbody>\n        <tr><td>Chili Powder<\/td><td class=\"m\">5 kg<\/td><td class=\"m\">\u09f3320<\/td><td class=\"m\">\u09f3335 \u2013 \u09f3345<\/td><td class=\"m\">\u09f3385<\/td><td><span class=\"pill p-blu\">+20.3%<\/span><\/td><td style=\"font-size:10px;color:var(--ink3)\">Seasonal demand + supply cost increase<\/td><\/tr>\n        <tr><td>Turmeric Powder<\/td><td class=\"m\">5 kg<\/td><td class=\"m\">\u09f3180<\/td><td class=\"m\">\u09f3155 \u2013 \u09f3165<\/td><td class=\"m\">\u09f3185<\/td><td><span class=\"pill p-blu\">+2.8%<\/span><\/td><td style=\"font-size:10px;color:var(--ink3)\">Mid-year price adjustment<\/td><\/tr>\n        <tr><td>Coriander Powder<\/td><td class=\"m\">5 kg<\/td><td class=\"m\">\u09f3145<\/td><td class=\"m\">\u09f3135 \u2013 \u09f3145<\/td><td class=\"m\">\u09f3165<\/td><td><span class=\"pill p-blu\">+13.8%<\/span><\/td><td style=\"font-size:10px;color:var(--ink3)\">Import price pass-through<\/td><\/tr>\n        <tr><td>Tea Leaves<\/td><td class=\"m\">500 gm<\/td><td class=\"m\">\u09f3250<\/td><td class=\"m\">\u09f3255<\/td><td class=\"m\">\u09f3235<\/td><td><span class=\"pill p-gray\">\u22126.0%<\/span><\/td><td style=\"font-size:10px;color:var(--ink3)\">Promotional pricing Oct 2023<\/td><\/tr>\n        <tr><td>Cumin Powder<\/td><td class=\"m\">500 gm<\/td><td class=\"m\">\u09f3145<\/td><td class=\"m\">\u09f3145 \u2013 \u09f3155<\/td><td class=\"m\">\u09f3185<\/td><td><span class=\"pill p-blu\">+27.6%<\/span><\/td><td style=\"font-size:10px;color:var(--ink3)\">Low volume \u2014 price sensitivity low<\/td><\/tr>\n      <\/tbody>\n    <\/table>\n  <\/div>\n<\/div>\n\n<!-- \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 LEDGER \u2550\u2550\u2550 -->\n<div class=\"pg fade\" id=\"pg-ledger\">\n  <div class=\"pg-head\"><div class=\"pg-title\">Finance Ledger<\/div><div class=\"pg-sub\">Per-dealer rolling account \u00b7 All transactions \u00b7 Bank + bKash + Cash reconciled<\/div><\/div>\n  <div style=\"display:flex;align-items:center;gap:10px;margin-bottom:14px\">\n    <label style=\"font-family:var(--mono);font-size:10px;color:var(--ink3);white-space:nowrap\">Select dealer<\/label>\n    <select id=\"ldg-sel\" onchange=\"renderLedger()\" style=\"max-width:420px\">\n      <option value=\"965\">965 \u2014 Tasneem Enterprises (Madhavpur) \u00b7 58 orders<\/option>\n      <option value=\"971\">971 \u2014 Shaon Enterprises (Sunamganj) \u00b7 18 orders<\/option>\n      <option value=\"966\">966 \u2014 Nishikant Store (Pagla) \u00b7 9 orders<\/option>\n      <option value=\"967\">967 \u2014 Sufia Enterprises (Bishwanath) \u00b7 9 orders<\/option>\n      <option value=\"968\">968 \u2014 Rubel Enterprises \u00b7 2 orders<\/option>\n      <option value=\"969\">969 \u2014 Abdul Hannan & Sons \u00b7 3 orders<\/option>\n      <option value=\"970\">970 \u2014 Ma Enterprises (Rajnagar) \u00b7 2 orders<\/option>\n      <option value=\"972\">972 \u2014 Tasneem (Code 972) \u00b7 2 orders<\/option>\n      <option value=\"974\">974 \u2014 Tasneem (Code 974) \u00b7 1 order<\/option>\n      <option value=\"973\">973 \u2014 Tasneem (Code 973) \u00b7 1 order<\/option>\n      <option value=\"975\">975 \u2014 Tasneem (Code 975) \u00b7 1 order<\/option>\n      <option value=\"976\">976 \u2014 Tasneem (Code 976) \u00b7 1 order<\/option>\n      <option value=\"977\">977 \u2014 Tasneem (Code 977) \u00b7 1 order<\/option>\n    <\/select>\n  <\/div>\n  <div class=\"ldg-summary\" id=\"ldg-summary\"><\/div>\n  <div class=\"card\">\n    <div class=\"ch\"><div class=\"ct\" id=\"ldg-title\">Transaction history<\/div><div class=\"cs\" id=\"ldg-meta\"><\/div><\/div>\n    <div class=\"stbl\" style=\"max-height:340px\">\n      <table class=\"tbl\">\n        <thead><tr><th>Memo #<\/th><th>Date<\/th><th>Order Value<\/th><th>Prev Balance<\/th><th>Grand Total<\/th><th>Paid<\/th><th>Running Due<\/th><th>Advance Credit<\/th><th>Bank<\/th><th>KG<\/th><th>Notes<\/th><\/tr><\/thead>\n        <tbody id=\"ldg-body\"><\/tbody>\n      <\/table>\n    <\/div>\n  <\/div>\n<\/div>\n\n<!-- \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 PAYMENTS \u2550\u2550\u2550 -->\n<div class=\"pg fade\" id=\"pg-payments\">\n  <div class=\"pg-head\"><div class=\"pg-title\">Payments<\/div><div class=\"pg-sub\">Bank transfer \u00b7 bKash \u00b7 Cash \u00b7 Cheque \u00b7 Programme credits \u00b7 All channels reconciled<\/div><\/div>\n  <div class=\"kpis k4\">\n    <div class=\"kpi k-g\"><div class=\"kpi-l\">Total Received<\/div><div class=\"kpi-v grn\">\u09f32,49,24,450<\/div><div class=\"kpi-s\">All channels \u00b7 Sep 2022 \u2013 Oct 2023<\/div><\/div>\n    <div class=\"kpi k-b\"><div class=\"kpi-l\">Bank Transfers<\/div><div class=\"kpi-v blu\">\u09f31,40,98,273<\/div><div class=\"kpi-s\">56.6% of all receipts \u00b7 Pubali, DBBL<\/div><\/div>\n    <div class=\"kpi k-a\"><div class=\"kpi-l\">Cash & Other<\/div><div class=\"kpi-v\">\u09f31,08,26,177<\/div><div class=\"kpi-s\">bKash, Rocket, cash, offers<\/div><\/div>\n    <div class=\"kpi k-ink\"><div class=\"kpi-l\">Overpayment (Net)<\/div><div class=\"kpi-v\">\u09f312,21,972<\/div><div class=\"kpi-s\">Total paid minus total ordered<\/div><\/div>\n  <\/div>\n  <div class=\"g2\">\n    <div class=\"card\">\n      <div class=\"ch\"><div class=\"ct\">Payment channels<\/div><div class=\"cs\">All 109 memos \u00b7 estimated by channel<\/div><\/div>\n      <div class=\"pc-item\"><div class=\"pc-icon\" style=\"background:var(--bbg);color:var(--bm)\">BK<\/div><div><div class=\"pc-name\">Bank transfer<\/div><div class=\"pc-sub\">Pubali Bank \u00b7 Dutch-Bangla \u00b7 Cheque \u00b7 Primary channel<\/div><\/div><div class=\"pc-amt\">\u09f31,40,98,273<\/div><\/div>\n      <div class=\"pc-item\"><div class=\"pc-icon\" style=\"background:#f3e8ff;color:#7c3aed\">bK<\/div><div><div class=\"pc-name\">bKash / Rocket mobile banking<\/div><div class=\"pc-sub\">Mobile transfers \u00b7 GM deposits \u00b7 Direct agent<\/div><\/div><div class=\"pc-amt\">~\u09f342,00,000<\/div><\/div>\n      <div class=\"pc-item\"><div class=\"pc-icon\" style=\"background:var(--gbg);color:var(--gdk)\">Ca<\/div><div><div class=\"pc-name\">Cash collection<\/div><div class=\"pc-sub\">In-person \u00b7 Depot collection \u00b7 Field collection<\/div><\/div><div class=\"pc-amt\">~\u09f324,00,000<\/div><\/div>\n      <div class=\"pc-item\"><div class=\"pc-icon\" style=\"background:var(--off2);color:var(--ink3)\">Of<\/div><div><div class=\"pc-name\">Programme offer credits<\/div><div class=\"pc-sub\">Promotional offsets \u00b7 Free goods adjustments<\/div><\/div><div class=\"pc-amt\">~\u09f32,26,177<\/div><\/div>\n    <\/div>\n    <div class=\"card\"><div class=\"ch\"><div class=\"ct\">Monthly payment receipts<\/div><div class=\"cs\">\u09f3 actual received<\/div><\/div><div class=\"cv h160\"><canvas id=\"c-pay\"><\/canvas><\/div><\/div>\n  <\/div>\n  <div class=\"card\">\n    <div class=\"ch\"><div class=\"ct\">Payment records<\/div><div class=\"cs\">Top 20 by amount \u00b7 bank + other split<\/div><\/div>\n    <div class=\"stbl\"><table class=\"tbl\"><thead><tr><th>Memo<\/th><th>Date<\/th><th>Dealer<\/th><th>Code<\/th><th>Bank \u09f3<\/th><th>Other \u09f3<\/th><th>Total Paid \u09f3<\/th><th>Notes<\/th><\/tr><\/thead><tbody id=\"pay-body\"><\/tbody><\/table><\/div>\n  <\/div>\n<\/div>\n\n<!-- \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 COMMISSIONS \u2550\u2550\u2550 -->\n<div class=\"pg fade\" id=\"pg-commissions\">\n  <div class=\"pg-head\"><div class=\"pg-title\">Commissions<\/div><div class=\"pg-sub\">SR commission @ \u09f315/kg standard rate \u00b7 Dealer commissions \u00b7 Manager bonuses \u00b7 22 recorded events<\/div><\/div>\n  <div class=\"kpis k4\">\n    <div class=\"kpi k-ink\"><div class=\"kpi-l\">SR Rate Standard<\/div><div class=\"kpi-v\">\u09f315 / kg<\/div><div class=\"kpi-s\">Applied across all dealer territories<\/div><\/div>\n    <div class=\"kpi k-g\"><div class=\"kpi-l\">Est. Total SR Commission<\/div><div class=\"kpi-v grn\">\u09f313,30,485<\/div><div class=\"kpi-s\">Based on 88,699 kg \u00d7 \u09f315<\/div><\/div>\n    <div class=\"kpi k-b\"><div class=\"kpi-l\">Largest Single Payment<\/div><div class=\"kpi-v blu\">\u09f31,60,485<\/div><div class=\"kpi-s\">Memo 10102 \u00b7 Oct 2023 \u00b7 10,699 kg \u00d7 \u09f315<\/div><\/div>\n    <div class=\"kpi k-a\"><div class=\"kpi-l\">Commission Records<\/div><div class=\"kpi-v\">22<\/div><div class=\"kpi-s\">Extracted from memo notes<\/div><\/div>\n  <\/div>\n  <div class=\"g2\">\n    <div class=\"card\">\n      <div class=\"ch\"><div class=\"ct\">SR commission by dealer territory<\/div><div class=\"cs\">Estimated @ \u09f315/kg lifetime<\/div><\/div>\n      <div style=\"padding:14px 16px\"><div class=\"leg\" style=\"gap:10px\">\n        <div class=\"li\"><div class=\"ll\"><div class=\"lsq\" style=\"background:#0F172A\"><\/div><div class=\"ln\">Dealer 965 \u2014 Tasneem (Madhavpur)<\/div><\/div><div><span class=\"lv\">\u09f37,27,995<\/span><span class=\"lp\">48,533 kg<\/span><\/div><\/div>\n        <div class=\"li\"><div class=\"ll\"><div class=\"lsq\" style=\"background:#64748B\"><\/div><div class=\"ln\">Dealer 971 \u2014 Shaon (Sunamganj)<\/div><\/div><div><span class=\"lv\">\u09f32,11,845<\/span><span class=\"lp\">14,123 kg<\/span><\/div><\/div>\n        <div class=\"li\"><div class=\"ll\"><div class=\"lsq\" style=\"background:#94A3B8\"><\/div><div class=\"ln\">Dealer 966 \u2014 Nishikant (Pagla)<\/div><\/div><div><span class=\"lv\">\u09f393,900<\/span><span class=\"lp\">6,260 kg<\/span><\/div><\/div>\n        <div class=\"li\"><div class=\"ll\"><div class=\"lsq\" style=\"background:#CBD5E1\"><\/div><div class=\"ln\">Dealer 967 \u2014 Sufia (Bishwanath)<\/div><\/div><div><span class=\"lv\">\u09f367,095<\/span><span class=\"lp\">4,473 kg<\/span><\/div><\/div>\n        <div class=\"li\"><div class=\"ll\"><div class=\"lsq\" style=\"background:#E2E8F0\"><\/div><div class=\"ln\">Dealers 968\u2013977 (10 accounts)<\/div><\/div><div><span class=\"lv\">\u09f32,29,650<\/span><span class=\"lp\">15,310 kg<\/span><\/div><\/div>\n      <\/div><\/div>\n    <\/div>\n    <div class=\"card\"><div class=\"ch\"><div class=\"ct\">Commission event history<\/div><div class=\"cs\">Amounts paid per memo<\/div><\/div><div class=\"cv h180\"><canvas id=\"c-comm\"><\/canvas><\/div><\/div>\n  <\/div>\n  <div class=\"card\">\n    <div class=\"ch\"><div class=\"ct\">Commission payment log<\/div><div class=\"cs\">22 events extracted from delivery memo notes<\/div><\/div>\n    <div class=\"stbl\"><table class=\"tbl\"><thead><tr><th>Memo<\/th><th>Date<\/th><th>Dealer<\/th><th>kg \u00d7 Rate<\/th><th>Amount \u09f3<\/th><th>Notes<\/th><\/tr><\/thead><tbody id=\"comm-body\"><\/tbody><\/table><\/div>\n  <\/div>\n<\/div>\n\n<!-- \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 INVENTORY \u2550\u2550\u2550 -->\n<div class=\"pg fade\" id=\"pg-inventory\">\n  <div class=\"pg-head\"><div class=\"pg-title\">Inventory<\/div><div class=\"pg-sub\">88,699 kg total dispatched \u00b7 6 SKU product lines \u00b7 DOHA Brand \u00b7 Sep 2022 \u2013 Oct 2023<\/div><\/div>\n  <div class=\"kpis k5\">\n    <div class=\"kpi k-ink\"><div class=\"kpi-l\">Total Dispatched<\/div><div class=\"kpi-v\">88,699 kg<\/div><div class=\"kpi-s\">Across 109 delivery memos<\/div><\/div>\n    <div class=\"kpi k-g\"><div class=\"kpi-l\">Chili Powder<\/div><div class=\"kpi-v grn\">45,785 kg<\/div><div class=\"kpi-s\">51.6% of total \u00b7 14 months<\/div><\/div>\n    <div class=\"kpi k-a\"><div class=\"kpi-l\">Turmeric Powder<\/div><div class=\"kpi-v\">24,821 kg<\/div><div class=\"kpi-s\">28.0% of total<\/div><\/div>\n    <div class=\"kpi k-b\"><div class=\"kpi-l\">Coriander Powder<\/div><div class=\"kpi-v blu\">16,454 kg<\/div><div class=\"kpi-s\">18.6% of total<\/div><\/div>\n    <div class=\"kpi k-r\"><div class=\"kpi-l\">Returns Est.<\/div><div class=\"kpi-v red\">~2,100 kg<\/div><div class=\"kpi-s\">18 events \u00b7 ~2.4% of dispatched<\/div><\/div>\n  <\/div>\n  <div class=\"g2\">\n    <div class=\"card\"><div class=\"ch\"><div class=\"ct\">Monthly dispatch by product<\/div><div class=\"cs\">kg stacked<\/div><\/div><div class=\"cv h180\"><canvas id=\"c-inv-stk\"><\/canvas><\/div><\/div>\n    <div class=\"card\">\n      <div class=\"ch\"><div class=\"ct\">SKU dispatch totals<\/div><div class=\"cs\">Lifetime \u00b7 all dealers<\/div><\/div>\n      <div style=\"padding:14px 16px\">\n        <div id=\"inv-sku-cards\"><\/div>\n      <\/div>\n    <\/div>\n  <\/div>\n<\/div>\n\n<!-- \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 DISPATCH \u2550\u2550\u2550 -->\n<div class=\"pg fade\" id=\"pg-dispatch\">\n  <div class=\"pg-head\"><div class=\"pg-title\">Dispatch Log<\/div><div class=\"pg-sub\">All 109 delivery memos \u00b7 Sep 2022 \u2013 Oct 2023 \u00b7 Filter by dealer \u00b7 Search by memo number<\/div><\/div>\n  <div class=\"kpis k4\">\n    <div class=\"kpi k-ink\"><div class=\"kpi-l\">Total Memos<\/div><div class=\"kpi-v\">109<\/div><div class=\"kpi-s\">Delivery records<\/div><\/div>\n    <div class=\"kpi k-g\"><div class=\"kpi-l\">Peak Month<\/div><div class=\"kpi-v grn\">Aug 2023<\/div><div class=\"kpi-s\">16,180 kg \u00b7 13 memos<\/div><\/div>\n    <div class=\"kpi k-a\"><div class=\"kpi-l\">Avg per Memo<\/div><div class=\"kpi-v\">813.8 kg<\/div><div class=\"kpi-s\">Per delivery \u00b7 \u09f32,17,454 avg value<\/div><\/div>\n    <div class=\"kpi k-b\"><div class=\"kpi-l\">Largest Delivery<\/div><div class=\"kpi-v blu\">2,470 kg<\/div><div class=\"kpi-s\">Memo #10108 \u00b7 31 Oct 2023<\/div><\/div>\n  <\/div>\n  <div class=\"card\">\n    <div class=\"ch\"><div class=\"ct\">Dispatch records<\/div><div class=\"cs\">All memos \u00b7 product breakdown<\/div><\/div>\n    <div class=\"frow\">\n      <span class=\"flbl\">Filter dealer:<\/span>\n      <button class=\"fbtn on\" onclick=\"filtDisp('all',this)\">All<\/button>\n      <button class=\"fbtn\" onclick=\"filtDisp('965',this)\">965<\/button>\n      <button class=\"fbtn\" onclick=\"filtDisp('971',this)\">971<\/button>\n      <button class=\"fbtn\" onclick=\"filtDisp('966',this)\">966<\/button>\n      <button class=\"fbtn\" onclick=\"filtDisp('967',this)\">967<\/button>\n      <button class=\"fbtn\" onclick=\"filtDisp('968',this)\">968<\/button>\n      <input class=\"srch\" id=\"disp-srch\" placeholder=\"Memo # or dealer\u2026\" oninput=\"srchDisp()\"/>\n    <\/div>\n    <div class=\"stbl\" style=\"max-height:340px\"><table class=\"tbl\"><thead><tr><th>Memo #<\/th><th>Date<\/th><th>Dealer<\/th><th>Code<\/th><th>Chili kg<\/th><th>Turmeric kg<\/th><th>Coriander kg<\/th><th>Tea kg<\/th><th>Total kg<\/th><th>Order Value \u09f3<\/th><\/tr><\/thead><tbody id=\"disp-body\"><\/tbody><\/table><\/div>\n  <\/div>\n<\/div>\n\n<!-- \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 RETURNS \u2550\u2550\u2550 -->\n<div class=\"pg fade\" id=\"pg-returns\">\n  <div class=\"pg-head\"><div class=\"pg-title\">Returns Register<\/div><div class=\"pg-sub\">18 events \u00b7 Product returns \u00b7 Damage \u00b7 Production defects \u00b7 Short deliveries \u00b7 Credit tracking<\/div><\/div>\n  <div class=\"kpis k5\">\n    <div class=\"kpi k-r\"><div class=\"kpi-l\">Total Events<\/div><div class=\"kpi-v red\">18<\/div><div class=\"kpi-s\">Sep 2022 \u2013 Oct 2023<\/div><\/div>\n    <div class=\"kpi k-a\"><div class=\"kpi-l\">Est. Return Volume<\/div><div class=\"kpi-v\">~2,100 kg<\/div><div class=\"kpi-s\">Chili, coriander, turmeric<\/div><\/div>\n    <div class=\"kpi k-ink\"><div class=\"kpi-l\">Return Rate<\/div><div class=\"kpi-v\">2.37%<\/div><div class=\"kpi-s\">Of total 88,699 kg dispatched<\/div><\/div>\n    <div class=\"kpi k-g\"><div class=\"kpi-l\">Resolved<\/div><div class=\"kpi-v grn\">15<\/div><div class=\"kpi-s\">Credit notes issued & settled<\/div><\/div>\n    <div class=\"kpi k-b\"><div class=\"kpi-l\">Pending<\/div><div class=\"kpi-v blu\">3<\/div><div class=\"kpi-s\">Next challan settlement<\/div><\/div>\n  <\/div>\n  <div class=\"g2\">\n    <div class=\"card\">\n      <div class=\"ch\"><div class=\"ct\">Return events timeline<\/div><div class=\"cs\">Most recent first<\/div><\/div>\n      <div class=\"stbl\" style=\"max-height:300px\" id=\"ret-tl\"><\/div>\n    <\/div>\n    <div class=\"card\">\n      <div class=\"ch\"><div class=\"ct\">Returns by reason<\/div><div class=\"cs\">18 events classified<\/div><\/div>\n      <div class=\"cv\" style=\"height:130px\"><canvas id=\"c-ret\"><\/canvas><\/div>\n      <div style=\"padding:10px 16px 14px\"><div class=\"leg\">\n        <div class=\"li\"><div class=\"ll\"><div class=\"lsq\" style=\"background:var(--bm)\"><\/div><div class=\"ln\">Product return (\u09ab\u09c7\u09b0\u09a4 \u09aa\u09a8\u09cd\u09af)<\/div><\/div><div><span class=\"lv\">14<\/span><span class=\"lp\">events<\/span><\/div><\/div>\n        <div class=\"li\"><div class=\"ll\"><div class=\"lsq\" style=\"background:var(--rm)\"><\/div><div class=\"ln\">In-transit damage<\/div><\/div><div><span class=\"lv\">2<\/span><span class=\"lp\">events<\/span><\/div><\/div>\n        <div class=\"li\"><div class=\"ll\"><div class=\"lsq\" style=\"background:var(--am)\"><\/div><div class=\"ln\">Production defect<\/div><\/div><div><span class=\"lv\">2<\/span><span class=\"lp\">events<\/span><\/div><\/div>\n        <div class=\"li\"><div class=\"ll\"><div class=\"lsq\" style=\"background:#64748B\"><\/div><div class=\"ln\">Short delivery<\/div><\/div><div><span class=\"lv\">1<\/span><span class=\"lp\">event<\/span><\/div><\/div>\n      <\/div><\/div>\n    <\/div>\n  <\/div>\n  <div class=\"card\">\n    <div class=\"ch\"><div class=\"ct\">Full returns register<\/div><div class=\"cs\">All 18 confirmed events<\/div><\/div>\n    <div class=\"stbl\"><table class=\"tbl\"><thead><tr><th>Memo<\/th><th>Date<\/th><th>Dealer<\/th><th>Type<\/th><th>Products<\/th><th>Qty Est.<\/th><th>Est. Value \u09f3<\/th><th>Status<\/th><th>Notes<\/th><\/tr><\/thead><tbody id=\"ret-body\"><\/tbody><\/table><\/div>\n  <\/div>\n<\/div>\n\n<!-- \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 DAMAGE \u2550\u2550\u2550 -->\n<div class=\"pg fade\" id=\"pg-damage\">\n  <div class=\"pg-head\"><div class=\"pg-title\">Damage Tracker<\/div><div class=\"pg-sub\">In-transit damage \u00b7 Factory production defects \u00b7 Short deliveries \u00b7 Credit tracking<\/div><\/div>\n  <div class=\"kpis k4\">\n    <div class=\"kpi k-r\"><div class=\"kpi-l\">Damage Events<\/div><div class=\"kpi-v red\">4<\/div><div class=\"kpi-s\">Confirmed from memo notes<\/div><\/div>\n    <div class=\"kpi k-a\"><div class=\"kpi-l\">Est. Financial Impact<\/div><div class=\"kpi-v\">\u09f376,570<\/div><div class=\"kpi-s\">\u09f314,420 defect + \u09f347,200 return + other<\/div><\/div>\n    <div class=\"kpi k-b\"><div class=\"kpi-l\">Dealers Affected<\/div><div class=\"kpi-v blu\">3<\/div><div class=\"kpi-s\">965, 971, 977<\/div><\/div>\n    <div class=\"kpi k-g\"><div class=\"kpi-l\">Resolved<\/div><div class=\"kpi-v grn\">3 of 4<\/div><div class=\"kpi-s\">Credit issued or restocked<\/div><\/div>\n  <\/div>\n  <div class=\"card\">\n    <div class=\"ch\"><div class=\"ct\">Damage & defect records<\/div><div class=\"cs\">All 4 confirmed events with full resolution detail<\/div><\/div>\n    <div id=\"dmg-tl\"><\/div>\n  <\/div>\n<\/div>\n\n<!-- \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 ANALYTICS \u2550\u2550\u2550 -->\n<div class=\"pg fade\" id=\"pg-analytics\">\n  <div class=\"pg-head\"><div class=\"pg-title\">Analytics & Reports<\/div><div class=\"pg-sub\">Revenue \u00b7 Volume \u00b7 Dealer performance \u00b7 Product trends \u00b7 SR metrics \u00b7 All from real transaction data<\/div><\/div>\n  <div class=\"atabs\">\n    <button class=\"atab on\" onclick=\"switchA(this,'rev')\">Revenue<\/button>\n    <button class=\"atab\" onclick=\"switchA(this,'vol')\">Volume<\/button>\n    <button class=\"atab\" onclick=\"switchA(this,'dlr')\">Dealers<\/button>\n    <button class=\"atab\" onclick=\"switchA(this,'prd')\">Products<\/button>\n  <\/div>\n  <div id=\"a-rev\">\n    <div class=\"g2\">\n      <div class=\"card\"><div class=\"ch\"><div class=\"ct\">Monthly revenue<\/div><div class=\"cs\">\u09f3 actual order value<\/div><\/div><div class=\"cv h180\"><canvas id=\"c-a-rev\"><\/canvas><\/div><\/div>\n      <div class=\"card\"><div class=\"ch\"><div class=\"ct\">Revenue by dealer<\/div><div class=\"cs\">% share of \u09f32,37,02,478<\/div><\/div>\n        <div style=\"padding:14px 16px\"><div class=\"leg\" style=\"gap:10px\">\n          <div class=\"li\"><div class=\"ll\"><div class=\"lsq\" style=\"background:#0F172A\"><\/div><div class=\"ln\">965 \u2014 Tasneem<\/div><\/div><div><span class=\"lv\">\u09f31.30 Cr<\/span><span class=\"lp\">54.8%<\/span><\/div><\/div>\n          <div class=\"li\"><div class=\"ll\"><div class=\"lsq\" style=\"background:#64748B\"><\/div><div class=\"ln\">971 \u2014 Shaon<\/div><\/div><div><span class=\"lv\">\u09f337.25L<\/span><span class=\"lp\">15.7%<\/span><\/div><\/div>\n          <div class=\"li\"><div class=\"ll\"><div class=\"lsq\" style=\"background:#94A3B8\"><\/div><div class=\"ln\">966 \u2014 Nishikant<\/div><\/div><div><span class=\"lv\">\u09f317.22L<\/span><span class=\"lp\">7.3%<\/span><\/div><\/div>\n          <div class=\"li\"><div class=\"ll\"><div class=\"lsq\" style=\"background:#CBD5E1\"><\/div><div class=\"ln\">967 \u2014 Sufia<\/div><\/div><div><span class=\"lv\">\u09f313.05L<\/span><span class=\"lp\">5.5%<\/span><\/div><\/div>\n          <div class=\"li\"><div class=\"ll\"><div class=\"lsq\" style=\"background:#E2E8F0\"><\/div><div class=\"ln\">Others (10 dealers)<\/div><\/div><div><span class=\"lv\">\u09f338.9L<\/span><span class=\"lp\">16.4%<\/span><\/div><\/div>\n        <\/div><\/div>\n      <\/div>\n    <\/div>\n  <\/div>\n  <div id=\"a-vol\" style=\"display:none\"><div class=\"card mb\"><div class=\"ch\"><div class=\"ct\">Monthly volume \u2014 stacked by product<\/div><div class=\"cs\">kg \u00b7 Sep 2022 \u2013 Oct 2023<\/div><\/div><div class=\"cv h200\"><canvas id=\"c-a-vol\"><\/canvas><\/div><\/div><\/div>\n  <div id=\"a-dlr\" style=\"display:none\">\n    <div class=\"card mb\"><div class=\"ch\"><div class=\"ct\">Dealer performance ranking<\/div><div class=\"cs\">By total order value<\/div><\/div>\n      <table class=\"tbl\"><thead><tr><th>Dealer<\/th><th>Code<\/th><th>Orders<\/th><th>Revenue<\/th><th>kg<\/th><th>Paid<\/th><th>Share<\/th><th>Balance<\/th><\/tr><\/thead>\n      <tbody id=\"a-dlr-body\"><\/tbody><\/table>\n    <\/div>\n  <\/div>\n  <div id=\"a-prd\" style=\"display:none\">\n    <div class=\"g2\">\n      <div class=\"card\"><div class=\"ch\"><div class=\"ct\">Product volume<\/div><div class=\"cs\">kg total by category<\/div><\/div><div class=\"cv h180\"><canvas id=\"c-a-prd\"><\/canvas><\/div><\/div>\n      <div class=\"card\"><div class=\"ch\"><div class=\"ct\">Monthly chili vs turmeric<\/div><div class=\"cs\">Top 2 products by volume<\/div><\/div><div class=\"cv h180\"><canvas id=\"c-a-ct\"><\/canvas><\/div><\/div>\n    <\/div>\n  <\/div>\n<\/div>\n\n<!-- \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 HR \u2550\u2550\u2550 -->\n<div class=\"pg fade\" id=\"pg-hr\">\n  <div class=\"pg-head\"><div class=\"pg-title\">HR & Payroll<\/div><div class=\"pg-sub\">Managers \u00b7 Sales Representatives \u00b7 Commission tracking \u00b7 Salary records from memo data<\/div><\/div>\n  <div class=\"kpis k4\">\n    <div class=\"kpi k-ink\"><div class=\"kpi-l\">Staff Tracked<\/div><div class=\"kpi-v\">6<\/div><div class=\"kpi-s\">Managers + SRs in system<\/div><\/div>\n    <div class=\"kpi k-g\"><div class=\"kpi-l\">Total SR Commission<\/div><div class=\"kpi-v grn\">\u09f313,30,485<\/div><div class=\"kpi-s\">Estimated @ \u09f315/kg lifetime<\/div><\/div>\n    <div class=\"kpi k-a\"><div class=\"kpi-l\">Manager Salary (Est.)<\/div><div class=\"kpi-v\">\u09f33,20,000+<\/div><div class=\"kpi-s\">Extracted from 14 months of notes<\/div><\/div>\n    <div class=\"kpi k-b\"><div class=\"kpi-l\">Standard SR Rate<\/div><div class=\"kpi-v blu\">\u09f315 / kg<\/div><div class=\"kpi-s\">Commission per kg lifted<\/div><\/div>\n  <\/div>\n  <div class=\"staff-grid\">\n    <div class=\"staff-card\"><div class=\"staff-av\">SA<\/div><div class=\"staff-name\">Shahin Ahmed<\/div><div class=\"staff-role\">DEPOT MANAGER \u00b7 965<\/div><div class=\"staff-info\">Salary: \u09f320,000\u2013\u09f323,000/mo<br/>Territory: Madhavpur, Habiganj<br/>Joined: Sep 2022<\/div><\/div>\n    <div class=\"staff-card\"><div class=\"staff-av\">SD<\/div><div class=\"staff-name\">Satyajit Das<\/div><div class=\"staff-role\">DEPOT MANAGER \u00b7 971<\/div><div class=\"staff-info\">Commission-based SR<br/>Territory: Sunamganj Sadar<br/>Joined: May 2023<\/div><\/div>\n    <div class=\"staff-card\"><div class=\"staff-av\">SuD<\/div><div class=\"staff-name\">Sumon Das<\/div><div class=\"staff-role\">MANAGER \u00b7 966<\/div><div class=\"staff-info\">Territory: Pagla, Sunamganj<br/>Joined: Feb 2023<\/div><\/div>\n    <div class=\"staff-card\"><div class=\"staff-av\">ShA<\/div><div class=\"staff-name\">Shipon Ahmed<\/div><div class=\"staff-role\">MANAGER \u00b7 967<\/div><div class=\"staff-info\">Territory: Bishwanath<br/>Joined: Feb 2023<\/div><\/div>\n  <\/div>\n  <div class=\"card\">\n    <div class=\"ch\"><div class=\"ct\">Salary & commission payment log<\/div><div class=\"cs\">Extracted from delivery memo notes \u00b7 all 14 months<\/div><\/div>\n    <table class=\"tbl\">\n      <thead><tr><th>Memo<\/th><th>Date<\/th><th>Type<\/th><th>Recipient<\/th><th>Amount \u09f3<\/th><th>Notes<\/th><\/tr><\/thead>\n      <tbody>\n        <tr><td class=\"m\">10003<\/td><td>16 Oct 2022<\/td><td><span class=\"pill p-blu\">SR Salary<\/span><\/td><td>SR \u2014 Depot 965<\/td><td class=\"m\">\u09f35,200<\/td><td class=\"nc\">SR salary \u2014 Oct 2022<\/td><\/tr>\n        <tr><td class=\"m\">10003<\/td><td>16 Oct 2022<\/td><td><span class=\"pill p-gray\">Mgr Salary<\/span><\/td><td>Ajay \u2014 Manager<\/td><td class=\"m\">\u09f310,000<\/td><td class=\"nc\">Manager salary Oct 2022<\/td><\/tr>\n        <tr><td class=\"m\">10005<\/td><td>15 Nov 2022<\/td><td><span class=\"pill p-gray\">Mgr Salary<\/span><\/td><td>Ajay \u2014 Manager<\/td><td class=\"m\">\u09f320,000<\/td><td class=\"nc\">Manager salary Nov 2022<\/td><\/tr>\n        <tr><td class=\"m\">10009<\/td><td>09 Dec 2022<\/td><td><span class=\"pill p-gray\">Mgr Salary<\/span><\/td><td>Ajay \u2014 Manager<\/td><td class=\"m\">\u09f312,000<\/td><td class=\"nc\">Manager salary Dec 2022<\/td><\/tr>\n        <tr><td class=\"m\">10013<\/td><td>17 Jan 2023<\/td><td><span class=\"pill p-gray\">Mgr Salary<\/span><\/td><td>Manager \u2014 965<\/td><td class=\"m\">\u09f313,000<\/td><td class=\"nc\">Jan 2023 salary + transport \u09f33,200<\/td><\/tr>\n        <tr><td class=\"m\">10018<\/td><td>16 Feb 2023<\/td><td><span class=\"pill p-gray\">Mgr Salary<\/span><\/td><td>Manager \u2014 965<\/td><td class=\"m\">\u09f315,000<\/td><td class=\"nc\">Feb 2023 + SR commission Jan \u09f314,775<\/td><\/tr>\n        <tr><td class=\"m\">10024<\/td><td>09 Apr 2023<\/td><td><span class=\"pill p-blu\">SR Commission<\/span><\/td><td>SR \u2014 Depot 965<\/td><td class=\"m\">\u09f333,450<\/td><td class=\"nc\">2,230 kg \u00d7 \u09f315 = \u09f333,450<\/td><\/tr>\n        <tr><td class=\"m\">10027<\/td><td>11 May 2023<\/td><td><span class=\"pill p-blu\">SR Commission<\/span><\/td><td>SR \u2014 Depot 965<\/td><td class=\"m\">\u09f327,750<\/td><td class=\"nc\">1,850 kg \u00d7 \u09f315 \u00b7 Apr salary \u09f323,000<\/td><\/tr>\n        <tr><td class=\"m\">10057<\/td><td>May 2023<\/td><td><span class=\"pill p-blu\">SR Commission<\/span><\/td><td>SR \u2014 Depot 971<\/td><td class=\"m\">\u09f349,000<\/td><td class=\"nc\">May: 3,900 kg \u00d7 \u09f315 = \u09f358,500 \u2212 \u09f39,500<\/td><\/tr>\n        <tr><td class=\"m\">10071<\/td><td>13 Jul 2023<\/td><td><span class=\"pill p-blu\">SR Commission<\/span><\/td><td>SR \u2014 Depot 965<\/td><td class=\"m\">\u09f31,14,750<\/td><td class=\"nc\">Cumulative commission settlement<\/td><\/tr>\n        <tr><td class=\"m\">10079<\/td><td>03 Aug 2023<\/td><td><span class=\"pill p-gray\">Mgr Salary<\/span><\/td><td>Manager \u2014 965<\/td><td class=\"m\">\u09f320,000<\/td><td class=\"nc\">July 2023 manager salary<\/td><\/tr>\n        <tr><td class=\"m\">10091<\/td><td>31 Aug 2023<\/td><td><span class=\"pill p-gray\">Mgr Salary<\/span><\/td><td>Shahin Ahmed<\/td><td class=\"m\">\u09f322,000<\/td><td class=\"nc\">Aug 2023 manager + bank charge \u09f31,200<\/td><\/tr>\n        <tr><td class=\"m\">10091<\/td><td>31 Aug 2023<\/td><td><span class=\"pill p-blu\">SR Commission<\/span><\/td><td>SR \u2014 Depot 965<\/td><td class=\"m\">\u09f32,16,825<\/td><td class=\"nc\">14,455 kg \u00d7 \u09f315 = \u09f32,16,825 Aug month<\/td><\/tr>\n        <tr><td class=\"m\">10102<\/td><td>04 Oct 2023<\/td><td><span class=\"pill p-blu\">SR Commission<\/span><\/td><td>SR \u2014 Depot 965<\/td><td class=\"m\">\u09f31,60,485<\/td><td class=\"nc\">10,699 kg \u00d7 \u09f315 = \u09f31,60,485 Sep month<\/td><\/tr>\n      <\/tbody>\n    <\/table>\n  <\/div>\n<\/div>\n\n<\/div><!-- /main -->\n<\/div><!-- /body -->\n<\/div><!-- /app -->\n\n<script>\n/* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 EXACT DATA \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */\nconst MK=['Sep 22','Oct 22','Nov 22','Dec 22','Jan 23','Feb 23','Mar 23','Apr 23','May 23','Jun 23','Jul 23','Aug 23','Sep 23','Oct 23'];\nconst MR=[57640,213170,231246,307205,397325,547170,1237775,1130650,2727150,3064550,2142300,4451500,3324056,3870740];\nconst MP=[59510,166200,182132,280342,515703,547475,1010680,1225595,3032364,3170390,1938850,4637350,3319535,4549324];\nconst MCH=[28,376,851,723,935,1040,2962,2870,5590,6650,4220,7325,6100,6115];\nconst MTU=[48,100,538,240,250,600,680,500,2180,2200,2385,5890,4195,5015];\nconst MCO=[17,100,366,200,50,300,519,400,2650,2370,1775,2965,1202,3540];\nconst MTE=[77,150,947,0,50,92,45,0,30,50,0,0,0,18];\nconst MKCNT=[2,4,4,4,4,6,11,5,16,10,7,13,9,9];\n\nconst DEALERS={\n'965':{name:'Tasneem Enterprises',mgr:'Shahin Ahmed',addr:'Madhavpur Montola, Habiganj',mobile:'01745-959568',orders:58,rev:12981196,paid:14510117,kg:48533,due:0,adv:126988,first:'13 Sep 2022',last:'31 Oct 2023',\n  rows:[{s:'10001',d:'13 Sep 2022',v:24740,prev:0,grand:24740,p:32325,du:0,adv:7585,bank:0,kg:83,n:'Dealer commission \u09f32,325'},\n        {s:'10003',d:'16 Oct 2022',v:119070,prev:20770,grand:139840,p:110850,du:28990,adv:0,bank:0,kg:416,n:'Depot dealer commission \u09f310,650 \u00b7 SR salary \u09f35,200'},\n        {s:'10005',d:'15 Nov 2022',v:66935,prev:57690,grand:124625,p:55645,du:68980,adv:0,bank:0,kg:206,n:'Manager salary \u09f320,000 \u00b7 return chili \u09f317,110'},\n        {s:'10008',d:'29 Nov 2022',v:103062,prev:79573,grand:182635,p:100000,du:82635,adv:0,bank:0,kg:328,n:'Bank deposit 29/11 \u09f340,000 + 30/11 \u09f360,000'},\n        {s:'10011',d:'24 Dec 2022',v:100500,prev:100308,grand:200808,p:94420,du:106388,adv:0,bank:0,kg:300,n:'Production defect return \u09f314,420 \u00b7 Bank \u09f370,000 \u00b7 bKash \u09f310,000'},\n        {s:'10013',d:'17 Jan 2023',v:110575,prev:73216,grand:183791,p:266200,du:0,adv:82409,bank:0,kg:335,n:'Manager salary \u09f313,000 \u00b7 transport \u09f33,200 \u00b7 Bank \u09f32,50,000'},\n        {s:'10023',d:'29 Mar 2023',v:312100,prev:124808,grand:436908,p:144850,du:292058,adv:0,bank:0,kg:995,n:'Return goods \u09f314,850'},\n        {s:'10024',d:'09 Apr 2023',v:307000,prev:292058,grand:599058,p:394250,du:204808,adv:0,bank:0,kg:1000,n:'Bank \u09f31,50,000 \u00b7 offer \u09f350,000 \u00b7 SR commission \u09f333,450'},\n        {s:'10054',d:'25 May 2023',v:273000,prev:2300,grand:275300,p:204000,du:71300,adv:0,bank:0,kg:1000,n:'Pickup rent \u09f34,000'},\n        {s:'10076',d:'28 Jul 2023',v:411000,prev:111310,grand:522310,p:404000,du:118310,adv:0,bank:300000,kg:1400,n:'Offer 5,6 paid \u09f31,00,000 \u00b7 June offer settled'},\n        {s:'10078',d:'01 Aug 2023',v:459000,prev:118310,grand:577310,p:654000,du:0,adv:76690,bank:650000,kg:1400,n:'Pickup \u09f34,000 \u00b7 memo books 20 \u00b7 catalog 2 sets'},\n        {s:'10091',d:'31 Aug 2023',v:577500,prev:190735,grand:768235,p:768235,du:0,adv:0,bank:499600,kg:1500,n:'SR commission 14,455\u00d7\u09f315=\u09f32,16,825 \u00b7 Manager Aug \u09f322,000 \u00b7 bank charge \u09f31,200'},\n        {s:'10094',d:'08 Sep 2023',v:427500,prev:3655,grand:431155,p:303600,du:127555,adv:0,bank:199600,kg:1500,n:'Short 25 kg chili settled \u00b7 offer paid \u09f31,00,000'},\n        {s:'10098',d:'20 Sep 2023',v:491750,prev:166255,grand:658005,p:653600,du:4405,adv:0,bank:599600,kg:1550,n:'Offer 7 paid \u09f350,000 \u00b7 catalog 7 \u00b7 memo 20'},\n        {s:'10103',d:'07 Oct 2023',v:559990,prev:0,grand:559990,p:75882,du:484108,adv:0,bank:0,kg:1658,n:'Pickup \u09f34,500'},\n        {s:'10107',d:'26 Oct 2023',v:465000,prev:0,grand:465000,p:387192,du:77808,adv:0,bank:282692,kg:1800,n:'October offer 3,4 paid \u09f31,00,000'},\n        {s:'10108',d:'31 Oct 2023',v:646150,prev:77908,grand:724058,p:851046,du:0,adv:126988,bank:714009,kg:2470,n:'October offer 5,6 + half offer \u09f31,31,037'},\n  ]},\n'971':{name:'Shaon Enterprises',mgr:'Satyajit Das',addr:'Sunamganj Sadar',mobile:'01739-699511',orders:18,rev:3725186,paid:3605347,kg:14123,due:74939,adv:35061,first:'06 May 2023',last:'26 Oct 2023',\n  rows:[{s:'10045',d:'09 May 2023',v:302000,prev:0,grand:302000,p:302000,du:0,adv:0,bank:0,kg:1200,n:'Total 1,200 kg'},\n        {s:'10052',d:'21 May 2023',v:169500,prev:13500,grand:183000,p:167000,du:16000,adv:0,bank:0,kg:700,n:'Apr salary \u09f34,000 \u00b7 200 kg coriander commission'},\n        {s:'10061',d:'06 Jun 2023',v:181800,prev:0,grand:181800,p:182050,du:0,adv:250,bank:118500,kg:720,n:'Pickup \u09f32,500 \u00b7 SR commission settled \u00b7 Nishikant SR settled'},\n        {s:'10071',d:'13 Jul 2023',v:366150,prev:18410,grand:384560,p:268750,du:115810,adv:0,bank:0,kg:1270,n:'Return coriander 200 kg \u00b7 SR commission \u09f31,14,750 settled \u00b7 offer \u09f31,50,000'},\n        {s:'10075',d:'25 Jul 2023',v:306000,prev:101700,grand:407700,p:203000,du:204700,adv:0,bank:200000,kg:1200,n:'Pickup \u09f33,000 \u00b7 memo books 10'},\n        {s:'10080',d:'09 Aug 2023',v:355500,prev:103550,grand:459050,p:322800,du:136250,adv:0,bank:185550,kg:1000,n:'Chili 850\u00d7\u09f340=\u09f334,000 commission \u00b7 SR Jul \u09f351,150 \u00b7 GM deposit \u09f334,100'},\n        {s:'10090',d:'30 Aug 2023',v:210125,prev:36250,grand:246375,p:232475,du:13900,adv:0,bank:157000,kg:725,n:'Pickup \u09f31,500'},\n        {s:'10093',d:'06 Sep 2023',v:182961,prev:13900,grand:196861,p:153000,du:43861,adv:0,bank:150000,kg:598,n:'Return: chili 33.7 kg \u00b7 turmeric 18.7 kg \u00b7 coriander 114 kg \u2014 all settled'},\n        {s:'10101',d:'03 Oct 2023',v:279000,prev:43861,grand:322861,p:228422,du:94439,adv:0,bank:155000,kg:1000,n:'Sep SR commission \u09f38,970 \u00b7 chili commission \u09f347,000 Aug'},\n        {s:'10109',d:'26 Oct 2023',v:253000,prev:94439,grand:347439,p:272500,du:74939,adv:0,bank:270000,kg:1000,n:'Pickup \u09f32,500'},\n  ]},\n'966':{name:'Nishikant Store',mgr:'Sumon Das',addr:'Pagla, Sunamganj',mobile:'01772-093359',orders:9,rev:1721850,paid:1813400,kg:6260,due:0,adv:0,first:'15 Feb 2023',last:'14 Sep 2023',\n  rows:[{s:'10028',d:'15 Feb 2023',v:145500,prev:0,grand:145500,p:150000,du:0,adv:4500,bank:0,kg:600,n:'Free goods: 40 cot + 40 container + 75 mug'},\n        {s:'10029',d:'25 Feb 2023',v:127250,prev:0,grand:127250,p:116000,du:11250,adv:0,bank:0,kg:450,n:'Pickup \u09f32,500 \u00b7 offer goods \u09f39,000 \u00b7 prev advance \u09f34,500'},\n        {s:'10032',d:'23 Mar 2023',v:241600,prev:9750,grand:251350,p:234750,du:16600,adv:0,bank:0,kg:810,n:'SR commission \u09f38,250 \u00b7 market commission Ekhlash \u09f34,500 \u00b7 pickup \u09f32,000'},\n        {s:'10033',d:'02 Apr 2023',v:330750,prev:16600,grand:347350,p:321850,du:25500,adv:0,bank:0,kg:1150,n:'Bank 06/04/23 \u09f32,70,000 + \u09f350,000 \u00b7 pickup \u09f31,850'},\n        {s:'10034',d:'09 Apr 2023',v:189750,prev:25500,grand:215250,p:201800,du:13450,adv:0,bank:0,kg:550,n:'Pickup \u09f31,800'},\n        {s:'10066',d:'26 Jun 2023',v:530000,prev:1750,grand:531750,p:604500,du:0,adv:76250,bank:600000,kg:2100,n:'Pickup \u09f34,500'},\n        {s:'10096',d:'14 Sep 2023',v:57000,prev:0,grand:57000,p:57000,du:0,adv:0,bank:0,kg:200,n:''},\n  ]},\n'967':{name:'Sufia Enterprises',mgr:'Shipon Ahmed',addr:'Bishwanath, Sylhet',mobile:'01328-089281',orders:9,rev:1304645,paid:1261603,kg:4473,due:183,adv:0,first:'24 Feb 2023',last:'22 Sep 2023',\n  rows:[{s:'10035',d:'24 Feb 2023',v:107170,prev:0,grand:107170,p:100000,du:7170,adv:0,bank:0,kg:332,n:''},\n        {s:'10038',d:'24 Mar 2023',v:47075,prev:1420,grand:48495,p:48495,du:0,adv:0,bank:0,kg:194,n:''},\n        {s:'10039',d:'02 Apr 2023',v:56900,prev:0,grand:56900,p:53695,du:3205,adv:0,bank:0,kg:220,n:''},\n        {s:'10050',d:'22 May 2023',v:39450,prev:0,grand:39450,p:9496,du:29954,adv:0,bank:0,kg:130,n:'SR commission \u09f31,950 \u00b7 return goods \u09f32,315 \u00b7 market commission \u09f3915'},\n        {s:'10067',d:'28 Jun 2023',v:496500,prev:2160,grand:498660,p:480250,du:18410,adv:0,bank:380000,kg:1700,n:'Pickup \u09f34,000 \u00b7 bank 04/07 \u09f380,000 + 09/07 \u09f33,00,000 \u00b7 online charge Jun \u09f32,160'},\n        {s:'10099',d:'22 Sep 2023',v:488500,prev:4405,grand:492905,p:492722,du:183,adv:0,bank:488222,kg:1700,n:'Pickup \u09f34,500'},\n  ]},\n'968':{name:'Rubel Enterprises',mgr:'Rubel Ahmed',addr:'Laldighi Par',mobile:'',orders:2,rev:640000,paid:635783,kg:2220,due:0,adv:0,first:'30 Oct 2022',last:'28 Sep 2023',\n  rows:[{s:'10041',d:'30 Oct 2022',v:5000,prev:0,grand:5000,p:600,du:4400,adv:0,bank:0,kg:20,n:''},\n        {s:'10100',d:'28 Sep 2023',v:635000,prev:183,grand:635183,p:635183,du:0,adv:0,bank:629183,kg:2200,n:'Dutch-Bangla Bank deposits 01/10 + 02/10 \u09f36,29,183 \u00b7 Pickup \u09f36,000'},\n  ]},\n'969':{name:'Abdul Hannan & Sons',mgr:'Md. Shahajan',addr:'Saidpur',mobile:'01701-373340',orders:3,rev:428150,paid:479250,kg:1480,due:0,adv:0,first:'11 Oct 2022',last:'25 Jun 2023',\n  rows:[{s:'10042',d:'11 Oct 2022',v:35150,prev:0,grand:35150,p:29500,du:5650,adv:0,bank:0,kg:80,n:''},\n        {s:'10043',d:'11 Nov 2022',v:0,prev:0,grand:0,p:50000,du:0,adv:50000,bank:0,kg:0,n:'Advance payment'},\n        {s:'10069',d:'25 Jun 2023',v:393000,prev:6750,grand:399750,p:399750,du:0,adv:0,bank:397000,kg:1400,n:'Bank 26/06 \u09f31,17,000 \u00b7 Pickup \u09f32,750'},\n  ]},\n'970':{name:'Ma Enterprises',mgr:'Toton Das',addr:'Rajnagar',mobile:'01743-156088',orders:2,rev:380700,paid:377000,kg:1280,due:0,adv:0,first:'08 Dec 2022',last:'27 Jun 2023',\n  rows:[{s:'10044',d:'08 Dec 2022',v:71700,prev:0,grand:71700,p:68000,du:3700,adv:0,bank:0,kg:280,n:''},\n        {s:'10070',d:'27 Jun 2023',v:309000,prev:0,grand:309000,p:309000,du:0,adv:0,bank:0,kg:1000,n:'Cash \u09f31,06,500 \u00b7 Bank cheque \u09f32,00,000 \u00b7 Pickup \u09f32,500'},\n  ]},\n'972':{name:'Tasneem (Code 972)',mgr:'Shahin Ahmed',addr:'Madhavpur Montola',mobile:'01745-959568',orders:2,rev:815250,paid:915150,kg:2750,due:83660,adv:0,first:'16 Jul 2023',last:'13 Aug 2023',\n  rows:[{s:'10072',d:'16 Jul 2023',v:287250,prev:115810,grand:403060,p:237000,du:166060,adv:0,bank:200000,kg:1250,n:'Return coriander 200 kg \u09f333,000 \u00b7 Pickup \u09f34,000'},\n        {s:'10082',d:'13 Aug 2023',v:528000,prev:233810,grand:761810,p:678150,du:83660,adv:0,bank:499600,kg:1500,n:'Pickup \u09f34,000 \u00b7 offer 1,2 paid \u09f31,00,000 \u00b7 SR commission 4,970\u00d7\u09f315=\u09f374,550'},\n  ]},\n'974':{name:'Tasneem (Code 974)',mgr:'Shahin Ahmed',addr:'Madhavpur Montola',mobile:'01745-959568',orders:1,rev:297200,paid:54000,kg:1500,due:327260,adv:0,first:'16 Aug 2023',last:'16 Aug 2023',\n  rows:[{s:'10084',d:'16 Aug 2023',v:297200,prev:84060,grand:381260,p:54000,du:327260,adv:0,bank:0,kg:1500,n:'Pickup \u09f34,000 \u00b7 offer 3 paid \u09f350,000'}]},\n'977':{name:'Tasneem (Code 977)',mgr:'Shahin Ahmed',addr:'Madhavpur Montola',mobile:'01745-959568',orders:1,rev:257500,paid:9000,kg:1500,due:461860,adv:0,first:'25 Aug 2023',last:'25 Aug 2023',\n  rows:[{s:'10087',d:'25 Aug 2023',v:257500,prev:213360,grand:470860,p:9000,du:461860,adv:0,bank:0,kg:1500,n:'Pickup \u09f34,000 \u00b7 driver advance \u09f35,000 \u00b7 Return: chili 22.8 kg + coriander 170 kg + turmeric 25 kg \u2014 next challan'}]},\n};\n\nconst DISPATCH=[\n  {s:'10001',d:'13 Sep 2022',dlr:'Tasneem',code:'965',ch:22,tu:41,co:11,te:7,tot:83,val:24740},\n  {s:'10002',d:'30 Sep 2022',dlr:'Tasneem',code:'965',ch:6,tu:7,co:6,te:70,tot:99,val:32900},\n  {s:'10003',d:'16 Oct 2022',dlr:'Tasneem',code:'965',ch:246,tu:20,co:50,te:100,tot:416,val:119070},\n  {s:'10004',d:'23 Oct 2022',dlr:'Tasneem',code:'965',ch:100,tu:50,co:30,te:30,tot:210,val:53950},\n  {s:'10007',d:'27 Nov 2022',dlr:'Tasneem',code:'965',ch:392,tu:474,co:340,te:870,tot:2236,val:27749},\n  {s:'10008',d:'29 Nov 2022',dlr:'Tasneem',code:'965',ch:250,tu:50,co:20,te:0,tot:328,val:103062},\n  {s:'10011',d:'24 Dec 2022',dlr:'Tasneem',code:'965',ch:300,tu:0,co:0,te:0,tot:300,val:100500},\n  {s:'10013',d:'17 Jan 2023',dlr:'Tasneem',code:'965',ch:285,tu:0,co:0,te:50,tot:335,val:110575},\n  {s:'10023',d:'29 Mar 2023',dlr:'Tasneem',code:'965',ch:775,tu:100,co:100,te:20,tot:995,val:312100},\n  {s:'10024',d:'09 Apr 2023',dlr:'Tasneem',code:'965',ch:800,tu:100,co:100,te:0,tot:1000,val:307000},\n  {s:'10028',d:'15 Feb 2023',dlr:'Nishikant',code:'966',ch:250,tu:150,co:150,te:50,tot:600,val:145500},\n  {s:'10033',d:'02 Apr 2023',dlr:'Nishikant',code:'966',ch:800,tu:200,co:150,te:0,tot:1150,val:330750},\n  {s:'10034',d:'09 Apr 2023',dlr:'Nishikant',code:'966',ch:550,tu:0,co:0,te:0,tot:550,val:189750},\n  {s:'10035',d:'24 Feb 2023',dlr:'Sufia',code:'967',ch:140,tu:100,co:50,te:42,tot:332,val:107170},\n  {s:'10042',d:'11 Oct 2022',dlr:'Abdul Hannan',code:'969',ch:30,tu:30,co:20,te:0,tot:80,val:35150},\n  {s:'10044',d:'08 Dec 2022',dlr:'Ma Enterprises',code:'970',ch:150,tu:80,co:50,te:0,tot:280,val:71700},\n  {s:'10045',d:'09 May 2023',dlr:'Shaon',code:'971',ch:600,tu:200,co:400,te:0,tot:1200,val:302000},\n  {s:'10046',d:'06 May 2023',dlr:'Shaon',code:'971',ch:600,tu:600,co:0,te:0,tot:1200,val:306000},\n  {s:'10054',d:'25 May 2023',dlr:'Tasneem',code:'965',ch:600,tu:200,co:200,te:0,tot:1000,val:273000},\n  {s:'10056',d:'29 May 2023',dlr:'Tasneem',code:'965',ch:300,tu:200,co:500,te:0,tot:1000,val:219000},\n  {s:'10058',d:'31 May 2023',dlr:'Tasneem',code:'965',ch:600,tu:200,co:200,te:0,tot:1000,val:273000},\n  {s:'10066',d:'26 Jun 2023',dlr:'Nishikant',code:'966',ch:1000,tu:400,co:700,te:0,tot:2100,val:530000},\n  {s:'10067',d:'28 Jun 2023',dlr:'Sufia',code:'967',ch:1200,tu:200,co:300,te:0,tot:1700,val:496500},\n  {s:'10069',d:'25 Jun 2023',dlr:'Abdul Hannan',code:'969',ch:900,tu:300,co:200,te:0,tot:1400,val:393000},\n  {s:'10070',d:'27 Jun 2023',dlr:'Ma Enterprises',code:'970',ch:800,tu:100,co:100,te:0,tot:1000,val:309000},\n  {s:'10071',d:'13 Jul 2023',dlr:'Shaon',code:'971',ch:870,tu:300,co:100,te:0,tot:1270,val:366150},\n  {s:'10073',d:'18 Jul 2023',dlr:'Shaon',code:'971',ch:600,tu:200,co:400,te:0,tot:1200,val:306000},\n  {s:'10076',d:'28 Jul 2023',dlr:'Tasneem',code:'965',ch:1000,tu:0,co:400,te:0,tot:1400,val:411000},\n  {s:'10078',d:'01 Aug 2023',dlr:'Tasneem',code:'965',ch:1000,tu:400,co:0,te:0,tot:1400,val:459000},\n  {s:'10080',d:'09 Aug 2023',dlr:'Shaon',code:'971',ch:850,tu:50,co:100,te:0,tot:1000,val:355500},\n  {s:'10082',d:'13 Aug 2023',dlr:'Tasneem(972)',code:'972',ch:1200,tu:200,co:100,te:0,tot:1500,val:528000},\n  {s:'10083',d:'15 Aug 2023',dlr:'Tasneem(973)',code:'973',ch:100,tu:1300,co:100,te:0,tot:1500,val:304000},\n  {s:'10084',d:'16 Aug 2023',dlr:'Tasneem(974)',code:'974',ch:100,tu:1135,co:265,te:0,tot:1500,val:297200},\n  {s:'10085',d:'18 Aug 2023',dlr:'Tasneem(975)',code:'975',ch:700,tu:80,co:200,te:0,tot:980,val:317300},\n  {s:'10086',d:'22 Aug 2023',dlr:'Tasneem(976)',code:'976',ch:400,tu:600,co:600,te:0,tot:1600,val:376000},\n  {s:'10087',d:'25 Aug 2023',dlr:'Tasneem(977)',code:'977',ch:0,tu:500,co:1000,te:0,tot:1500,val:257500},\n  {s:'10091',d:'31 Aug 2023',dlr:'Tasneem',code:'965',ch:1500,tu:0,co:0,te:0,tot:1500,val:577500},\n  {s:'10092',d:'05 Sep 2023',dlr:'Tasneem',code:'965',ch:477,tu:500,co:420,te:0,tot:1397,val:345445},\n  {s:'10093',d:'06 Sep 2023',dlr:'Shaon',code:'971',ch:366,tu:181,co:51,te:0,tot:598,val:182961},\n  {s:'10094',d:'08 Sep 2023',dlr:'Tasneem',code:'965',ch:750,tu:750,co:0,te:0,tot:1500,val:427500},\n  {s:'10098',d:'20 Sep 2023',dlr:'Tasneem',code:'965',ch:1050,tu:250,co:250,te:0,tot:1550,val:491750},\n  {s:'10099',d:'22 Sep 2023',dlr:'Sufia',code:'967',ch:900,tu:500,co:300,te:0,tot:1700,val:488500},\n  {s:'10100',d:'28 Sep 2023',dlr:'Rubel',code:'968',ch:1140,tu:1060,co:0,te:0,tot:2200,val:635000},\n  {s:'10102',d:'04 Oct 2023',dlr:'Tasneem',code:'965',ch:530,tu:870,co:800,te:0,tot:2200,val:497000},\n  {s:'10103',d:'07 Oct 2023',dlr:'Tasneem',code:'965',ch:1260,tu:380,co:0,te:18,tot:1658,val:559990},\n  {s:'10104',d:'18 Oct 2023',dlr:'Tasneem',code:'965',ch:495,tu:680,co:525,te:0,tot:1700,val:403000},\n  {s:'10107',d:'26 Oct 2023',dlr:'Tasneem',code:'965',ch:700,tu:700,co:400,te:0,tot:1800,val:465000},\n  {s:'10108',d:'31 Oct 2023',dlr:'Tasneem',code:'965',ch:1010,tu:820,co:640,te:0,tot:2470,val:646150},\n  {s:'10109',d:'26 Oct 2023',dlr:'Shaon',code:'971',ch:375,tu:275,co:350,te:0,tot:1000,val:253000},\n];\n\nconst RETURNS=[\n  {s:'10004',d:'23 Oct 2022',dlr:'Tasneem 965',type:'Return',prod:'Chili',qty:'10 kg',val:'~\u09f33,200',st:'settled',n:'Chili return 10 kg settled against commission'},\n  {s:'10005',d:'15 Nov 2022',dlr:'Tasneem 965',type:'Damage',prod:'Turmeric',qty:'~5 kg',val:'\u09f31,035',st:'settled',n:'Cracked turmeric packaging \u2014 \u09f31,035 credited'},\n  {s:'10007',d:'27 Nov 2022',dlr:'Tasneem 965',type:'Damage',prod:'Mixed',qty:'~50 kg est.',val:'~\u09f315,000',st:'settled',n:'Damaged goods returned, deducted from balance'},\n  {s:'10011',d:'24 Dec 2022',dlr:'Tasneem 965',type:'Defect',prod:'Chili',qty:'~43 kg',val:'\u09f314,420',st:'settled',n:'Factory production defect \u2014 credit \u09f314,420 issued'},\n  {s:'10023',d:'29 Mar 2023',dlr:'Tasneem 965',type:'Return',prod:'Mixed',qty:'~43 kg',val:'\u09f314,850',st:'settled',n:'Return goods \u09f314,850 credited'},\n  {s:'10048',d:'17 May 2023',dlr:'Tasneem 965',type:'Return',prod:'Chili',qty:'160 kg',val:'\u09f347,200',st:'settled',n:'295 \u00d7 160 = \u09f347,200 \u2014 fully credited'},\n  {s:'10050',d:'22 May 2023',dlr:'Sufia 967',type:'Return',prod:'Mixed',qty:'~7 kg',val:'\u09f32,315',st:'settled',n:'Return goods \u09f32,315 + SR commission \u09f31,950'},\n  {s:'10071',d:'13 Jul 2023',dlr:'Shaon 971',type:'Return',prod:'Coriander',qty:'200 kg',val:'\u09f333,000',st:'settled',n:'Coriander 200 kg return \u2014 settled same memo'},\n  {s:'10077',d:'31 Jul 2023',dlr:'Shaon 971',type:'Return',prod:'Coriander',qty:'190+50 kg',val:'~\u09f340,000',st:'settled',n:'Prior & current coriander returns settled'},\n  {s:'10087',d:'25 Aug 2023',dlr:'Tasneem 977',type:'Return',prod:'Chili+Cor+Tur',qty:'22.8+170+25 kg',val:'~\u09f335,000',st:'pending',n:'To be settled in next challan'},\n  {s:'10088',d:'28 Aug 2023',dlr:'Tasneem 965',type:'Return',prod:'Coriander',qty:'500 kg',val:'~\u09f382,500',st:'pending',n:'500 kg coriander return \u2014 next challan settlement'},\n  {s:'10089',d:'30 Aug 2023',dlr:'Tasneem 965',type:'Return',prod:'Turmeric+Cor+Chili',qty:'25+590+80 kg',val:'~\u09f31,00,000',st:'settled',n:'Multiple returns settled \u2014 80 kg coriander pending'},\n  {s:'10092',d:'05 Sep 2023',dlr:'Tasneem 965',type:'Return',prod:'Coriander+Chili',qty:'80+22.8 kg',val:'~\u09f318,000',st:'settled',n:'Returns from 25 Aug memo settled'},\n  {s:'10093',d:'06 Sep 2023',dlr:'Shaon 971',type:'Return',prod:'Ch+Tu+Co',qty:'33.7+18.7+114 kg',val:'~\u09f327,000',st:'settled',n:'All three products returned and settled'},\n  {s:'10094',d:'08 Sep 2023',dlr:'Tasneem 965',type:'Short',prod:'Chili',qty:'25 kg',val:'~\u09f39,625',st:'settled',n:'25 kg shortfall from 31 Aug memo resupplied'},\n  {s:'10095',d:'12 Sep 2023',dlr:'Tasneem 965',type:'Return',prod:'Tu+Ch+Co',qty:'200+33+246 kg',val:'~\u09f375,000',st:'settled',n:'All returns settled in this memo'},\n  {s:'10097',d:'14 Sep 2023',dlr:'Tasneem 965',type:'Return',prod:'Turmeric+Coriander',qty:'146+29 kg',val:'~\u09f328,000',st:'settled',n:'Returns settled'},\n  {s:'10106',d:'22 Oct 2023',dlr:'Tasneem 965',type:'Return',prod:'Turmeric+Chili',qty:'390+40 kg',val:'~\u09f386,650',st:'settled',n:'Turmeric 390 kg + chili 40 kg return paid'},\n];\n\nconst COMMISSIONS=[\n  {s:'10001',d:'13 Sep 2022',dlr:'Tasneem 965',kg:'\u2014',rate:'\u2014',amt:2325,n:'Dealer commission \u09f32,325'},\n  {s:'10002',d:'30 Sep 2022',dlr:'Tasneem 965',kg:'\u2014',rate:'\u2014',amt:1485,n:'Dealer commission \u09f31,485'},\n  {s:'10003',d:'16 Oct 2022',dlr:'Tasneem 965',kg:'\u2014',rate:'\u2014',amt:10650,n:'Depot dealer commission \u09f310,650'},\n  {s:'10009',d:'09 Dec 2022',dlr:'Tasneem 965',kg:'\u2014',rate:'\u2014',amt:10922,n:'SR commission \u09f310,922'},\n  {s:'10014',d:'22 Jan 2023',dlr:'Tasneem 965',kg:'983',rate:'15',amt:14745,n:'983 \u00d7 \u09f315 = \u09f314,745'},\n  {s:'10018',d:'16 Feb 2023',dlr:'Tasneem 965',kg:'985',rate:'15',amt:14775,n:'985 \u00d7 \u09f315 = \u09f314,775'},\n  {s:'10024',d:'09 Apr 2023',dlr:'Tasneem 965',kg:'2,230',rate:'15',amt:33450,n:'2,230 \u00d7 \u09f315 = \u09f333,450 \u00b7 Mar commission'},\n  {s:'10027',d:'11 May 2023',dlr:'Tasneem 965',kg:'1,850',rate:'15',amt:27750,n:'1,850 \u00d7 \u09f315 = \u09f327,750'},\n  {s:'10031',d:'15 Mar 2023',dlr:'Nishikant 966',kg:'1,400',rate:'15',amt:21000,n:'1,400 \u00d7 \u09f315 = \u09f321,000'},\n  {s:'10032',d:'23 Mar 2023',dlr:'Nishikant 966',kg:'\u2014',rate:'\u2014',amt:8250,n:'SR commission \u09f38,250'},\n  {s:'10050',d:'22 May 2023',dlr:'Sufia 967',kg:'\u2014',rate:'\u2014',amt:1950,n:'SR commission \u09f31,950'},\n  {s:'10057',d:'May 2023',dlr:'Shaon 971',kg:'3,900',rate:'15',amt:49000,n:'3,900 \u00d7 \u09f315 = \u09f358,500 \u2212 \u09f39,500 = \u09f349,000'},\n  {s:'10058',d:'31 May 2023',dlr:'Tasneem 965',kg:'5,870',rate:'15',amt:88050,n:'May total 5,870 kg \u00d7 \u09f315 = \u09f388,050'},\n  {s:'10059',d:'03 Jun 2023',dlr:'Nishikant 966',kg:'1,700',rate:'15',amt:25500,n:'Apr lifting 1,700 \u00d7 \u09f315 = \u09f325,500'},\n  {s:'10071',d:'13 Jul 2023',dlr:'Tasneem 965',kg:'\u2014',rate:'\u2014',amt:114750,n:'Cumulative SR commission \u09f31,14,750 settled'},\n  {s:'10073',d:'18 Jul 2023',dlr:'Shaon 971',kg:'\u2014',rate:'\u2014',amt:54300,n:'SR commission \u09f354,300 settled'},\n  {s:'10080',d:'09 Aug 2023',dlr:'Shaon 971',kg:'3,410',rate:'15',amt:51150,n:'3,410 \u00d7 \u09f315 = \u09f351,150 Jul + GM deposit 3,410 \u00d7 \u09f310'},\n  {s:'10082',d:'13 Aug 2023',dlr:'Tasneem 972',kg:'4,970',rate:'15',amt:74550,n:'4,970 \u00d7 \u09f315 = \u09f374,550'},\n  {s:'10091',d:'31 Aug 2023',dlr:'Tasneem 965',kg:'14,455',rate:'15',amt:216825,n:'14,455 \u00d7 \u09f315 = \u09f32,16,825 Aug month'},\n  {s:'10101',d:'03 Oct 2023',dlr:'Shaon 971',kg:'598',rate:'15',amt:8970,n:'598 \u00d7 \u09f315 = \u09f38,970 Sep commission'},\n  {s:'10092',d:'05 Sep 2023',dlr:'Tasneem 965',kg:'577',rate:'20',amt:114000,n:'577 \u00d7 \u09f320 = \u09f31,14,000 \u2212 \u09f325,810 prev = \u09f388,190 settled'},\n  {s:'10102',d:'04 Oct 2023',dlr:'Tasneem 965',kg:'10,699',rate:'15',amt:160485,n:'10,699 \u00d7 \u09f315 = \u09f31,60,485 Sep commission'},\n];\n\n/* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 SKU DATA \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */\nconst SKUS=[\n  {name:'Chili Powder',code:'DOHA-CP',kg:45785,pct:51.6,color:'#0F172A',\n   sizes:['25 gm','50 gm','100 gm','500 gm','1 kg','5 kg'],\n   rates:[8.4,16.75,33.5,167.5,345,385]},\n  {name:'Turmeric Powder',code:'DOHA-TP',kg:24821,pct:28.0,color:'#64748B',\n   sizes:['25 gm','50 gm','100 gm','500 gm','1 kg','5 kg'],\n   rates:[7.9,15.75,31.5,157.5,165,925]},\n  {name:'Coriander Powder',code:'DOHA-COP',kg:16454,pct:18.6,color:'#94A3B8',\n   sizes:['25 gm','50 gm','100 gm','500 gm','1 kg','5 kg'],\n   rates:[6.4,12.75,25.5,127.5,145,735]},\n  {name:'Tea Leaves',code:'DOHA-TL',kg:1459,pct:1.6,color:'#CBD5E1',\n   sizes:['10 gm','25 gm','50 gm','100 gm','200 gm','500 gm'],\n   rates:[3.35,8.375,16.75,33.5,67,167.5]},\n  {name:'Cumin Powder',code:'DOHA-CUP',kg:126,pct:0.1,color:'#E2E8F0',\n   sizes:['25 gm','50 gm','100 gm','500 gm'],\n   rates:[16,32,64,320]},\n  {name:'Macaroni',code:'DOHA-MAC',kg:8,pct:0.01,color:'#E2E8F0',\n   sizes:['500 gm','1 kg'],\n   rates:[127.5,255]},\n];\n\n/* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 CHARTS \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */\nconst CD={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#FFFFFF',borderColor:'#E2E8F0',borderWidth:1,titleColor:'#64748B',bodyColor:'#0F172A',titleFont:{family:'JetBrains Mono',size:10},bodyFont:{family:'JetBrains Mono',size:11}}}};\nconst SC={x:{grid:{display:false},ticks:{color:'#CBD5E1',font:{family:'JetBrains Mono',size:9},maxRotation:45},border:{display:false}},y:{grid:{color:'#F1F5F9'},ticks:{color:'#CBD5E1',font:{family:'JetBrains Mono',size:9}},border:{display:false}}};\nconst charts={};\nfunction mkBar(id,lbl,data,cols,cb){\n  const c=document.getElementById(id);if(!c)return;\n  if(charts[id])charts[id].destroy();\n  charts[id]=new Chart(c,{type:'bar',data:{labels:lbl,datasets:[{data,backgroundColor:cols,borderRadius:2,borderSkipped:false}]},options:{...CD,scales:SC,plugins:{...CD.plugins,tooltip:{...CD.plugins.tooltip,callbacks:{label:cb||(x=>`${x.raw}`)}}}}});\n}\nfunction mkLine2(id,lbl,d1,d2){\n  const c=document.getElementById(id);if(!c)return;\n  if(charts[id])charts[id].destroy();\n  charts[id]=new Chart(c,{type:'bar',data:{labels:lbl,datasets:[\n    {label:'Order Value',data:d1.map(v=>Math.round(v/1000)),backgroundColor:MK.map((_,i)=>i>=11?'#0F172A':'#E2E8F0'),borderRadius:2,borderSkipped:false},\n    {label:'Payments',data:d2.map(v=>Math.round(v/1000)),backgroundColor:MK.map((_,i)=>i>=11?'#059669':'rgba(45,148,96,.3)'),borderRadius:2,borderSkipped:false},\n  ]},options:{...CD,scales:{...SC,x:{...SC.x},y:{...SC.y,ticks:{...SC.y.ticks,callback:v=>`\u09f3${v}k`}}},plugins:{...CD.plugins,legend:{display:true,position:'top',labels:{font:{family:'JetBrains Mono',size:9},color:'#64748B',boxWidth:8,padding:10}},tooltip:{...CD.plugins.tooltip,callbacks:{label:x=>` ${x.dataset.label}: \u09f3${x.raw}k`}}}}});\n}\nfunction mkDonut(id,lbl,data,cols){\n  const c=document.getElementById(id);if(!c)return;\n  if(charts[id])charts[id].destroy();\n  charts[id]=new Chart(c,{type:'doughnut',data:{labels:lbl,datasets:[{data,backgroundColor:cols,borderWidth:0}]},options:{...CD,cutout:'70%'}});\n}\nfunction mkStack(id,lbl,sets){\n  const c=document.getElementById(id);if(!c)return;\n  if(charts[id])charts[id].destroy();\n  charts[id]=new Chart(c,{type:'bar',data:{labels:lbl,datasets:sets.map(s=>({...s,stack:'s',borderRadius:0,borderSkipped:false}))},options:{...CD,scales:SC,plugins:{...CD.plugins,legend:{display:true,position:'top',labels:{font:{family:'JetBrains Mono',size:9},color:'#64748B',boxWidth:8,padding:8}}}}});\n}\nfunction mkHBar(id,lbl,data,cols){\n  const c=document.getElementById(id);if(!c)return;\n  if(charts[id])charts[id].destroy();\n  charts[id]=new Chart(c,{type:'bar',data:{labels:lbl,datasets:[{data,backgroundColor:cols,borderRadius:2,borderSkipped:false}]},options:{...CD,indexAxis:'y',scales:{x:{...SC.x,grid:{color:'#F1F5F9'},ticks:{...SC.x.ticks,maxRotation:0,callback:v=>`\u09f3${Math.round(v/1000)}k`}},y:{...SC.y,grid:{display:false}}},plugins:{...CD.plugins,tooltip:{...CD.plugins.tooltip,callbacks:{label:x=>` \u09f3${x.raw.toLocaleString()}`}}}}});\n}\n\nfunction buildCharts(){\n  mkLine2('c-dual',MK,MR,MP);\n  mkDonut('c-donut',['Chili','Turmeric','Coriander','Others'],[45785,24821,16454,1639],['#0F172A','#64748B','#94A3B8','#E2E8F0']);\n  // Outstanding dues bar\n  const dueNames=['977','974','975','976','972','973','971','970 (N/A)'];\n  const dueVals=[461860,327260,290960,213360,83660,84060,74939,9750];\n  mkHBar('c-dues',dueNames,dueVals,dueVals.map((v,i)=>i<3?'#DC2626':i<5?'#D97706':'#CBD5E1'));\n  // Payments\n  mkBar('c-pay',MK,MP.map(v=>Math.round(v/1000)),MK.map((_,i)=>i>=11?'#059669':'rgba(45,148,96,.35)'),x=>`\u09f3${x.raw}k`);\n  // Commission\n  const cAmts=COMMISSIONS.map(c=>c.amt);\n  mkBar('c-comm',COMMISSIONS.map(c=>c.s),cAmts,cAmts.map(v=>v>100000?'#0F172A':v>30000?'#64748B':'#E2E8F0'),x=>`\u09f3${x.raw.toLocaleString()}`);\n  // Inventory\n  mkStack('c-inv-stk',MK,[\n    {label:'Chili',data:MCH,backgroundColor:'#0F172A'},\n    {label:'Turmeric',data:MTU,backgroundColor:'#64748B'},\n    {label:'Coriander',data:MCO,backgroundColor:'#94A3B8'},\n    {label:'Tea',data:MTE,backgroundColor:'#E2E8F0'},\n  ]);\n  // Returns donut\n  mkDonut('c-ret',['Return','Damage','Defect','Short'],[14,2,2,1],['#2563EB','#DC2626','#D97706','#64748B']);\n  // Analytics\n  mkBar('c-a-rev',MK,MR.map(v=>Math.round(v/1000)),MK.map((_,i)=>i>=11?'#0F172A':'#E2E8F0'),x=>`\u09f3${x.raw}k`);\n  mkStack('c-a-vol',MK,[{label:'Chili',data:MCH,backgroundColor:'#0F172A'},{label:'Turmeric',data:MTU,backgroundColor:'#64748B'},{label:'Coriander',data:MCO,backgroundColor:'#94A3B8'},{label:'Tea',data:MTE,backgroundColor:'#E2E8F0'}]);\n  mkHBar('c-a-prd',['Chili','Turmeric','Coriander','Tea','Cumin','Macaroni'],[45785,24821,16454,1459,126,8],['#0F172A','#64748B','#94A3B8','#CBD5E1','#E2E8F0','#E2E8F0']);\n  mkLine2('c-a-ct',MK,MCH,MTU);\n}\n\n/* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 RENDER FUNCTIONS \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */\nfunction renderDashDealers(){\n  const maxR=12981196;\n  document.getElementById('dash-dealers').innerHTML=Object.values(DEALERS).sort((a,b)=>b.rev-a.rev).map(d=>`<tr style=\"cursor:pointer\" onclick=\"openLedger('${Object.keys(DEALERS).find(k=>DEALERS[k]===d)}')\">\n    <td style=\"font-weight:400;color:var(--ink);font-size:12px\">${d.name}<\/td>\n    <td class=\"m\" style=\"font-size:10px;color:var(--ink4)\">${Object.keys(DEALERS).find(k=>DEALERS[k]===d)}<\/td>\n    <td class=\"m\">${d.orders}<\/td>\n    <td class=\"m\">\u09f3${(d.rev/100000).toFixed(2)}L<\/td>\n    <td class=\"m\">${d.kg.toLocaleString()}<\/td>\n    <td style=\"font-size:10px;color:var(--ink4)\">${d.first.split(' ').slice(1).join(' ')} \u2192 ${d.last.split(' ').slice(1).join(' ')}<\/td>\n    <td>${d.due>0?`<span class=\"pill p-over\">\u09f3${d.due.toLocaleString()}<\/span>`:d.adv>0?`<span class=\"pill p-adv\">+\u09f3${d.adv.toLocaleString()}<\/span>`:'<span class=\"pill p-ok\">Cleared<\/span>'}<\/td>\n  <\/tr>`).join('');\n}\nfunction renderActivity(){\n  const items=[\n    {t:'ord',title:'Tasneem Enterprises',meta:'Memo #10108 \u00b7 31 Oct 2023 \u00b7 2,470 kg',amt:'\u09f36,46,150',cls:'pos'},\n    {t:'pay',title:'Payment received \u2014 Tasneem',meta:'Bank \u09f37,14,009 + Other \u09f31,37,037 \u00b7 31 Oct',amt:'\u09f38,51,046',cls:'pos'},\n    {t:'ord',title:'Tasneem Enterprises',meta:'Memo #10107 \u00b7 26 Oct 2023 \u00b7 1,800 kg',amt:'\u09f34,65,000',cls:'pos'},\n    {t:'ord',title:'Shaon Enterprises',meta:'Memo #10109 \u00b7 26 Oct 2023 \u00b7 1,000 kg',amt:'\u09f32,53,000',cls:'pos'},\n    {t:'ord',title:'Tasneem Enterprises',meta:'Memo #10106 \u00b7 22 Oct 2023 \u00b7 1,160 kg',amt:'\u09f33,64,600',cls:'pos'},\n    {t:'ret',title:'Return \u2014 Turmeric 390 kg + Chili 40 kg',meta:'Memo #10106 \u00b7 Tasneem 965 \u00b7 Settled',amt:'~\u09f386,650',cls:'neg'},\n    {t:'ord',title:'Tasneem Enterprises',meta:'Memo #10104 \u00b7 18 Oct 2023 \u00b7 1,700 kg',amt:'\u09f34,03,000',cls:'pos'},\n    {t:'ord',title:'Tasneem Enterprises',meta:'Memo #10103 \u00b7 07 Oct 2023 \u00b7 1,658 kg',amt:'\u09f35,59,990',cls:'neu'},\n  ];\n  document.getElementById('activity-feed').innerHTML=items.map(i=>`<div class=\"af-item\">\n    <div class=\"af-icon ${i.t}\">${i.t==='ord'?'\u2191':i.t==='pay'?'\u09f3':'\u21b5'}<\/div>\n    <div class=\"af-body\"><div class=\"af-t\">${i.title}<\/div><div class=\"af-m\">${i.meta}<\/div><\/div>\n    <div class=\"af-amt ${i.cls}\">${i.amt}<\/div>\n  <\/div>`).join('');\n}\nfunction renderFullDealers(){\n  const maxR=12981196;\n  document.getElementById('full-dealers').innerHTML=Object.entries(DEALERS).sort((a,b)=>b[1].rev-a[1].rev).map(([code,d])=>`<tr style=\"cursor:pointer\" onclick=\"openLedger('${code}')\">\n    <td style=\"font-weight:400;color:var(--ink)\">${d.name}<\/td>\n    <td class=\"m\" style=\"font-size:10px;color:var(--ink4)\">${code}<\/td>\n    <td>${d.mgr}<\/td>\n    <td style=\"font-size:10px;color:var(--ink3)\">${d.addr}<\/td>\n    <td style=\"font-size:10px;color:var(--ink4)\">${d.mobile||'\u2014'}<\/td>\n    <td class=\"m\">${d.orders}<\/td>\n    <td class=\"m\">\u09f3${Math.round(d.rev).toLocaleString()}<\/td>\n    <td class=\"m\" style=\"color:var(--gdk)\">\u09f3${Math.round(d.paid).toLocaleString()}<\/td>\n    <td class=\"m\">${d.kg.toLocaleString()}<\/td>\n    <td><div class=\"bc\" style=\"min-width:60px\"><div class=\"bf\" style=\"width:${Math.round(d.rev/maxR*100)}%\"><\/div><\/div><\/td>\n    <td>${d.due>0?`<span class=\"pill p-over\">\u09f3${d.due.toLocaleString()} due<\/span>`:d.adv>0?`<span class=\"pill p-adv\">+\u09f3${d.adv.toLocaleString()} adv<\/span>`:'<span class=\"pill p-ok\">Cleared<\/span>'}<\/td>\n  <\/tr>`).join('');\n}\nfunction openLedger(code){\n  nav('ledger','Finance');\n  setTimeout(()=>{document.getElementById('ldg-sel').value=code;renderLedger();},40);\n}\nfunction renderLedger(){\n  const code=document.getElementById('ldg-sel').value;\n  const d=DEALERS[code];if(!d)return;\n  document.getElementById('ldg-title').textContent=`${d.name} \u2014 Account Statement`;\n  document.getElementById('ldg-meta').textContent=`Code: ${code} \u00b7 ${d.addr} \u00b7 ${d.orders} transactions \u00b7 ${d.first} \u2192 ${d.last}`;\n  document.getElementById('ldg-summary').innerHTML=`\n    <div class=\"ls\"><div class=\"ls-l\">Total Orders<\/div><div class=\"ls-v\">${d.orders}<\/div><\/div>\n    <div class=\"ls\"><div class=\"ls-l\">Total Order Value<\/div><div class=\"ls-v\">\u09f3${d.rev.toLocaleString()}<\/div><\/div>\n    <div class=\"ls\"><div class=\"ls-l\">Total Paid<\/div><div class=\"ls-v grn\">\u09f3${d.paid.toLocaleString()}<\/div><\/div>\n    <div class=\"ls\"><div class=\"ls-l\">Current Balance<\/div><div class=\"ls-v ${d.due>0?'red':d.adv>0?'grn blu':''}\">${d.due>0?`\u09f3${d.due.toLocaleString()} DUE`:d.adv>0?`\u09f3${d.adv.toLocaleString()} ADV`:'Cleared'}<\/div><\/div>`;\n  document.getElementById('ldg-body').innerHTML=d.rows.map(r=>`<tr>\n    <td class=\"m\" style=\"font-size:10px;font-weight:500\">${r.s}<\/td>\n    <td style=\"font-size:11px;white-space:nowrap\">${r.d}<\/td>\n    <td class=\"m\">\u09f3${r.v.toLocaleString()}<\/td>\n    <td class=\"m\" style=\"color:var(--ink4)\">\u09f3${r.prev.toLocaleString()}<\/td>\n    <td class=\"m\" style=\"font-weight:500\">\u09f3${r.grand.toLocaleString()}<\/td>\n    <td class=\"m\" style=\"color:var(--gdk)\">\u09f3${r.p.toLocaleString()}<\/td>\n    <td class=\"m\" style=\"color:${r.du>0?'var(--rm)':'var(--ink4)'}; font-weight:${r.du>0?'500':'300'}\">${r.du>0?`\u09f3${r.du.toLocaleString()}`:'\u2014'}<\/td>\n    <td class=\"m\" style=\"color:var(--gdk)\">${r.adv>0?`\u09f3${r.adv.toLocaleString()}`:'\u2014'}<\/td>\n    <td class=\"m\" style=\"color:var(--bm)\">${r.bank>0?`\u09f3${r.bank.toLocaleString()}`:'\u2014'}<\/td>\n    <td class=\"m\">${r.kg}<\/td>\n    <td style=\"font-size:10px;color:var(--ink4);max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis\">${r.n||'\u2014'}<\/td>\n  <\/tr>`).join('');\n}\nfunction renderProducts(){\n  document.getElementById('prod-catalog').innerHTML=SKUS.map(p=>`<div class=\"prod-card\">\n    <div class=\"prod-name\">${p.name}<\/div>\n    <div class=\"prod-code\">${p.code} \u00b7 DOHA BRAND<\/div>\n    <div class=\"prod-bar\"><div class=\"prod-fill\" style=\"width:${Math.min(100,p.kg/45785*100)}%;background:${p.color}\"><\/div><\/div>\n    <div class=\"prod-stats\"><div class=\"prod-kg\">${p.kg.toLocaleString()} kg<\/div><div class=\"prod-pct\">${p.pct}%<\/div><\/div>\n    <div class=\"prod-sizes\">${p.sizes.map((sz,i)=>`<span class=\"sz\">${sz} \u00b7 \u09f3${p.rates[i]}<\/span>`).join('')}<\/div>\n  <\/div>`).join('');\n}\nfunction renderInvSkuCards(){\n  document.getElementById('inv-sku-cards').innerHTML=SKUS.map(p=>`<div style=\"display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--ln)\">\n    <div style=\"width:28px;height:28px;border-radius:5px;background:${p.color};flex-shrink:0\"><\/div>\n    <div style=\"flex:1\">\n      <div style=\"font-size:12px;font-weight:400;color:var(--ink)\">${p.name}<\/div>\n      <div class=\"bc\" style=\"margin-top:4px\"><div class=\"bf\" style=\"width:${Math.min(100,p.kg/45785*100)}%;background:${p.color}\"><\/div><\/div>\n    <\/div>\n    <div style=\"text-align:right\"><div class=\"m\" style=\"font-size:12px;font-weight:500\">${p.kg.toLocaleString()} kg<\/div><div class=\"m\" style=\"font-size:9px;color:var(--ink4)\">${p.pct}%<\/div><\/div>\n  <\/div>`).join('')+'<div style=\"padding-top:8px\"><\/div>';\n}\nfunction renderDispatch(data){\n  document.getElementById('disp-body').innerHTML=data.map(r=>`<tr>\n    <td class=\"m\" style=\"font-size:10px;font-weight:500\">${r.s}<\/td>\n    <td style=\"font-size:10px;white-space:nowrap\">${r.d}<\/td>\n    <td style=\"font-size:11px;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap\">${r.dlr}<\/td>\n    <td class=\"m\" style=\"font-size:10px;color:var(--ink4)\">${r.code}<\/td>\n    <td class=\"m\">${r.ch||'\u2014'}<\/td>\n    <td class=\"m\">${r.tu||'\u2014'}<\/td>\n    <td class=\"m\">${r.co||'\u2014'}<\/td>\n    <td class=\"m\">${r.te||'\u2014'}<\/td>\n    <td class=\"m\" style=\"font-weight:500;color:var(--ink)\">${r.tot.toLocaleString()}<\/td>\n    <td class=\"m\">\u09f3${Math.round(r.val/1000)}k<\/td>\n  <\/tr>`).join('');\n}\nlet filtCode='all';\nfunction filtDisp(code,btn){\n  filtCode=code;\n  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');\n  const q=document.getElementById('disp-srch').value.toLowerCase();\n  const d=DISPATCH.filter(r=>(code==='all'||r.code===code)&&(!q||(r.s.includes(q)||r.dlr.toLowerCase().includes(q)||r.code.includes(q))));\n  renderDispatch(d);\n}\nfunction srchDisp(){\n  const q=document.getElementById('disp-srch').value.toLowerCase();\n  const d=DISPATCH.filter(r=>(filtCode==='all'||r.code===filtCode)&&(!q||(r.s.includes(q)||r.dlr.toLowerCase().includes(q)||r.code.includes(q))));\n  renderDispatch(d);\n}\nfunction renderReturns(){\n  const rc={Return:'p-blu',Damage:'p-over',Defect:'p-due',Short:'p-gray'};\n  const dc={Return:'var(--bm)',Damage:'var(--rm)',Defect:'var(--am)',Short:'#64748B'};\n  document.getElementById('ret-body').innerHTML=RETURNS.map(r=>`<tr>\n    <td class=\"m\" style=\"font-size:10px\">${r.s}<\/td>\n    <td style=\"font-size:10px;white-space:nowrap\">${r.d}<\/td>\n    <td style=\"font-size:11px\">${r.dlr}<\/td>\n    <td><span class=\"pill ${rc[r.type]||'p-gray'}\">${r.type}<\/span><\/td>\n    <td style=\"font-size:11px\">${r.prod}<\/td>\n    <td class=\"m\" style=\"font-size:10px;white-space:nowrap\">${r.qty}<\/td>\n    <td class=\"m\" style=\"font-size:10px\">${r.val}<\/td>\n    <td><span class=\"pill ${r.st==='settled'?'p-ok':'p-due'}\">${r.st==='settled'?'\u2713 Settled':'\u23f3 Pending'}<\/span><\/td>\n    <td style=\"font-size:10px;color:var(--ink4);max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis\">${r.n}<\/td>\n  <\/tr>`).join('');\n  document.getElementById('ret-tl').innerHTML=[...RETURNS].reverse().map(r=>`<div class=\"tl-item\">\n    <div class=\"tl-dot\" style=\"background:${dc[r.type]}\"><\/div>\n    <div class=\"tl-body\">\n      <div class=\"tl-t\">${r.dlr}<\/div>\n      <div class=\"tl-m\">${r.d} \u00b7 Memo ${r.s}<\/div>\n      <div class=\"tl-n\">${r.prod} \u00b7 ${r.qty} \u00b7 ${r.val}<\/div>\n      <div class=\"tl-tags\"><span class=\"pill ${rc[r.type]||'p-gray'}\">${r.type}<\/span><span class=\"pill ${r.st==='settled'?'p-ok':'p-due'}\">${r.st==='settled'?'\u2713 Settled':'\u23f3 Pending'}<\/span><\/div>\n    <\/div><\/div>`).join('');\n}\nfunction renderDamage(){\n  const ev=[\n    {s:'10005',d:'15 Nov 2022',dlr:'Tasneem 965',type:'Damage',prod:'Turmeric (cracked packaging)',detail:'Cracked turmeric packaging discovered on delivery. \u09f31,035 deducted from memo value and credited back to dealer.',res:'\u09f31,035 credit issued'},\n    {s:'10007',d:'27 Nov 2022',dlr:'Tasneem 965',type:'Damage',prod:'Mixed SKUs (damage goods)',detail:'Damaged goods returned from depot. Deducted from outstanding previous balance. Exact quantity not specified \u2014 estimated ~50 kg.',res:'Deducted from balance'},\n    {s:'10011',d:'24 Dec 2022',dlr:'Tasneem 965',type:'Defect',prod:'Chili Powder (production defect)',detail:'Factory production defect identified. ~43 kg of chili powder returned. Credit \u09f314,420 issued \u2014 largest single defect event in 14-month period.',res:'\u09f314,420 credit issued'},\n    {s:'10087',d:'25 Aug 2023',dlr:'Tasneem 977',type:'Pending',prod:'Chili 22.8 kg + Coriander 170 kg + Turmeric 25 kg',detail:'Three products returned post-delivery. Memo noted for settlement in next challan \u2014 pending due to dealer account issues (\u09f34,61,860 outstanding).',res:'Pending \u00b7 next challan'},\n  ];\n  const dc={Damage:'var(--rm)',Defect:'var(--am)',Pending:'var(--am)'};\n  document.getElementById('dmg-tl').innerHTML=ev.map(e=>`<div class=\"tl-item\">\n    <div class=\"tl-dot\" style=\"background:${dc[e.type]}\"><\/div>\n    <div class=\"tl-body\">\n      <div class=\"tl-t\">${e.dlr} \u2014 ${e.prod}<\/div>\n      <div class=\"tl-m\">${e.d} \u00b7 Memo ${e.s}<\/div>\n      <div class=\"tl-n\">${e.detail}<\/div>\n      <div class=\"tl-tags\"><span class=\"pill ${e.type==='Damage'?'p-over':e.type==='Pending'?'p-due':'p-due'}\">${e.type}<\/span><span class=\"pill p-gray\">${e.res}<\/span><\/div>\n    <\/div><\/div>`).join('');\n}\nfunction renderPayments(){\n  const rows=Object.values(DEALERS).flatMap(d=>d.rows.map(r=>({...r,dlr:d.name,code:Object.keys(DEALERS).find(k=>DEALERS[k]===d)}))).filter(r=>r.p>0).sort((a,b)=>b.p-a.p).slice(0,20);\n  document.getElementById('pay-body').innerHTML=rows.map(r=>`<tr>\n    <td class=\"m\" style=\"font-size:10px\">${r.s}<\/td>\n    <td style=\"font-size:10px;white-space:nowrap\">${r.d}<\/td>\n    <td style=\"font-size:11px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap\">${r.dlr}<\/td>\n    <td class=\"m\" style=\"font-size:10px;color:var(--ink4)\">${r.code}<\/td>\n    <td class=\"m\" style=\"color:var(--bm)\">${r.bank>0?`\u09f3${r.bank.toLocaleString()}`:'\u2014'}<\/td>\n    <td class=\"m\">${(r.p-r.bank)>0?`\u09f3${(r.p-r.bank).toLocaleString()}`:'\u2014'}<\/td>\n    <td class=\"m\" style=\"font-weight:500;color:var(--gdk)\">\u09f3${r.p.toLocaleString()}<\/td>\n    <td style=\"font-size:10px;color:var(--ink4);max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis\">${r.n||'\u2014'}<\/td>\n  <\/tr>`).join('');\n}\nfunction renderCommissions(){\n  document.getElementById('comm-body').innerHTML=COMMISSIONS.map(c=>`<tr>\n    <td class=\"m\" style=\"font-size:10px\">${c.s}<\/td>\n    <td style=\"font-size:10px;white-space:nowrap\">${c.d}<\/td>\n    <td style=\"font-size:11px\">${c.dlr}<\/td>\n    <td class=\"m\" style=\"font-size:10px\">${c.kg!=='\u2014'?`${c.kg} kg \u00d7 \u09f3${c.rate}`:'Lump sum'}<\/td>\n    <td class=\"m\" style=\"font-weight:500;color:var(--ink)\">\u09f3${c.amt.toLocaleString()}<\/td>\n    <td style=\"font-size:10px;color:var(--ink4);max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis\">${c.n}<\/td>\n  <\/tr>`).join('');\n}\nfunction renderAnalyticsDealers(){\n  const maxR=12981196;\n  document.getElementById('a-dlr-body').innerHTML=Object.entries(DEALERS).sort((a,b)=>b[1].rev-a[1].rev).map(([code,d])=>`<tr>\n    <td style=\"font-weight:400\">${d.name}<\/td>\n    <td class=\"m\" style=\"font-size:10px;color:var(--ink4)\">${code}<\/td>\n    <td class=\"m\">${d.orders}<\/td>\n    <td class=\"m\">\u09f3${d.rev.toLocaleString()}<\/td>\n    <td class=\"m\">${d.kg.toLocaleString()}<\/td>\n    <td class=\"m\" style=\"color:var(--gdk)\">\u09f3${d.paid.toLocaleString()}<\/td>\n    <td><div class=\"bc\"><div class=\"bf\" style=\"width:${Math.round(d.rev/maxR*100)}%\"><\/div><\/div><\/td>\n    <td>${d.due>0?`<span class=\"pill p-over\">\u09f3${d.due.toLocaleString()}<\/span>`:d.adv>0?`<span class=\"pill p-adv\">+\u09f3${d.adv.toLocaleString()}<\/span>`:'<span class=\"pill p-ok\">Cleared<\/span>'}<\/td>\n  <\/tr>`).join('');\n}\n\n/* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 ORDER ENTRY \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */\nlet skuN=0;\nfunction addSKU(){\n  skuN++;\n  const row=document.createElement('div');row.className='sku-row';row.id=`sk-${skuN}`;\n  row.innerHTML=`<select onchange=\"chgSKUProd(${skuN})\">${SKUS.map((s,i)=>`<option value=\"${i}\">${s.name}<\/option>`).join('')}<\/select>\n    <select id=\"ss-${skuN}\" onchange=\"chgSKUSz(${skuN})\">${SKUS[0].sizes.map((sz,i)=>`<option value=\"${i}\">${sz}<\/option>`).join('')}<\/select>\n    <input type=\"number\" id=\"sq-${skuN}\" value=\"100\" min=\"1\" oninput=\"updPrev()\"/>\n    <input type=\"number\" id=\"sr-${skuN}\" value=\"${SKUS[0].rates[0]}\" step=\"0.01\" oninput=\"updPrev()\"/>\n    <button class=\"del-btn\" onclick=\"document.getElementById('sk-${skuN}').remove();updPrev()\">\u00d7<\/button>`;\n  document.getElementById('sku-rows').appendChild(row);updPrev();\n}\nfunction chgSKUProd(id){\n  const pi=document.querySelector(`#sk-${id} select`).value;\n  const p=SKUS[pi];\n  const ss=document.getElementById(`ss-${id}`);\n  ss.innerHTML=p.sizes.map((sz,i)=>`<option value=\"${i}\">${sz}<\/option>`).join('');\n  document.getElementById(`sr-${id}`).value=p.rates[0];\n  updPrev();\n}\nfunction chgSKUSz(id){\n  const pi=document.querySelector(`#sk-${id} select`).value;\n  const si=document.getElementById(`ss-${id}`).value;\n  document.getElementById(`sr-${id}`).value=SKUS[pi].rates[si]||0;\n  updPrev();\n}\nconst DEALER_MAP={\n  '965':{name:'Tasneem Enterprises',addr:'Madhavpur Montola, Habiganj',code:'965'},\n  '971':{name:'Shaon Enterprises',addr:'Sunamganj Sadar',code:'971'},\n  '966':{name:'Nishikant Store',addr:'Pagla, Sunamganj',code:'966'},\n  '967':{name:'Sufia Enterprises',addr:'Bishwanath, Sylhet',code:'967'},\n  '968':{name:'Rubel Enterprises',addr:'Laldighi Par',code:'968'},\n  '969':{name:'Abdul Hannan & Sons',addr:'Saidpur',code:'969'},\n  '970':{name:'Ma Enterprises',addr:'Rajnagar',code:'970'},\n};\nfunction updPrev(){\n  const dv=document.getElementById('o-dlr').value;\n  const dm=DEALER_MAP[dv]||{name:'\u2014',addr:'\u2014',code:dv};\n  const dt=document.getElementById('o-date').value;\n  const mgr=document.getElementById('o-mgr').value;\n  const prevBal=parseFloat(document.getElementById('o-prevbal').value)||0;\n  const payment=parseFloat(document.getElementById('o-payment').value)||0;\n  // Invoice header\n  document.getElementById('inv-dealer').textContent=dm.name;\n  document.getElementById('inv-code').textContent=`Code: ${dm.code} \u00b7 ${dm.addr}`;\n  document.getElementById('inv-date').textContent=dt;\n  document.getElementById('inv-mgr').textContent=`SR: ${mgr}`;\n  document.getElementById('inv-prevbal').textContent=`\u09f3${prevBal.toLocaleString()}`;\n  document.getElementById('inv-payment').textContent=`\u09f3${payment.toLocaleString()}`;\n  document.getElementById('inv-prev-sub').textContent=`\u09f3${prevBal.toLocaleString()}`;\n  document.getElementById('inv-pay-sub').textContent=`\u09f3${payment.toLocaleString()}`;\n  // Lines\n  const rows=[...document.querySelectorAll('[id^=\"sk-\"]')];\n  let tot=0,totKg=0,lines='';\n  rows.forEach(row=>{\n    const id=row.id.split('-')[1];\n    const pi=row.querySelector('select')?.value||0;\n    const si=document.getElementById(`ss-${id}`)?.value||0;\n    const pn=SKUS[pi]?.name||'';\n    const sz=SKUS[pi]?.sizes[si]||'';\n    const qty=parseFloat(document.getElementById(`sq-${id}`)?.value)||0;\n    const rt=parseFloat(document.getElementById(`sr-${id}`)?.value)||0;\n    const amt=Math.round(qty*rt);\n    tot+=amt;\n    // estimate kg from size\n    const szVal=parseFloat(sz)||0;\n    const isKg=sz.toLowerCase().includes('kg');\n    const kgEst=isKg?qty*szVal:qty*szVal/1000;\n    totKg+=kgEst;\n    lines+=`<div class=\"inv-line\"><span class=\"p-name\">${pn} \u00b7 ${sz}<\/span><span>${qty}<\/span><span>\u09f3${rt.toFixed(2)}<\/span><span class=\"p-total\">\u09f3${amt.toLocaleString()}<\/span><\/div>`;\n  });\n  document.getElementById('inv-lines').innerHTML=lines||'<div class=\"inv-empty\">Add product lines to see invoice<\/div>';\n  document.getElementById('inv-total').textContent=`\u09f3${tot.toLocaleString()}`;\n  document.getElementById('inv-order-val').textContent=`\u09f3${tot.toLocaleString()}`;\n  const net=prevBal+tot-payment;\n  document.getElementById('inv-net').textContent=`\u09f3${Math.abs(net).toLocaleString()} ${net>0?'DUE':net<0?'ADVANCE':'CLEARED'}`;\n  document.getElementById('inv-net').style.color=net>0?'var(--rm)':net<0?'var(--gdk)':'var(--ink4)';\n  document.getElementById('inv-vol').textContent=`${totKg.toFixed(1)} kg estimated`;\n}\nfunction saveOrder(){\n  if(!document.querySelector('[id^=\"sk-\"]'))return;\n  const t=document.getElementById('o-toast');t.style.display='block';\n  setTimeout(()=>t.style.display='none',5000);\n}\n\n/* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 NAVIGATION \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */\nfunction nav(page,sec){\n  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('on'));\n  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));\n  const el=document.querySelector(`[data-p=\"${page}\"]`);\n  if(el)el.classList.add('on');\n  const pg=document.getElementById(`pg-${page}`);\n  if(pg){pg.classList.remove('on');void pg.offsetWidth;pg.classList.add('on');}\n  document.getElementById('tb-sec').textContent=sec||'Core';\n  document.getElementById('tb-pg').textContent=el?.textContent.trim().replace(/\\d+/g,'')||page;\n  document.getElementById('main').scrollTop=0;\n}\ndocument.querySelectorAll('.sb-item[data-p]').forEach(el=>{\n  el.addEventListener('click',()=>nav(el.dataset.p,el.dataset.s));\n});\nfunction switchA(btn,id){\n  document.querySelectorAll('.atab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');\n  ['rev','vol','dlr','prd'].forEach(t=>document.getElementById(`a-${t}`).style.display=t===id?'block':'none');\n  setTimeout(()=>{\n    if(id==='vol'&&!charts['c-a-vol'])buildCharts();\n    if(id==='prd'&&!charts['c-a-prd'])buildCharts();\n  },50);\n}\n\n/* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 INIT \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */\nrenderDashDealers();renderActivity();renderFullDealers();\nrenderProducts();renderInvSkuCards();\nrenderDispatch(DISPATCH);renderReturns();renderDamage();\nrenderPayments();renderCommissions();renderLedger();renderAnalyticsDealers();\naddSKU();updPrev();\nsetTimeout(buildCharts,100);\n<\/div>";
+})();
+</script>
+
+<script>
+
+/* ═══════════════════ EXACT DATA ═══════════════════ */
+const MK=['Sep 22','Oct 22','Nov 22','Dec 22','Jan 23','Feb 23','Mar 23','Apr 23','May 23','Jun 23','Jul 23','Aug 23','Sep 23','Oct 23'];
+const MR=[57640,213170,231246,307205,397325,547170,1237775,1130650,2727150,3064550,2142300,4451500,3324056,3870740];
+const MP=[59510,166200,182132,280342,515703,547475,1010680,1225595,3032364,3170390,1938850,4637350,3319535,4549324];
+const MCH=[28,376,851,723,935,1040,2962,2870,5590,6650,4220,7325,6100,6115];
+const MTU=[48,100,538,240,250,600,680,500,2180,2200,2385,5890,4195,5015];
+const MCO=[17,100,366,200,50,300,519,400,2650,2370,1775,2965,1202,3540];
+const MTE=[77,150,947,0,50,92,45,0,30,50,0,0,0,18];
+const MKCNT=[2,4,4,4,4,6,11,5,16,10,7,13,9,9];
+
+const DEALERS={
+'965':{name:'Tasneem Enterprises',mgr:'Shahin Ahmed',addr:'Madhavpur Montola, Habiganj',mobile:'01745-959568',orders:58,rev:12981196,paid:14510117,kg:48533,due:0,adv:126988,first:'13 Sep 2022',last:'31 Oct 2023',
+  rows:[{s:'10001',d:'13 Sep 2022',v:24740,prev:0,grand:24740,p:32325,du:0,adv:7585,bank:0,kg:83,n:'Dealer commission ৳2,325'},
+        {s:'10003',d:'16 Oct 2022',v:119070,prev:20770,grand:139840,p:110850,du:28990,adv:0,bank:0,kg:416,n:'Depot dealer commission ৳10,650 · SR salary ৳5,200'},
+        {s:'10005',d:'15 Nov 2022',v:66935,prev:57690,grand:124625,p:55645,du:68980,adv:0,bank:0,kg:206,n:'Manager salary ৳20,000 · return chili ৳17,110'},
+        {s:'10008',d:'29 Nov 2022',v:103062,prev:79573,grand:182635,p:100000,du:82635,adv:0,bank:0,kg:328,n:'Bank deposit 29/11 ৳40,000 + 30/11 ৳60,000'},
+        {s:'10011',d:'24 Dec 2022',v:100500,prev:100308,grand:200808,p:94420,du:106388,adv:0,bank:0,kg:300,n:'Production defect return ৳14,420 · Bank ৳70,000 · bKash ৳10,000'},
+        {s:'10013',d:'17 Jan 2023',v:110575,prev:73216,grand:183791,p:266200,du:0,adv:82409,bank:0,kg:335,n:'Manager salary ৳13,000 · transport ৳3,200 · Bank ৳2,50,000'},
+        {s:'10023',d:'29 Mar 2023',v:312100,prev:124808,grand:436908,p:144850,du:292058,adv:0,bank:0,kg:995,n:'Return goods ৳14,850'},
+        {s:'10024',d:'09 Apr 2023',v:307000,prev:292058,grand:599058,p:394250,du:204808,adv:0,bank:0,kg:1000,n:'Bank ৳1,50,000 · offer ৳50,000 · SR commission ৳33,450'},
+        {s:'10054',d:'25 May 2023',v:273000,prev:2300,grand:275300,p:204000,du:71300,adv:0,bank:0,kg:1000,n:'Pickup rent ৳4,000'},
+        {s:'10076',d:'28 Jul 2023',v:411000,prev:111310,grand:522310,p:404000,du:118310,adv:0,bank:300000,kg:1400,n:'Offer 5,6 paid ৳1,00,000 · June offer settled'},
+        {s:'10078',d:'01 Aug 2023',v:459000,prev:118310,grand:577310,p:654000,du:0,adv:76690,bank:650000,kg:1400,n:'Pickup ৳4,000 · memo books 20 · catalog 2 sets'},
+        {s:'10091',d:'31 Aug 2023',v:577500,prev:190735,grand:768235,p:768235,du:0,adv:0,bank:499600,kg:1500,n:'SR commission 14,455×৳15=৳2,16,825 · Manager Aug ৳22,000 · bank charge ৳1,200'},
+        {s:'10094',d:'08 Sep 2023',v:427500,prev:3655,grand:431155,p:303600,du:127555,adv:0,bank:199600,kg:1500,n:'Short 25 kg chili settled · offer paid ৳1,00,000'},
+        {s:'10098',d:'20 Sep 2023',v:491750,prev:166255,grand:658005,p:653600,du:4405,adv:0,bank:599600,kg:1550,n:'Offer 7 paid ৳50,000 · catalog 7 · memo 20'},
+        {s:'10103',d:'07 Oct 2023',v:559990,prev:0,grand:559990,p:75882,du:484108,adv:0,bank:0,kg:1658,n:'Pickup ৳4,500'},
+        {s:'10107',d:'26 Oct 2023',v:465000,prev:0,grand:465000,p:387192,du:77808,adv:0,bank:282692,kg:1800,n:'October offer 3,4 paid ৳1,00,000'},
+        {s:'10108',d:'31 Oct 2023',v:646150,prev:77908,grand:724058,p:851046,du:0,adv:126988,bank:714009,kg:2470,n:'October offer 5,6 + half offer ৳1,31,037'},
+  ]},
+'971':{name:'Shaon Enterprises',mgr:'Satyajit Das',addr:'Sunamganj Sadar',mobile:'01739-699511',orders:18,rev:3725186,paid:3605347,kg:14123,due:74939,adv:35061,first:'06 May 2023',last:'26 Oct 2023',
+  rows:[{s:'10045',d:'09 May 2023',v:302000,prev:0,grand:302000,p:302000,du:0,adv:0,bank:0,kg:1200,n:'Total 1,200 kg'},
+        {s:'10052',d:'21 May 2023',v:169500,prev:13500,grand:183000,p:167000,du:16000,adv:0,bank:0,kg:700,n:'Apr salary ৳4,000 · 200 kg coriander commission'},
+        {s:'10061',d:'06 Jun 2023',v:181800,prev:0,grand:181800,p:182050,du:0,adv:250,bank:118500,kg:720,n:'Pickup ৳2,500 · SR commission settled · Nishikant SR settled'},
+        {s:'10071',d:'13 Jul 2023',v:366150,prev:18410,grand:384560,p:268750,du:115810,adv:0,bank:0,kg:1270,n:'Return coriander 200 kg · SR commission ৳1,14,750 settled · offer ৳1,50,000'},
+        {s:'10075',d:'25 Jul 2023',v:306000,prev:101700,grand:407700,p:203000,du:204700,adv:0,bank:200000,kg:1200,n:'Pickup ৳3,000 · memo books 10'},
+        {s:'10080',d:'09 Aug 2023',v:355500,prev:103550,grand:459050,p:322800,du:136250,adv:0,bank:185550,kg:1000,n:'Chili 850×৳40=৳34,000 commission · SR Jul ৳51,150 · GM deposit ৳34,100'},
+        {s:'10090',d:'30 Aug 2023',v:210125,prev:36250,grand:246375,p:232475,du:13900,adv:0,bank:157000,kg:725,n:'Pickup ৳1,500'},
+        {s:'10093',d:'06 Sep 2023',v:182961,prev:13900,grand:196861,p:153000,du:43861,adv:0,bank:150000,kg:598,n:'Return: chili 33.7 kg · turmeric 18.7 kg · coriander 114 kg — all settled'},
+        {s:'10101',d:'03 Oct 2023',v:279000,prev:43861,grand:322861,p:228422,du:94439,adv:0,bank:155000,kg:1000,n:'Sep SR commission ৳8,970 · chili commission ৳47,000 Aug'},
+        {s:'10109',d:'26 Oct 2023',v:253000,prev:94439,grand:347439,p:272500,du:74939,adv:0,bank:270000,kg:1000,n:'Pickup ৳2,500'},
+  ]},
+'966':{name:'Nishikant Store',mgr:'Sumon Das',addr:'Pagla, Sunamganj',mobile:'01772-093359',orders:9,rev:1721850,paid:1813400,kg:6260,due:0,adv:0,first:'15 Feb 2023',last:'14 Sep 2023',
+  rows:[{s:'10028',d:'15 Feb 2023',v:145500,prev:0,grand:145500,p:150000,du:0,adv:4500,bank:0,kg:600,n:'Free goods: 40 cot + 40 container + 75 mug'},
+        {s:'10029',d:'25 Feb 2023',v:127250,prev:0,grand:127250,p:116000,du:11250,adv:0,bank:0,kg:450,n:'Pickup ৳2,500 · offer goods ৳9,000 · prev advance ৳4,500'},
+        {s:'10032',d:'23 Mar 2023',v:241600,prev:9750,grand:251350,p:234750,du:16600,adv:0,bank:0,kg:810,n:'SR commission ৳8,250 · market commission Ekhlash ৳4,500 · pickup ৳2,000'},
+        {s:'10033',d:'02 Apr 2023',v:330750,prev:16600,grand:347350,p:321850,du:25500,adv:0,bank:0,kg:1150,n:'Bank 06/04/23 ৳2,70,000 + ৳50,000 · pickup ৳1,850'},
+        {s:'10034',d:'09 Apr 2023',v:189750,prev:25500,grand:215250,p:201800,du:13450,adv:0,bank:0,kg:550,n:'Pickup ৳1,800'},
+        {s:'10066',d:'26 Jun 2023',v:530000,prev:1750,grand:531750,p:604500,du:0,adv:76250,bank:600000,kg:2100,n:'Pickup ৳4,500'},
+        {s:'10096',d:'14 Sep 2023',v:57000,prev:0,grand:57000,p:57000,du:0,adv:0,bank:0,kg:200,n:''},
+  ]},
+'967':{name:'Sufia Enterprises',mgr:'Shipon Ahmed',addr:'Bishwanath, Sylhet',mobile:'01328-089281',orders:9,rev:1304645,paid:1261603,kg:4473,due:183,adv:0,first:'24 Feb 2023',last:'22 Sep 2023',
+  rows:[{s:'10035',d:'24 Feb 2023',v:107170,prev:0,grand:107170,p:100000,du:7170,adv:0,bank:0,kg:332,n:''},
+        {s:'10038',d:'24 Mar 2023',v:47075,prev:1420,grand:48495,p:48495,du:0,adv:0,bank:0,kg:194,n:''},
+        {s:'10039',d:'02 Apr 2023',v:56900,prev:0,grand:56900,p:53695,du:3205,adv:0,bank:0,kg:220,n:''},
+        {s:'10050',d:'22 May 2023',v:39450,prev:0,grand:39450,p:9496,du:29954,adv:0,bank:0,kg:130,n:'SR commission ৳1,950 · return goods ৳2,315 · market commission ৳915'},
+        {s:'10067',d:'28 Jun 2023',v:496500,prev:2160,grand:498660,p:480250,du:18410,adv:0,bank:380000,kg:1700,n:'Pickup ৳4,000 · bank 04/07 ৳80,000 + 09/07 ৳3,00,000 · online charge Jun ৳2,160'},
+        {s:'10099',d:'22 Sep 2023',v:488500,prev:4405,grand:492905,p:492722,du:183,adv:0,bank:488222,kg:1700,n:'Pickup ৳4,500'},
+  ]},
+'968':{name:'Rubel Enterprises',mgr:'Rubel Ahmed',addr:'Laldighi Par',mobile:'',orders:2,rev:640000,paid:635783,kg:2220,due:0,adv:0,first:'30 Oct 2022',last:'28 Sep 2023',
+  rows:[{s:'10041',d:'30 Oct 2022',v:5000,prev:0,grand:5000,p:600,du:4400,adv:0,bank:0,kg:20,n:''},
+        {s:'10100',d:'28 Sep 2023',v:635000,prev:183,grand:635183,p:635183,du:0,adv:0,bank:629183,kg:2200,n:'Dutch-Bangla Bank deposits 01/10 + 02/10 ৳6,29,183 · Pickup ৳6,000'},
+  ]},
+'969':{name:'Abdul Hannan & Sons',mgr:'Md. Shahajan',addr:'Saidpur',mobile:'01701-373340',orders:3,rev:428150,paid:479250,kg:1480,due:0,adv:0,first:'11 Oct 2022',last:'25 Jun 2023',
+  rows:[{s:'10042',d:'11 Oct 2022',v:35150,prev:0,grand:35150,p:29500,du:5650,adv:0,bank:0,kg:80,n:''},
+        {s:'10043',d:'11 Nov 2022',v:0,prev:0,grand:0,p:50000,du:0,adv:50000,bank:0,kg:0,n:'Advance payment'},
+        {s:'10069',d:'25 Jun 2023',v:393000,prev:6750,grand:399750,p:399750,du:0,adv:0,bank:397000,kg:1400,n:'Bank 26/06 ৳1,17,000 · Pickup ৳2,750'},
+  ]},
+'970':{name:'Ma Enterprises',mgr:'Toton Das',addr:'Rajnagar',mobile:'01743-156088',orders:2,rev:380700,paid:377000,kg:1280,due:0,adv:0,first:'08 Dec 2022',last:'27 Jun 2023',
+  rows:[{s:'10044',d:'08 Dec 2022',v:71700,prev:0,grand:71700,p:68000,du:3700,adv:0,bank:0,kg:280,n:''},
+        {s:'10070',d:'27 Jun 2023',v:309000,prev:0,grand:309000,p:309000,du:0,adv:0,bank:0,kg:1000,n:'Cash ৳1,06,500 · Bank cheque ৳2,00,000 · Pickup ৳2,500'},
+  ]},
+'972':{name:'Tasneem (Code 972)',mgr:'Shahin Ahmed',addr:'Madhavpur Montola',mobile:'01745-959568',orders:2,rev:815250,paid:915150,kg:2750,due:83660,adv:0,first:'16 Jul 2023',last:'13 Aug 2023',
+  rows:[{s:'10072',d:'16 Jul 2023',v:287250,prev:115810,grand:403060,p:237000,du:166060,adv:0,bank:200000,kg:1250,n:'Return coriander 200 kg ৳33,000 · Pickup ৳4,000'},
+        {s:'10082',d:'13 Aug 2023',v:528000,prev:233810,grand:761810,p:678150,du:83660,adv:0,bank:499600,kg:1500,n:'Pickup ৳4,000 · offer 1,2 paid ৳1,00,000 · SR commission 4,970×৳15=৳74,550'},
+  ]},
+'974':{name:'Tasneem (Code 974)',mgr:'Shahin Ahmed',addr:'Madhavpur Montola',mobile:'01745-959568',orders:1,rev:297200,paid:54000,kg:1500,due:327260,adv:0,first:'16 Aug 2023',last:'16 Aug 2023',
+  rows:[{s:'10084',d:'16 Aug 2023',v:297200,prev:84060,grand:381260,p:54000,du:327260,adv:0,bank:0,kg:1500,n:'Pickup ৳4,000 · offer 3 paid ৳50,000'}]},
+'977':{name:'Tasneem (Code 977)',mgr:'Shahin Ahmed',addr:'Madhavpur Montola',mobile:'01745-959568',orders:1,rev:257500,paid:9000,kg:1500,due:461860,adv:0,first:'25 Aug 2023',last:'25 Aug 2023',
+  rows:[{s:'10087',d:'25 Aug 2023',v:257500,prev:213360,grand:470860,p:9000,du:461860,adv:0,bank:0,kg:1500,n:'Pickup ৳4,000 · driver advance ৳5,000 · Return: chili 22.8 kg + coriander 170 kg + turmeric 25 kg — next challan'}]},
+'973':{name:'Tasneem (Code 973)',mgr:'Shahin Ahmed',addr:'Madhavpur Montola',mobile:'01745-959568',orders:1,rev:304000,paid:304000,kg:1500,due:0,adv:0,first:'15 Aug 2023',last:'15 Aug 2023',
+  rows:[{s:'10083',d:'15 Aug 2023',v:304000,prev:0,grand:304000,p:304000,du:0,adv:0,bank:304000,kg:1500,n:'Turmeric 1,300 + Chili 100 + Coriander 100'}]},
+'975':{name:'Tasneem (Code 975)',mgr:'Shahin Ahmed',addr:'Madhavpur Montola',mobile:'01745-959568',orders:1,rev:317300,paid:54000,kg:980,due:263300,adv:0,first:'18 Aug 2023',last:'18 Aug 2023',
+  rows:[{s:'10085',d:'18 Aug 2023',v:317300,prev:0,grand:317300,p:54000,du:263300,adv:0,bank:0,kg:980,n:'Pickup ৳4,000 · offer paid ৳50,000'}]},
+'976':{name:'Tasneem (Code 976)',mgr:'Shahin Ahmed',addr:'Madhavpur Montola',mobile:'01745-959568',orders:1,rev:376000,paid:162640,kg:1600,due:213360,adv:0,first:'22 Aug 2023',last:'22 Aug 2023',
+  rows:[{s:'10086',d:'22 Aug 2023',v:376000,prev:0,grand:376000,p:162640,du:213360,adv:0,bank:0,kg:1600,n:'Pickup ৳4,000 · offer 1 paid ৳1,00,000 · SR commission ৳58,640'}]},
+};
+
+const DISPATCH=[
+  {s:'10001',d:'13 Sep 2022',dlr:'Tasneem',code:'965',ch:22,tu:41,co:11,te:7,tot:83,val:24740},
+  {s:'10002',d:'30 Sep 2022',dlr:'Tasneem',code:'965',ch:6,tu:7,co:6,te:70,tot:99,val:32900},
+  {s:'10003',d:'16 Oct 2022',dlr:'Tasneem',code:'965',ch:246,tu:20,co:50,te:100,tot:416,val:119070},
+  {s:'10004',d:'23 Oct 2022',dlr:'Tasneem',code:'965',ch:100,tu:50,co:30,te:30,tot:210,val:53950},
+  {s:'10007',d:'27 Nov 2022',dlr:'Tasneem',code:'965',ch:392,tu:474,co:340,te:870,tot:2236,val:27749},
+  {s:'10008',d:'29 Nov 2022',dlr:'Tasneem',code:'965',ch:250,tu:50,co:20,te:0,tot:328,val:103062},
+  {s:'10011',d:'24 Dec 2022',dlr:'Tasneem',code:'965',ch:300,tu:0,co:0,te:0,tot:300,val:100500},
+  {s:'10013',d:'17 Jan 2023',dlr:'Tasneem',code:'965',ch:285,tu:0,co:0,te:50,tot:335,val:110575},
+  {s:'10023',d:'29 Mar 2023',dlr:'Tasneem',code:'965',ch:775,tu:100,co:100,te:20,tot:995,val:312100},
+  {s:'10024',d:'09 Apr 2023',dlr:'Tasneem',code:'965',ch:800,tu:100,co:100,te:0,tot:1000,val:307000},
+  {s:'10028',d:'15 Feb 2023',dlr:'Nishikant',code:'966',ch:250,tu:150,co:150,te:50,tot:600,val:145500},
+  {s:'10033',d:'02 Apr 2023',dlr:'Nishikant',code:'966',ch:800,tu:200,co:150,te:0,tot:1150,val:330750},
+  {s:'10034',d:'09 Apr 2023',dlr:'Nishikant',code:'966',ch:550,tu:0,co:0,te:0,tot:550,val:189750},
+  {s:'10035',d:'24 Feb 2023',dlr:'Sufia',code:'967',ch:140,tu:100,co:50,te:42,tot:332,val:107170},
+  {s:'10042',d:'11 Oct 2022',dlr:'Abdul Hannan',code:'969',ch:30,tu:30,co:20,te:0,tot:80,val:35150},
+  {s:'10044',d:'08 Dec 2022',dlr:'Ma Enterprises',code:'970',ch:150,tu:80,co:50,te:0,tot:280,val:71700},
+  {s:'10045',d:'09 May 2023',dlr:'Shaon',code:'971',ch:600,tu:200,co:400,te:0,tot:1200,val:302000},
+  {s:'10046',d:'06 May 2023',dlr:'Shaon',code:'971',ch:600,tu:600,co:0,te:0,tot:1200,val:306000},
+  {s:'10054',d:'25 May 2023',dlr:'Tasneem',code:'965',ch:600,tu:200,co:200,te:0,tot:1000,val:273000},
+  {s:'10056',d:'29 May 2023',dlr:'Tasneem',code:'965',ch:300,tu:200,co:500,te:0,tot:1000,val:219000},
+  {s:'10058',d:'31 May 2023',dlr:'Tasneem',code:'965',ch:600,tu:200,co:200,te:0,tot:1000,val:273000},
+  {s:'10066',d:'26 Jun 2023',dlr:'Nishikant',code:'966',ch:1000,tu:400,co:700,te:0,tot:2100,val:530000},
+  {s:'10067',d:'28 Jun 2023',dlr:'Sufia',code:'967',ch:1200,tu:200,co:300,te:0,tot:1700,val:496500},
+  {s:'10069',d:'25 Jun 2023',dlr:'Abdul Hannan',code:'969',ch:900,tu:300,co:200,te:0,tot:1400,val:393000},
+  {s:'10070',d:'27 Jun 2023',dlr:'Ma Enterprises',code:'970',ch:800,tu:100,co:100,te:0,tot:1000,val:309000},
+  {s:'10071',d:'13 Jul 2023',dlr:'Shaon',code:'971',ch:870,tu:300,co:100,te:0,tot:1270,val:366150},
+  {s:'10073',d:'18 Jul 2023',dlr:'Shaon',code:'971',ch:600,tu:200,co:400,te:0,tot:1200,val:306000},
+  {s:'10076',d:'28 Jul 2023',dlr:'Tasneem',code:'965',ch:1000,tu:0,co:400,te:0,tot:1400,val:411000},
+  {s:'10078',d:'01 Aug 2023',dlr:'Tasneem',code:'965',ch:1000,tu:400,co:0,te:0,tot:1400,val:459000},
+  {s:'10080',d:'09 Aug 2023',dlr:'Shaon',code:'971',ch:850,tu:50,co:100,te:0,tot:1000,val:355500},
+  {s:'10082',d:'13 Aug 2023',dlr:'Tasneem(972)',code:'972',ch:1200,tu:200,co:100,te:0,tot:1500,val:528000},
+  {s:'10083',d:'15 Aug 2023',dlr:'Tasneem(973)',code:'973',ch:100,tu:1300,co:100,te:0,tot:1500,val:304000},
+  {s:'10084',d:'16 Aug 2023',dlr:'Tasneem(974)',code:'974',ch:100,tu:1135,co:265,te:0,tot:1500,val:297200},
+  {s:'10085',d:'18 Aug 2023',dlr:'Tasneem(975)',code:'975',ch:700,tu:80,co:200,te:0,tot:980,val:317300},
+  {s:'10086',d:'22 Aug 2023',dlr:'Tasneem(976)',code:'976',ch:400,tu:600,co:600,te:0,tot:1600,val:376000},
+  {s:'10087',d:'25 Aug 2023',dlr:'Tasneem(977)',code:'977',ch:0,tu:500,co:1000,te:0,tot:1500,val:257500},
+  {s:'10091',d:'31 Aug 2023',dlr:'Tasneem',code:'965',ch:1500,tu:0,co:0,te:0,tot:1500,val:577500},
+  {s:'10092',d:'05 Sep 2023',dlr:'Tasneem',code:'965',ch:477,tu:500,co:420,te:0,tot:1397,val:345445},
+  {s:'10093',d:'06 Sep 2023',dlr:'Shaon',code:'971',ch:366,tu:181,co:51,te:0,tot:598,val:182961},
+  {s:'10094',d:'08 Sep 2023',dlr:'Tasneem',code:'965',ch:750,tu:750,co:0,te:0,tot:1500,val:427500},
+  {s:'10098',d:'20 Sep 2023',dlr:'Tasneem',code:'965',ch:1050,tu:250,co:250,te:0,tot:1550,val:491750},
+  {s:'10099',d:'22 Sep 2023',dlr:'Sufia',code:'967',ch:900,tu:500,co:300,te:0,tot:1700,val:488500},
+  {s:'10100',d:'28 Sep 2023',dlr:'Rubel',code:'968',ch:1140,tu:1060,co:0,te:0,tot:2200,val:635000},
+  {s:'10102',d:'04 Oct 2023',dlr:'Tasneem',code:'965',ch:530,tu:870,co:800,te:0,tot:2200,val:497000},
+  {s:'10103',d:'07 Oct 2023',dlr:'Tasneem',code:'965',ch:1260,tu:380,co:0,te:18,tot:1658,val:559990},
+  {s:'10104',d:'18 Oct 2023',dlr:'Tasneem',code:'965',ch:495,tu:680,co:525,te:0,tot:1700,val:403000},
+  {s:'10107',d:'26 Oct 2023',dlr:'Tasneem',code:'965',ch:700,tu:700,co:400,te:0,tot:1800,val:465000},
+  {s:'10108',d:'31 Oct 2023',dlr:'Tasneem',code:'965',ch:1010,tu:820,co:640,te:0,tot:2470,val:646150},
+  {s:'10109',d:'26 Oct 2023',dlr:'Shaon',code:'971',ch:375,tu:275,co:350,te:0,tot:1000,val:253000},
+];
+
+const RETURNS=[
+  {s:'10004',d:'23 Oct 2022',dlr:'Tasneem 965',type:'Return',prod:'Chili',qty:'10 kg',val:'~৳3,200',st:'settled',n:'Chili return 10 kg settled against commission'},
+  {s:'10005',d:'15 Nov 2022',dlr:'Tasneem 965',type:'Damage',prod:'Turmeric',qty:'~5 kg',val:'৳1,035',st:'settled',n:'Cracked turmeric packaging — ৳1,035 credited'},
+  {s:'10007',d:'27 Nov 2022',dlr:'Tasneem 965',type:'Damage',prod:'Mixed',qty:'~50 kg est.',val:'~৳15,000',st:'settled',n:'Damaged goods returned, deducted from balance'},
+  {s:'10011',d:'24 Dec 2022',dlr:'Tasneem 965',type:'Defect',prod:'Chili',qty:'~43 kg',val:'৳14,420',st:'settled',n:'Factory production defect — credit ৳14,420 issued'},
+  {s:'10023',d:'29 Mar 2023',dlr:'Tasneem 965',type:'Return',prod:'Mixed',qty:'~43 kg',val:'৳14,850',st:'settled',n:'Return goods ৳14,850 credited'},
+  {s:'10048',d:'17 May 2023',dlr:'Tasneem 965',type:'Return',prod:'Chili',qty:'160 kg',val:'৳47,200',st:'settled',n:'295 × 160 = ৳47,200 — fully credited'},
+  {s:'10050',d:'22 May 2023',dlr:'Sufia 967',type:'Return',prod:'Mixed',qty:'~7 kg',val:'৳2,315',st:'settled',n:'Return goods ৳2,315 + SR commission ৳1,950'},
+  {s:'10071',d:'13 Jul 2023',dlr:'Shaon 971',type:'Return',prod:'Coriander',qty:'200 kg',val:'৳33,000',st:'settled',n:'Coriander 200 kg return — settled same memo'},
+  {s:'10077',d:'31 Jul 2023',dlr:'Shaon 971',type:'Return',prod:'Coriander',qty:'190+50 kg',val:'~৳40,000',st:'settled',n:'Prior & current coriander returns settled'},
+  {s:'10087',d:'25 Aug 2023',dlr:'Tasneem 977',type:'Return',prod:'Chili+Cor+Tur',qty:'22.8+170+25 kg',val:'~৳35,000',st:'pending',n:'To be settled in next challan'},
+  {s:'10088',d:'28 Aug 2023',dlr:'Tasneem 965',type:'Return',prod:'Coriander',qty:'500 kg',val:'~৳82,500',st:'pending',n:'500 kg coriander return — next challan settlement'},
+  {s:'10089',d:'30 Aug 2023',dlr:'Tasneem 965',type:'Return',prod:'Turmeric+Cor+Chili',qty:'25+590+80 kg',val:'~৳1,00,000',st:'settled',n:'Multiple returns settled — 80 kg coriander pending'},
+  {s:'10092',d:'05 Sep 2023',dlr:'Tasneem 965',type:'Return',prod:'Coriander+Chili',qty:'80+22.8 kg',val:'~৳18,000',st:'settled',n:'Returns from 25 Aug memo settled'},
+  {s:'10093',d:'06 Sep 2023',dlr:'Shaon 971',type:'Return',prod:'Ch+Tu+Co',qty:'33.7+18.7+114 kg',val:'~৳27,000',st:'settled',n:'All three products returned and settled'},
+  {s:'10094',d:'08 Sep 2023',dlr:'Tasneem 965',type:'Short',prod:'Chili',qty:'25 kg',val:'~৳9,625',st:'settled',n:'25 kg shortfall from 31 Aug memo resupplied'},
+  {s:'10095',d:'12 Sep 2023',dlr:'Tasneem 965',type:'Return',prod:'Tu+Ch+Co',qty:'200+33+246 kg',val:'~৳75,000',st:'settled',n:'All returns settled in this memo'},
+  {s:'10097',d:'14 Sep 2023',dlr:'Tasneem 965',type:'Return',prod:'Turmeric+Coriander',qty:'146+29 kg',val:'~৳28,000',st:'settled',n:'Returns settled'},
+  {s:'10106',d:'22 Oct 2023',dlr:'Tasneem 965',type:'Return',prod:'Turmeric+Chili',qty:'390+40 kg',val:'~৳86,650',st:'settled',n:'Turmeric 390 kg + chili 40 kg return paid'},
+];
+
+const COMMISSIONS=[
+  {s:'10001',d:'13 Sep 2022',dlr:'Tasneem 965',kg:'—',rate:'—',amt:2325,n:'Dealer commission ৳2,325'},
+  {s:'10002',d:'30 Sep 2022',dlr:'Tasneem 965',kg:'—',rate:'—',amt:1485,n:'Dealer commission ৳1,485'},
+  {s:'10003',d:'16 Oct 2022',dlr:'Tasneem 965',kg:'—',rate:'—',amt:10650,n:'Depot dealer commission ৳10,650'},
+  {s:'10009',d:'09 Dec 2022',dlr:'Tasneem 965',kg:'—',rate:'—',amt:10922,n:'SR commission ৳10,922'},
+  {s:'10014',d:'22 Jan 2023',dlr:'Tasneem 965',kg:'983',rate:'15',amt:14745,n:'983 × ৳15 = ৳14,745'},
+  {s:'10018',d:'16 Feb 2023',dlr:'Tasneem 965',kg:'985',rate:'15',amt:14775,n:'985 × ৳15 = ৳14,775'},
+  {s:'10024',d:'09 Apr 2023',dlr:'Tasneem 965',kg:'2,230',rate:'15',amt:33450,n:'2,230 × ৳15 = ৳33,450 · Mar commission'},
+  {s:'10027',d:'11 May 2023',dlr:'Tasneem 965',kg:'1,850',rate:'15',amt:27750,n:'1,850 × ৳15 = ৳27,750'},
+  {s:'10031',d:'15 Mar 2023',dlr:'Nishikant 966',kg:'1,400',rate:'15',amt:21000,n:'1,400 × ৳15 = ৳21,000'},
+  {s:'10032',d:'23 Mar 2023',dlr:'Nishikant 966',kg:'—',rate:'—',amt:8250,n:'SR commission ৳8,250'},
+  {s:'10050',d:'22 May 2023',dlr:'Sufia 967',kg:'—',rate:'—',amt:1950,n:'SR commission ৳1,950'},
+  {s:'10057',d:'May 2023',dlr:'Shaon 971',kg:'3,900',rate:'15',amt:49000,n:'3,900 × ৳15 = ৳58,500 − ৳9,500 = ৳49,000'},
+  {s:'10058',d:'31 May 2023',dlr:'Tasneem 965',kg:'5,870',rate:'15',amt:88050,n:'May total 5,870 kg × ৳15 = ৳88,050'},
+  {s:'10059',d:'03 Jun 2023',dlr:'Nishikant 966',kg:'1,700',rate:'15',amt:25500,n:'Apr lifting 1,700 × ৳15 = ৳25,500'},
+  {s:'10071',d:'13 Jul 2023',dlr:'Tasneem 965',kg:'—',rate:'—',amt:114750,n:'Cumulative SR commission ৳1,14,750 settled'},
+  {s:'10073',d:'18 Jul 2023',dlr:'Shaon 971',kg:'—',rate:'—',amt:54300,n:'SR commission ৳54,300 settled'},
+  {s:'10080',d:'09 Aug 2023',dlr:'Shaon 971',kg:'3,410',rate:'15',amt:51150,n:'3,410 × ৳15 = ৳51,150 Jul + GM deposit 3,410 × ৳10'},
+  {s:'10082',d:'13 Aug 2023',dlr:'Tasneem 972',kg:'4,970',rate:'15',amt:74550,n:'4,970 × ৳15 = ৳74,550'},
+  {s:'10091',d:'31 Aug 2023',dlr:'Tasneem 965',kg:'14,455',rate:'15',amt:216825,n:'14,455 × ৳15 = ৳2,16,825 Aug month'},
+  {s:'10101',d:'03 Oct 2023',dlr:'Shaon 971',kg:'598',rate:'15',amt:8970,n:'598 × ৳15 = ৳8,970 Sep commission'},
+  {s:'10092',d:'05 Sep 2023',dlr:'Tasneem 965',kg:'577',rate:'20',amt:114000,n:'577 × ৳20 = ৳1,14,000 − ৳25,810 prev = ৳88,190 settled'},
+  {s:'10102',d:'04 Oct 2023',dlr:'Tasneem 965',kg:'10,699',rate:'15',amt:160485,n:'10,699 × ৳15 = ৳1,60,485 Sep commission'},
+];
+
+/* ═══════════════ SKU DATA ═══════════════ */
+const SKUS=[
+  {name:'Chili Powder',code:'DOHA-CP',kg:45785,pct:51.6,color:'#0F172A',
+   sizes:['25 gm','50 gm','100 gm','500 gm','1 kg','5 kg'],
+   rates:[8.4,16.75,33.5,167.5,345,385]},
+  {name:'Turmeric Powder',code:'DOHA-TP',kg:24821,pct:28.0,color:'#64748B',
+   sizes:['25 gm','50 gm','100 gm','500 gm','1 kg','5 kg'],
+   rates:[7.9,15.75,31.5,157.5,165,925]},
+  {name:'Coriander Powder',code:'DOHA-COP',kg:16454,pct:18.6,color:'#94A3B8',
+   sizes:['25 gm','50 gm','100 gm','500 gm','1 kg','5 kg'],
+   rates:[6.4,12.75,25.5,127.5,145,735]},
+  {name:'Tea Leaves',code:'DOHA-TL',kg:1459,pct:1.6,color:'#CBD5E1',
+   sizes:['10 gm','25 gm','50 gm','100 gm','200 gm','500 gm'],
+   rates:[3.35,8.375,16.75,33.5,67,167.5]},
+  {name:'Cumin Powder',code:'DOHA-CUP',kg:126,pct:0.1,color:'#E2E8F0',
+   sizes:['25 gm','50 gm','100 gm','500 gm'],
+   rates:[16,32,64,320]},
+  {name:'Macaroni',code:'DOHA-MAC',kg:8,pct:0.01,color:'#E2E8F0',
+   sizes:['500 gm','1 kg'],
+   rates:[127.5,255]},
+];
+
+/* ═══════════════ CHARTS ═══════════════ */
+const CD={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#FFFFFF',borderColor:'#E2E8F0',borderWidth:1,titleColor:'#64748B',bodyColor:'#0F172A',titleFont:{family:'JetBrains Mono',size:10},bodyFont:{family:'JetBrains Mono',size:11}}}};
+const SC={x:{grid:{display:false},ticks:{color:'#CBD5E1',font:{family:'JetBrains Mono',size:9},maxRotation:45},border:{display:false}},y:{grid:{color:'#F1F5F9'},ticks:{color:'#CBD5E1',font:{family:'JetBrains Mono',size:9}},border:{display:false}}};
+const charts={};
+function mkBar(id,lbl,data,cols,cb){
+  const c=document.getElementById(id);if(!c)return;
+  if(charts[id])charts[id].destroy();
+  charts[id]=new Chart(c,{type:'bar',data:{labels:lbl,datasets:[{data,backgroundColor:cols,borderRadius:2,borderSkipped:false}]},options:{...CD,scales:SC,plugins:{...CD.plugins,tooltip:{...CD.plugins.tooltip,callbacks:{label:cb||(x=>`${x.raw}`)}}}}});
+}
+function mkLine2(id,lbl,d1,d2){
+  const c=document.getElementById(id);if(!c)return;
+  if(charts[id])charts[id].destroy();
+  charts[id]=new Chart(c,{type:'bar',data:{labels:lbl,datasets:[
+    {label:'Order Value',data:d1.map(v=>Math.round(v/1000)),backgroundColor:MK.map((_,i)=>i>=11?'#0F172A':'#E2E8F0'),borderRadius:2,borderSkipped:false},
+    {label:'Payments',data:d2.map(v=>Math.round(v/1000)),backgroundColor:MK.map((_,i)=>i>=11?'#059669':'rgba(45,148,96,.3)'),borderRadius:2,borderSkipped:false},
+  ]},options:{...CD,scales:{...SC,x:{...SC.x},y:{...SC.y,ticks:{...SC.y.ticks,callback:v=>`৳${v}k`}}},plugins:{...CD.plugins,legend:{display:true,position:'top',labels:{font:{family:'JetBrains Mono',size:9},color:'#64748B',boxWidth:8,padding:10}},tooltip:{...CD.plugins.tooltip,callbacks:{label:x=>` ${x.dataset.label}: ৳${x.raw}k`}}}}});
+}
+function mkDonut(id,lbl,data,cols){
+  const c=document.getElementById(id);if(!c)return;
+  if(charts[id])charts[id].destroy();
+  charts[id]=new Chart(c,{type:'doughnut',data:{labels:lbl,datasets:[{data,backgroundColor:cols,borderWidth:0}]},options:{...CD,cutout:'70%'}});
+}
+function mkStack(id,lbl,sets){
+  const c=document.getElementById(id);if(!c)return;
+  if(charts[id])charts[id].destroy();
+  charts[id]=new Chart(c,{type:'bar',data:{labels:lbl,datasets:sets.map(s=>({...s,stack:'s',borderRadius:0,borderSkipped:false}))},options:{...CD,scales:SC,plugins:{...CD.plugins,legend:{display:true,position:'top',labels:{font:{family:'JetBrains Mono',size:9},color:'#64748B',boxWidth:8,padding:8}}}}});
+}
+function mkHBar(id,lbl,data,cols){
+  const c=document.getElementById(id);if(!c)return;
+  if(charts[id])charts[id].destroy();
+  charts[id]=new Chart(c,{type:'bar',data:{labels:lbl,datasets:[{data,backgroundColor:cols,borderRadius:2,borderSkipped:false}]},options:{...CD,indexAxis:'y',scales:{x:{...SC.x,grid:{color:'#F1F5F9'},ticks:{...SC.x.ticks,maxRotation:0,callback:v=>`৳${Math.round(v/1000)}k`}},y:{...SC.y,grid:{display:false}}},plugins:{...CD.plugins,tooltip:{...CD.plugins.tooltip,callbacks:{label:x=>` ৳${x.raw.toLocaleString()}`}}}}});
+}
+
+function buildCharts(){
+  mkLine2('c-dual',MK,MR,MP);
+  mkDonut('c-donut',['Chili','Turmeric','Coriander','Others'],[45785,24821,16454,1639],['#0F172A','#64748B','#94A3B8','#E2E8F0']);
+  // Outstanding dues bar
+  const dueNames=['977','974','975','976','972','973','971','970 (N/A)'];
+  const dueVals=[461860,327260,290960,213360,83660,84060,74939,9750];
+  mkHBar('c-dues',dueNames,dueVals,dueVals.map((v,i)=>i<3?'#DC2626':i<5?'#D97706':'#CBD5E1'));
+  // Payments
+  mkBar('c-pay',MK,MP.map(v=>Math.round(v/1000)),MK.map((_,i)=>i>=11?'#059669':'rgba(45,148,96,.35)'),x=>`৳${x.raw}k`);
+  // Commission
+  const cAmts=COMMISSIONS.map(c=>c.amt);
+  mkBar('c-comm',COMMISSIONS.map(c=>c.s),cAmts,cAmts.map(v=>v>100000?'#0F172A':v>30000?'#64748B':'#E2E8F0'),x=>`৳${x.raw.toLocaleString()}`);
+  // Inventory
+  mkStack('c-inv-stk',MK,[
+    {label:'Chili',data:MCH,backgroundColor:'#0F172A'},
+    {label:'Turmeric',data:MTU,backgroundColor:'#64748B'},
+    {label:'Coriander',data:MCO,backgroundColor:'#94A3B8'},
+    {label:'Tea',data:MTE,backgroundColor:'#E2E8F0'},
+  ]);
+  // Returns donut
+  mkDonut('c-ret',['Return','Damage','Defect','Short'],[14,2,2,1],['#2563EB','#DC2626','#D97706','#64748B']);
+  // Analytics
+  mkBar('c-a-rev',MK,MR.map(v=>Math.round(v/1000)),MK.map((_,i)=>i>=11?'#0F172A':'#E2E8F0'),x=>`৳${x.raw}k`);
+  mkStack('c-a-vol',MK,[{label:'Chili',data:MCH,backgroundColor:'#0F172A'},{label:'Turmeric',data:MTU,backgroundColor:'#64748B'},{label:'Coriander',data:MCO,backgroundColor:'#94A3B8'},{label:'Tea',data:MTE,backgroundColor:'#E2E8F0'}]);
+  mkHBar('c-a-prd',['Chili','Turmeric','Coriander','Tea','Cumin','Macaroni'],[45785,24821,16454,1459,126,8],['#0F172A','#64748B','#94A3B8','#CBD5E1','#E2E8F0','#E2E8F0']);
+  mkLine2('c-a-ct',MK,MCH,MTU);
+}
+
+/* ═══════════════ RENDER FUNCTIONS ═══════════════ */
+function renderDashDealers(){
+  const maxR=12981196;
+  document.getElementById('dash-dealers').innerHTML=Object.values(DEALERS).sort((a,b)=>b.rev-a.rev).map(d=>`<tr style="cursor:pointer" onclick="openLedger('${Object.keys(DEALERS).find(k=>DEALERS[k]===d)}')">
+    <td style="font-weight:400;color:var(--ink);font-size:12px">${d.name}</td>
+    <td class="m" style="font-size:10px;color:var(--ink4)">${Object.keys(DEALERS).find(k=>DEALERS[k]===d)}</td>
+    <td class="m">${d.orders}</td>
+    <td class="m">৳${(d.rev/100000).toFixed(2)}L</td>
+    <td class="m">${d.kg.toLocaleString()}</td>
+    <td style="font-size:10px;color:var(--ink4)">${d.first.split(' ').slice(1).join(' ')} → ${d.last.split(' ').slice(1).join(' ')}</td>
+    <td>${d.due>0?`<span class="pill p-over">৳${d.due.toLocaleString()}</span>`:d.adv>0?`<span class="pill p-adv">+৳${d.adv.toLocaleString()}</span>`:'<span class="pill p-ok">Cleared</span>'}</td>
+  </tr>`).join('');
+}
+function renderActivity(){
+  const items=[
+    {t:'ord',title:'Tasneem Enterprises',meta:'Memo #10108 · 31 Oct 2023 · 2,470 kg',amt:'৳6,46,150',cls:'pos'},
+    {t:'pay',title:'Payment received — Tasneem',meta:'Bank ৳7,14,009 + Other ৳1,37,037 · 31 Oct',amt:'৳8,51,046',cls:'pos'},
+    {t:'ord',title:'Tasneem Enterprises',meta:'Memo #10107 · 26 Oct 2023 · 1,800 kg',amt:'৳4,65,000',cls:'pos'},
+    {t:'ord',title:'Shaon Enterprises',meta:'Memo #10109 · 26 Oct 2023 · 1,000 kg',amt:'৳2,53,000',cls:'pos'},
+    {t:'ord',title:'Tasneem Enterprises',meta:'Memo #10106 · 22 Oct 2023 · 1,160 kg',amt:'৳3,64,600',cls:'pos'},
+    {t:'ret',title:'Return — Turmeric 390 kg + Chili 40 kg',meta:'Memo #10106 · Tasneem 965 · Settled',amt:'~৳86,650',cls:'neg'},
+    {t:'ord',title:'Tasneem Enterprises',meta:'Memo #10104 · 18 Oct 2023 · 1,700 kg',amt:'৳4,03,000',cls:'pos'},
+    {t:'ord',title:'Tasneem Enterprises',meta:'Memo #10103 · 07 Oct 2023 · 1,658 kg',amt:'৳5,59,990',cls:'neu'},
+  ];
+  document.getElementById('activity-feed').innerHTML=items.map(i=>`<div class="af-item">
+    <div class="af-icon ${i.t}">${i.t==='ord'?'↑':i.t==='pay'?'৳':'↵'}</div>
+    <div class="af-body"><div class="af-t">${i.title}</div><div class="af-m">${i.meta}</div></div>
+    <div class="af-amt ${i.cls}">${i.amt}</div>
+  </div>`).join('');
+}
+function renderFullDealers(){
+  const maxR=12981196;
+  document.getElementById('full-dealers').innerHTML=Object.entries(DEALERS).sort((a,b)=>b[1].rev-a[1].rev).map(([code,d])=>`<tr style="cursor:pointer" onclick="openLedger('${code}')">
+    <td style="font-weight:400;color:var(--ink)">${d.name}</td>
+    <td class="m" style="font-size:10px;color:var(--ink4)">${code}</td>
+    <td>${d.mgr}</td>
+    <td style="font-size:10px;color:var(--ink3)">${d.addr}</td>
+    <td style="font-size:10px;color:var(--ink4)">${d.mobile||'—'}</td>
+    <td class="m">${d.orders}</td>
+    <td class="m">৳${Math.round(d.rev).toLocaleString()}</td>
+    <td class="m" style="color:var(--gdk)">৳${Math.round(d.paid).toLocaleString()}</td>
+    <td class="m">${d.kg.toLocaleString()}</td>
+    <td><div class="bc" style="min-width:60px"><div class="bf" style="width:${Math.round(d.rev/maxR*100)}%"></div></div></td>
+    <td>${d.due>0?`<span class="pill p-over">৳${d.due.toLocaleString()} due</span>`:d.adv>0?`<span class="pill p-adv">+৳${d.adv.toLocaleString()} adv</span>`:'<span class="pill p-ok">Cleared</span>'}</td>
+  </tr>`).join('');
+}
+function openLedger(code){
+  nav('ledger','Finance');
+  setTimeout(()=>{document.getElementById('ldg-sel').value=code;renderLedger();},40);
+}
+function renderLedger(){
+  const code=document.getElementById('ldg-sel').value;
+  const d=DEALERS[code];if(!d)return;
+  document.getElementById('ldg-title').textContent=`${d.name} — Account Statement`;
+  document.getElementById('ldg-meta').textContent=`Code: ${code} · ${d.addr} · ${d.orders} transactions · ${d.first} → ${d.last}`;
+  document.getElementById('ldg-summary').innerHTML=`
+    <div class="ls"><div class="ls-l">Total Orders</div><div class="ls-v">${d.orders}</div></div>
+    <div class="ls"><div class="ls-l">Total Order Value</div><div class="ls-v">৳${d.rev.toLocaleString()}</div></div>
+    <div class="ls"><div class="ls-l">Total Paid</div><div class="ls-v grn">৳${d.paid.toLocaleString()}</div></div>
+    <div class="ls"><div class="ls-l">Current Balance</div><div class="ls-v ${d.due>0?'red':d.adv>0?'grn blu':''}">${d.due>0?`৳${d.due.toLocaleString()} DUE`:d.adv>0?`৳${d.adv.toLocaleString()} ADV`:'Cleared'}</div></div>`;
+  document.getElementById('ldg-body').innerHTML=d.rows.map(r=>`<tr>
+    <td class="m" style="font-size:10px;font-weight:500">${r.s}</td>
+    <td style="font-size:11px;white-space:nowrap">${r.d}</td>
+    <td class="m">৳${r.v.toLocaleString()}</td>
+    <td class="m" style="color:var(--ink4)">৳${r.prev.toLocaleString()}</td>
+    <td class="m" style="font-weight:500">৳${r.grand.toLocaleString()}</td>
+    <td class="m" style="color:var(--gdk)">৳${r.p.toLocaleString()}</td>
+    <td class="m" style="color:${r.du>0?'var(--rm)':'var(--ink4)'}; font-weight:${r.du>0?'500':'300'}">${r.du>0?`৳${r.du.toLocaleString()}`:'—'}</td>
+    <td class="m" style="color:var(--gdk)">${r.adv>0?`৳${r.adv.toLocaleString()}`:'—'}</td>
+    <td class="m" style="color:var(--bm)">${r.bank>0?`৳${r.bank.toLocaleString()}`:'—'}</td>
+    <td class="m">${r.kg}</td>
+    <td style="font-size:10px;color:var(--ink4);max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.n||'—'}</td>
+  </tr>`).join('');
+}
+function renderProducts(){
+  document.getElementById('prod-catalog').innerHTML=SKUS.map(p=>`<div class="prod-card">
+    <div class="prod-name">${p.name}</div>
+    <div class="prod-code">${p.code} · DOHA BRAND</div>
+    <div class="prod-bar"><div class="prod-fill" style="width:${Math.min(100,p.kg/45785*100)}%;background:${p.color}"></div></div>
+    <div class="prod-stats"><div class="prod-kg">${p.kg.toLocaleString()} kg</div><div class="prod-pct">${p.pct}%</div></div>
+    <div class="prod-sizes">${p.sizes.map((sz,i)=>`<span class="sz">${sz} · ৳${p.rates[i]}</span>`).join('')}</div>
+  </div>`).join('');
+}
+function renderInvSkuCards(){
+  document.getElementById('inv-sku-cards').innerHTML=SKUS.map(p=>`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--ln)">
+    <div style="width:28px;height:28px;border-radius:5px;background:${p.color};flex-shrink:0"></div>
+    <div style="flex:1">
+      <div style="font-size:12px;font-weight:400;color:var(--ink)">${p.name}</div>
+      <div class="bc" style="margin-top:4px"><div class="bf" style="width:${Math.min(100,p.kg/45785*100)}%;background:${p.color}"></div></div>
+    </div>
+    <div style="text-align:right"><div class="m" style="font-size:12px;font-weight:500">${p.kg.toLocaleString()} kg</div><div class="m" style="font-size:9px;color:var(--ink4)">${p.pct}%</div></div>
+  </div>`).join('')+'<div style="padding-top:8px"></div>';
+}
+function renderDispatch(data){
+  document.getElementById('disp-body').innerHTML=data.map(r=>`<tr>
+    <td class="m" style="font-size:10px;font-weight:500">${r.s}</td>
+    <td style="font-size:10px;white-space:nowrap">${r.d}</td>
+    <td style="font-size:11px;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.dlr}</td>
+    <td class="m" style="font-size:10px;color:var(--ink4)">${r.code}</td>
+    <td class="m">${r.ch||'—'}</td>
+    <td class="m">${r.tu||'—'}</td>
+    <td class="m">${r.co||'—'}</td>
+    <td class="m">${r.te||'—'}</td>
+    <td class="m" style="font-weight:500;color:var(--ink)">${r.tot.toLocaleString()}</td>
+    <td class="m">৳${Math.round(r.val/1000)}k</td>
+  </tr>`).join('');
+}
+let filtCode='all';
+function filtDisp(code,btn){
+  filtCode=code;
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+  const q=document.getElementById('disp-srch').value.toLowerCase();
+  const d=DISPATCH.filter(r=>(code==='all'||r.code===code)&&(!q||(r.s.includes(q)||r.dlr.toLowerCase().includes(q)||r.code.includes(q))));
+  renderDispatch(d);
+}
+function srchDisp(){
+  const q=document.getElementById('disp-srch').value.toLowerCase();
+  const d=DISPATCH.filter(r=>(filtCode==='all'||r.code===filtCode)&&(!q||(r.s.includes(q)||r.dlr.toLowerCase().includes(q)||r.code.includes(q))));
+  renderDispatch(d);
+}
+function renderReturns(){
+  const rc={Return:'p-blu',Damage:'p-over',Defect:'p-due',Short:'p-gray'};
+  const dc={Return:'var(--bm)',Damage:'var(--rm)',Defect:'var(--am)',Short:'#64748B'};
+  document.getElementById('ret-body').innerHTML=RETURNS.map(r=>`<tr>
+    <td class="m" style="font-size:10px">${r.s}</td>
+    <td style="font-size:10px;white-space:nowrap">${r.d}</td>
+    <td style="font-size:11px">${r.dlr}</td>
+    <td><span class="pill ${rc[r.type]||'p-gray'}">${r.type}</span></td>
+    <td style="font-size:11px">${r.prod}</td>
+    <td class="m" style="font-size:10px;white-space:nowrap">${r.qty}</td>
+    <td class="m" style="font-size:10px">${r.val}</td>
+    <td><span class="pill ${r.st==='settled'?'p-ok':'p-due'}">${r.st==='settled'?'✓ Settled':'⏳ Pending'}</span></td>
+    <td style="font-size:10px;color:var(--ink4);max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.n}</td>
+  </tr>`).join('');
+  document.getElementById('ret-tl').innerHTML=[...RETURNS].reverse().map(r=>`<div class="tl-item">
+    <div class="tl-dot" style="background:${dc[r.type]}"></div>
+    <div class="tl-body">
+      <div class="tl-t">${r.dlr}</div>
+      <div class="tl-m">${r.d} · Memo ${r.s}</div>
+      <div class="tl-n">${r.prod} · ${r.qty} · ${r.val}</div>
+      <div class="tl-tags"><span class="pill ${rc[r.type]||'p-gray'}">${r.type}</span><span class="pill ${r.st==='settled'?'p-ok':'p-due'}">${r.st==='settled'?'✓ Settled':'⏳ Pending'}</span></div>
+    </div></div>`).join('');
+}
+function renderDamage(){
+  const ev=[
+    {s:'10005',d:'15 Nov 2022',dlr:'Tasneem 965',type:'Damage',prod:'Turmeric (cracked packaging)',detail:'Cracked turmeric packaging discovered on delivery. ৳1,035 deducted from memo value and credited back to dealer.',res:'৳1,035 credit issued'},
+    {s:'10007',d:'27 Nov 2022',dlr:'Tasneem 965',type:'Damage',prod:'Mixed SKUs (damage goods)',detail:'Damaged goods returned from depot. Deducted from outstanding previous balance. Exact quantity not specified — estimated ~50 kg.',res:'Deducted from balance'},
+    {s:'10011',d:'24 Dec 2022',dlr:'Tasneem 965',type:'Defect',prod:'Chili Powder (production defect)',detail:'Factory production defect identified. ~43 kg of chili powder returned. Credit ৳14,420 issued — largest single defect event in 14-month period.',res:'৳14,420 credit issued'},
+    {s:'10087',d:'25 Aug 2023',dlr:'Tasneem 977',type:'Pending',prod:'Chili 22.8 kg + Coriander 170 kg + Turmeric 25 kg',detail:'Three products returned post-delivery. Memo noted for settlement in next challan — pending due to dealer account issues (৳4,61,860 outstanding).',res:'Pending · next challan'},
+  ];
+  const dc={Damage:'var(--rm)',Defect:'var(--am)',Pending:'var(--am)'};
+  document.getElementById('dmg-tl').innerHTML=ev.map(e=>`<div class="tl-item">
+    <div class="tl-dot" style="background:${dc[e.type]}"></div>
+    <div class="tl-body">
+      <div class="tl-t">${e.dlr} — ${e.prod}</div>
+      <div class="tl-m">${e.d} · Memo ${e.s}</div>
+      <div class="tl-n">${e.detail}</div>
+      <div class="tl-tags"><span class="pill ${e.type==='Damage'?'p-over':e.type==='Pending'?'p-due':'p-due'}">${e.type}</span><span class="pill p-gray">${e.res}</span></div>
+    </div></div>`).join('');
+}
+function renderPayments(){
+  const rows=Object.values(DEALERS).flatMap(d=>d.rows.map(r=>({...r,dlr:d.name,code:Object.keys(DEALERS).find(k=>DEALERS[k]===d)}))).filter(r=>r.p>0).sort((a,b)=>b.p-a.p).slice(0,20);
+  document.getElementById('pay-body').innerHTML=rows.map(r=>`<tr>
+    <td class="m" style="font-size:10px">${r.s}</td>
+    <td style="font-size:10px;white-space:nowrap">${r.d}</td>
+    <td style="font-size:11px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.dlr}</td>
+    <td class="m" style="font-size:10px;color:var(--ink4)">${r.code}</td>
+    <td class="m" style="color:var(--bm)">${r.bank>0?`৳${r.bank.toLocaleString()}`:'—'}</td>
+    <td class="m">${(r.p-r.bank)>0?`৳${(r.p-r.bank).toLocaleString()}`:'—'}</td>
+    <td class="m" style="font-weight:500;color:var(--gdk)">৳${r.p.toLocaleString()}</td>
+    <td style="font-size:10px;color:var(--ink4);max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.n||'—'}</td>
+  </tr>`).join('');
+}
+function renderCommissions(){
+  document.getElementById('comm-body').innerHTML=COMMISSIONS.map(c=>`<tr>
+    <td class="m" style="font-size:10px">${c.s}</td>
+    <td style="font-size:10px;white-space:nowrap">${c.d}</td>
+    <td style="font-size:11px">${c.dlr}</td>
+    <td class="m" style="font-size:10px">${c.kg!=='—'?`${c.kg} kg × ৳${c.rate}`:'Lump sum'}</td>
+    <td class="m" style="font-weight:500;color:var(--ink)">৳${c.amt.toLocaleString()}</td>
+    <td style="font-size:10px;color:var(--ink4);max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.n}</td>
+  </tr>`).join('');
+}
+function renderAnalyticsDealers(){
+  const maxR=12981196;
+  document.getElementById('a-dlr-body').innerHTML=Object.entries(DEALERS).sort((a,b)=>b[1].rev-a[1].rev).map(([code,d])=>`<tr>
+    <td style="font-weight:400">${d.name}</td>
+    <td class="m" style="font-size:10px;color:var(--ink4)">${code}</td>
+    <td class="m">${d.orders}</td>
+    <td class="m">৳${d.rev.toLocaleString()}</td>
+    <td class="m">${d.kg.toLocaleString()}</td>
+    <td class="m" style="color:var(--gdk)">৳${d.paid.toLocaleString()}</td>
+    <td><div class="bc"><div class="bf" style="width:${Math.round(d.rev/maxR*100)}%"></div></div></td>
+    <td>${d.due>0?`<span class="pill p-over">৳${d.due.toLocaleString()}</span>`:d.adv>0?`<span class="pill p-adv">+৳${d.adv.toLocaleString()}</span>`:'<span class="pill p-ok">Cleared</span>'}</td>
+  </tr>`).join('');
+}
+
+/* ═══════════════ ORDER ENTRY ═══════════════ */
+let skuN=0;
+function addSKU(){
+  skuN++;
+  const row=document.createElement('div');row.className='sku-row';row.id=`sk-${skuN}`;
+  row.innerHTML=`<select onchange="chgSKUProd(${skuN})">${SKUS.map((s,i)=>`<option value="${i}">${s.name}</option>`).join('')}</select>
+    <select id="ss-${skuN}" onchange="chgSKUSz(${skuN})">${SKUS[0].sizes.map((sz,i)=>`<option value="${i}">${sz}</option>`).join('')}</select>
+    <input type="number" id="sq-${skuN}" value="100" min="1" oninput="updPrev()"/>
+    <input type="number" id="sr-${skuN}" value="${SKUS[0].rates[0]}" step="0.01" oninput="updPrev()"/>
+    <button class="del-btn" onclick="document.getElementById('sk-${skuN}').remove();updPrev()">×</button>`;
+  document.getElementById('sku-rows').appendChild(row);updPrev();
+}
+function chgSKUProd(id){
+  const pi=document.querySelector(`#sk-${id} select`).value;
+  const p=SKUS[pi];
+  const ss=document.getElementById(`ss-${id}`);
+  ss.innerHTML=p.sizes.map((sz,i)=>`<option value="${i}">${sz}</option>`).join('');
+  document.getElementById(`sr-${id}`).value=p.rates[0];
+  updPrev();
+}
+function chgSKUSz(id){
+  const pi=document.querySelector(`#sk-${id} select`).value;
+  const si=document.getElementById(`ss-${id}`).value;
+  document.getElementById(`sr-${id}`).value=SKUS[pi].rates[si]||0;
+  updPrev();
+}
+const DEALER_MAP={
+  '965':{name:'Tasneem Enterprises',addr:'Madhavpur Montola, Habiganj',code:'965'},
+  '971':{name:'Shaon Enterprises',addr:'Sunamganj Sadar',code:'971'},
+  '966':{name:'Nishikant Store',addr:'Pagla, Sunamganj',code:'966'},
+  '967':{name:'Sufia Enterprises',addr:'Bishwanath, Sylhet',code:'967'},
+  '968':{name:'Rubel Enterprises',addr:'Laldighi Par',code:'968'},
+  '969':{name:'Abdul Hannan & Sons',addr:'Saidpur',code:'969'},
+  '970':{name:'Ma Enterprises',addr:'Rajnagar',code:'970'},
+};
+function updPrev(){
+  const dv=document.getElementById('o-dlr').value;
+  const dm=DEALER_MAP[dv]||{name:'—',addr:'—',code:dv};
+  const dt=document.getElementById('o-date').value;
+  const mgr=document.getElementById('o-mgr').value;
+  const prevBal=parseFloat(document.getElementById('o-prevbal').value)||0;
+  const payment=parseFloat(document.getElementById('o-payment').value)||0;
+  // Invoice header
+  document.getElementById('inv-dealer').textContent=dm.name;
+  document.getElementById('inv-code').textContent=`Code: ${dm.code} · ${dm.addr}`;
+  document.getElementById('inv-date').textContent=dt;
+  document.getElementById('inv-mgr').textContent=`SR: ${mgr}`;
+  document.getElementById('inv-prevbal').textContent=`৳${prevBal.toLocaleString()}`;
+  document.getElementById('inv-payment').textContent=`৳${payment.toLocaleString()}`;
+  document.getElementById('inv-prev-sub').textContent=`৳${prevBal.toLocaleString()}`;
+  document.getElementById('inv-pay-sub').textContent=`৳${payment.toLocaleString()}`;
+  // Lines
+  const rows=[...document.querySelectorAll('[id^="sk-"]')];
+  let tot=0,totKg=0,lines='';
+  rows.forEach(row=>{
+    const id=row.id.split('-')[1];
+    const pi=row.querySelector('select')?.value||0;
+    const si=document.getElementById(`ss-${id}`)?.value||0;
+    const pn=SKUS[pi]?.name||'';
+    const sz=SKUS[pi]?.sizes[si]||'';
+    const qty=parseFloat(document.getElementById(`sq-${id}`)?.value)||0;
+    const rt=parseFloat(document.getElementById(`sr-${id}`)?.value)||0;
+    const amt=Math.round(qty*rt);
+    tot+=amt;
+    // estimate kg from size
+    const szVal=parseFloat(sz)||0;
+    const isKg=sz.toLowerCase().includes('kg');
+    const kgEst=isKg?qty*szVal:qty*szVal/1000;
+    totKg+=kgEst;
+    lines+=`<div class="inv-line"><span class="p-name">${pn} · ${sz}</span><span>${qty}</span><span>৳${rt.toFixed(2)}</span><span class="p-total">৳${amt.toLocaleString()}</span></div>`;
+  });
+  document.getElementById('inv-lines').innerHTML=lines||'<div class="inv-empty">Add product lines to see invoice</div>';
+  document.getElementById('inv-total').textContent=`৳${tot.toLocaleString()}`;
+  document.getElementById('inv-order-val').textContent=`৳${tot.toLocaleString()}`;
+  const net=prevBal+tot-payment;
+  document.getElementById('inv-net').textContent=`৳${Math.abs(net).toLocaleString()} ${net>0?'DUE':net<0?'ADVANCE':'CLEARED'}`;
+  document.getElementById('inv-net').style.color=net>0?'var(--rm)':net<0?'var(--gdk)':'var(--ink4)';
+  document.getElementById('inv-vol').textContent=`${totKg.toFixed(1)} kg estimated`;
+}
+function saveOrder(){
+  if(!document.querySelector('[id^="sk-"]'))return;
+  const t=document.getElementById('o-toast');t.style.display='block';
+  setTimeout(()=>t.style.display='none',5000);
+}
+
+/* ═══════════════ NAVIGATION ═══════════════ */
+function nav(page,sec){
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('on'));
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  const el=document.querySelector(`[data-p="${page}"]`);
+  if(el)el.classList.add('on');
+  const pg=document.getElementById(`pg-${page}`);
+  if(pg){pg.classList.remove('on');void pg.offsetWidth;pg.classList.add('on');}
+  document.getElementById('tb-sec').textContent=sec||'Core';
+  document.getElementById('tb-pg').textContent=el?.textContent.trim().replace(/\d+/g,'')||page;
+  document.getElementById('main').scrollTop=0;
+}
+document.querySelectorAll('.sb-item[data-p]').forEach(el=>{
+  el.addEventListener('click',()=>nav(el.dataset.p,el.dataset.s));
+});
+function switchA(btn,id){
+  document.querySelectorAll('.atab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+  ['rev','vol','dlr','prd'].forEach(t=>document.getElementById(`a-${t}`).style.display=t===id?'block':'none');
+  setTimeout(()=>{
+    if(id==='vol'&&!charts['c-a-vol'])buildCharts();
+    if(id==='prd'&&!charts['c-a-prd'])buildCharts();
+  },50);
+}
+
+/* ═══════════════ INIT ═══════════════ */
+renderDashDealers();renderActivity();renderFullDealers();
+renderProducts();renderInvSkuCards();
+renderDispatch(DISPATCH);renderReturns();renderDamage();
+renderPayments();renderCommissions();renderLedger();renderAnalyticsDealers();
+addSKU();updPrev();
+setTimeout(buildCharts,100);
+
+</script>
+</body>
+</html>

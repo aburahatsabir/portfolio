@@ -80,7 +80,7 @@ const Navbar: React.FC = () => {
   return (
     <>
       <nav className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-500 ${isScrolled || isOpen ? 'glass-nav border-b border-slate-100 py-4 shadow-sm' : 'bg-transparent py-8'}`}>
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+        <div className="max-w-[1320px] mx-auto px-[15px] flex items-center justify-between">
           <a href="/" className="flex items-center gap-4 group" onClick={handleLinkClick}>
             <div className="relative w-[42px] h-[42px] flex items-center justify-center overflow-visible bg-transparent">
               <img

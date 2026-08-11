@@ -1,20 +1,36 @@
-import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
-import ReactDOM from 'react-dom';
-import { CERTIFICATES, PLATFORM_METADATA, CATEGORY_METADATA, CertificatePlatform, Certificate, CertificateCategory, CertificateType } from '../content/certificates';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useMemo, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+    ArrowUpRight,
+    Award,
+    BadgeCheck,
+    BookOpenCheck,
+    BriefcaseBusiness,
+    ChevronLeft,
+    ChevronRight,
+    Clock3,
+    Code2,
+    Database,
+    LayoutGrid,
+    Palette,
+    Search,
+    Users,
+    X,
+} from 'lucide-react';
+import { CERTIFICATES, Certificate, CertificateCategory, CertificateType } from '../content/certificates';
 import SectionLabel from './shared/SectionLabel';
 import { trackCustomEvent } from '../utils/analytics';
 
 const revealVariants = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: 18 },
     visible: {
         opacity: 1,
         y: 0,
         transition: {
-            duration: 1.2,
+            duration: 0.45,
             ease: [0.16, 1, 0.3, 1],
-        }
-    }
+        },
+    },
 };
 
 const staggerContainer = {
@@ -22,676 +38,559 @@ const staggerContainer = {
     visible: {
         opacity: 1,
         transition: {
-            staggerChildren: 0.1,
-            delayChildren: 0.05,
-        }
+            staggerChildren: 0.045,
+        },
+    },
+};
+
+const GoogleLogo = () => (
+    <svg className="h-6 md:h-7 w-auto fill-current text-white" viewBox="0 0 272 92" aria-label="Google">
+        <path d="M115.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18c0-12.85 9.99-22.18 22.25-22.18s22.25 9.33 22.25 22.18zm-9.74 0c0-7.98-5.79-13.44-12.51-13.44s-12.51 5.46-12.51 13.44c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44z"/>
+        <path d="M163.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18c0-12.85 9.99-22.18 22.25-22.18s22.25 9.33 22.25 22.18zm-9.74 0c0-7.98-5.79-13.44-12.51-13.44s-12.51 5.46-12.51 13.44c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44z"/>
+        <path d="M209.75 26.34v41.02c0 16.89-9.99 23.78-21.75 23.78-11.09 0-17.65-7.48-20.17-13.61l8.57-3.57c1.51 3.61 5.21 7.9 11.6 7.9 7.65 0 12.44-4.71 12.44-13.61v-3.36h-.34c-2.27 2.77-6.64 5.29-12.18 5.29-11.51 0-21.68-10.08-21.68-22.02 0-12.02 10.17-22.18 21.68-22.18 5.55 0 9.92 2.52 12.18 5.21h.34v-3.87h9.33zm-8.82 21.01c0-7.82-5.21-13.44-11.93-13.44-6.81 0-12.52 5.63-12.52 13.44 0 7.73 5.71 13.44 12.52 13.44 6.72 0 11.93-5.71 11.93-13.44z"/>
+        <path d="M225 3v65h-9.5V3h9.5z"/>
+        <path d="M262.02 54.49l7.56 5.04c-2.44 3.61-8.32 9.83-18.49 9.83-12.6 0-22.02-9.83-22.02-22.18 0-13.19 9.5-22.18 20.92-22.18 11.51 0 17.14 9.16 18.91 14.12l.92 2.44-29.41 12.18c2.27 4.45 5.79 6.72 10.76 6.72 4.96 0 8.4-2.44 10.75-5.97zm-22.77-7.98l19.66-8.15c-1.09-2.77-4.29-6.72-9.16-6.72-5.88 0-10.67 4.71-10.5 14.87z"/>
+        <path d="M35.29 41.59v11.75H56.7c-1.68 5.46-6.47 16.05-21.41 16.05-12.94 0-23.36-10.67-23.36-23.87S22.35 21.65 35.29 21.65c7.39 0 12.35 3.11 15.21 5.8l9.24-9.24C53.77 12.61 45.29 8 35.29 8 15.79 8 0 23.79 0 43.29s15.79 35.29 35.29 35.29c20.34 0 33.87-14.3 33.87-34.46 0-2.44-.25-4.29-.59-6.13H35.29z"/>
+    </svg>
+);
+
+const MicrosoftLogo = () => (
+    <div className="flex items-center gap-2 font-bold tracking-tight text-xl md:text-2xl text-white" aria-label="Microsoft">
+        <svg className="w-5 h-5 md:w-6 md:h-6 shrink-0" viewBox="0 0 23 23">
+            <path fill="#f25022" d="M1 1h10v10H1z"/>
+            <path fill="#7fba00" d="M12 1h10v10H1z"/>
+            <path fill="#00a4ef" d="M1 12h10v10H1z"/>
+            <path fill="#ffb900" d="M12 12h10v10H1z"/>
+        </svg>
+        <span>Microsoft</span>
+    </div>
+);
+
+const MetaLogo = () => (
+    <div className="flex items-center gap-2 font-bold tracking-tight text-xl md:text-2xl text-white" aria-label="Meta">
+        <svg className="w-6 h-6 md:w-7 md:h-7 shrink-0 fill-current text-white" viewBox="0 0 24 24">
+            <path d="M17.472 4.048c-2.457 0-4.607 1.258-6.155 3.125-1.547-1.867-3.697-3.125-6.155-3.125-4.241 0-7.662 3.421-7.662 7.662 0 4.887 4.294 9.176 10.428 12.062 1.092.513 2.686.513 3.778 0 6.134-2.886 10.428-7.175 10.428-12.062 0-4.241-3.421-7.662-7.662-7.662zm-6.155 17.065c-4.996-2.39-8.487-5.918-8.487-9.403 0-2.613 2.118-4.731 4.731-4.731 2.38 0 4.348 1.761 4.673 4.068.084.597.595 1.042 1.198 1.042s1.114-.445 1.198-1.042c.325-2.307 2.293-4.068 4.673-4.068 2.613 0 4.731 2.118 4.731 4.731 0 3.485-3.491 7.013-8.487 9.403-.687.329-1.543.329-2.23 0z"/>
+        </svg>
+        <span>Meta</span>
+    </div>
+);
+
+const IBMLogo = () => (
+    <div className="flex items-center text-white" aria-label="IBM">
+        <svg className="h-6 md:h-7 w-auto fill-current" viewBox="0 0 100 40">
+            <path d="M0 4h30v5H0zM0 11h30v5H0zM0 18h30v5H0zM0 25h30v5H0zM0 32h30v5H0zM35 4h30v5H35zM35 11h30v5H35zM35 18h30v5H35zM35 25h30v5H35zM35 32h30v5H35zM70 4h30v5H70zM70 11h30v5H70zM70 18h30v5H70zM70 25h30v5H70zM70 32h30v5H70z"/>
+        </svg>
+    </div>
+);
+
+const FILTER_OPTIONS: Array<'All' | CertificateCategory> = [
+    'All',
+    'Data',
+    'Technical',
+    'Business',
+    'Design',
+    'Leadership',
+];
+
+const CERTIFICATES_PER_PAGE = 30;
+
+const CATEGORY_ICONS: Record<'All' | CertificateCategory, React.ReactNode> = {
+    All: <LayoutGrid aria-hidden="true" />,
+    Data: <Database aria-hidden="true" />,
+    Technical: <Code2 aria-hidden="true" />,
+    Business: <BriefcaseBusiness aria-hidden="true" />,
+    Design: <Palette aria-hidden="true" />,
+    Leadership: <Users aria-hidden="true" />,
+};
+
+const CERT_TYPE_LABELS: Record<CertificateType, string> = {
+    professional: 'Professional Certificate',
+    specialization: 'Specialization',
+    course: 'Course Certificate',
+};
+
+const TYPE_ORDER: Record<CertificateType, number> = {
+    professional: 0,
+    specialization: 1,
+    course: 2,
+};
+
+const CERTIFICATE_RELEVANCE_RANK: Record<string, number> = {
+    'microsoft-it-support': 1,
+    'google-it-support': 2,
+    'datacamp-ai-engineer-developers-associate': 3,
+    'datacamp-ai-engineer-data-scientists-associate': 4,
+    'datacamp-data-engineer-associate': 5,
+    'google-cloud-data-analytics': 6,
+    'machine-learning-python': 7,
+    'datacamp-data-scientist-associate': 8,
+    'ibm-data-management': 9,
+    'datacamp-data-analyst-associate': 10,
+    'google-data-analytics': 11,
+    'ibm-data-analyst': 12,
+    'meta-data-analyst': 13,
+    'python-basics-data-science': 14,
+    'version-control-git': 15,
+    'html-css-javascript-web': 16,
+    'ibm-data-analytics-excel-r': 17,
+    'excel-data-analytics-visualization': 18,
+    'excel-business-forecasting': 19,
+    'excel-skills-business': 20,
+    'agile-atlassian-jira': 21,
+    'introduction-to-linux': 22,
+    'ai-for-everyone': 23,
+    'career-success': 24,
+    'english-communication-skills': 25,
+    'understanding-modern-finance': 26,
+    'udemy-photoshop-beginner-pro': 27,
+};
+
+const getPlatformLogoAlt = (certificate: Certificate) => {
+    const logoPath = certificate.platformLogo.toLowerCase();
+    if (logoPath.includes('coursera')) return 'Coursera logo';
+    if (logoPath.includes('datacamp')) return 'DataCamp logo';
+    if (logoPath.includes('edx')) return 'edX logo';
+    if (logoPath.includes('udemy')) return 'Udemy logo';
+    if (logoPath.includes('linkedin')) return 'LinkedIn Learning logo';
+    return `${certificate.platform} logo`;
+};
+
+const getPlatformLogoClass = (certificate: Certificate) => {
+    const logoPath = certificate.platformLogo.toLowerCase();
+    if (logoPath.includes('datacamp')) return 'cert-logo--datacamp';
+    if (logoPath.includes('edx')) return 'cert-logo--edx';
+    if (logoPath.includes('udemy')) return 'cert-logo--udemy';
+    if (logoPath.includes('linkedin')) return 'cert-logo--linkedin';
+    return 'cert-logo--coursera';
+};
+
+const getRibbonLabel = (certificate: Certificate) => {
+    if (certificate.certType === 'course') return null;
+    if (certificate.platform === 'DataCamp') return 'Certification Exam';
+
+    return CERT_TYPE_LABELS[certificate.certType];
+};
+
+const getCertificateFacts = (certificate: Certificate) => {
+    if (certificate.platform === 'DataCamp') {
+        return [
+            { type: 'time' as const, label: '2hr' },
+            { type: 'course' as const, label: '30 day' },
+        ];
     }
+
+    const facts: Array<{ type: 'time' | 'course'; label: string }> = [];
+
+    if (certificate.hours) {
+        facts.push({ type: 'time', label: `${certificate.hours}hrs` });
+    }
+
+    if (certificate.courses) {
+        facts.push({ type: 'course', label: `${certificate.courses} courses` });
+    } else if (certificate.certType === 'course') {
+        facts.push({ type: 'course', label: '1 course' });
+    }
+
+    return facts;
 };
 
-const CATEGORY_ICONS: Record<string, React.ReactNode> = {
-    All: (
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="3" y="3" width="7" height="7" rx="1.5" />
-            <rect x="14" y="3" width="7" height="7" rx="1.5" />
-            <rect x="14" y="14" width="7" height="7" rx="1.5" />
-            <rect x="3" y="14" width="7" height="7" rx="1.5" />
-        </svg>
-    ),
-    Technical: (
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M16 18l6-6-6-6M8 6l-6 6 6 6" />
-        </svg>
-    ),
-    Business: (
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="2" y="7" width="20" height="14" rx="2" />
-            <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16" />
-        </svg>
-    ),
-    Data: (
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M12 3c-4.97 0-9 1.79-9 4s4.03 4 9 4 9-1.79 9-4-4.03-4-9-4z" />
-            <path d="M3 7v10c0 2.21 4.03 4 9 4s9-1.79 9-4V7" />
-            <path d="M3 12c0 2.21 4.03 4 9 4s9-1.79 9-4" />
-        </svg>
-    ),
-    Design: (
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="10" />
-            <path d="M12 2A10 10 0 002 12a10 10 0 0010 10 10 10 0 0010-10H12V2z" />
-        </svg>
-    ),
-    Security: (
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-            <path d="M7 11V7a5 5 0 0110 0v4" />
-        </svg>
-    ),
-    Leadership: (
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-            <circle cx="9" cy="7" r="4" />
-            <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
-        </svg>
-    )
+const getCompletionYear = (certificate: Certificate) => {
+    return new Date(certificate.completionDate).getFullYear();
 };
 
-const FilterMenu: React.FC<{
-    anchorRef: React.RefObject<HTMLButtonElement>;
-    activeFilter: string;
-    counts: Record<string, number>;
-    onSelect: (filter: 'All' | CertificateCategory) => void;
-    onClose: () => void;
-}> = ({ anchorRef, activeFilter, counts, onSelect, onClose }) => {
-    const [rect, setRect] = useState<DOMRect | null>(null);
+const getPaginationItems = (currentPage: number, totalPages: number) => {
+    if (totalPages <= 7) {
+        return Array.from({ length: totalPages }, (_, index) => index + 1);
+    }
 
-    useEffect(() => {
-        if (anchorRef.current) {
-            setRect(anchorRef.current.getBoundingClientRect());
-        }
-    }, [anchorRef]);
+    if (currentPage <= 4) {
+        return [1, 2, 3, 4, 5, 'ellipsis-end', totalPages] as const;
+    }
 
-    if (!rect) return null;
+    if (currentPage >= totalPages - 3) {
+        return [1, 'ellipsis-start', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages] as const;
+    }
 
-    const filterOptions: Array<'All' | CertificateCategory> = [
-        'All', 'Technical', 'Business', 'Data', 'Design', 'Leadership'
-    ];
-
-    return ReactDOM.createPortal(
-        <>
-            <div className="fixed inset-0 z-[9998]" onClick={onClose} />
-            <motion.div
-                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                style={{
-                    position: 'absolute',
-                    top: rect.bottom + window.scrollY + 8,
-                    right: window.innerWidth - rect.right,
-                    width: 240,
-                    zIndex: 9999
-                }}
-                className="bg-white/80 backdrop-blur-3xl border border-white/40 shadow-[0_30px_60px_rgba(0,0,0,0.1)] rounded-2xl p-2 overflow-hidden"
-            >
-                <div className="px-2 pt-2 space-y-1">
-                    {filterOptions.map((option) => (
-                        <button
-                            key={option}
-                            onClick={() => onSelect(option)}
-                            className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-500 group ${activeFilter === option
-                                ? 'bg-slate-900 text-white shadow-2xl shadow-slate-900/20'
-                                : 'hover:bg-slate-50 text-slate-500 hover:text-slate-900'
-                                }`}
-                        >
-                            <div className="flex items-center gap-4">
-                                <div className={`${activeFilter === option ? 'text-white' : 'text-slate-400 group-hover:text-blue-600'} transition-transform duration-500 group-hover:scale-110`}>
-                                    {CATEGORY_ICONS[option]}
-                                </div>
-                                <span className={`text-[12px] font-black tracking-tight uppercase transition-all duration-500 ${activeFilter === option ? 'translate-x-1' : 'group-hover:translate-x-1'}`}>
-                                    {option}
-                                </span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <span className={`text-[10px] font-bold ${activeFilter === option ? 'text-white/30' : 'text-slate-200 group-hover:text-slate-400'}`}>
-                                    {counts[option]}
-                                </span>
-                                {activeFilter === option && (
-                                    <div className="w-1.5 h-1.5 rounded-full bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.5)]" />
-                                )}
-                            </div>
-                        </button>
-                    ))}
-                </div>
-            </motion.div>
-        </>,
-        document.body
-    );
+    return [1, 'ellipsis-start', currentPage - 1, currentPage, currentPage + 1, 'ellipsis-end', totalPages] as const;
 };
-
-// Hover Popover Component — Udemy-style detailed preview, rendered via Portal
-const HoverPopover: React.FC<{
-    certificate: Certificate;
-    anchorRect: DOMRect | null;
-    onMouseEnter: () => void;
-    onMouseLeave: () => void;
-}> = ({ certificate, anchorRect, onMouseEnter, onMouseLeave }) => {
-    if (!anchorRect) return null;
-
-    const popoverWidth = 360;
-    const gap = 12;
-    const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
-
-    // Determine if popover should go left or right of the card
-    const spaceRight = viewportWidth - anchorRect.right;
-    const position: 'left' | 'right' = spaceRight > popoverWidth + gap ? 'right' : 'left';
-
-    const style: React.CSSProperties = {
-        position: 'absolute',
-        top: anchorRect.top + window.scrollY,
-        height: anchorRect.height,
-        width: popoverWidth,
-        zIndex: 50,
-        pointerEvents: 'auto',
-        ...(position === 'right'
-            ? { left: anchorRect.right + gap }
-            : { left: anchorRect.left - popoverWidth - gap }
-        ),
-    };
-
-    return ReactDOM.createPortal(
-        <motion.div
-            initial={{ opacity: 0, y: 15, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 15, scale: 0.98 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            style={style}
-            onMouseEnter={onMouseEnter}
-            onMouseLeave={onMouseLeave}
-            className="z-[9999]"
-        >
-            <div className="bg-white/80 backdrop-blur-2xl rounded-2xl border border-white/40 shadow-[0_30px_60px_rgba(0,0,0,0.12)] p-7 space-y-5 overflow-hidden">
-                {/* Title */}
-                <div>
-                    <h4 className="text-[19px] font-black text-slate-900 leading-tight tracking-tighter">
-                        {certificate.name}
-                    </h4>
-                </div>
-
-                {/* Description */}
-                <p className="text-[13px] text-slate-600 leading-relaxed font-medium">
-                    {certificate.description}
-                </p>
-
-                {/* What I Learned */}
-                {certificate.whatILearned.length > 0 && (
-                    <div className="space-y-3 pt-4 border-t border-slate-100">
-                        <p className="text-[10px] uppercase font-bold tracking-wider text-slate-400">What I Learned</p>
-                        <ul className="space-y-3">
-                            {certificate.whatILearned.slice(0, 3).map((learning, idx) => (
-                                <li key={idx} className="flex gap-3 text-[12px] text-slate-600 leading-snug items-start">
-                                    <div className="mt-1.5 h-1 w-1 rounded-full bg-blue-600 flex-shrink-0" />
-                                    <span className="font-medium">{learning}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
-
-                {/* CTA */}
-                {certificate.credentialUrl && (
-                    <a
-                        href={certificate.credentialUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group/btn relative flex items-center justify-center gap-3 w-full py-3.5 bg-slate-900 rounded-xl transition-all duration-300 hover:shadow-2xl active:scale-[0.98]"
-                    >
-                        <span className="text-white text-[11px] font-bold uppercase tracking-[0.2em]">
-                            View Certificate
-                        </span>
-                        <svg className="w-3.5 h-3.5 text-white transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
-                    </a>
-                )}
-            </div>
-        </motion.div>,
-        document.body
-    );
-};
-
 
 const Certifications: React.FC = () => {
     const [activeFilter, setActiveFilter] = useState<'All' | CertificateCategory>('All');
     const [searchQuery, setSearchQuery] = useState('');
-    const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
-    const [hoveredCert, setHoveredCert] = useState<{ cert: Certificate; rect: DOMRect } | null>(null);
-    const [mounted, setMounted] = useState(false);
-    const [isSearchFocused, setIsSearchFocused] = useState(false);
-
-    const filterButtonRef = useRef<HTMLButtonElement>(null);
-    const searchInputRef = useRef<HTMLInputElement>(null);
-    const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-    const isOverPopover = useRef(false);
-    const filterChangeTimeRef = useRef<number>(0);
-
-    useEffect(() => {
-        setMounted(true);
-        return () => setMounted(false);
-    }, []);
+    const [currentPage, setCurrentPage] = useState(1);
 
     const counts = useMemo(() => {
-        const categoryCounts: Record<string, number> = { All: CERTIFICATES.length };
-        CERTIFICATES.forEach(cert => {
-            categoryCounts[cert.category] = (categoryCounts[cert.category] || 0) + 1;
+        const categoryCounts: Record<'All' | CertificateCategory, number> = {
+            All: CERTIFICATES.length,
+            Data: 0,
+            Technical: 0,
+            Business: 0,
+            Design: 0,
+            Leadership: 0,
+        };
+
+        CERTIFICATES.forEach((cert) => {
+            categoryCounts[cert.category] += 1;
         });
+
         return categoryCounts;
     }, []);
 
     const filteredCertificates = useMemo(() => {
-        const TYPE_ORDER: Record<CertificateType, number> = {
-            professional: 0,
-            specialization: 1,
-            course: 2,
-        };
+        const searchLower = searchQuery.trim().toLowerCase();
+
         return CERTIFICATES
-            .filter(cert => {
+            .filter((cert) => {
                 const matchesFilter = activeFilter === 'All' || cert.category === activeFilter;
-                const searchLower = searchQuery.toLowerCase();
-                const matchesSearch = !searchQuery ||
+                const matchesSearch =
+                    !searchLower ||
                     cert.name.toLowerCase().includes(searchLower) ||
                     cert.issuer.toLowerCase().includes(searchLower) ||
-                    cert.skills.some(skill => skill.toLowerCase().includes(searchLower));
+                    cert.platform.toLowerCase().includes(searchLower) ||
+                    cert.description.toLowerCase().includes(searchLower) ||
+                    cert.skills.some((skill) => skill.toLowerCase().includes(searchLower));
+
                 return matchesFilter && matchesSearch;
             })
-            .sort((a, b) => TYPE_ORDER[a.certType] - TYPE_ORDER[b.certType]);
-    }, [activeFilter, searchQuery]);
+            .sort((a, b) => {
+                const rankDiff =
+                    (CERTIFICATE_RELEVANCE_RANK[a.id] ?? 999) -
+                    (CERTIFICATE_RELEVANCE_RANK[b.id] ?? 999);
+                if (rankDiff !== 0) return rankDiff;
 
-    // Forcefully dismiss any popover whenever the active filter changes
-    useEffect(() => {
-        if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-        setHoveredCert(null);
-        isOverPopover.current = false;
-        filterChangeTimeRef.current = Date.now();
-    }, [activeFilter]);
+                const typeDiff = TYPE_ORDER[a.certType] - TYPE_ORDER[b.certType];
+                if (typeDiff !== 0) return typeDiff;
+
+                return new Date(b.completionDate).getTime() - new Date(a.completionDate).getTime();
+            });
+    }, [activeFilter, searchQuery]);
 
     const stats = useMemo(() => {
         const totalHours = CERTIFICATES.reduce((sum, cert) => sum + (cert.hours || 0), 0);
-        const uniquePlatforms = new Set(CERTIFICATES.map(cert => cert.platform)).size - ['Google', 'Meta', 'Microsoft'].filter(p => CERTIFICATES.some(c => c.platform === p)).length;
-        const latestCert = [...CERTIFICATES].sort((a, b) =>
-            new Date(b.completionDate).getTime() - new Date(a.completionDate).getTime()
+        const uniqueIssuers = new Set(CERTIFICATES.map((cert) => cert.issuer)).size;
+        const latestCert = [...CERTIFICATES].sort(
+            (a, b) => new Date(b.completionDate).getTime() - new Date(a.completionDate).getTime(),
         )[0];
+
         return {
             total: CERTIFICATES.length,
             hours: totalHours,
-            platforms: uniquePlatforms,
-            latest: latestCert
+            issuers: uniqueIssuers,
+            latest: latestCert,
         };
     }, []);
 
-    const handleFilterChange = (filter: 'All' | CertificateCategory) => {
-        // Clear any active popover & hover state before switching filter
-        if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-        setHoveredCert(null);
-        isOverPopover.current = false;
+    const shouldPaginate = filteredCertificates.length > CERTIFICATES_PER_PAGE;
+    const totalPages = Math.max(1, Math.ceil(filteredCertificates.length / CERTIFICATES_PER_PAGE));
+    const paginatedCertificates = useMemo(() => {
+        if (!shouldPaginate) return filteredCertificates;
 
+        const startIndex = (currentPage - 1) * CERTIFICATES_PER_PAGE;
+        return filteredCertificates.slice(startIndex, startIndex + CERTIFICATES_PER_PAGE);
+    }, [currentPage, filteredCertificates, shouldPaginate]);
+    const paginationItems = useMemo(
+        () => (shouldPaginate ? getPaginationItems(currentPage, totalPages) : []),
+        [currentPage, shouldPaginate, totalPages],
+    );
+
+    const handleFilterChange = (filter: 'All' | CertificateCategory) => {
         setActiveFilter(filter);
+        setCurrentPage(1);
         trackCustomEvent('certifications_filter_change', {
             event_category: 'certifications',
-            skill_area: filter
+            skill_area: filter,
         });
     };
 
-    const handleMouseEnter = useCallback((cert: Certificate, element: HTMLElement) => {
-        // Suppress popover while the filter menu is open or within 500ms
-        // after a filter change to prevent ghost popovers
-        if (isFilterMenuOpen) return;
-        if (Date.now() - filterChangeTimeRef.current < 500) return;
-        if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-        hoverTimeoutRef.current = setTimeout(() => {
-            const rect = element.getBoundingClientRect();
-            setHoveredCert({ cert, rect });
-        }, 300);
-    }, [isFilterMenuOpen]);
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(event.target.value);
+        setCurrentPage(1);
+    };
 
-    const handleMouseLeave = useCallback(() => {
-        if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-        hoverTimeoutRef.current = setTimeout(() => {
-            if (!isOverPopover.current) {
-                setHoveredCert(null);
-            }
-        }, 200);
-    }, []);
+    const clearSearch = () => {
+        setSearchQuery('');
+        setCurrentPage(1);
+    };
 
-    const handlePopoverMouseEnter = useCallback(() => {
-        isOverPopover.current = true;
-        if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-    }, []);
+    const clearFilters = () => {
+        setSearchQuery('');
+        setCurrentPage(1);
+        handleFilterChange('All');
+    };
 
-    const handlePopoverMouseLeave = useCallback(() => {
-        isOverPopover.current = false;
-        hoverTimeoutRef.current = setTimeout(() => {
-            setHoveredCert(null);
-        }, 150);
-    }, []);
-
-    const filterOptions: Array<'All' | CertificateCategory> = [
-        'All',
-        'Technical',
-        'Business',
-        'Data',
-        'Design',
-        'Leadership'
-    ];
+    const goToPage = (page: number) => {
+        setCurrentPage(Math.min(Math.max(page, 1), totalPages));
+    };
 
     return (
-        <section id="certifications" className="py-24 md:py-40 bg-white selection:bg-blue-700 selection:text-white overflow-hidden">
-            <div className="max-w-7xl mx-auto px-6">
-                {/* Header Section */}
-                <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-16 items-end mb-24">
-                    <div className="space-y-10">
-                        <div className="flex items-center gap-4">
-                            <SectionLabel>Certifications</SectionLabel>
-                            <div className="h-px bg-slate-100 flex-1"></div>
+        <section id="certifications" className="cert-dc-page selection:bg-[#4f46e5] selection:text-white">
+            <div className="cert-dc-container">
+                <div className="cert-dc-hero">
+                    <div style={{ fontVariantLigatures: 'none', fontFeatureSettings: '"liga" 0, "clig" 0' }}>
+                        <div className="cert-dc-eyebrow">
+                            <Award className="h-4 w-4" strokeWidth={2.2} aria-hidden="true" />
+                            <SectionLabel className="!text-[16px] !font-medium !normal-case !tracking-normal !text-[#141414] !leading-[150%]">
+                                Certifications
+                            </SectionLabel>
                         </div>
-                        <h1 className="text-6xl md:text-8xl lg:text-[100px] font-[900] tracking-[-0.04em] leading-[0.88] text-slate-900">
-                            Verified <br />
-                            <span className="text-slate-400">Expertise.</span>
+
+                        <h1 className="cert-dc-title">
+                            Verif&zwnj;ied <br />
+                            Certif&zwnj;ications.
                         </h1>
-                        <p className="text-xl md:text-2xl text-slate-500 font-medium leading-relaxed max-w-xl">
-                            Industry-recognized credentials proving <span className="text-slate-900 font-bold">technical mastery</span> across domains—from production-grade code to strategic execution.
+
+                        <p className="cert-dc-description">
+                            Industry-recognized credentials proving <strong>technical mastery</strong> across domains
+                            from production-grade code to strategic execution.
                         </p>
                     </div>
 
-                    {/* Telemetry Stats */}
-                    <div className="flex flex-wrap gap-x-12 gap-y-10 lg:justify-end pb-4">
-                        <div className="space-y-2 group/meta">
-                            <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400 group-hover/meta:text-blue-700 transition-colors">Earned</p>
-                            <p className="text-3xl font-black text-slate-900 tracking-tight">{stats.total}<span className="text-blue-700 text-sm ml-1">+</span></p>
+                    <aside className="cert-dc-summary" aria-label="Certification portfolio summary">
+                        <div className="cert-dc-summary__badge">
+                            <BadgeCheck aria-hidden="true" />
+                            Portfolio verified
                         </div>
-                        <div className="space-y-2 group/meta">
-                            <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400 group-hover/meta:text-blue-700 transition-colors">Invested</p>
-                            <p className="text-3xl font-black text-slate-900 tracking-tight">{stats.hours}<span className="text-blue-700 text-sm ml-1">Hrs</span></p>
+                        <div className="cert-dc-summary__grid">
+                            <div>
+                                <span>Earned</span>
+                                <strong>{stats.total}+</strong>
+                            </div>
+                            <div>
+                                <span>Invested</span>
+                                <strong>{stats.hours}hrs</strong>
+                            </div>
+                            <div>
+                                <span>Issuers</span>
+                                <strong>{stats.issuers}</strong>
+                            </div>
                         </div>
-                        <div className="space-y-2 group/meta">
-                            <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400 group-hover/meta:text-blue-700 transition-colors">Platforms</p>
-                            <p className="text-3xl font-black text-slate-900 tracking-tight">{stats.platforms}</p>
+                        <p className="cert-dc-summary__latest">
+                            Latest: {stats.latest.name} ({getCompletionYear(stats.latest)})
+                        </p>
+                    </aside>
+                </div>
+
+                {/* DataCamp style Trust & Recognition Banner */}
+                <div className="bg-[#4f46e5] text-white p-8 md:p-10 rounded-2xl mb-10 shadow-xl shadow-indigo-500/10 overflow-hidden relative border border-indigo-400/20" aria-label="Loved by learners at thousands of companies">
+                    <div className="absolute top-0 right-0 -mt-8 -mr-8 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+                    <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-10">
+                        <h2 className="text-xl md:text-2xl lg:text-3xl font-extrabold tracking-tight text-white text-center md:text-left max-w-md leading-snug">
+                            Loved by learners at thousands of companies
+                        </h2>
+                        <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10">
+                            <div className="flex items-center gap-2 opacity-95 hover:opacity-100 transition-all hover:-translate-y-0.5" title="Google">
+                                <GoogleLogo />
+                            </div>
+                            <div className="flex items-center gap-2 opacity-95 hover:opacity-100 transition-all hover:-translate-y-0.5" title="Microsoft">
+                                <MicrosoftLogo />
+                            </div>
+                            <div className="flex items-center gap-2 opacity-95 hover:opacity-100 transition-all hover:-translate-y-0.5" title="Meta">
+                                <MetaLogo />
+                            </div>
+                            <div className="flex items-center gap-2 opacity-95 hover:opacity-100 transition-all hover:-translate-y-0.5" title="IBM">
+                                <IBMLogo />
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Filter Control Bar — Architectural Breadcrumb Style */}
-                <div className="mb-16">
-                    <div className="flex items-center justify-between pb-8">
-                        {/* Filter Status */}
-                        <div className="flex items-center gap-4">
-                            <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Showing</span>
-                            <AnimatePresence mode="wait">
-                                <motion.span
-                                    key={activeFilter}
-                                    initial={{ opacity: 0, y: 4 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -4 }}
-                                    className="text-slate-900 font-black text-base tracking-tight"
-                                >
-                                    {activeFilter === 'All' ? 'All Certifications' : activeFilter}
-                                </motion.span>
-                            </AnimatePresence>
-                            <div className="h-4 w-px bg-slate-200" />
-                            <span className="text-[11px] font-semibold text-slate-400 tabular-nums">
-                                {filteredCertificates.length}
-                            </span>
-                        </div>
-
-                        {/* Minimalist Search & Filter Bar */}
-                        <div className="flex items-center gap-4">
-                            {/* Modern Search Input */}
-                            <motion.div
-                                animate={{
-                                    width: isSearchFocused || searchQuery ? (typeof window !== 'undefined' && window.innerWidth < 640 ? 180 : 280) : 48,
-                                    transition: { duration: 0.4, ease: [0.23, 1, 0.32, 1] }
-                                }}
-                                onClick={() => searchInputRef.current?.focus()}
-                                className={`relative group flex items-center h-12 rounded-full border transition-[border-color,background-color] duration-300 cursor-text overflow-hidden ${isSearchFocused
-                                    ? 'border-slate-900 bg-white shadow-2xl shadow-slate-900/5'
-                                    : 'border-slate-200 bg-white/50 hover:border-slate-400'
-                                    }`}
-                            >
-                                <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center text-slate-400 group-hover:text-slate-900 transition-colors duration-300">
-                                    <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                                        <circle cx="11" cy="11" r="8" />
-                                        <path d="M21 21l-4.35-4.35" />
-                                    </svg>
-                                </div>
-
-                                <input
-                                    ref={searchInputRef}
-                                    type="text"
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    onFocus={() => setIsSearchFocused(true)}
-                                    onBlur={() => setIsSearchFocused(false)}
-                                    placeholder="Search certifications..."
-                                    className="w-full h-full pl-12 pr-10 bg-transparent text-[13px] font-bold text-slate-900 placeholder:text-slate-300 focus:outline-none"
-                                />
-
-                                {searchQuery && (
-                                    <button
-                                        onClick={() => {
-                                            setSearchQuery('');
-                                            searchInputRef.current?.focus();
-                                        }}
-                                        className="absolute right-3 p-1 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-900 transition-all duration-300"
-                                    >
-                                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                                            <path d="M18 6L6 18M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                )}
-                            </motion.div>
-
-                            <AnimatePresence>
-                                {activeFilter !== 'All' && (
-                                    <motion.button
-                                        initial={{ opacity: 0, scale: 0.8 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        exit={{ opacity: 0, scale: 0.8 }}
-                                        onClick={() => handleFilterChange('All')}
-                                        className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 hover:text-blue-700 transition-colors"
-                                    >
-                                        Reset
-                                    </motion.button>
-                                )}
-                            </AnimatePresence>
-
-                            <motion.button
-                                ref={filterButtonRef}
-                                onClick={() => setIsFilterMenuOpen(!isFilterMenuOpen)}
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                className={`relative group flex items-center justify-center w-12 h-12 rounded-full transition-all duration-500 overflow-hidden ${isFilterMenuOpen
-                                    ? 'bg-slate-900 text-white shadow-2xl rotate-45'
-                                    : 'bg-white border border-slate-200 text-slate-900 hover:border-slate-900'
-                                    }`}
-                            >
-                                <div className="relative z-10 transition-transform duration-500">
-                                    {isFilterMenuOpen ? (
-                                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                                            <path d="M18 6L6 18M6 6l12 12" />
-                                        </svg>
-                                    ) : (
-                                        <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                                            <line x1="4" y1="8" x2="20" y2="8" />
-                                            <line x1="4" y1="16" x2="20" y2="16" />
-                                            <circle cx="9" cy="8" r="2.5" fill="currentColor" stroke="none" />
-                                            <circle cx="15" cy="16" r="2.5" fill="currentColor" stroke="none" />
-                                        </svg>
-                                    )}
-                                </div>
-                                <motion.div
-                                    className="absolute inset-0 bg-slate-900 opacity-0 group-hover:opacity-5 transition-opacity"
-                                />
-                            </motion.button>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Faceted Filter Menu — Portal based */}
-                <AnimatePresence>
-                    {isFilterMenuOpen && (
-                        <FilterMenu
-                            anchorRef={filterButtonRef}
-                            activeFilter={activeFilter}
-                            counts={counts}
-                            onSelect={(f) => {
-                                handleFilterChange(f);
-                                setIsFilterMenuOpen(false);
-                            }}
-                            onClose={() => setIsFilterMenuOpen(false)}
+                <div className="cert-dc-controls" aria-label="Certification search and filters">
+                    <div className="cert-dc-search">
+                        <Search aria-hidden="true" />
+                        <label className="sr-only" htmlFor="certification-search">
+                            Search certifications
+                        </label>
+                        <input
+                            id="certification-search"
+                            type="text"
+                            value={searchQuery}
+                            onChange={handleSearchChange}
+                            placeholder="Search certifications"
                         />
-                    )}
-                </AnimatePresence>
+                        {searchQuery && (
+                            <button type="button" onClick={clearSearch} aria-label="Clear search">
+                                <X aria-hidden="true" />
+                            </button>
+                        )}
+                    </div>
 
-                {/* Certificates Grid */}
+                    <div className="cert-dc-tabs" role="list" aria-label="Filter certifications by category">
+                        {FILTER_OPTIONS.map((option) => (
+                            <button
+                                key={option}
+                                type="button"
+                                aria-pressed={activeFilter === option}
+                                className={`cert-dc-tab ${activeFilter === option ? 'cert-dc-tab--active' : ''}`}
+                                onClick={() => handleFilterChange(option)}
+                            >
+                                <span className="cert-dc-tab__icon">{CATEGORY_ICONS[option]}</span>
+                                <span>{option}</span>
+                                <span className="cert-dc-tab__count">{counts[option]}</span>
+                            </button>
+                        ))}
+                    </div>
+
+                    <div className="cert-dc-results">
+                        <strong>{filteredCertificates.length}</strong>{' '}
+                        {filteredCertificates.length === 1 ? 'Certification' : 'Certifications'}
+                    </div>
+                </div>
+
                 <motion.div
                     variants={staggerContainer}
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ once: true, margin: "-5%" }}
-                    className="grid md:grid-cols-2 lg:grid-cols-3 gap-5"
-                    style={{ pointerEvents: isFilterMenuOpen ? 'none' : 'auto' }}
+                    viewport={{ once: true, margin: '-5%' }}
+                    className="cert-dc-grid"
                 >
                     <AnimatePresence mode="popLayout">
-                        {filteredCertificates.map((cert) => (
-                            <motion.div
-                                layout="position"
-                                key={cert.id}
-                                variants={revealVariants}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                                className="group cursor-pointer h-full"
-                                onMouseEnter={(e) => handleMouseEnter(cert, e.currentTarget)}
-                                onMouseLeave={handleMouseLeave}
-                                role="article"
-                                aria-label={`${cert.name} certification`}
-                            >
-                                <div className={`relative h-full bg-white border border-slate-200/60 rounded-2xl hover:border-slate-300 hover:executive-shadow transition-[border-color,box-shadow,transform] duration-700 flex flex-col p-9 group/card hover:-translate-y-2 cert-card`}>
-                                    {/* Category Label + Platform Logo */}
-                                    <div className="flex justify-between items-center mb-8">
-                                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400/50 group-hover/card:text-blue-700 transition-colors duration-500">
-                                            {cert.category}
-                                        </span>
-                                        <img
-                                            src={
-                                                cert.platformLogo.startsWith('/images/certificates/')
-                                                    ? cert.platformLogo
-                                                    : cert.platform === 'edX'
-                                                        ? '/images/certificates/edx logo.webp'
-                                                        : '/images/certificates/coursera.webp'
-                                            }
-                                            alt={cert.platform}
-                                            className="cert-logo object-contain ml-auto flex-shrink-0"
-                                            style={{
-                                                height: cert.platform === 'LinkedIn Learning' ? '16px'
-                                                    : cert.platform === 'edX' ? '14px'
-                                                        : cert.platform === 'Udemy' ? '14px'
-                                                            : cert.platform === 'DataCamp' ? '18px'
-                                                                : cert.id === 'bmet-computer-operation' ? '32px'
-                                                                    : cert.id === 'it-aid-graphic-design' ? '18px'
-                                                                        : undefined,
-                                                width: 'auto',
-                                                maxWidth: cert.id === 'bmet-computer-operation' ? '32px' : undefined,
-                                            }}
-                                        />
-                                    </div>
+                        {paginatedCertificates.map((cert) => {
+                            const ribbonLabel = getRibbonLabel(cert);
+                            const facts = getCertificateFacts(cert);
 
-                                    {/* Title */}
-                                    <h3 className="text-[22px] font-black text-slate-900 leading-[1.15] tracking-tighter mb-8 group-hover/card:text-blue-700 transition-colors duration-300">
-                                        {cert.name}
-                                    </h3>
-
-                                    {/* Metadata */}
-                                    <div className="space-y-6 mb-auto">
-                                        <div className="flex flex-col gap-1.5">
-                                            <span className="text-[9px] font-bold uppercase tracking-widest text-slate-300">Issued By</span>
-                                            <p className="text-[11px] font-black text-slate-900 tracking-tight">
-                                                {cert.issuer}
-                                            </p>
+                            return (
+                                <motion.article
+                                    layout="position"
+                                    key={cert.id}
+                                    variants={revealVariants}
+                                    initial={{ opacity: 0, y: 14 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                                    className="cert-dc-card cert-card"
+                                    aria-label={`${cert.name} certification`}
+                                >
+                                    {ribbonLabel && (
+                                        <div className="cert-dc-ribbon">
+                                            <Award aria-hidden="true" />
+                                            {ribbonLabel}
                                         </div>
-                                        <div className={`grid gap-8 ${cert.courses ? 'grid-cols-3' : 'grid-cols-2'}`}>
-                                            <div className="flex flex-col gap-1.5">
-                                                <span className="text-[9px] font-bold uppercase tracking-widest text-slate-300">Completed</span>
-                                                <p className="text-[11px] font-bold text-slate-500">
-                                                    {new Date(cert.completionDate).getFullYear()}
-                                                </p>
+                                    )}
+
+                                    <div className="cert-dc-card__body">
+                                        <div className="cert-dc-card__top">
+                                            <img
+                                                src={cert.platformLogo}
+                                                alt={getPlatformLogoAlt(cert)}
+                                                className={`cert-logo ${getPlatformLogoClass(cert)}`}
+                                            />
+                                        </div>
+
+                                        <h2 className="cert-dc-card__title">{cert.name}</h2>
+
+                                        <div className="cert-dc-card__meta">
+                                            <strong>{getCompletionYear(cert)}</strong>
+                                            <span className="cert-dc-card__meta-divider" aria-hidden="true" />
+                                            <span>with {cert.issuer}</span>
+                                        </div>
+
+                                        <p className="cert-dc-card__description">{cert.description}</p>
+
+                                        {cert.skills.length > 0 && (
+                                            <div className="cert-dc-skill-row" aria-label="Primary skills">
+                                                {cert.skills.slice(0, 3).map((skill) => (
+                                                    <span key={skill}>{skill}</span>
+                                                ))}
                                             </div>
-                                            {cert.hours && (
-                                                <div className="flex flex-col gap-1.5">
-                                                    <span className="text-[9px] font-bold uppercase tracking-widest text-slate-300">Hours</span>
-                                                    <p className="text-[11px] font-bold text-slate-500">
-                                                        {cert.hours}
-                                                    </p>
-                                                </div>
-                                            )}
-                                            {cert.courses && (
-                                                <div className="flex flex-col gap-1.5">
-                                                    <span className="text-[9px] font-bold uppercase tracking-widest text-slate-300">Courses</span>
-                                                    <p className="text-[11px] font-bold text-slate-500">
-                                                        {cert.courses}
-                                                    </p>
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        {/* Description Preview */}
-                                        <p className="text-[12px] text-slate-500 leading-relaxed line-clamp-2">
-                                            {cert.description}
-                                        </p>
+                                        )}
                                     </div>
 
-                                    {/* Skills */}
-                                    {cert.skills.length > 0 && (
-                                        <div className="mt-6 pt-8 border-t border-slate-50 group-hover/card:border-slate-100 transition-colors duration-500">
-                                            <div className="flex flex-wrap gap-x-5 gap-y-2">
-                                                {cert.skills.slice(0, 3).map((skill, i) => (
-                                                    <span key={i} className="text-[9px] font-bold text-slate-400 tracking-tight flex items-center gap-2">
-                                                        <span className="w-1 h-1 rounded-full bg-slate-200 group-hover/card:bg-blue-400 transition-colors" />
-                                                        {skill}
+                                    <div className="cert-dc-card__footer">
+                                        {facts.length > 0 && (
+                                            <div className="cert-dc-facts">
+                                                {facts.map((fact) => (
+                                                    <span key={`${cert.id}-${fact.label}`}>
+                                                        {fact.type === 'time' ? (
+                                                            <Clock3 aria-hidden="true" />
+                                                        ) : (
+                                                            <BookOpenCheck aria-hidden="true" />
+                                                        )}
+                                                        {fact.label}
                                                     </span>
                                                 ))}
                                             </div>
-                                        </div>
-                                    )}
-                                </div>
-                            </motion.div>
-                        ))}
+                                        )}
+
+                                        {cert.credentialUrl && (
+                                            <a
+                                                href={cert.credentialUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="cert-dc-link"
+                                            >
+                                                View Certificate
+                                                <ArrowUpRight aria-hidden="true" />
+                                            </a>
+                                        )}
+                                    </div>
+                                </motion.article>
+                            );
+                        })}
                     </AnimatePresence>
                 </motion.div>
 
-                {/* Empty State */}
+                {shouldPaginate && (
+                    <nav className="cert-dc-pagination" aria-label="Certification pagination">
+                        <button
+                            type="button"
+                            className="cert-dc-pagination__arrow"
+                            onClick={() => goToPage(currentPage - 1)}
+                            disabled={currentPage === 1}
+                        >
+                            <ChevronLeft aria-hidden="true" />
+                            Previous
+                        </button>
+
+                        <div className="cert-dc-pagination__pages">
+                            {paginationItems.map((item) =>
+                                typeof item === 'number' ? (
+                                    <button
+                                        key={item}
+                                        type="button"
+                                        className={`cert-dc-pagination__page ${
+                                            currentPage === item ? 'cert-dc-pagination__page--active' : ''
+                                        }`}
+                                        aria-current={currentPage === item ? 'page' : undefined}
+                                        onClick={() => goToPage(item)}
+                                    >
+                                        {item}
+                                    </button>
+                                ) : (
+                                    <span key={item} className="cert-dc-pagination__ellipsis" aria-hidden="true">
+                                        ...
+                                    </span>
+                                ),
+                            )}
+                        </div>
+
+                        <button
+                            type="button"
+                            className="cert-dc-pagination__arrow"
+                            onClick={() => goToPage(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                        >
+                            Next
+                            <ChevronRight aria-hidden="true" />
+                        </button>
+                    </nav>
+                )}
+
                 {filteredCertificates.length === 0 && (
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 12 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-center py-32 space-y-4"
+                        className="cert-dc-empty"
                     >
-                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-50 text-slate-200 mb-6">
-                            <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                <circle cx="11" cy="11" r="8" />
-                                <path d="M21 21l-4.35-4.35" />
-                                <path d="M8 8l6 6M14 8l-6 6" />
-                            </svg>
-                        </div>
-                        <h3 className="text-2xl font-black text-slate-900 tracking-tight">No results found</h3>
-                        <p className="text-slate-400 font-medium max-w-sm mx-auto">
-                            We couldn't find any certificates matching "{searchQuery}" in the {activeFilter} category.
+                        <h2>No results found</h2>
+                        <p>
+                            We could not find any certificates matching "{searchQuery}" in the {activeFilter} category.
                         </p>
-                        <button
-                            onClick={() => {
-                                setSearchQuery('');
-                                handleFilterChange('All');
-                            }}
-                            className="mt-8 text-[11px] font-black uppercase tracking-[0.2em] text-blue-600 hover:text-blue-700 transition-colors"
-                        >
-                            Clear all filters
+                        <button type="button" onClick={clearFilters}>
+                            Reset filters
                         </button>
                     </motion.div>
                 )}
             </div>
-
-            {/* Udemy-style Hover Popover — rendered via Portal */}
-            <AnimatePresence>
-                {mounted && hoveredCert && (
-                    <HoverPopover
-                        certificate={hoveredCert.cert}
-                        anchorRect={hoveredCert.rect}
-                        onMouseEnter={handlePopoverMouseEnter}
-                        onMouseLeave={handlePopoverMouseLeave}
-                    />
-                )}
-            </AnimatePresence>
         </section>
     );
 };

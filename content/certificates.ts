@@ -37,7 +37,7 @@ export const CERTIFICATES: Certificate[] = [
         credentialId: 'DAA0012892055768',
         credentialUrl: 'https://www.datacamp.com/certificate/DAA0012892055768',
         skills: ['PostgreSQL', 'Data Cleaning', 'Data Validation', 'Statistical Concepts', 'Data Visualization', 'Hypothesis Testing'],
-        platformLogo: '/images/logos/platform-logo/datacamp.webp',
+        platformLogo: '/images/certificates/Data Camp Logo.webp',
         description: 'Entry-level data analysis certification covering data management, exploratory analysis, statistical experimentation, and stakeholder communication.',
         whatILearned: [
             'Use PostgreSQL to extract, join, aggregate, validate, and clean data',
@@ -58,7 +58,7 @@ export const CERTIFICATES: Certificate[] = [
         credentialId: 'DSA0016086648677',
         credentialUrl: 'https://www.datacamp.com/certificate/DSA0016086648677',
         skills: ['Python', 'Data Management', 'Statistical Testing', 'Supervised Learning', 'Unsupervised Learning', 'Data Visualization'],
-        platformLogo: '/images/logos/platform-logo/datacamp.webp',
+        platformLogo: '/images/certificates/Data Camp Logo.webp',
         description: 'Foundational data science certification covering data management, statistical experimentation, supervised and unsupervised learning, and Python programming.',
         whatILearned: [
             'Import, manipulate, and validate data using Python',
@@ -79,7 +79,7 @@ export const CERTIFICATES: Certificate[] = [
         credentialId: 'DEA0017646228366',
         credentialUrl: 'https://www.datacamp.com/certificate/DEA0017646228366',
         skills: ['PostgreSQL', 'Database Design', 'Data Validation', 'Data Cleaning', 'Cloud Tools', 'Schema Design'],
-        platformLogo: '/images/logos/platform-logo/datacamp.webp',
+        platformLogo: '/images/certificates/Data Camp Logo.webp',
         description: 'Entry-level data engineering certification covering schema design, PostgreSQL data manipulation, cloud tools, and data validation.',
         whatILearned: [
             'Use PostgreSQL to manipulate, validate, and clean data effectively',
@@ -100,7 +100,7 @@ export const CERTIFICATES: Certificate[] = [
         credentialId: 'AEDS0018117957021',
         credentialUrl: 'https://www.datacamp.com/certificate/AEDS0018117957021',
         skills: ['Python', 'MLOps', 'LLMOps', 'Generative AI', 'ETL/ELT Pipelines', 'AI Governance', 'Model Development'],
-        platformLogo: '/images/logos/platform-logo/datacamp.webp',
+        platformLogo: '/images/certificates/Data Camp Logo.webp',
         description: 'AI engineering certification for data scientists covering model development, AI governance, MLOps/LLMOps awareness, and generative AI application prototyping.',
         whatILearned: [
             'Prepare data for modeling and implement supervised/unsupervised ML approaches using Python',
@@ -121,7 +121,7 @@ export const CERTIFICATES: Certificate[] = [
         credentialId: 'AIEDA0017312065110',
         credentialUrl: 'https://www.datacamp.com/certificate/AIEDA0017312065110',
         skills: ['Python', 'LLMs', 'Prompt Engineering', 'AI Governance', 'Chatbot Development', 'Software Engineering Principles'],
-        platformLogo: '/images/logos/platform-logo/datacamp.webp',
+        platformLogo: '/images/certificates/Data Camp Logo.webp',
         description: 'Developer-focused AI engineering certification covering core AI theory, LLM concepts, prompt engineering, AI safety, and building chatbots and AI systems in Python.',
         whatILearned: [
             'Understand and apply core AI and LLM concepts including prompt engineering',
@@ -144,7 +144,7 @@ export const CERTIFICATES: Certificate[] = [
         skills: ['Excel Essentials', 'Formulas & Functions', 'Data Manipulation', 'Advanced Excel', 'Dashboards'],
         hours: 120,
         courses: 4,
-        platformLogo: '/images/logos/platform-logo/coursera.webp',
+        platformLogo: '/images/platforms/coursera.svg',
         description: 'Fundamental to advanced proficiency in Microsoft Excel for professional business environments, covering formulas, data tools, and automation.',
         whatILearned: [
             'Master Excel formulas, functions, and advanced data manipulation techniques',
@@ -167,7 +167,7 @@ export const CERTIFICATES: Certificate[] = [
         skills: ['Business Writing', 'Public Speaking', 'Professional Networking', 'Grammar', 'Presentations'],
         hours: 40,
         courses: 4,
-        platformLogo: '/images/logos/platform-logo/coursera.webp',
+        platformLogo: '/images/platforms/coursera.svg',
         description: 'Focused on writing professional emails, delivering effective presentations, and building a professional ePortfolio for career advancement.',
         whatILearned: [
             'Write clear, concise professional emails and business documents',
@@ -190,7 +190,7 @@ export const CERTIFICATES: Certificate[] = [
         skills: ['Project Management', 'Time Management', 'Negotiation', 'Business Communication', 'Decision-Making'],
         hours: 80,
         courses: 10,
-        platformLogo: '/images/logos/platform-logo/coursera.webp',
+        platformLogo: '/images/platforms/coursera.svg',
         description: 'Developed essential professional skills for the modern workforce, including finance fundamentals, communication techniques, and strategic problem-solving.',
         whatILearned: [
             'Apply time management and productivity frameworks in professional settings',
@@ -213,7 +213,7 @@ export const CERTIFICATES: Certificate[] = [
         skills: ['Financial Accounting', 'Corporate Finance', 'Business Valuation', 'Capital Budgeting', 'M&A'],
         courses: 5,
         hours: 80,
-        platformLogo: '/images/logos/platform-logo/coursera.webp',
+        platformLogo: '/images/platforms/coursera.svg',
         description: 'Deep dive into financial analysis, corporate valuation, and project finance within the modern financial landscape including M&A strategy.',
         whatILearned: [
             'Analyze financial statements and assess corporate financial health',
@@ -236,7 +236,7 @@ export const CERTIFICATES: Certificate[] = [
         skills: ['Technical Support', 'Computer Networking', 'Operating Systems', 'System Administration', 'IT Security'],
         hours: 120,
         courses: 5,
-        platformLogo: '/images/logos/platform-logo/coursera.webp',
+        platformLogo: '/images/platforms/coursera.svg',
         description: 'Hands-on program designed to prepare learners for IT support roles through OS management, networking, and security defense strategies.',
         whatILearned: [
             'Troubleshoot hardware, software, and network issues systematically',
@@ -259,7 +259,7 @@ export const CERTIFICATES: Certificate[] = [
         skills: ['Data Analytics', 'Data Cleaning', 'Data Visualization', 'R', 'Tableau'],
         hours: 240,
         courses: 8,
-        platformLogo: '/images/logos/platform-logo/coursera.webp',
+        platformLogo: '/images/platforms/coursera.svg',
         description: 'Comprehensive professional program covering the full data analytics lifecycle — from asking the right questions to sharing insights through visualization.',
         whatILearned: [
             'Clean, transform, and prepare raw datasets for analysis',
@@ -282,7 +282,7 @@ export const CERTIFICATES: Certificate[] = [
         skills: ['Power Query', 'Power Pivot', 'Data Visualization', 'Dashboarding', 'Data Cleansing'],
         hours: 40,
         courses: 3,
-        platformLogo: '/images/logos/platform-logo/coursera.webp',
+        platformLogo: '/images/platforms/coursera.svg',
         description: 'Advanced Excel techniques using Power Query and Power Pivot for professional data storytelling, interactive dashboards, and large-scale data analysis.',
         whatILearned: [
             'Build automated data pipelines using Power Query for ETL workflows',
@@ -305,7 +305,7 @@ export const CERTIFICATES: Certificate[] = [
         skills: ['Google Cloud', 'BigQuery', 'Data Transformation', 'Cloud Analytics', 'Data Visualization'],
         hours: 80,
         courses: 5,
-        platformLogo: '/images/logos/platform-logo/coursera.webp',
+        platformLogo: '/images/platforms/coursera.svg',
         description: 'Specialized training in leveraging Google Cloud tools for cloud-native data management, storage, transformation, and analytics at scale.',
         whatILearned: [
             'Query and analyze large datasets using BigQuery on Google Cloud',
@@ -328,7 +328,7 @@ export const CERTIFICATES: Certificate[] = [
         skills: ['R Programming', 'SQL', 'Excel Pivot Tables', 'Data Visualization', 'Statistical Analysis'],
         hours: 120,
         courses: 9,
-        platformLogo: '/images/logos/platform-logo/coursera.webp',
+        platformLogo: '/images/platforms/coursera.svg',
         description: 'Comprehensive certificate covering data preparation in Excel and advanced statistical analysis and visualization using R programming.',
         whatILearned: [
             'Perform statistical analysis and hypothesis testing using R',
@@ -351,7 +351,7 @@ export const CERTIFICATES: Certificate[] = [
         skills: ['Data Engineering', 'SQL', 'Data Warehouse', 'Data Governance', 'Tableau'],
         hours: 120,
         courses: 12,
-        platformLogo: '/images/logos/platform-logo/coursera.webp',
+        platformLogo: '/images/platforms/coursera.svg',
         description: 'Specialized program covering the full lifecycle of data management — from engineering foundations to governance, security, and risk compliance.',
         whatILearned: [
             'Design and manage relational databases and data warehouse architectures',
@@ -374,7 +374,7 @@ export const CERTIFICATES: Certificate[] = [
         skills: ['Python', 'SQL', 'IBM Cognos', 'Tableau', 'Generative AI for Data'],
         hours: 160,
         courses: 11,
-        platformLogo: '/images/logos/platform-logo/coursera.webp',
+        platformLogo: '/images/platforms/coursera.svg',
         description: 'Mastery of practical tools used by professional data analysts, including advanced dashboarding and the application of Generative AI in data careers.',
         whatILearned: [
             'Analyze data using Python, Pandas, and NumPy for real-world problems',
@@ -397,7 +397,7 @@ export const CERTIFICATES: Certificate[] = [
         skills: ['Python', 'SQL', 'Statistics', 'OSEMN Framework', 'Data Visualization'],
         hours: 200,
         courses: 5,
-        platformLogo: '/images/logos/platform-logo/coursera.webp',
+        platformLogo: '/images/platforms/coursera.svg',
         description: 'Professional training in collecting and cleaning data using the OSEMN framework, Python-based analysis, and statistical modeling for business insights.',
         whatILearned: [
             'Apply the OSEMN framework to structure end-to-end data projects',
@@ -420,7 +420,7 @@ export const CERTIFICATES: Certificate[] = [
         skills: ['Microsoft 365', 'Cybersecurity', 'Networking', 'Troubleshooting', 'System Administration'],
         hours: 120,
         courses: 6,
-        platformLogo: '/images/logos/platform-logo/coursera.webp',
+        platformLogo: '/images/platforms/microsoft.svg',
         description: 'Comprehensive training in IT support within the Microsoft ecosystem, covering diagnostics, secure networking, and Microsoft 365 administration.',
         whatILearned: [
             'Administer and troubleshoot Microsoft 365 environments at scale',
@@ -443,7 +443,7 @@ export const CERTIFICATES: Certificate[] = [
         skills: ['Time Series Analysis', 'Regression Models', 'Forecasting', 'Process Optimization', 'Model Evaluation'],
         hours: 40,
         courses: 3,
-        platformLogo: '/images/logos/platform-logo/coursera.webp',
+        platformLogo: '/images/platforms/coursera.svg',
         description: 'Advanced techniques for building regression and time series forecasting models in Excel for data-driven business planning and decision-making.',
         whatILearned: [
             'Build regression models to identify trends and forecast business outcomes',
@@ -465,7 +465,7 @@ export const CERTIFICATES: Certificate[] = [
         credentialUrl: 'https://ude.my/UC-5294979e-6073-4e9e-9d84-aeb9b1e98a22',
         skills: ['Adobe Photoshop', 'Photo Editing', 'Digital Design', 'Layer Masking', 'Compositing'],
         hours: 15.5,
-        platformLogo: '/images/logos/platform-logo/udemy.webp',
+        platformLogo: '/images/certificates/Udemy Logo Logo.webp',
         description: 'Comprehensive Photoshop training from beginner to professional level — covering photo retouching, compositing, digital painting, and advanced layer techniques.',
         whatILearned: [
             'Master Photoshop tools, layers, masks, and blending modes',
@@ -487,7 +487,7 @@ export const CERTIFICATES: Certificate[] = [
         credentialUrl: 'https://www.coursera.org/account/accomplishments/records/4ZQUL1KMK6IG',
         skills: ['Machine Learning', 'Python', 'Scikit-learn', 'Regression', 'Classification', 'Clustering'],
         hours: 20,
-        platformLogo: '/images/logos/platform-logo/coursera.webp',
+        platformLogo: '/images/platforms/coursera.svg',
         description: 'Hands-on introduction to machine learning using Python and Scikit-learn, covering supervised and unsupervised algorithms applied to real-world datasets.',
         whatILearned: [
             'Build and evaluate supervised models including regression and classification',
@@ -509,7 +509,7 @@ export const CERTIFICATES: Certificate[] = [
         credentialUrl: 'https://www.coursera.org/account/accomplishments/records/4VHGH9JEHTP6',
         skills: ['Agile', 'Scrum', 'Kanban', 'Jira', 'Sprint Planning', 'Backlog Management'],
         hours: 8,
-        platformLogo: '/images/logos/platform-logo/coursera.webp',
+        platformLogo: '/images/platforms/coursera.svg',
         description: 'Practical training in Agile methodologies using Atlassian Jira — covering Scrum, Kanban, sprint planning, and backlog management for modern software teams.',
         whatILearned: [
             'Configure and manage Jira projects using Scrum and Kanban boards',
@@ -531,7 +531,7 @@ export const CERTIFICATES: Certificate[] = [
         credentialUrl: 'https://www.coursera.org/account/accomplishments/records/ZDAK2KZXMU9T',
         skills: ['Git', 'Version Control', 'Branching', 'Merging', 'Pull Requests', 'CI/CD Workflows'],
         hours: 8,
-        platformLogo: '/images/logos/platform-logo/coursera.webp',
+        platformLogo: '/images/platforms/coursera.svg',
         description: 'Comprehensive Git training covering branching strategies, merge conflict resolution, and collaborative workflows used in professional software development teams.',
         whatILearned: [
             'Manage code history using Git commits, branches, and tags',
@@ -553,7 +553,7 @@ export const CERTIFICATES: Certificate[] = [
         credentialUrl: 'https://www.coursera.org/account/accomplishments/records/X97DKP2TR86X',
         skills: ['Artificial Intelligence', 'AI Strategy', 'Machine Learning Concepts', 'AI Ethics', 'Digital Transformation'],
         hours: 6,
-        platformLogo: '/images/logos/platform-logo/coursera.webp',
+        platformLogo: '/images/platforms/coursera.svg',
         description: 'Andrew Ng\'s non-technical AI literacy course covering how AI works, how to build AI projects, and how to navigate AI strategy within an organization.',
         whatILearned: [
             'Understand what AI and machine learning can and cannot do realistically',
@@ -575,7 +575,7 @@ export const CERTIFICATES: Certificate[] = [
         credentialUrl: 'https://www.coursera.org/account/accomplishments/records/7FEUTY9XMYE4',
         skills: ['HTML5', 'CSS3', 'JavaScript', 'Responsive Design', 'Bootstrap', 'DOM Manipulation'],
         hours: 40,
-        platformLogo: '/images/logos/platform-logo/coursera.webp',
+        platformLogo: '/images/platforms/coursera.svg',
         description: 'Full front-end web development foundation from Johns Hopkins — covering semantic HTML, responsive CSS layouts, and interactive JavaScript for modern web applications.',
         whatILearned: [
             'Build semantic, accessible HTML5 page structures and layouts',
@@ -597,7 +597,7 @@ export const CERTIFICATES: Certificate[] = [
         credentialUrl: 'https://courses.edx.org/certificates/07801979521e4ceeb602b231f616ff92',
         skills: ['Linux', 'Command Line', 'Shell Scripting', 'File System', 'System Administration'],
         hours: 21,
-        platformLogo: '/images/logos/platform-logo/edx.webp',
+        platformLogo: '/images/platforms/edx.svg',
         description: 'Comprehensive introduction to Linux from The Linux Foundation — covering the command line, file system, shell scripting, and system administration fundamentals.',
         whatILearned: [
             'Navigate and manage the Linux file system using the command line',
@@ -619,7 +619,7 @@ export const CERTIFICATES: Certificate[] = [
         credentialUrl: 'https://courses.edx.org/certificates/11c7f14dfa8d4f658f4f1e8ce87f3399',
         skills: ['Python', 'Pandas', 'NumPy', 'Data Wrangling', 'Jupyter Notebooks'],
         hours: 84,
-        platformLogo: '/images/logos/platform-logo/edx.webp',
+        platformLogo: '/images/platforms/edx.svg',
         description: 'IBM-designed Python course covering the core programming fundamentals and data science libraries needed to begin working with real-world datasets.',
         whatILearned: [
             'Write Python programs using variables, loops, functions, and data structures',

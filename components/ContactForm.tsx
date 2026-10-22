@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import emailjs from '@emailjs/browser';
-import Button from './shared/Button';
 import { trackFormSubmission, trackCustomEvent } from '../utils/analytics';
-import SectionLabel from './shared/SectionLabel';
+import { resolveEmailJsConfig } from '../config/contact-env.js';
 
 interface ContactFormData {
     name: string;
@@ -11,6 +10,8 @@ interface ContactFormData {
     subject: string;
     message: string;
 }
+
+const CONTACT_EMAIL = 'aburahatsabir178@gmail.com';
 
 const ContactForm: React.FC = () => {
     const [formData, setFormData] = useState<ContactFormData>({
@@ -22,8 +23,9 @@ const ContactForm: React.FC = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSent, setIsSent] = useState(false);
     const [errors, setErrors] = useState<Partial<ContactFormData>>({});
-    const [focusedField, setFocusedField] = useState<string | null>(null);
     const [formStarted, setFormStarted] = useState(false);
+    const [submitError, setSubmitError] = useState<string | null>(null);
+    const emailJsConfig = resolveEmailJsConfig(import.meta.env);
 
     const validateForm = (): boolean => {
         const newErrors: Partial<ContactFormData> = {};
@@ -48,21 +50,28 @@ const ContactForm: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!validateForm()) return;
+        if (!validateForm()) {
+            requestAnimationFrame(() => {
+                document.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+            });
+            return;
+        }
+
+        if (!emailJsConfig) {
+            setSubmitError(`The secure form is temporarily unavailable. Please email ${CONTACT_EMAIL}.`);
+            return;
+        }
 
         setIsSubmitting(true);
+        setSubmitError(null);
 
         try {
-            const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_portfolio';
-            const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_portfolio';
-            const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'public_key_portfolio';
-
-            await emailjs.send(serviceId, templateId, {
+            await emailjs.send(emailJsConfig.serviceId, emailJsConfig.templateId, {
                 from_name: formData.name,
                 from_email: formData.email,
                 subject: formData.subject,
                 message: formData.message || 'No additional details provided.'
-            }, publicKey);
+            }, emailJsConfig.publicKey);
 
             trackFormSubmission({
                 formType: 'contact',
@@ -74,7 +83,7 @@ const ContactForm: React.FC = () => {
             setTimeout(() => setIsSent(false), 6000);
         } catch (error) {
             console.error('Submission failed:', error);
-            alert('Message failed to send. Please try again.');
+            setSubmitError(`Your message could not be sent. Please try again or email ${CONTACT_EMAIL}.`);
         } finally {
             setIsSubmitting(false);
         }
@@ -83,10 +92,13 @@ const ContactForm: React.FC = () => {
     const handleChange = (field: keyof ContactFormData, value: string) => {
         setFormData({ ...formData, [field]: value });
         if (errors[field]) setErrors({ ...errors, [field]: undefined });
+        if (submitError) setSubmitError(null);
     };
 
-    const hasValue = (field: keyof ContactFormData) => formData[field].trim().length > 0;
-    const showLabel = (field: keyof ContactFormData) => focusedField === field || hasValue(field);
+    const formDescriptionIds = [
+        !emailJsConfig ? 'contact-form-availability' : null,
+        submitError ? 'contact-submit-error' : null,
+    ].filter(Boolean).join(' ') || undefined;
 
     return (
         <div className="bg-white border border-slate-200/60 rounded-2xl p-8 executive-shadow relative overflow-hidden noise-bg">
@@ -104,6 +116,8 @@ const ContactForm: React.FC = () => {
                             exit={{ opacity: 0, scale: 0.98, y: -10 }}
                             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                             className="flex flex-col items-center justify-center text-center py-20 px-6"
+                            role="status"
+                            aria-live="polite"
                         >
                             <motion.div
                                 initial={{ scale: 0, rotate: -10 }}
@@ -130,30 +144,48 @@ const ContactForm: React.FC = () => {
                             onSubmit={handleSubmit}
                             className="space-y-8"
                             onFocus={handleFormStart}
+                            aria-describedby={formDescriptionIds}
+                            aria-busy={isSubmitting}
                         >
                             <div className="mb-10">
                                 <h3 className="text-3xl md:text-4xl font-[900] text-slate-900 tracking-tighter leading-none">Send a Message</h3>
                             </div>
 
+                            {!emailJsConfig && (
+                                <p id="contact-form-availability" role="status" className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm font-medium text-amber-900">
+                                    The secure form is temporarily unavailable. Email{' '}
+                                    <a className="font-bold underline" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
+                                </p>
+                            )}
+
+                            {submitError && (
+                                <p id="contact-submit-error" role="alert" aria-live="assertive" className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-800">
+                                    {submitError}
+                                </p>
+                            )}
+
                             {/* Name and Email Row */}
                             <div className="grid md:grid-cols-2 gap-8">
                                 {/* Name Field */}
                                 <div className="relative group">
-                                    <label className={`absolute left-0 transition-all duration-300 pointer-events-none font-mono text-[9px] uppercase tracking-[0.2em] ${showLabel('name') ? '-top-5 text-blue-600 opacity-100' : 'top-5 text-slate-400 opacity-0'}`}>
+                                    <label htmlFor="contact-name" className="sr-only">
                                         Your Name
                                     </label>
                                     <input
+                                        id="contact-name"
                                         required
                                         type="text"
                                         value={formData.name}
                                         onChange={(e) => handleChange('name', e.target.value)}
-                                        onFocus={() => setFocusedField('name')}
-                                        onBlur={() => setFocusedField(null)}
-                                        className={`w-full py-4 bg-transparent border-b ${errors.name ? 'border-red-300' : 'border-slate-200'} text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:placeholder-transparent transition-all outline-none text-base font-medium tracking-tight`}
-                                        placeholder={focusedField === 'name' ? '' : 'Name'}
+                                        aria-invalid={Boolean(errors.name)}
+                                        aria-describedby={errors.name ? 'contact-name-error' : undefined}
+                                        className={`w-full rounded-none border-0 border-b bg-transparent py-4 ${errors.name ? 'border-red-300' : 'border-slate-200'} text-base font-medium tracking-tight text-slate-900 placeholder:text-slate-400 hover:border-slate-300 focus:border-slate-900 focus-visible:outline-none focus-visible:ring-0 transition-colors duration-200`}
+                                        placeholder="Name"
                                     />
                                     {errors.name && (
                                         <motion.p
+                                            id="contact-name-error"
+                                            role="alert"
                                             initial={{ opacity: 0 }}
                                             animate={{ opacity: 1 }}
                                             className="text-[10px] font-bold text-red-500 mt-2 uppercase tracking-widest"
@@ -165,21 +197,24 @@ const ContactForm: React.FC = () => {
 
                                 {/* Email Field */}
                                 <div className="relative group">
-                                    <label className={`absolute left-0 transition-all duration-300 pointer-events-none font-mono text-[9px] uppercase tracking-[0.2em] ${showLabel('email') ? '-top-5 text-blue-600 opacity-100' : 'top-5 text-slate-400 opacity-0'}`}>
+                                    <label htmlFor="contact-email" className="sr-only">
                                         Email Address
                                     </label>
                                     <input
+                                        id="contact-email"
                                         required
                                         type="email"
                                         value={formData.email}
                                         onChange={(e) => handleChange('email', e.target.value)}
-                                        onFocus={() => setFocusedField('email')}
-                                        onBlur={() => setFocusedField(null)}
-                                        className={`w-full py-4 bg-transparent border-b ${errors.email ? 'border-red-300' : 'border-slate-200'} text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:placeholder-transparent transition-all outline-none text-base font-medium tracking-tight`}
-                                        placeholder={focusedField === 'email' ? '' : 'Email'}
+                                        aria-invalid={Boolean(errors.email)}
+                                        aria-describedby={errors.email ? 'contact-email-error' : undefined}
+                                        className={`w-full rounded-none border-0 border-b bg-transparent py-4 ${errors.email ? 'border-red-300' : 'border-slate-200'} text-base font-medium tracking-tight text-slate-900 placeholder:text-slate-400 hover:border-slate-300 focus:border-slate-900 focus-visible:outline-none focus-visible:ring-0 transition-colors duration-200`}
+                                        placeholder="Email"
                                     />
                                     {errors.email && (
                                         <motion.p
+                                            id="contact-email-error"
+                                            role="alert"
                                             initial={{ opacity: 0 }}
                                             animate={{ opacity: 1 }}
                                             className="text-[10px] font-bold text-red-500 mt-2 uppercase tracking-widest"
@@ -192,21 +227,24 @@ const ContactForm: React.FC = () => {
 
                             {/* Subject Field */}
                             <div className="relative group">
-                                <label className={`absolute left-0 transition-all duration-300 pointer-events-none font-mono text-[9px] uppercase tracking-[0.2em] ${showLabel('subject') ? '-top-5 text-blue-600 opacity-100' : 'top-5 text-slate-400 opacity-0'}`}>
+                                <label htmlFor="contact-subject" className="sr-only">
                                     Subject Line
                                 </label>
                                 <input
+                                    id="contact-subject"
                                     required
                                     type="text"
                                     value={formData.subject}
                                     onChange={(e) => handleChange('subject', e.target.value)}
-                                    onFocus={() => setFocusedField('subject')}
-                                    onBlur={() => setFocusedField(null)}
-                                    className={`w-full py-4 bg-transparent border-b ${errors.subject ? 'border-red-300' : 'border-slate-200'} text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:placeholder-transparent transition-all outline-none text-base font-medium tracking-tight`}
-                                    placeholder={focusedField === 'subject' ? '' : 'Subject'}
+                                    aria-invalid={Boolean(errors.subject)}
+                                    aria-describedby={errors.subject ? 'contact-subject-error' : undefined}
+                                    className={`w-full rounded-none border-0 border-b bg-transparent py-4 ${errors.subject ? 'border-red-300' : 'border-slate-200'} text-base font-medium tracking-tight text-slate-900 placeholder:text-slate-400 hover:border-slate-300 focus:border-slate-900 focus-visible:outline-none focus-visible:ring-0 transition-colors duration-200`}
+                                    placeholder="What’s this about?"
                                 />
                                 {errors.subject && (
                                     <motion.p
+                                        id="contact-subject-error"
+                                        role="alert"
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                         className="text-[10px] font-bold text-red-500 mt-2 uppercase tracking-widest"
@@ -218,44 +256,33 @@ const ContactForm: React.FC = () => {
 
                             {/* Message Field */}
                             <div className="relative group">
-                                <label className={`absolute left-0 transition-all duration-300 pointer-events-none font-mono text-[9px] uppercase tracking-[0.2em] ${showLabel('message') ? '-top-5 text-blue-600 opacity-100' : 'top-5 text-slate-400 opacity-0'}`}>
+                                <label htmlFor="contact-message" className="sr-only">
                                     Detailed Message
                                 </label>
                                 <textarea
+                                    id="contact-message"
                                     rows={4}
                                     value={formData.message}
                                     onChange={(e) => handleChange('message', e.target.value)}
-                                    onFocus={() => setFocusedField('message')}
-                                    onBlur={() => setFocusedField(null)}
-                                    className="w-full py-4 bg-transparent border-b border-slate-200 text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:placeholder-transparent transition-all outline-none text-base font-medium tracking-tight resize-none"
-                                    placeholder={focusedField === 'message' ? '' : 'Your Message'}
+                                    className="w-full resize-none rounded-none border-0 border-b border-slate-200 bg-transparent py-4 text-base font-medium tracking-tight text-slate-900 placeholder:text-slate-400 hover:border-slate-300 focus:border-slate-900 focus-visible:outline-none focus-visible:ring-0 transition-colors duration-200"
+                                    placeholder="Tell me about the role or support you need"
                                 />
                             </div>
 
                             {/* Submit Button */}
                             <div className="pt-4">
-                                <Button
-                                    variant="accent"
-                                    size="lg"
+                                <button
                                     type="submit"
-                                    disabled={isSubmitting}
-                                    loading={isSubmitting}
-                                    className="w-full py-6 bg-slate-900 text-white rounded-2xl font-bold text-[10px] uppercase tracking-[0.3em] hover:bg-blue-600 transition-all duration-500 shadow-xl shadow-slate-200 flex items-center justify-between group/btn relative overflow-hidden"
+                                    disabled={isSubmitting || !emailJsConfig}
+                                    className="group/btn flex min-h-16 w-full items-center justify-between rounded-lg bg-slate-900 px-6 py-4 text-sm font-semibold text-white transition-colors duration-200 hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
                                 >
-                                    <span className="relative z-10 flex items-center gap-4 px-4 overflow-hidden">
-                                        <span className="inline-block transition-transform duration-500 group-hover/btn:-translate-y-[120%]">
-                                            {isSubmitting ? 'Processing...' : 'Send Message'}
-                                        </span>
-                                        <span className="absolute left-4 inline-block transition-transform duration-500 translate-y-[120%] group-hover/btn:translate-y-0">
-                                            {isSubmitting ? 'Processing...' : 'Send Now'}
-                                        </span>
-                                    </span>
-                                    <div className="relative z-10 w-10 h-10 bg-white/10 rounded-full flex items-center justify-center mr-2 transition-transform duration-500 group-hover/btn:scale-110 group-hover/btn:bg-white/20">
-                                        <svg className="w-4 h-4 transition-transform duration-500 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <span aria-live="polite" aria-atomic="true">{isSubmitting ? 'Sending...' : emailJsConfig ? 'Send Message' : 'Form Unavailable'}</span>
+                                    <span className="flex h-9 w-9 items-center justify-center rounded-md bg-white/10" aria-hidden="true">
+                                        <svg className="h-4 w-4 transition-transform duration-200 group-hover/btn:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                         </svg>
-                                    </div>
-                                </Button>
+                                    </span>
+                                </button>
                             </div>
                         </motion.form>
                     )}

@@ -7,7 +7,11 @@
 # Build output
 dist/
 dist-ssr/
+docs/
 .vite_cache/
+public/robots.txt
+public/rss.xml
+public/sitemap.xml
 
 # Dependencies
 node_modules/
@@ -24,6 +28,9 @@ lerna-debug.log*
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
+.vscode_history/
+.lighthouseci/
+coverage/
 .idea
 .DS_Store
 *.suo
@@ -40,3 +47,33 @@ tmp/localhost-root.html
 tmp/
 tmp_*
 *.tmp.webp
+
+# Local audits, browser captures, and one-off extraction output
+build_output.txt
+dev-*-out.txt
+temp*.txt
+ts*.txt
+ts_error*.txt
+ts_errors*.txt
+tsc_errors*.txt
+local_*.png
+process-check-*.png
+webflow_screenshot.png
+scrape*.js
+scrape*.json
+screenshot*.js
+exact_*.js
+exact_*.json
+*_spacing.json
+distances.json
+hero_img_styles.json
+photo_card_styles.json
+typo_*.json
+webflow*.json
+results*.json
+metadata.json
+lighthouse-*.json
+update-links.ps1
+modify-*.cjs
+fix-*.cjs
+undo-*.cjs

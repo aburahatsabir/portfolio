@@ -1,6 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  DEFAULT_SITE_URL,
+  STATIC_ROUTES,
+  getBlogPostRouteMetadata,
+  getStaticRouteMetadata,
+} from "../config/site-routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -8,91 +14,13 @@ const __dirname = path.dirname(__filename);
 export const SITE_URL = (
   process.env.SITE_URL ||
   process.env.VITE_SITE_URL ||
-  "https://aburahatsabir.vercel.app"
+  DEFAULT_SITE_URL
 ).replace(/\/+$/, "");
 
 const NOT_FOUND_ROUTE_PATH = "/404";
 const NOT_FOUND_TITLE = "Page Not Found | Abu Rahat Sabir";
 const NOT_FOUND_DESCRIPTION =
   "The page you requested could not be found. Return to the portfolio index or browse the latest work and writing.";
-const BLOG_INDEX_TITLE =
-  "The Journal: Ideas, Guides, Resources, Articles and Notes | Abu Rahat Sabir";
-const BLOG_INDEX_DESCRIPTION =
-  "Ideas, guides, resources, articles, and notes from Abu Rahat Sabir.";
-
-const STATIC_ROUTE_HEAD_METADATA = {
-  "/blog": {
-    title: BLOG_INDEX_TITLE,
-    description: BLOG_INDEX_DESCRIPTION,
-    ogImage: "/images/og-blog.webp",
-    ogImageAlt:
-      "The Journal by Abu Rahat Sabir — ideas, guides, resources, articles, and notes",
-    ogType: "website",
-    schema: (canonicalUrl, imageUrl, siteUrl) => ({
-      "@context": "https://schema.org",
-      "@type": "Blog",
-      "@id": `${canonicalUrl}#blog`,
-      name: "The Journal",
-      headline: BLOG_INDEX_TITLE.replace(" | Abu Rahat Sabir", ""),
-      description: BLOG_INDEX_DESCRIPTION,
-      url: canonicalUrl,
-      image: imageUrl,
-      publisher: {
-        "@type": "Person",
-        name: "Abu Rahat Sabir",
-        url: buildCanonicalUrl("/", siteUrl),
-      },
-      author: {
-        "@type": "Person",
-        name: "Abu Rahat Sabir",
-        url: buildCanonicalUrl("/about", siteUrl),
-      },
-      inLanguage: "en",
-    }),
-  },
-};
-
-const STATIC_ROUTES = [
-  "/",
-  "/about",
-  "/contact",
-  "/solutions",
-  "/governance",
-  "/blog",
-  "/for",
-  "/work",
-  "/privacy",
-  "/cookies",
-  "/accessibility",
-  "/conduct",
-  "/certifications",
-];
-
-const PERSONA_ROUTES = [
-  "/persona/executive-assistants",
-  "/persona/operations-leaders",
-  "/persona/founders",
-  "/persona/hiring-managers",
-];
-
-const WORK_ROUTE_ENTRIES = [
-  { routePath: "/work/fmcg-erp", canonicalPath: "/work/fmcg-erp" },
-  { routePath: "/work/mocs", canonicalPath: "/work/mocs" },
-  {
-    routePath: "/work/hr-documentation-control-system",
-    canonicalPath: "/work/hr-documentation-control-system",
-  },
-  // Legacy aliases preserved for direct requests; canonical points at the normalized route.
-  {
-    routePath: "/work/hr-docs",
-    canonicalPath: "/work/hr-documentation-control-system",
-  },
-  {
-    routePath: "/work/erp-lite",
-    canonicalPath: "/work/hr-documentation-control-system",
-  },
-];
-
 function escapeRegex(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
@@ -189,14 +117,6 @@ function toAbsoluteUrl(value, siteUrl = SITE_URL) {
   return new URL(value, `${siteUrl.replace(/\/+$/, "")}/`).href;
 }
 
-function getSeoTitleForBlogPost(post) {
-  return post.seoTitle || `${post.title} | Abu Rahat Sabir`;
-}
-
-function getSeoDescriptionForBlogPost(post) {
-  return post.seoDescription || post.excerpt;
-}
-
 function buildBlogPostingSchema(post, canonicalUrl, imageUrl, siteUrl = SITE_URL) {
   const datePublished = post.publishedAt || post.dateModified;
   const dateModified = post.dateModified || post.publishedAt;
@@ -211,7 +131,7 @@ function buildBlogPostingSchema(post, canonicalUrl, imageUrl, siteUrl = SITE_URL
     },
     headline: post.title,
     name: post.title,
-    description: getSeoDescriptionForBlogPost(post),
+    description: getBlogPostRouteMetadata(post).description,
     image: imageUrl ? [imageUrl] : undefined,
     author: {
       "@type": "Person",
@@ -263,9 +183,38 @@ function buildBreadcrumbListSchema(post, canonicalUrl, siteUrl = SITE_URL) {
   };
 }
 
+function buildBlogIndexSchema(canonicalUrl, imageUrl, siteUrl = SITE_URL) {
+  const metadata = getStaticRouteMetadata("/blog");
+  if (!metadata) {
+    throw new Error("Missing metadata for /blog");
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "@id": `${canonicalUrl}#blog`,
+    name: "The Journal",
+    headline: metadata.title.replace(" | Abu Rahat Sabir", ""),
+    description: metadata.description,
+    url: canonicalUrl,
+    image: imageUrl,
+    publisher: {
+      "@type": "Person",
+      name: "Abu Rahat Sabir",
+      url: buildCanonicalUrl("/", siteUrl),
+    },
+    author: {
+      "@type": "Person",
+      name: "Abu Rahat Sabir",
+      url: buildCanonicalUrl("/about", siteUrl),
+    },
+    inLanguage: "en",
+  };
+}
+
 export function injectRouteHead(html, routePath, siteUrl = SITE_URL) {
   const canonicalUrl = buildCanonicalUrl(routePath, siteUrl);
-  const routeMetadata = STATIC_ROUTE_HEAD_METADATA[routePath];
+  const routeMetadata = getStaticRouteMetadata(routePath);
   const imageUrl = toAbsoluteUrl(routeMetadata?.ogImage, siteUrl);
   let updatedHtml = upsertCanonicalLink(html, canonicalUrl);
   updatedHtml = upsertMetaTag(updatedHtml, "property", "og:url", canonicalUrl);
@@ -281,6 +230,12 @@ export function injectRouteHead(html, routePath, siteUrl = SITE_URL) {
     );
     updatedHtml = upsertMetaTag(
       updatedHtml,
+      "name",
+      "robots",
+      routeMetadata.robots,
+    );
+    updatedHtml = upsertMetaTag(
+      updatedHtml,
       "property",
       "og:type",
       routeMetadata.ogType || "website",
@@ -290,15 +245,15 @@ export function injectRouteHead(html, routePath, siteUrl = SITE_URL) {
       updatedHtml,
       "property",
       "og:description",
-      routeMetadata.description,
+      routeMetadata.socialDescription || routeMetadata.description,
     );
-    updatedHtml = upsertMetaTag(updatedHtml, "name", "twitter:card", "summary_large_image");
+    updatedHtml = upsertMetaTag(updatedHtml, "name", "twitter:card", routeMetadata.twitterCard);
     updatedHtml = upsertMetaTag(updatedHtml, "name", "twitter:title", routeMetadata.title);
     updatedHtml = upsertMetaTag(
       updatedHtml,
       "name",
       "twitter:description",
-      routeMetadata.description,
+      routeMetadata.socialDescription || routeMetadata.description,
     );
 
     if (imageUrl) {
@@ -320,11 +275,11 @@ export function injectRouteHead(html, routePath, siteUrl = SITE_URL) {
       );
     }
 
-    if (routeMetadata.schema) {
+    if (routePath === "/blog") {
       updatedHtml = upsertJsonLdScript(
         updatedHtml,
         "route-schema",
-        routeMetadata.schema(canonicalUrl, imageUrl, siteUrl),
+        buildBlogIndexSchema(canonicalUrl, imageUrl, siteUrl),
       );
     }
   }
@@ -334,52 +289,60 @@ export function injectRouteHead(html, routePath, siteUrl = SITE_URL) {
 
 export function injectBlogPostHead(html, post, routePath, siteUrl = SITE_URL) {
   const canonicalUrl = buildCanonicalUrl(routePath, siteUrl);
-  const seoTitle = getSeoTitleForBlogPost(post);
-  const seoDescription = getSeoDescriptionForBlogPost(post);
-  const imageUrl = toAbsoluteUrl(post.ogImage || post.image, siteUrl);
-  const datePublished = post.publishedAt || post.dateModified;
-  const dateModified = post.dateModified || post.publishedAt;
+  const routeMetadata = getBlogPostRouteMetadata(post);
+  const imageUrl = toAbsoluteUrl(routeMetadata.ogImage, siteUrl);
 
   let updatedHtml = injectRouteHead(html, routePath, siteUrl);
-  updatedHtml = upsertTitle(updatedHtml, seoTitle);
-  updatedHtml = upsertMetaTag(updatedHtml, "name", "description", seoDescription);
-  updatedHtml = upsertMetaTag(updatedHtml, "name", "author", post.author?.name || "Abu Rahat Sabir");
-  updatedHtml = upsertMetaTag(updatedHtml, "property", "og:type", "article");
-  updatedHtml = upsertMetaTag(updatedHtml, "property", "og:title", seoTitle);
-  updatedHtml = upsertMetaTag(updatedHtml, "property", "og:description", seoDescription);
+  updatedHtml = upsertTitle(updatedHtml, routeMetadata.title);
+  updatedHtml = upsertMetaTag(updatedHtml, "name", "description", routeMetadata.description);
+  updatedHtml = upsertMetaTag(updatedHtml, "name", "robots", routeMetadata.robots);
+  updatedHtml = upsertMetaTag(updatedHtml, "name", "author", routeMetadata.author);
+  updatedHtml = upsertMetaTag(updatedHtml, "property", "og:type", routeMetadata.ogType);
+  updatedHtml = upsertMetaTag(updatedHtml, "property", "og:title", routeMetadata.title);
+  updatedHtml = upsertMetaTag(
+    updatedHtml,
+    "property",
+    "og:description",
+    routeMetadata.socialDescription || routeMetadata.description,
+  );
   updatedHtml = upsertMetaTag(updatedHtml, "property", "og:url", canonicalUrl);
-  updatedHtml = upsertMetaTag(updatedHtml, "name", "twitter:card", "summary_large_image");
+  updatedHtml = upsertMetaTag(updatedHtml, "name", "twitter:card", routeMetadata.twitterCard);
   updatedHtml = upsertMetaTag(updatedHtml, "name", "twitter:url", canonicalUrl);
-  updatedHtml = upsertMetaTag(updatedHtml, "name", "twitter:title", seoTitle);
-  updatedHtml = upsertMetaTag(updatedHtml, "name", "twitter:description", seoDescription);
+  updatedHtml = upsertMetaTag(updatedHtml, "name", "twitter:title", routeMetadata.title);
+  updatedHtml = upsertMetaTag(
+    updatedHtml,
+    "name",
+    "twitter:description",
+    routeMetadata.socialDescription || routeMetadata.description,
+  );
 
   if (imageUrl) {
     updatedHtml = upsertMetaTag(updatedHtml, "property", "og:image", imageUrl);
-    updatedHtml = upsertMetaTag(updatedHtml, "property", "og:image:alt", post.title);
+    updatedHtml = upsertMetaTag(updatedHtml, "property", "og:image:alt", routeMetadata.ogImageAlt);
     updatedHtml = upsertMetaTag(updatedHtml, "name", "twitter:image", imageUrl);
-    updatedHtml = upsertMetaTag(updatedHtml, "name", "twitter:image:alt", post.title);
+    updatedHtml = upsertMetaTag(updatedHtml, "name", "twitter:image:alt", routeMetadata.ogImageAlt);
   }
 
-  if (datePublished) {
+  if (routeMetadata.publishedTime) {
     updatedHtml = upsertMetaTag(
       updatedHtml,
       "property",
       "article:published_time",
-      datePublished,
+      routeMetadata.publishedTime,
     );
   }
 
-  if (dateModified) {
+  if (routeMetadata.modifiedTime) {
     updatedHtml = upsertMetaTag(
       updatedHtml,
       "property",
       "article:modified_time",
-      dateModified,
+      routeMetadata.modifiedTime,
     );
   }
 
-  if (post.category) {
-    updatedHtml = upsertMetaTag(updatedHtml, "property", "article:section", post.category);
+  if (routeMetadata.section) {
+    updatedHtml = upsertMetaTag(updatedHtml, "property", "article:section", routeMetadata.section);
   }
 
   updatedHtml = upsertJsonLdScript(
@@ -435,23 +398,6 @@ export function extractBlogRouteEntries(sourceText) {
   return extractBlogPostMetadataEntries(sourceText).map((post) => ({
     routePath: `/blog/${post.id}`,
     canonicalPath: `/blog/${post.id}`,
-  }));
-}
-
-export function extractBlogRouteAliasEntries(sourceText) {
-  const aliasesBlock = sourceText.match(
-    /BLOG_POST_ROUTE_ALIASES[^=]*=\s*\{([\s\S]*?)\};/,
-  )?.[1];
-
-  if (!aliasesBlock) {
-    return [];
-  }
-
-  return [
-    ...aliasesBlock.matchAll(/["']([^"']+)["']\s*:\s*["']([^"']+)["']/g),
-  ].map((match) => ({
-    routePath: `/blog/${match[1]}`,
-    canonicalPath: `/blog/${match[2]}`,
   }));
 }
 
@@ -743,13 +689,7 @@ export function getPrerenderRouteEntries(blogPostsSource = readBlogPostsSource()
       routePath,
       canonicalPath: routePath,
     })),
-    ...PERSONA_ROUTES.map((routePath) => ({
-      routePath,
-      canonicalPath: routePath,
-    })),
-    ...WORK_ROUTE_ENTRIES,
     ...extractBlogRouteEntries(blogPostsSource),
-    ...extractBlogRouteAliasEntries(blogPostsSource),
   ];
 
   const uniqueEntries = new Map();

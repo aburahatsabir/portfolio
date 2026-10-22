@@ -34,14 +34,7 @@ const Footer: React.FC = () => {
     explore: [
       { name: 'About', path: '/about' },
       { name: 'Work', path: '/work' },
-      { name: 'Solutions', path: '/solutions' },
       { name: 'Contact', path: '/contact' },
-    ],
-    whoThisHelps: [
-      { name: 'Executive Assistants', path: '/persona/executive-assistants' },
-      { name: 'Operations Leaders', path: '/persona/operations-leaders' },
-      { name: 'Founders', path: '/persona/founders' },
-      { name: 'Hiring Managers', path: '/persona/hiring-managers' },
     ],
     resources: [
       { name: 'Certifications', path: '/certifications' },
@@ -63,7 +56,6 @@ const Footer: React.FC = () => {
           </div>
 
           <FooterColumn title="Explore" links={footerLinks.explore} />
-          <FooterColumn title="Who This Helps" links={footerLinks.whoThisHelps} />
           <FooterColumn title="Resources" links={footerLinks.resources} />
           <FooterColumn title="Evidence" links={footerLinks.evidence} />
         </div>

@@ -101,11 +101,12 @@
 }
 
 .administrative-working-process .working-process-main-title {
-  letter-spacing: 0 !important;
+  letter-spacing: -0.035em !important;
   word-spacing: normal;
   font-kerning: normal;
   font-stretch: normal;
-  line-height: 1.16;
+  line-height: 1.1;
+  text-wrap: balance;
   text-rendering: optimizeLegibility;
 }
 
@@ -209,10 +210,10 @@
 
 .administrative-working-process .working-process-card {
   position: relative;
-  border: 1px solid rgba(23, 23, 23, 0.1);
-  border-radius: 20px;
+  border: 1px solid rgba(20, 20, 20, 0.08);
+  border-radius: 14px;
   background-color: var(--process-white);
-  padding: 20px 20px 32px 32px;
+  padding: 32px;
   transform: translate3d(0, 0, 0);
   will-change: transform;
   backface-visibility: hidden;
@@ -228,43 +229,48 @@
 
 .administrative-working-process .working-process-card-icon-number-wrapper {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
 
 .administrative-working-process .working-process-card-icon-wrap {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex: 0 0 auto;
 }
 
 .administrative-working-process .working-process-card-icon {
   display: block;
   width: 100%;
-  max-width: 60px;
+  max-width: 52px;
 }
 
 .administrative-working-process .working-process-card-number {
-  color: rgba(20, 20, 20, 0.2);
-  font-size: 48px;
+  color: rgba(20, 20, 20, 0.46);
+  font-size: 13px;
   font-weight: 700;
-  line-height: 150%;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
 }
 
 .administrative-working-process .working-process-card-title {
-  margin: 0 0 8px;
+  margin: 0 0 12px;
   color: var(--process-primary);
-  font-size: 33px;
+  font-size: 32px;
   font-weight: 700;
-  line-height: 150%;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
 }
 
 .administrative-working-process .working-process-card-description {
+  max-width: 520px;
   color: var(--process-gray);
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 150%;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
 }
 
 @media screen and (max-width: 991px) {

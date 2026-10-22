@@ -6,7 +6,7 @@ import React, {
   useRef,
 } from "react";
 import { motion, AnimatePresence, useScroll, useSpring, useReducedMotion } from "framer-motion";
-import { BLOG_POSTS, resolveBlogPostRouteId } from "../content/blog-posts";
+import { BLOG_POSTS } from "../content/blog-posts";
 import type { BlogBodyRenderer, BlogPost, BlogTemplate } from "../types";
 import NotFoundPage from "./NotFoundPage";
 import DOMPurify from "dompurify";
@@ -5462,67 +5462,7 @@ const BlogPostDetail: React.FC<{ post: BlogPost }> = ({ post }) => {
   useEffect(() => {
     // Check Web Share API support
     setCanShare(typeof navigator.share === "function");
-
-    const originalTitle = document.title;
-    document.title = `${post.title} | Thought Leadership`;
-
-    // Inject OG + Twitter Card meta tags
-    const pageUrl = window.location.href;
-    const socialImage = post.ogImage ?? post.image;
-    const absoluteSocialImage = socialImage.startsWith("http")
-      ? socialImage
-      : `${window.location.origin}${socialImage}`;
-    const metaTags: { property?: string; name?: string; content: string }[] = [
-      { property: "og:type", content: "article" },
-      { property: "og:title", content: post.title },
-      { property: "og:description", content: post.excerpt },
-      { property: "og:image", content: absoluteSocialImage },
-      { property: "og:image:secure_url", content: absoluteSocialImage },
-      { property: "og:url", content: pageUrl },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: post.title },
-      { name: "twitter:description", content: post.excerpt },
-      { name: "twitter:image", content: absoluteSocialImage },
-    ];
-
-    let canonicalLink = document.querySelector(
-      'link[rel="canonical"]',
-    ) as HTMLLinkElement | null;
-    const previousCanonicalHref = canonicalLink?.href ?? null;
-    if (!canonicalLink) {
-      canonicalLink = document.createElement("link");
-      canonicalLink.rel = "canonical";
-      document.head.appendChild(canonicalLink);
-    }
-    canonicalLink.href = pageUrl;
-
-    const injected: HTMLMetaElement[] = [];
-    metaTags.forEach(({ property, name, content }) => {
-      const meta = document.createElement("meta");
-      if (property) {
-        meta.setAttribute("property", property);
-        document.querySelector(`meta[property="${property}"]`)?.remove();
-      } else if (name) {
-        meta.setAttribute("name", name);
-        document.querySelector(`meta[name="${name}"]`)?.remove();
-      }
-      meta.setAttribute("content", content);
-      document.head.appendChild(meta);
-      injected.push(meta);
-    });
-
-    return () => {
-      document.title = originalTitle;
-      injected.forEach((m) => m.remove());
-      if (canonicalLink) {
-        if (previousCanonicalHref) {
-          canonicalLink.href = previousCanonicalHref;
-        } else {
-          canonicalLink.remove();
-        }
-      }
-    };
-  }, [post]);
+  }, []);
 
   /*
   useEffect(() => {
@@ -6538,9 +6478,7 @@ const BlogSeries: React.FC = () => {
     }
   };
 
-  const selectedCanonicalPostId = selectedPostId
-    ? resolveBlogPostRouteId(selectedPostId)
-    : null;
+  const selectedCanonicalPostId = selectedPostId;
 
   useEffect(() => {
     if (!selectedPostId || selectedPostId === selectedCanonicalPostId) {

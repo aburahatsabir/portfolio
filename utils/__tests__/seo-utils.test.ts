@@ -1,4 +1,10 @@
 import { beforeEach, describe, expect, it } from "vitest";
+import { BLOG_POSTS } from "../../content/blog-posts";
+import {
+  DEFAULT_SITE_URL,
+  STATIC_ROUTE_METADATA,
+  getBlogPostRouteMetadata,
+} from "../../config/site-routes.js";
 import { updatePageMetadata } from "../seo-utils";
 
 describe("updatePageMetadata", () => {
@@ -6,7 +12,7 @@ describe("updatePageMetadata", () => {
     window.history.pushState(
       {},
       "",
-      "/work/hr-documentation-control-system?ref=twitter#overview",
+      "/work?ref=twitter#overview",
     );
 
     document
@@ -21,20 +27,20 @@ describe("updatePageMetadata", () => {
   });
 
   it("sets canonical and og:url to the clean path URL without query or hash", () => {
-    updatePageMetadata("/work/hr-documentation-control-system");
+    updatePageMetadata("/work");
 
     expect(
       document.querySelector('link[rel="canonical"]'),
     ).toHaveAttribute(
       "href",
-      "http://localhost:3000/work/hr-documentation-control-system",
+      `${DEFAULT_SITE_URL}/work`,
     );
 
     expect(
       document.querySelector('meta[property="og:url"]'),
     ).toHaveAttribute(
       "content",
-      "http://localhost:3000/work/hr-documentation-control-system",
+      `${DEFAULT_SITE_URL}/work`,
     );
   });
 
@@ -57,7 +63,7 @@ describe("updatePageMetadata", () => {
       document.querySelector('meta[property="og:image"]'),
     ).toHaveAttribute(
       "content",
-      "http://localhost:3000/images/blogs/how-to-learn-computer-networking-og.webp",
+      `${DEFAULT_SITE_URL}/images/blogs/how-to-learn-computer-networking-og.webp`,
     );
   });
 
@@ -75,26 +81,55 @@ describe("updatePageMetadata", () => {
     );
     expect(
       document.querySelector('link[rel="canonical"]'),
-    ).toHaveAttribute("href", "http://localhost:3000/blog");
+    ).toHaveAttribute("href", `${DEFAULT_SITE_URL}/blog`);
     expect(
       document.querySelector('meta[property="og:image"]'),
-    ).toHaveAttribute("content", "http://localhost:3000/images/og-blog.webp");
+    ).toHaveAttribute("content", `${DEFAULT_SITE_URL}/images/og-blog.webp`);
   });
 
-  it("sets old blog aliases to the canonical post URL", () => {
+  it("hydrates every canonical route from the shared metadata registry", () => {
+    const routes = [
+      ...Object.entries(STATIC_ROUTE_METADATA),
+      ...BLOG_POSTS.map((post) => [
+        `/blog/${post.id}`,
+        getBlogPostRouteMetadata(post),
+      ] as const),
+    ];
+
+    for (const [routePath, metadata] of routes) {
+      updatePageMetadata(routePath);
+
+      const canonicalUrl = `${DEFAULT_SITE_URL}${routePath === "/" ? "/" : routePath}`;
+      const socialDescription = metadata.socialDescription || metadata.description;
+
+      expect(document.title, routePath).toBe(metadata.title);
+      expect(document.querySelector('meta[name="description"]'), routePath)
+        .toHaveAttribute("content", metadata.description);
+      expect(document.querySelector('meta[name="robots"]'), routePath)
+        .toHaveAttribute("content", metadata.robots);
+      expect(document.querySelector('link[rel="canonical"]'), routePath)
+        .toHaveAttribute("href", canonicalUrl);
+      expect(document.querySelector('meta[property="og:title"]'), routePath)
+        .toHaveAttribute("content", metadata.title);
+      expect(document.querySelector('meta[property="og:description"]'), routePath)
+        .toHaveAttribute("content", socialDescription);
+      expect(document.querySelector('meta[property="og:type"]'), routePath)
+        .toHaveAttribute("content", metadata.ogType);
+      expect(document.querySelector('meta[property="og:url"]'), routePath)
+        .toHaveAttribute("content", canonicalUrl);
+      expect(document.querySelector('meta[name="twitter:title"]'), routePath)
+        .toHaveAttribute("content", metadata.title);
+      expect(document.querySelector('meta[name="twitter:description"]'), routePath)
+        .toHaveAttribute("content", socialDescription);
+      expect(document.querySelector('meta[name="twitter:url"]'), routePath)
+        .toHaveAttribute("content", canonicalUrl);
+    }
+  });
+
+  it("does not create canonical metadata for a removed blog route", () => {
     updatePageMetadata("/blog/blog-02");
 
-    expect(
-      document.querySelector('link[rel="canonical"]'),
-    ).toHaveAttribute(
-      "href",
-      "http://localhost:3000/blog/resume-writing-guide-getting-shortlisted",
-    );
-    expect(
-      document.querySelector('meta[property="og:url"]'),
-    ).toHaveAttribute(
-      "content",
-      "http://localhost:3000/blog/resume-writing-guide-getting-shortlisted",
-    );
+    expect(document.querySelector('link[rel="canonical"]')).toBeNull();
+    expect(document.querySelector('meta[property="og:url"]')).toBeNull();
   });
 });

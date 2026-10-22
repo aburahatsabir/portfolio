@@ -1,17 +1,24 @@
 import path from 'path';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
-import { visualizer } from 'rollup-plugin-visualizer';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
+import { assertProductionContactConfig } from './config/contact-env.js';
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => {
+  const environment = {
+    ...process.env,
+    ...loadEnv(mode, process.cwd(), ''),
+  };
+  assertProductionContactConfig(environment);
+  const hasSentryUpload = Boolean(environment.SENTRY_AUTH_TOKEN);
+
+  return {
   // Bypass OneDrive lock issues
   cacheDir: './.vite_cache',
 
-  // Set base path for GitHub Pages deployment
-  // GitHub Pages: /portfolio/ (subdirectory), Vercel: / (root)
-  base: process.env.GITHUB_ACTIONS ? '/portfolio/' : '/',
+  // Vercel is the only production host and serves the portfolio at the root.
+  base: '/',
 
   server: {
     port: 3001,
@@ -19,20 +26,15 @@ export default defineConfig({
 
   plugins: [
     react(),
-    // Bundle analysis visualization
-    visualizer({
-      filename: './dist/stats.html',
-      open: false,
-      gzipSize: true,
-      brotliSize: true,
-      template: 'sunburst', // 'sunburst', 'treemap', 'network'
-    }),
     // Sentry source map upload (only in production builds with auth token)
-    process.env.SENTRY_AUTH_TOKEN ? sentryVitePlugin({
-      authToken: process.env.SENTRY_AUTH_TOKEN,
-      org: process.env.SENTRY_ORG || 'abu-rahat-sabir',
-      project: process.env.SENTRY_PROJECT || 'portfolio',
+    hasSentryUpload ? sentryVitePlugin({
+      authToken: environment.SENTRY_AUTH_TOKEN,
+      org: environment.SENTRY_ORG || 'abu-rahat-sabir',
+      project: environment.SENTRY_PROJECT || 'portfolio',
       telemetry: false,
+      sourcemaps: {
+        filesToDeleteAfterUpload: ['./dist/**/*.map'],
+      },
     }) : null,
   ].filter(Boolean) as any, // Remove falsy plugins
 
@@ -45,7 +47,9 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
-    sourcemap: true, // Enable source maps for Sentry debugging
+    // Hidden maps are generated only for authenticated Sentry uploads and are
+    // deleted by the plugin before the deployment artifact is finalized.
+    sourcemap: hasSentryUpload ? 'hidden' : false,
     minify: 'terser',
 
     // Explicit browser targets for broader compatibility
@@ -180,9 +184,9 @@ export default defineConfig({
       'react-dom',
       'framer-motion',
       '@emailjs/browser',
-      'web-vitals',
-      'recharts'
+      'web-vitals'
     ],
     exclude: [],
   },
+  };
 });

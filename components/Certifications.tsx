@@ -1,20 +1,37 @@
-import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { CERTIFICATES, PLATFORM_METADATA, CATEGORY_METADATA, CertificatePlatform, Certificate, CertificateCategory, CertificateType } from '../content/certificates';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+    ArrowUpRight,
+    Award,
+    BadgeCheck,
+    BookOpenCheck,
+    BriefcaseBusiness,
+    ChevronLeft,
+    ChevronRight,
+    Clock3,
+    Code2,
+    Database,
+    LayoutGrid,
+    Palette,
+    Search,
+    Users,
+    X,
+} from 'lucide-react';
+import { CERTIFICATES, Certificate, CertificateCategory, CertificateType } from '../content/certificates';
 import SectionLabel from './shared/SectionLabel';
 import { trackCustomEvent } from '../utils/analytics';
 
 const revealVariants = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: 18 },
     visible: {
         opacity: 1,
         y: 0,
         transition: {
-            duration: 1.2,
+            duration: 0.45,
             ease: [0.16, 1, 0.3, 1],
-        }
-    }
+        },
+    },
 };
 
 const staggerContainer = {
@@ -22,671 +39,880 @@ const staggerContainer = {
     visible: {
         opacity: 1,
         transition: {
-            staggerChildren: 0.1,
-            delayChildren: 0.05,
+            staggerChildren: 0.045,
+        },
+    },
+};
+
+const FILTER_OPTIONS: Array<'All' | CertificateCategory> = [
+    'All',
+    'Data',
+    'Technical',
+    'Business',
+    'Design',
+    'Leadership',
+];
+
+const CERTIFICATES_PER_PAGE = 30;
+const POPOVER_OPEN_DELAY_MS = 180;
+const POPOVER_CLOSE_DELAY_MS = 220;
+const POPOVER_GAP_PX = 14;
+const POPOVER_MARGIN_PX = 16;
+const POPOVER_WIDTH_PX = 340;
+const LEARNING_MIN_LINES = 9;
+const LEARNING_MAX_LINES = 10;
+const LEARNING_APPROX_CHARS_PER_LINE = 42;
+const LEARNING_TEXT_HORIZONTAL_PADDING = 61;
+const LEARNING_MEASURE_FONT = '600 13px Arial, sans-serif';
+
+const CATEGORY_ICONS: Record<'All' | CertificateCategory, React.ReactNode> = {
+    All: <LayoutGrid aria-hidden="true" />,
+    Data: <Database aria-hidden="true" />,
+    Technical: <Code2 aria-hidden="true" />,
+    Business: <BriefcaseBusiness aria-hidden="true" />,
+    Design: <Palette aria-hidden="true" />,
+    Leadership: <Users aria-hidden="true" />,
+};
+
+const CERT_TYPE_LABELS: Record<CertificateType, string> = {
+    professional: 'Professional Certificate',
+    specialization: 'Specialization',
+    course: 'Course Certificate',
+};
+
+const TYPE_ORDER: Record<CertificateType, number> = {
+    professional: 0,
+    specialization: 1,
+    course: 2,
+};
+
+const CERTIFICATE_RELEVANCE_RANK: Record<string, number> = {
+    'microsoft-it-support': 1,
+    'google-it-support': 2,
+    'datacamp-ai-engineer-developers-associate': 3,
+    'datacamp-ai-engineer-data-scientists-associate': 4,
+    'datacamp-data-engineer-associate': 5,
+    'google-cloud-data-analytics': 6,
+    'machine-learning-python': 7,
+    'datacamp-data-scientist-associate': 8,
+    'ibm-data-management': 9,
+    'datacamp-data-analyst-associate': 10,
+    'google-data-analytics': 11,
+    'ibm-data-analyst': 12,
+    'meta-data-analyst': 13,
+    'python-basics-data-science': 14,
+    'version-control-git': 15,
+    'html-css-javascript-web': 16,
+    'ibm-data-analytics-excel-r': 17,
+    'excel-data-analytics-visualization': 18,
+    'excel-business-forecasting': 19,
+    'excel-skills-business': 20,
+    'agile-atlassian-jira': 21,
+    'introduction-to-linux': 22,
+    'ai-for-everyone': 23,
+    'career-success': 24,
+    'english-communication-skills': 25,
+    'understanding-modern-finance': 26,
+    'udemy-photoshop-beginner-pro': 27,
+};
+
+const getPlatformLogoAlt = (certificate: Certificate) => {
+    const logoPath = certificate.platformLogo.toLowerCase();
+    const logoSrc = getPlatformLogoSrc(certificate).toLowerCase();
+    if (logoSrc.includes('coursera')) return 'Coursera logo';
+    if (logoSrc.includes('datacamp') || logoSrc.includes('data camp')) return 'DataCamp logo';
+    if (logoPath.includes('edx')) return 'edX logo';
+    if (logoPath.includes('udemy')) return 'Udemy logo';
+    if (logoPath.includes('linkedin')) return 'LinkedIn Learning logo';
+    return `${certificate.platform} logo`;
+};
+
+const getPlatformLogoSrc = (certificate: Certificate) => {
+    if (certificate.platformLogo.startsWith('/images/certificates/')) {
+        return certificate.platformLogo;
+    }
+
+    return certificate.platform === 'edX'
+        ? '/images/certificates/edx logo.webp'
+        : '/images/certificates/coursera.webp';
+};
+
+const getPlatformLogoClass = (certificate: Certificate) => {
+    const logoPath = getPlatformLogoSrc(certificate).toLowerCase();
+    if (logoPath.includes('datacamp') || logoPath.includes('data camp')) return 'cert-logo--datacamp';
+    if (logoPath.includes('edx')) return 'cert-logo--edx';
+    if (logoPath.includes('udemy')) return 'cert-logo--udemy';
+    if (logoPath.includes('linkedin')) return 'cert-logo--linkedin';
+    return 'cert-logo--coursera';
+};
+
+const getRibbonLabel = (certificate: Certificate) => {
+    if (certificate.certType === 'course') return null;
+    if (certificate.platform === 'DataCamp') return 'Certification Exam';
+
+    return CERT_TYPE_LABELS[certificate.certType];
+};
+
+const getCertificateFacts = (certificate: Certificate) => {
+    if (certificate.platform === 'DataCamp') {
+        return [
+            { type: 'time' as const, label: '2hr' },
+            { type: 'course' as const, label: '30 day' },
+        ];
+    }
+
+    const facts: Array<{ type: 'time' | 'course'; label: string }> = [];
+
+    if (certificate.hours) {
+        facts.push({ type: 'time', label: `${certificate.hours}hrs` });
+    }
+
+    if (certificate.courses) {
+        facts.push({ type: 'course', label: `${certificate.courses} courses` });
+    } else if (certificate.certType === 'course') {
+        facts.push({ type: 'course', label: '1 course' });
+    }
+
+    return facts;
+};
+
+const getCredentialSource = (certificate: Certificate) => {
+    return certificate.platform === 'Other' ? certificate.issuer : certificate.platform;
+};
+
+const getVisibleSkillLimit = (certificate: Certificate) => {
+    if (certificate.skills.length <= 3) return certificate.skills.length;
+
+    const contentLoad = certificate.name.length + certificate.description.length;
+
+    if (contentLoad < 210) return Math.min(certificate.skills.length, 5);
+    if (contentLoad < 245) return Math.min(certificate.skills.length, 4);
+
+    return 3;
+};
+
+const getLearningItems = (certificate: Certificate) => {
+    return certificate.whatILearned.map(finishSentence).filter(Boolean);
+};
+
+let learningMeasureContext: CanvasRenderingContext2D | null = null;
+
+const getLearningMeasureContext = () => {
+    if (typeof document === 'undefined') return null;
+
+    if (!learningMeasureContext) {
+        learningMeasureContext = document.createElement('canvas').getContext('2d');
+    }
+
+    if (learningMeasureContext) {
+        learningMeasureContext.font = LEARNING_MEASURE_FONT;
+    }
+
+    return learningMeasureContext;
+};
+
+const getLearningLineCount = (learning: string, maxLineWidth?: number) => {
+    const context = getLearningMeasureContext();
+    if (!context || !maxLineWidth) {
+        return Math.max(1, Math.ceil(learning.length / LEARNING_APPROX_CHARS_PER_LINE));
+    }
+
+    const words = learning.trim().split(/\s+/);
+    let lines = 1;
+    let currentLine = '';
+
+    for (const word of words) {
+        const nextLine = currentLine ? `${currentLine} ${word}` : word;
+
+        if (context.measureText(nextLine).width > maxLineWidth && currentLine) {
+            lines += 1;
+            currentLine = word;
+        } else {
+            currentLine = nextLine;
         }
     }
+
+    return lines;
 };
 
-const CATEGORY_ICONS: Record<string, React.ReactNode> = {
-    All: (
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="3" y="3" width="7" height="7" rx="1.5" />
-            <rect x="14" y="3" width="7" height="7" rx="1.5" />
-            <rect x="14" y="14" width="7" height="7" rx="1.5" />
-            <rect x="3" y="14" width="7" height="7" rx="1.5" />
-        </svg>
-    ),
-    Technical: (
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M16 18l6-6-6-6M8 6l-6 6 6 6" />
-        </svg>
-    ),
-    Business: (
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="2" y="7" width="20" height="14" rx="2" />
-            <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16" />
-        </svg>
-    ),
-    Data: (
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M12 3c-4.97 0-9 1.79-9 4s4.03 4 9 4 9-1.79 9-4-4.03-4-9-4z" />
-            <path d="M3 7v10c0 2.21 4.03 4 9 4s9-1.79 9-4V7" />
-            <path d="M3 12c0 2.21 4.03 4 9 4s9-1.79 9-4" />
-        </svg>
-    ),
-    Design: (
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="10" />
-            <path d="M12 2A10 10 0 002 12a10 10 0 0010 10 10 10 0 0010-10H12V2z" />
-        </svg>
-    ),
-    Security: (
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-            <path d="M7 11V7a5 5 0 0110 0v4" />
-        </svg>
-    ),
-    Leadership: (
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-            <circle cx="9" cy="7" r="4" />
-            <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
-        </svg>
-    )
+const finishSentence = (text: string) => {
+    const cleanText = text.trim().replace(/[,:;—-]+$/u, '');
+    if (!cleanText) return '';
+
+    return /[.!?]$/u.test(cleanText) ? cleanText : `${cleanText}.`;
 };
 
-const FilterMenu: React.FC<{
-    anchorRef: React.RefObject<HTMLButtonElement>;
-    activeFilter: string;
-    counts: Record<string, number>;
-    onSelect: (filter: 'All' | CertificateCategory) => void;
-    onClose: () => void;
-}> = ({ anchorRef, activeFilter, counts, onSelect, onClose }) => {
-    const [rect, setRect] = useState<DOMRect | null>(null);
+const getConciseTakeawayCandidates = (certificate: Certificate) => {
+    const category = certificate.category.toLowerCase();
+    const primarySkill = certificate.skills[0];
+    const secondarySkill = certificate.skills[1];
+    const skillPhrase = primarySkill ? ` with ${primarySkill}` : '';
+    const skillPairPhrase =
+        primarySkill && secondarySkill ? `, ${primarySkill}, and ${secondarySkill}` : skillPhrase;
 
-    useEffect(() => {
-        if (anchorRef.current) {
-            setRect(anchorRef.current.getBoundingClientRect());
-        }
-    }, [anchorRef]);
-
-    if (!rect) return null;
-
-    const filterOptions: Array<'All' | CertificateCategory> = [
-        'All', 'Technical', 'Business', 'Data', 'Design', 'Leadership'
-    ];
-
-    return ReactDOM.createPortal(
-        <>
-            <div className="fixed inset-0 z-[9998]" onClick={onClose} />
-            <motion.div
-                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                style={{
-                    position: 'absolute',
-                    top: rect.bottom + window.scrollY + 8,
-                    right: window.innerWidth - rect.right,
-                    width: 240,
-                    zIndex: 9999
-                }}
-                className="bg-white/80 backdrop-blur-3xl border border-white/40 shadow-[0_30px_60px_rgba(0,0,0,0.1)] rounded-2xl p-2 overflow-hidden"
-            >
-                <div className="px-2 pt-2 space-y-1">
-                    {filterOptions.map((option) => (
-                        <button
-                            key={option}
-                            onClick={() => onSelect(option)}
-                            className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-500 group ${activeFilter === option
-                                ? 'bg-slate-900 text-white shadow-2xl shadow-slate-900/20'
-                                : 'hover:bg-slate-50 text-slate-500 hover:text-slate-900'
-                                }`}
-                        >
-                            <div className="flex items-center gap-4">
-                                <div className={`${activeFilter === option ? 'text-white' : 'text-slate-400 group-hover:text-blue-600'} transition-transform duration-500 group-hover:scale-110`}>
-                                    {CATEGORY_ICONS[option]}
-                                </div>
-                                <span className={`text-[12px] font-black tracking-tight uppercase transition-all duration-500 ${activeFilter === option ? 'translate-x-1' : 'group-hover:translate-x-1'}`}>
-                                    {option}
-                                </span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <span className={`text-[10px] font-bold ${activeFilter === option ? 'text-white/30' : 'text-slate-200 group-hover:text-slate-400'}`}>
-                                    {counts[option]}
-                                </span>
-                                {activeFilter === option && (
-                                    <div className="w-1.5 h-1.5 rounded-full bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.5)]" />
-                                )}
-                            </div>
-                        </button>
-                    ))}
-                </div>
-            </motion.div>
-        </>,
-        document.body
-    );
+    return [
+        certificate.keyTakeaways ? finishSentence(certificate.keyTakeaways) : '',
+        finishSentence(
+            `Connected ${certificate.issuer} training to practical ${category} workflows${skillPairPhrase} for job-ready execution`,
+        ),
+        finishSentence(`Applied ${certificate.issuer} training to practical ${category} workflows${skillPhrase}`),
+        finishSentence(`Applied the credential to practical ${category} workflows`),
+    ].filter(Boolean);
 };
 
-// Hover Popover Component — Udemy-style detailed preview, rendered via Portal
-const HoverPopover: React.FC<{
+const getBestTakeawayForRemainingLines = (
+    certificate: Certificate,
+    remainingLines: number,
+    neededLines: number,
+    maxLineWidth?: number,
+) => {
+    const candidates = getConciseTakeawayCandidates(certificate)
+        .map((item) => ({
+            item,
+            lineCount: getLearningLineCount(item, maxLineWidth),
+        }))
+        .filter(({ lineCount }) => lineCount <= remainingLines)
+        .sort((a, b) => {
+            const aMeetsNeed = a.lineCount >= neededLines ? 0 : 1;
+            const bMeetsNeed = b.lineCount >= neededLines ? 0 : 1;
+            if (aMeetsNeed !== bMeetsNeed) return aMeetsNeed - bMeetsNeed;
+
+            return Math.abs(neededLines - a.lineCount) - Math.abs(neededLines - b.lineCount);
+        });
+
+    return candidates[0] ?? null;
+};
+
+const getVisibleLearningItems = (certificate: Certificate, maxLineWidth?: number) => {
+    const visibleItems: string[] = [];
+    let usedLines = 0;
+
+    for (const learning of getLearningItems(certificate)) {
+        const lineCount = getLearningLineCount(learning, maxLineWidth);
+        if (usedLines + lineCount > LEARNING_MAX_LINES) break;
+
+        visibleItems.push(learning);
+        usedLines += lineCount;
+
+        if (usedLines >= LEARNING_MIN_LINES) break;
+    }
+
+    while (usedLines < LEARNING_MIN_LINES) {
+        const remainingLines = LEARNING_MAX_LINES - usedLines;
+        const neededLines = LEARNING_MIN_LINES - usedLines;
+        const takeaway = getBestTakeawayForRemainingLines(certificate, remainingLines, neededLines, maxLineWidth);
+
+        if (!takeaway || visibleItems.includes(takeaway.item)) break;
+
+        visibleItems.push(takeaway.item);
+        usedLines += takeaway.lineCount;
+    }
+
+    return visibleItems;
+};
+
+const getCompletionYear = (certificate: Certificate) => {
+    return new Date(certificate.completionDate).getFullYear();
+};
+
+const getPaginationItems = (currentPage: number, totalPages: number) => {
+    if (totalPages <= 7) {
+        return Array.from({ length: totalPages }, (_, index) => index + 1);
+    }
+
+    if (currentPage <= 4) {
+        return [1, 2, 3, 4, 5, 'ellipsis-end', totalPages] as const;
+    }
+
+    if (currentPage >= totalPages - 3) {
+        return [1, 'ellipsis-start', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages] as const;
+    }
+
+    return [1, 'ellipsis-start', currentPage - 1, currentPage, currentPage + 1, 'ellipsis-end', totalPages] as const;
+};
+
+const canShowLearningPopover = () => {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return true;
+
+    return window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+};
+
+const LearningPopover: React.FC<{
     certificate: Certificate;
-    anchorRect: DOMRect | null;
+    anchorElement: HTMLElement;
     onMouseEnter: () => void;
     onMouseLeave: () => void;
-}> = ({ certificate, anchorRect, onMouseEnter, onMouseLeave }) => {
-    if (!anchorRect) return null;
+}> = ({ certificate, anchorElement, onMouseEnter, onMouseLeave }) => {
+    if (typeof document === 'undefined') return null;
 
-    const popoverWidth = 360;
-    const gap = 12;
+    const anchorRect = anchorElement.getBoundingClientRect();
     const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
+    const viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
 
-    // Determine if popover should go left or right of the card
-    const spaceRight = viewportWidth - anchorRect.right;
-    const position: 'left' | 'right' = spaceRight > popoverWidth + gap ? 'right' : 'left';
+    if (
+        !document.body.contains(anchorElement) ||
+        anchorRect.width <= 0 ||
+        anchorRect.height <= 0 ||
+        anchorRect.bottom <= 0 ||
+        anchorRect.top >= viewportHeight - POPOVER_MARGIN_PX
+    ) {
+        return null;
+    }
 
-    const style: React.CSSProperties = {
-        position: 'absolute',
-        top: anchorRect.top + window.scrollY,
-        height: anchorRect.height,
-        width: popoverWidth,
-        zIndex: 50,
-        pointerEvents: 'auto',
-        ...(position === 'right'
-            ? { left: anchorRect.right + gap }
-            : { left: anchorRect.left - popoverWidth - gap }
-        ),
-    };
+    const popoverWidth = Math.min(POPOVER_WIDTH_PX, viewportWidth - POPOVER_MARGIN_PX * 2);
+    const canPlaceRight = viewportWidth - anchorRect.right >= popoverWidth + POPOVER_GAP_PX + POPOVER_MARGIN_PX;
+    const placement = canPlaceRight ? 'right' : 'left';
+    const left = canPlaceRight
+        ? anchorRect.right + POPOVER_GAP_PX
+        : Math.max(POPOVER_MARGIN_PX, anchorRect.left - popoverWidth - POPOVER_GAP_PX);
+    const top = anchorRect.top;
+    const learningTextWidth = Math.max(180, popoverWidth - LEARNING_TEXT_HORIZONTAL_PADDING);
+    const visibleLearningItems = getVisibleLearningItems(certificate, learningTextWidth);
 
     return ReactDOM.createPortal(
-        <motion.div
-            initial={{ opacity: 0, y: 15, scale: 0.98 }}
+        <motion.aside
+            initial={{ opacity: 0, y: 10, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 15, scale: 0.98 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            style={style}
+            exit={{ opacity: 0, y: 8, scale: 0.98 }}
+            transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+            style={
+                {
+                    left,
+                    top,
+                    height: anchorRect.height,
+                    width: popoverWidth,
+                    '--cert-dc-popover-gap': `${POPOVER_GAP_PX}px`,
+                } as React.CSSProperties
+            }
+            data-side={placement}
+            className="cert-dc-popover"
+            aria-label={`What I learned from ${certificate.name}`}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
-            className="z-[9999]"
         >
-            <div className="bg-white/80 backdrop-blur-2xl rounded-2xl border border-white/40 shadow-[0_30px_60px_rgba(0,0,0,0.12)] p-7 space-y-5 overflow-hidden">
-                {/* Title */}
-                <div>
-                    <h4 className="text-[19px] font-black text-slate-900 leading-tight tracking-tighter">
-                        {certificate.name}
-                    </h4>
+            <div className="cert-dc-popover__panel">
+                <div className="cert-dc-popover__eyebrow">
+                    <BookOpenCheck aria-hidden="true" />
+                    What I learned
                 </div>
 
-                {/* Description */}
-                <p className="text-[13px] text-slate-600 leading-relaxed font-medium">
-                    {certificate.description}
-                </p>
+                <h3 className="cert-dc-popover__title">{certificate.name}</h3>
 
-                {/* What I Learned */}
-                {certificate.whatILearned.length > 0 && (
-                    <div className="space-y-3 pt-4 border-t border-slate-100">
-                        <p className="text-[10px] uppercase font-bold tracking-wider text-slate-400">What I Learned</p>
-                        <ul className="space-y-3">
-                            {certificate.whatILearned.slice(0, 3).map((learning, idx) => (
-                                <li key={idx} className="flex gap-3 text-[12px] text-slate-600 leading-snug items-start">
-                                    <div className="mt-1.5 h-1 w-1 rounded-full bg-blue-600 flex-shrink-0" />
-                                    <span className="font-medium">{learning}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
+                <ul className="cert-dc-popover__list">
+                    {visibleLearningItems.map((learning) => (
+                        <li key={learning}>
+                            <span>{learning}</span>
+                        </li>
+                    ))}
+                </ul>
 
-                {/* CTA */}
                 {certificate.credentialUrl && (
                     <a
                         href={certificate.credentialUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group/btn relative flex items-center justify-center gap-3 w-full py-3.5 bg-slate-900 rounded-xl transition-all duration-300 hover:shadow-2xl active:scale-[0.98]"
+                        className="cert-dc-popover__link"
                     >
-                        <span className="text-white text-[11px] font-bold uppercase tracking-[0.2em]">
-                            View Certificate
-                        </span>
-                        <svg className="w-3.5 h-3.5 text-white transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
+                        View Certificate
+                        <ArrowUpRight aria-hidden="true" />
                     </a>
                 )}
             </div>
-        </motion.div>,
-        document.body
+        </motion.aside>,
+        document.body,
     );
 };
-
 
 const Certifications: React.FC = () => {
     const [activeFilter, setActiveFilter] = useState<'All' | CertificateCategory>('All');
     const [searchQuery, setSearchQuery] = useState('');
-    const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
-    const [hoveredCert, setHoveredCert] = useState<{ cert: Certificate; rect: DOMRect } | null>(null);
+    const [currentPage, setCurrentPage] = useState(1);
     const [mounted, setMounted] = useState(false);
-    const [isSearchFocused, setIsSearchFocused] = useState(false);
+    const [learningPopover, setLearningPopover] = useState<{ cert: Certificate; anchor: HTMLElement } | null>(null);
+    const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const isOverPopoverRef = useRef(false);
+    const isLearningPopoverOpen = Boolean(learningPopover);
 
-    const filterButtonRef = useRef<HTMLButtonElement>(null);
-    const searchInputRef = useRef<HTMLInputElement>(null);
-    const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-    const isOverPopover = useRef(false);
-    const filterChangeTimeRef = useRef<number>(0);
+    const clearHoverTimeout = useCallback(() => {
+        if (hoverTimeoutRef.current) {
+            clearTimeout(hoverTimeoutRef.current);
+            hoverTimeoutRef.current = null;
+        }
+    }, []);
+
+    const closeLearningPopover = useCallback(() => {
+        isOverPopoverRef.current = false;
+        clearHoverTimeout();
+        setLearningPopover(null);
+    }, [clearHoverTimeout]);
 
     useEffect(() => {
         setMounted(true);
-        return () => setMounted(false);
-    }, []);
+
+        return () => {
+            clearHoverTimeout();
+        };
+    }, [clearHoverTimeout]);
+
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                closeLearningPopover();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [closeLearningPopover]);
+
+    useEffect(() => {
+        if (!isLearningPopoverOpen) return undefined;
+
+        let animationFrame = 0;
+        const syncPopoverPosition = () => {
+            if (animationFrame) return;
+
+            animationFrame = window.requestAnimationFrame(() => {
+                animationFrame = 0;
+                setLearningPopover((current) => {
+                    if (!current || !document.body.contains(current.anchor)) return null;
+
+                    return { ...current };
+                });
+            });
+        };
+
+        window.addEventListener('scroll', syncPopoverPosition, true);
+        window.addEventListener('resize', syncPopoverPosition);
+
+        return () => {
+            window.removeEventListener('scroll', syncPopoverPosition, true);
+            window.removeEventListener('resize', syncPopoverPosition);
+            if (animationFrame) {
+                window.cancelAnimationFrame(animationFrame);
+            }
+        };
+    }, [isLearningPopoverOpen]);
 
     const counts = useMemo(() => {
-        const categoryCounts: Record<string, number> = { All: CERTIFICATES.length };
-        CERTIFICATES.forEach(cert => {
-            categoryCounts[cert.category] = (categoryCounts[cert.category] || 0) + 1;
+        const categoryCounts: Record<'All' | CertificateCategory, number> = {
+            All: CERTIFICATES.length,
+            Data: 0,
+            Technical: 0,
+            Business: 0,
+            Design: 0,
+            Leadership: 0,
+        };
+
+        CERTIFICATES.forEach((cert) => {
+            categoryCounts[cert.category] += 1;
         });
+
         return categoryCounts;
     }, []);
 
     const filteredCertificates = useMemo(() => {
-        const TYPE_ORDER: Record<CertificateType, number> = {
-            professional: 0,
-            specialization: 1,
-            course: 2,
-        };
+        const searchLower = searchQuery.trim().toLowerCase();
+
         return CERTIFICATES
-            .filter(cert => {
+            .filter((cert) => {
                 const matchesFilter = activeFilter === 'All' || cert.category === activeFilter;
-                const searchLower = searchQuery.toLowerCase();
-                const matchesSearch = !searchQuery ||
+                const matchesSearch =
+                    !searchLower ||
                     cert.name.toLowerCase().includes(searchLower) ||
                     cert.issuer.toLowerCase().includes(searchLower) ||
-                    cert.skills.some(skill => skill.toLowerCase().includes(searchLower));
+                    cert.platform.toLowerCase().includes(searchLower) ||
+                    cert.description.toLowerCase().includes(searchLower) ||
+                    cert.skills.some((skill) => skill.toLowerCase().includes(searchLower));
+
                 return matchesFilter && matchesSearch;
             })
-            .sort((a, b) => TYPE_ORDER[a.certType] - TYPE_ORDER[b.certType]);
-    }, [activeFilter, searchQuery]);
+            .sort((a, b) => {
+                const rankDiff =
+                    (CERTIFICATE_RELEVANCE_RANK[a.id] ?? 999) -
+                    (CERTIFICATE_RELEVANCE_RANK[b.id] ?? 999);
+                if (rankDiff !== 0) return rankDiff;
 
-    // Forcefully dismiss any popover whenever the active filter changes
-    useEffect(() => {
-        if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-        setHoveredCert(null);
-        isOverPopover.current = false;
-        filterChangeTimeRef.current = Date.now();
-    }, [activeFilter]);
+                const typeDiff = TYPE_ORDER[a.certType] - TYPE_ORDER[b.certType];
+                if (typeDiff !== 0) return typeDiff;
+
+                return new Date(b.completionDate).getTime() - new Date(a.completionDate).getTime();
+            });
+    }, [activeFilter, searchQuery]);
 
     const stats = useMemo(() => {
         const totalHours = CERTIFICATES.reduce((sum, cert) => sum + (cert.hours || 0), 0);
-        const uniquePlatforms = new Set(CERTIFICATES.map(cert => cert.platform)).size - ['Google', 'Meta', 'Microsoft'].filter(p => CERTIFICATES.some(c => c.platform === p)).length;
-        const latestCert = [...CERTIFICATES].sort((a, b) =>
-            new Date(b.completionDate).getTime() - new Date(a.completionDate).getTime()
+        const uniqueSources = new Set(CERTIFICATES.map(getCredentialSource)).size;
+        const latestCert = [...CERTIFICATES].sort(
+            (a, b) => new Date(b.completionDate).getTime() - new Date(a.completionDate).getTime(),
         )[0];
+
         return {
             total: CERTIFICATES.length,
             hours: totalHours,
-            platforms: uniquePlatforms,
-            latest: latestCert
+            sources: uniqueSources,
+            latest: latestCert,
         };
     }, []);
 
-    const handleFilterChange = (filter: 'All' | CertificateCategory) => {
-        // Clear any active popover & hover state before switching filter
-        if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-        setHoveredCert(null);
-        isOverPopover.current = false;
+    const shouldPaginate = filteredCertificates.length > CERTIFICATES_PER_PAGE;
+    const totalPages = Math.max(1, Math.ceil(filteredCertificates.length / CERTIFICATES_PER_PAGE));
+    const paginatedCertificates = useMemo(() => {
+        if (!shouldPaginate) return filteredCertificates;
 
+        const startIndex = (currentPage - 1) * CERTIFICATES_PER_PAGE;
+        return filteredCertificates.slice(startIndex, startIndex + CERTIFICATES_PER_PAGE);
+    }, [currentPage, filteredCertificates, shouldPaginate]);
+    const paginationItems = useMemo(
+        () => (shouldPaginate ? getPaginationItems(currentPage, totalPages) : []),
+        [currentPage, shouldPaginate, totalPages],
+    );
+
+    const handleFilterChange = (filter: 'All' | CertificateCategory) => {
+        closeLearningPopover();
         setActiveFilter(filter);
+        setCurrentPage(1);
         trackCustomEvent('certifications_filter_change', {
             event_category: 'certifications',
-            skill_area: filter
+            skill_area: filter,
         });
     };
 
-    const handleMouseEnter = useCallback((cert: Certificate, element: HTMLElement) => {
-        // Suppress popover while the filter menu is open or within 500ms
-        // after a filter change to prevent ghost popovers
-        if (isFilterMenuOpen) return;
-        if (Date.now() - filterChangeTimeRef.current < 500) return;
-        if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-        hoverTimeoutRef.current = setTimeout(() => {
-            const rect = element.getBoundingClientRect();
-            setHoveredCert({ cert, rect });
-        }, 300);
-    }, [isFilterMenuOpen]);
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        closeLearningPopover();
+        setSearchQuery(event.target.value);
+        setCurrentPage(1);
+    };
 
-    const handleMouseLeave = useCallback(() => {
-        if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-        hoverTimeoutRef.current = setTimeout(() => {
-            if (!isOverPopover.current) {
-                setHoveredCert(null);
-            }
-        }, 200);
-    }, []);
+    const clearSearch = () => {
+        closeLearningPopover();
+        setSearchQuery('');
+        setCurrentPage(1);
+    };
+
+    const clearFilters = () => {
+        closeLearningPopover();
+        setSearchQuery('');
+        setCurrentPage(1);
+        handleFilterChange('All');
+    };
+
+    const goToPage = (page: number) => {
+        closeLearningPopover();
+        setCurrentPage(Math.min(Math.max(page, 1), totalPages));
+    };
+
+    const openLearningPopover = useCallback(
+        (certificate: Certificate, element: HTMLElement) => {
+            if (!certificate.whatILearned.length || !canShowLearningPopover()) return;
+
+            isOverPopoverRef.current = false;
+            clearHoverTimeout();
+            setLearningPopover(null);
+            hoverTimeoutRef.current = setTimeout(() => {
+                if (document.body.contains(element)) {
+                    setLearningPopover({ cert: certificate, anchor: element });
+                }
+            }, POPOVER_OPEN_DELAY_MS);
+        },
+        [clearHoverTimeout],
+    );
+
+    const scheduleLearningPopoverClose = useCallback(
+        (delay = POPOVER_CLOSE_DELAY_MS) => {
+            clearHoverTimeout();
+            hoverTimeoutRef.current = setTimeout(() => {
+                if (!isOverPopoverRef.current) {
+                    setLearningPopover(null);
+                }
+            }, delay);
+        },
+        [clearHoverTimeout],
+    );
 
     const handlePopoverMouseEnter = useCallback(() => {
-        isOverPopover.current = true;
-        if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-    }, []);
+        isOverPopoverRef.current = true;
+        clearHoverTimeout();
+    }, [clearHoverTimeout]);
 
     const handlePopoverMouseLeave = useCallback(() => {
-        isOverPopover.current = false;
-        hoverTimeoutRef.current = setTimeout(() => {
-            setHoveredCert(null);
-        }, 150);
-    }, []);
+        isOverPopoverRef.current = false;
+        scheduleLearningPopoverClose();
+    }, [scheduleLearningPopoverClose]);
 
-    const filterOptions: Array<'All' | CertificateCategory> = [
-        'All',
-        'Technical',
-        'Business',
-        'Data',
-        'Design',
-        'Leadership'
-    ];
+    const handleCardFocus = useCallback(
+        (certificate: Certificate, event: React.FocusEvent<HTMLElement>) => {
+            if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
+            openLearningPopover(certificate, event.currentTarget);
+        },
+        [openLearningPopover],
+    );
+
+    const handleCardBlur = useCallback(
+        (event: React.FocusEvent<HTMLElement>) => {
+            if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
+            scheduleLearningPopoverClose();
+        },
+        [scheduleLearningPopoverClose],
+    );
 
     return (
-        <section id="certifications" className="py-24 md:py-40 bg-white selection:bg-blue-700 selection:text-white overflow-hidden">
-            <div className="max-w-7xl mx-auto px-6">
-                {/* Header Section */}
-                <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-16 items-end mb-24">
-                    <div className="space-y-10">
-                        <div className="flex items-center gap-4">
-                            <SectionLabel>Certifications</SectionLabel>
-                            <div className="h-px bg-slate-100 flex-1"></div>
+        <section id="certifications" className="cert-dc-page selection:bg-[#4f46e5] selection:text-white">
+            <div className="cert-dc-container">
+                <div className="cert-dc-hero">
+                    <div style={{ fontVariantLigatures: 'none', fontFeatureSettings: '"liga" 0, "clig" 0' }}>
+                        <div className="cert-dc-eyebrow">
+                            <Award className="h-4 w-4" strokeWidth={2.2} aria-hidden="true" />
+                            <SectionLabel className="!text-[16px] !font-medium !normal-case !tracking-normal !text-[#141414] !leading-[150%]">
+                                Certifications
+                            </SectionLabel>
                         </div>
-                        <h1 className="text-6xl md:text-8xl lg:text-[100px] font-[900] tracking-[-0.04em] leading-[0.88] text-slate-900">
-                            Verified <br />
-                            <span className="text-slate-400">Expertise.</span>
+
+                        <h1 className="cert-dc-title">
+                            Certifications I've earned
                         </h1>
-                        <p className="text-xl md:text-2xl text-slate-500 font-medium leading-relaxed max-w-xl">
-                            Industry-recognized credentials proving <span className="text-slate-900 font-bold">technical mastery</span> across domains—from production-grade code to strategic execution.
+
+                        <p className="cert-dc-description">
+                            A record of formal training and certification exams I've completed, each one verifiable
+                            through the issuing body. Filter by field below, or open a credential to check it directly.
                         </p>
                     </div>
 
-                    {/* Telemetry Stats */}
-                    <div className="flex flex-wrap gap-x-12 gap-y-10 lg:justify-end pb-4">
-                        <div className="space-y-2 group/meta">
-                            <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400 group-hover/meta:text-blue-700 transition-colors">Earned</p>
-                            <p className="text-3xl font-black text-slate-900 tracking-tight">{stats.total}<span className="text-blue-700 text-sm ml-1">+</span></p>
+                    <aside className="cert-dc-summary" aria-label="Certification portfolio summary">
+                        <div className="cert-dc-summary__badge">
+                            <BadgeCheck aria-hidden="true" />
+                            Portfolio verified
                         </div>
-                        <div className="space-y-2 group/meta">
-                            <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400 group-hover/meta:text-blue-700 transition-colors">Invested</p>
-                            <p className="text-3xl font-black text-slate-900 tracking-tight">{stats.hours}<span className="text-blue-700 text-sm ml-1">Hrs</span></p>
+                        <div className="cert-dc-summary__grid">
+                            <div>
+                                <span>Certificates</span>
+                                <strong>{stats.total}</strong>
+                            </div>
+                            <div>
+                                <span>Learning hours</span>
+                                <strong>{Math.floor(stats.hours).toLocaleString()} hrs</strong>
+                            </div>
+                            <div>
+                                <span>Platforms</span>
+                                <strong>{stats.sources}</strong>
+                            </div>
                         </div>
-                        <div className="space-y-2 group/meta">
-                            <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400 group-hover/meta:text-blue-700 transition-colors">Platforms</p>
-                            <p className="text-3xl font-black text-slate-900 tracking-tight">{stats.platforms}</p>
-                        </div>
-                    </div>
+                        <p className="cert-dc-summary__latest">
+                            Latest: {stats.latest.name} ({getCompletionYear(stats.latest)})
+                        </p>
+                    </aside>
                 </div>
 
-                {/* Filter Control Bar — Architectural Breadcrumb Style */}
-                <div className="mb-16">
-                    <div className="flex items-center justify-between pb-8">
-                        {/* Filter Status */}
-                        <div className="flex items-center gap-4">
-                            <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Showing</span>
-                            <AnimatePresence mode="wait">
-                                <motion.span
-                                    key={activeFilter}
-                                    initial={{ opacity: 0, y: 4 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -4 }}
-                                    className="text-slate-900 font-black text-base tracking-tight"
-                                >
-                                    {activeFilter === 'All' ? 'All Certifications' : activeFilter}
-                                </motion.span>
-                            </AnimatePresence>
-                            <div className="h-4 w-px bg-slate-200" />
-                            <span className="text-[11px] font-semibold text-slate-400 tabular-nums">
-                                {filteredCertificates.length}
-                            </span>
-                        </div>
-
-                        {/* Minimalist Search & Filter Bar */}
-                        <div className="flex items-center gap-4">
-                            {/* Modern Search Input */}
-                            <motion.div
-                                animate={{
-                                    width: isSearchFocused || searchQuery ? (typeof window !== 'undefined' && window.innerWidth < 640 ? 180 : 280) : 48,
-                                    transition: { duration: 0.4, ease: [0.23, 1, 0.32, 1] }
-                                }}
-                                onClick={() => searchInputRef.current?.focus()}
-                                className={`relative group flex items-center h-12 rounded-full border transition-[border-color,background-color] duration-300 cursor-text overflow-hidden ${isSearchFocused
-                                    ? 'border-slate-900 bg-white shadow-2xl shadow-slate-900/5'
-                                    : 'border-slate-200 bg-white/50 hover:border-slate-400'
-                                    }`}
-                            >
-                                <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center text-slate-400 group-hover:text-slate-900 transition-colors duration-300">
-                                    <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                                        <circle cx="11" cy="11" r="8" />
-                                        <path d="M21 21l-4.35-4.35" />
-                                    </svg>
-                                </div>
-
-                                <input
-                                    ref={searchInputRef}
-                                    type="text"
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    onFocus={() => setIsSearchFocused(true)}
-                                    onBlur={() => setIsSearchFocused(false)}
-                                    placeholder="Search certifications..."
-                                    className="w-full h-full pl-12 pr-10 bg-transparent text-[13px] font-bold text-slate-900 placeholder:text-slate-300 focus:outline-none"
-                                />
-
-                                {searchQuery && (
-                                    <button
-                                        onClick={() => {
-                                            setSearchQuery('');
-                                            searchInputRef.current?.focus();
-                                        }}
-                                        className="absolute right-3 p-1 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-900 transition-all duration-300"
-                                    >
-                                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                                            <path d="M18 6L6 18M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                )}
-                            </motion.div>
-
-                            <AnimatePresence>
-                                {activeFilter !== 'All' && (
-                                    <motion.button
-                                        initial={{ opacity: 0, scale: 0.8 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        exit={{ opacity: 0, scale: 0.8 }}
-                                        onClick={() => handleFilterChange('All')}
-                                        className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 hover:text-blue-700 transition-colors"
-                                    >
-                                        Reset
-                                    </motion.button>
-                                )}
-                            </AnimatePresence>
-
-                            <motion.button
-                                ref={filterButtonRef}
-                                onClick={() => setIsFilterMenuOpen(!isFilterMenuOpen)}
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                className={`relative group flex items-center justify-center w-12 h-12 rounded-full transition-all duration-500 overflow-hidden ${isFilterMenuOpen
-                                    ? 'bg-slate-900 text-white shadow-2xl rotate-45'
-                                    : 'bg-white border border-slate-200 text-slate-900 hover:border-slate-900'
-                                    }`}
-                            >
-                                <div className="relative z-10 transition-transform duration-500">
-                                    {isFilterMenuOpen ? (
-                                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                                            <path d="M18 6L6 18M6 6l12 12" />
-                                        </svg>
-                                    ) : (
-                                        <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                                            <line x1="4" y1="8" x2="20" y2="8" />
-                                            <line x1="4" y1="16" x2="20" y2="16" />
-                                            <circle cx="9" cy="8" r="2.5" fill="currentColor" stroke="none" />
-                                            <circle cx="15" cy="16" r="2.5" fill="currentColor" stroke="none" />
-                                        </svg>
-                                    )}
-                                </div>
-                                <motion.div
-                                    className="absolute inset-0 bg-slate-900 opacity-0 group-hover:opacity-5 transition-opacity"
-                                />
-                            </motion.button>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Faceted Filter Menu — Portal based */}
-                <AnimatePresence>
-                    {isFilterMenuOpen && (
-                        <FilterMenu
-                            anchorRef={filterButtonRef}
-                            activeFilter={activeFilter}
-                            counts={counts}
-                            onSelect={(f) => {
-                                handleFilterChange(f);
-                                setIsFilterMenuOpen(false);
-                            }}
-                            onClose={() => setIsFilterMenuOpen(false)}
+                <div className="cert-dc-controls" aria-label="Certification search and filters">
+                    <div className="cert-dc-search">
+                        <Search aria-hidden="true" />
+                        <label className="sr-only" htmlFor="certification-search">
+                            Search certifications
+                        </label>
+                        <input
+                            id="certification-search"
+                            type="text"
+                            value={searchQuery}
+                            onChange={handleSearchChange}
+                            placeholder="Search certifications"
                         />
-                    )}
-                </AnimatePresence>
+                        {searchQuery && (
+                            <button type="button" onClick={clearSearch} aria-label="Clear search">
+                                <X aria-hidden="true" />
+                            </button>
+                        )}
+                    </div>
 
-                {/* Certificates Grid */}
+                    <div className="cert-dc-tabs" role="list" aria-label="Filter certifications by category">
+                        {FILTER_OPTIONS.map((option) => (
+                            <button
+                                key={option}
+                                type="button"
+                                aria-pressed={activeFilter === option}
+                                className={`cert-dc-tab ${activeFilter === option ? 'cert-dc-tab--active' : ''}`}
+                                onClick={() => handleFilterChange(option)}
+                            >
+                                <span className="cert-dc-tab__icon">{CATEGORY_ICONS[option]}</span>
+                                <span>{option}</span>
+                                <span className="cert-dc-tab__count">{counts[option]}</span>
+                            </button>
+                        ))}
+                    </div>
+
+                    <div className="cert-dc-results">
+                        <strong>{filteredCertificates.length}</strong>{' '}
+                        {filteredCertificates.length === 1 ? 'Certification' : 'Certifications'}
+                    </div>
+                </div>
+
                 <motion.div
                     variants={staggerContainer}
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ once: true, margin: "-5%" }}
-                    className="grid md:grid-cols-2 lg:grid-cols-3 gap-5"
-                    style={{ pointerEvents: isFilterMenuOpen ? 'none' : 'auto' }}
+                    viewport={{ once: true, margin: '-5%' }}
+                    className="cert-dc-grid"
                 >
                     <AnimatePresence mode="popLayout">
-                        {filteredCertificates.map((cert) => (
-                            <motion.div
-                                layout="position"
-                                key={cert.id}
-                                variants={revealVariants}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                                className="group cursor-pointer h-full"
-                                onMouseEnter={(e) => handleMouseEnter(cert, e.currentTarget)}
-                                onMouseLeave={handleMouseLeave}
-                                role="article"
-                                aria-label={`${cert.name} certification`}
-                            >
-                                <div className={`relative h-full bg-white border border-slate-200/60 rounded-2xl hover:border-slate-300 hover:executive-shadow transition-[border-color,box-shadow,transform] duration-700 flex flex-col p-9 group/card hover:-translate-y-2 cert-card`}>
-                                    {/* Category Label + Platform Logo */}
-                                    <div className="flex justify-between items-center mb-8">
-                                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400/50 group-hover/card:text-blue-700 transition-colors duration-500">
-                                            {cert.category}
-                                        </span>
-                                        <img
-                                            src={
-                                                cert.platformLogo.startsWith('/images/certificates/')
-                                                    ? cert.platformLogo
-                                                    : cert.platform === 'edX'
-                                                        ? '/images/certificates/edx logo.webp'
-                                                        : '/images/certificates/coursera.webp'
-                                            }
-                                            alt={cert.platform}
-                                            className="cert-logo object-contain ml-auto flex-shrink-0"
-                                            style={{
-                                                height: cert.platform === 'LinkedIn Learning' ? '16px'
-                                                    : cert.platform === 'edX' ? '14px'
-                                                        : cert.platform === 'Udemy' ? '14px'
-                                                            : cert.platform === 'DataCamp' ? '18px'
-                                                                : cert.id === 'bmet-computer-operation' ? '32px'
-                                                                    : cert.id === 'it-aid-graphic-design' ? '18px'
-                                                                        : undefined,
-                                                width: 'auto',
-                                                maxWidth: cert.id === 'bmet-computer-operation' ? '32px' : undefined,
-                                            }}
-                                        />
-                                    </div>
+                        {paginatedCertificates.map((cert) => {
+                            const ribbonLabel = getRibbonLabel(cert);
+                            const facts = getCertificateFacts(cert);
 
-                                    {/* Title */}
-                                    <h3 className="text-[22px] font-black text-slate-900 leading-[1.15] tracking-tighter mb-8 group-hover/card:text-blue-700 transition-colors duration-300">
-                                        {cert.name}
-                                    </h3>
-
-                                    {/* Metadata */}
-                                    <div className="space-y-6 mb-auto">
-                                        <div className="flex flex-col gap-1.5">
-                                            <span className="text-[9px] font-bold uppercase tracking-widest text-slate-300">Issued By</span>
-                                            <p className="text-[11px] font-black text-slate-900 tracking-tight">
-                                                {cert.issuer}
-                                            </p>
+                            return (
+                                <motion.article
+                                    layout="position"
+                                    key={cert.id}
+                                    variants={revealVariants}
+                                    initial={{ opacity: 0, y: 14 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                                    className="cert-dc-card cert-card"
+                                    aria-label={`${cert.name} certification`}
+                                    onMouseEnter={(event) => openLearningPopover(cert, event.currentTarget)}
+                                    onMouseLeave={() => scheduleLearningPopoverClose()}
+                                    onFocus={(event) => handleCardFocus(cert, event)}
+                                    onBlur={handleCardBlur}
+                                >
+                                    {ribbonLabel && (
+                                        <div className="cert-dc-ribbon">
+                                            <Award aria-hidden="true" />
+                                            {ribbonLabel}
                                         </div>
-                                        <div className={`grid gap-8 ${cert.courses ? 'grid-cols-3' : 'grid-cols-2'}`}>
-                                            <div className="flex flex-col gap-1.5">
-                                                <span className="text-[9px] font-bold uppercase tracking-widest text-slate-300">Completed</span>
-                                                <p className="text-[11px] font-bold text-slate-500">
-                                                    {new Date(cert.completionDate).getFullYear()}
-                                                </p>
+                                    )}
+
+                                    <div className="cert-dc-card__body">
+                                        <div className="cert-dc-card__top">
+                                            <img
+                                                src={getPlatformLogoSrc(cert)}
+                                                alt={getPlatformLogoAlt(cert)}
+                                                className={`cert-logo ${getPlatformLogoClass(cert)}`}
+                                            />
+                                        </div>
+
+                                        <h2 className="cert-dc-card__title">{cert.name}</h2>
+
+                                        <div className="cert-dc-card__meta">
+                                            <strong>{getCompletionYear(cert)}</strong>
+                                            <span className="cert-dc-card__meta-divider" aria-hidden="true" />
+                                            <span>with {cert.issuer}</span>
+                                        </div>
+
+                                        <p className="cert-dc-card__description">{cert.description}</p>
+
+                                        {cert.skills.length > 0 && (
+                                            <div className="cert-dc-skill-row" aria-label="Primary skills">
+                                                {cert.skills.slice(0, getVisibleSkillLimit(cert)).map((skill) => (
+                                                    <span key={skill}>{skill}</span>
+                                                ))}
                                             </div>
-                                            {cert.hours && (
-                                                <div className="flex flex-col gap-1.5">
-                                                    <span className="text-[9px] font-bold uppercase tracking-widest text-slate-300">Hours</span>
-                                                    <p className="text-[11px] font-bold text-slate-500">
-                                                        {cert.hours}
-                                                    </p>
-                                                </div>
-                                            )}
-                                            {cert.courses && (
-                                                <div className="flex flex-col gap-1.5">
-                                                    <span className="text-[9px] font-bold uppercase tracking-widest text-slate-300">Courses</span>
-                                                    <p className="text-[11px] font-bold text-slate-500">
-                                                        {cert.courses}
-                                                    </p>
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        {/* Description Preview */}
-                                        <p className="text-[12px] text-slate-500 leading-relaxed line-clamp-2">
-                                            {cert.description}
-                                        </p>
+                                        )}
                                     </div>
 
-                                    {/* Skills */}
-                                    {cert.skills.length > 0 && (
-                                        <div className="mt-6 pt-8 border-t border-slate-50 group-hover/card:border-slate-100 transition-colors duration-500">
-                                            <div className="flex flex-wrap gap-x-5 gap-y-2">
-                                                {cert.skills.slice(0, 3).map((skill, i) => (
-                                                    <span key={i} className="text-[9px] font-bold text-slate-400 tracking-tight flex items-center gap-2">
-                                                        <span className="w-1 h-1 rounded-full bg-slate-200 group-hover/card:bg-blue-400 transition-colors" />
-                                                        {skill}
+                                    <div className="cert-dc-card__footer">
+                                        {facts.length > 0 && (
+                                            <div className="cert-dc-facts">
+                                                {facts.map((fact) => (
+                                                    <span key={`${cert.id}-${fact.label}`}>
+                                                        {fact.type === 'time' ? (
+                                                            <Clock3 aria-hidden="true" />
+                                                        ) : (
+                                                            <BookOpenCheck aria-hidden="true" />
+                                                        )}
+                                                        {fact.label}
                                                     </span>
                                                 ))}
                                             </div>
-                                        </div>
-                                    )}
-                                </div>
-                            </motion.div>
-                        ))}
+                                        )}
+
+                                        {cert.credentialUrl && (
+                                            <a
+                                                href={cert.credentialUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="cert-dc-link"
+                                            >
+                                                View Certificate
+                                                <ArrowUpRight aria-hidden="true" />
+                                            </a>
+                                        )}
+                                    </div>
+                                </motion.article>
+                            );
+                        })}
                     </AnimatePresence>
                 </motion.div>
 
-                {/* Empty State */}
+                {shouldPaginate && (
+                    <nav className="cert-dc-pagination" aria-label="Certification pagination">
+                        <button
+                            type="button"
+                            className="cert-dc-pagination__arrow"
+                            onClick={() => goToPage(currentPage - 1)}
+                            disabled={currentPage === 1}
+                        >
+                            <ChevronLeft aria-hidden="true" />
+                            Previous
+                        </button>
+
+                        <div className="cert-dc-pagination__pages">
+                            {paginationItems.map((item) =>
+                                typeof item === 'number' ? (
+                                    <button
+                                        key={item}
+                                        type="button"
+                                        className={`cert-dc-pagination__page ${
+                                            currentPage === item ? 'cert-dc-pagination__page--active' : ''
+                                        }`}
+                                        aria-current={currentPage === item ? 'page' : undefined}
+                                        onClick={() => goToPage(item)}
+                                    >
+                                        {item}
+                                    </button>
+                                ) : (
+                                    <span key={item} className="cert-dc-pagination__ellipsis" aria-hidden="true">
+                                        ...
+                                    </span>
+                                ),
+                            )}
+                        </div>
+
+                        <button
+                            type="button"
+                            className="cert-dc-pagination__arrow"
+                            onClick={() => goToPage(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                        >
+                            Next
+                            <ChevronRight aria-hidden="true" />
+                        </button>
+                    </nav>
+                )}
+
                 {filteredCertificates.length === 0 && (
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 12 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-center py-32 space-y-4"
+                        className="cert-dc-empty"
                     >
-                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-50 text-slate-200 mb-6">
-                            <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                <circle cx="11" cy="11" r="8" />
-                                <path d="M21 21l-4.35-4.35" />
-                                <path d="M8 8l6 6M14 8l-6 6" />
-                            </svg>
-                        </div>
-                        <h3 className="text-2xl font-black text-slate-900 tracking-tight">No results found</h3>
-                        <p className="text-slate-400 font-medium max-w-sm mx-auto">
-                            We couldn't find any certificates matching "{searchQuery}" in the {activeFilter} category.
+                        <h2>No results found</h2>
+                        <p>
+                            We could not find any certificates matching "{searchQuery}" in the {activeFilter} category.
                         </p>
-                        <button
-                            onClick={() => {
-                                setSearchQuery('');
-                                handleFilterChange('All');
-                            }}
-                            className="mt-8 text-[11px] font-black uppercase tracking-[0.2em] text-blue-600 hover:text-blue-700 transition-colors"
-                        >
-                            Clear all filters
+                        <button type="button" onClick={clearFilters}>
+                            Reset filters
                         </button>
                     </motion.div>
                 )}
             </div>
 
-            {/* Udemy-style Hover Popover — rendered via Portal */}
             <AnimatePresence>
-                {mounted && hoveredCert && (
-                    <HoverPopover
-                        certificate={hoveredCert.cert}
-                        anchorRect={hoveredCert.rect}
+                {mounted && learningPopover && (
+                    <LearningPopover
+                        certificate={learningPopover.cert}
+                        anchorElement={learningPopover.anchor}
                         onMouseEnter={handlePopoverMouseEnter}
                         onMouseLeave={handlePopoverMouseLeave}
                     />

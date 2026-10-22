@@ -20,16 +20,11 @@ const ROUTE_CONFIG = {
   "/": { priority: "1.0", changefreq: "weekly" },
   "/about": { priority: "0.9", changefreq: "monthly" },
   "/work": { priority: "0.9", changefreq: "weekly" },
-  "/solutions": { priority: "0.8", changefreq: "monthly" },
   "/blog": { priority: "0.8", changefreq: "weekly" },
-  "/for": { priority: "0.7", changefreq: "monthly" },
   "/contact": { priority: "0.9", changefreq: "monthly" },
-  "/governance": { priority: "0.7", changefreq: "monthly" },
   "/certifications": { priority: "0.6", changefreq: "monthly" },
   "/privacy": { priority: "0.3", changefreq: "yearly" },
   "/cookies": { priority: "0.3", changefreq: "yearly" },
-  "/accessibility": { priority: "0.3", changefreq: "yearly" },
-  "/conduct": { priority: "0.3", changefreq: "yearly" },
 };
 
 function readBlogPostsSource() {
@@ -46,14 +41,6 @@ function normalizeSiteUrl(siteUrl = SITE_URL) {
 function getDefaultRouteConfig(routePath) {
   if (routePath.startsWith("/blog/")) {
     return { priority: "0.7", changefreq: "monthly" };
-  }
-
-  if (routePath.startsWith("/work/")) {
-    return { priority: "0.8", changefreq: "monthly" };
-  }
-
-  if (routePath.startsWith("/persona/")) {
-    return { priority: "0.8", changefreq: "monthly" };
   }
 
   return { priority: "0.5", changefreq: "monthly" };

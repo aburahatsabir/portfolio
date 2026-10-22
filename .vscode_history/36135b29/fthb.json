@@ -1,6 +1,0 @@
-{
-    "chat.mcp.gallery.enabled": true,
-    "editor.minimap.enabled": false,
-    "security.workspace.trust.untrustedFiles": "open",
-    "git.autofetch": true
-}

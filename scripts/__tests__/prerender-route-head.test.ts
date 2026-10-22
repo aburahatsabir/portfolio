@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import {
   buildCanonicalUrl,
   extractBlogPostMetadataEntries,
-  extractBlogRouteAliasEntries,
   extractBlogRouteEntries,
   injectBlogPostHead,
   injectNotFoundHead,
@@ -13,10 +12,10 @@ describe("prerender route head helpers", () => {
   it("builds a clean canonical URL from the site URL and route path", () => {
     expect(
       buildCanonicalUrl(
-        "/work/hr-documentation-control-system",
+        "/work",
         "https://aburahatsabir.vercel.app/",
       ),
-    ).toBe("https://aburahatsabir.vercel.app/work/hr-documentation-control-system");
+    ).toBe("https://aburahatsabir.vercel.app/work");
   });
 
   it("injects canonical, og:url, and twitter:url into raw HTML", () => {
@@ -119,26 +118,6 @@ describe("prerender route head helpers", () => {
       },
       {
         routePath: "/blog/how-to-learn-computer-networking",
-        canonicalPath: "/blog/how-to-learn-computer-networking",
-      },
-    ]);
-  });
-
-  it("extracts legacy blog aliases with canonical targets", () => {
-    const routes = extractBlogRouteAliasEntries(`
-      export const BLOG_POST_ROUTE_ALIASES: Record<string, string> = {
-        "blog-02": "resume-writing-guide-getting-shortlisted",
-        "blog-semrush-bing-ai": "how-to-learn-computer-networking",
-      };
-    `);
-
-    expect(routes).toEqual([
-      {
-        routePath: "/blog/blog-02",
-        canonicalPath: "/blog/resume-writing-guide-getting-shortlisted",
-      },
-      {
-        routePath: "/blog/blog-semrush-bing-ai",
         canonicalPath: "/blog/how-to-learn-computer-networking",
       },
     ]);

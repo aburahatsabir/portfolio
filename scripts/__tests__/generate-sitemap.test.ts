@@ -6,11 +6,6 @@ import {
 } from "../generate-sitemap.js";
 
 const BLOG_POSTS_SOURCE = `
-export const BLOG_POST_ROUTE_ALIASES: Record<string, string> = {
-  "blog-02": "resume-writing-guide-getting-shortlisted",
-  "blog-semrush-bing-ai": "how-to-learn-computer-networking",
-};
-
 export const BLOG_POSTS: BlogPost[] = [
   {
     id: "resume-writing-guide-getting-shortlisted",
@@ -37,15 +32,20 @@ describe("generate sitemap", () => {
 
     expect(paths).toContain("/blog/resume-writing-guide-getting-shortlisted");
     expect(paths).toContain("/blog/how-to-learn-computer-networking");
-    expect(paths).toContain("/work/fmcg-erp");
-    expect(paths).toContain("/work/mocs");
-    expect(paths).toContain("/work/hr-documentation-control-system");
-    expect(paths).toContain("/accessibility");
-    expect(paths).toContain("/conduct");
     expect(paths).toContain("/certifications");
 
     expect(paths).not.toContain("/blog/blog-02");
     expect(paths).not.toContain("/blog/blog-semrush-bing-ai");
+    expect(paths).not.toContain("/governance");
+    expect(paths).not.toContain("/accessibility");
+    expect(paths).not.toContain("/conduct");
+    expect(paths).not.toContain("/terms");
+    expect(paths).not.toContain("/styleguide");
+    expect(paths).not.toContain("/work/fmcg-erp");
+    expect(paths).not.toContain("/work/mocs");
+    expect(paths).not.toContain("/work/hr-documentation-control-system");
+    expect(paths).not.toContain("/work/payroll-control");
+    expect(paths).not.toContain("/work/trade-finance");
     expect(paths).not.toContain("/work/hr-docs");
     expect(paths).not.toContain("/work/erp-lite");
     expect(paths).not.toContain("/work/fmcg-distribution-erp");
@@ -65,9 +65,6 @@ describe("generate sitemap", () => {
       "<loc>https://example.com/blog/resume-writing-guide-getting-shortlisted</loc>",
     );
     expect(sitemap).toContain("<lastmod>2026-04-02</lastmod>");
-    expect(sitemap).toContain(
-      "<loc>https://example.com/work/hr-documentation-control-system</loc>",
-    );
     expect(sitemap).not.toContain("github.io/portfolio");
     expect(sitemap).not.toContain("aburahatsabir.com");
     expect(sitemap).not.toContain("/blog/blog-02");

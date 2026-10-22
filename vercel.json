@@ -1,17 +1,5 @@
 {
     "trailingSlash": false,
-    "redirects": [
-        {
-            "source": "/blog/blog-02",
-            "destination": "/blog/resume-writing-guide-getting-shortlisted",
-            "permanent": true
-        },
-        {
-            "source": "/blog/blog-semrush-bing-ai",
-            "destination": "/blog/how-to-learn-computer-networking",
-            "permanent": true
-        }
-    ],
     "headers": [
         {
             "source": "/(.*)",

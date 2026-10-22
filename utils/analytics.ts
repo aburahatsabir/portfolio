@@ -47,15 +47,22 @@ export interface ScrollDepthEvent {
     page: string;
 }
 
-// Check if Google Analytics is loaded
+const hasAnalyticsConsent = (): boolean => {
+    return typeof window !== 'undefined'
+        && window.localStorage.getItem('cookie-consent') === 'accepted';
+};
+
+// Check if Google Analytics is loaded and the visitor has opted in.
 const isGALoaded = (): boolean => {
-    return typeof window !== 'undefined' && typeof (window as any).gtag === 'function';
+    return hasAnalyticsConsent() && typeof (window as any).gtag === 'function';
 };
 
 /**
  * Send event to GA4 or queue if unavailable
  */
 const sendEvent = (eventName: string, params: Record<string, any> = {}): void => {
+    if (!hasAnalyticsConsent()) return;
+
     if (isGALoaded()) {
         try {
             (window as any).gtag('event', eventName, params);

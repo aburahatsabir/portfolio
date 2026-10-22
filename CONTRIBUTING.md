@@ -587,15 +587,15 @@ trackEvent('cta_click', {
    npm run optimize:images
    ```
 
-3. Use OptimizedImage component:
+3. Use an explicit responsive image with dimensions and meaningful alternative text:
    ```tsx
-   import { OptimizedImage } from '@/components/OptimizedImage';
-   
-   <OptimizedImage
+   <img
      src="/images/projects/my-project.webp"
      alt="Descriptive alt text"
      width={800}
      height={600}
+     loading="lazy"
+     decoding="async"
    />
    ```
 

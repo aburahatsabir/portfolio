@@ -26,12 +26,10 @@ export const initSentry = () => {
             dsn,
             environment: import.meta.env.MODE, // 'development' or 'production'
 
-            // Performance Monitoring
-            tracesSampleRate: import.meta.env.PROD ? 0.1 : 1.0, // 10% in prod, 100% in dev
-
-            // Session Replay (optional - captures user sessions for debugging)
-            replaysSessionSampleRate: 0, // Disabled to save quota
-            replaysOnErrorSampleRate: 0.1, // Capture 10% of sessions with errors
+            // Error reports only: no performance tracing or session replay.
+            tracesSampleRate: 0,
+            replaysSessionSampleRate: 0,
+            replaysOnErrorSampleRate: 0,
 
             // Filter out sensitive data before sending to Sentry
             beforeSend(event) {

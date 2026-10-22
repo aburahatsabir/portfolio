@@ -1,153 +1,140 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { EXPERIENCES } from '../content/experiences';
-import SectionLabel from './shared/SectionLabel';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { BadgeCheck } from 'lucide-react';
+import './ExperienceTimeline.css';
 
-interface ExperienceCardProps {
-    exp: typeof EXPERIENCES[0];
-    index: number;
-    isActive: boolean;
-    onClick: () => void;
-}
+const profileLogoUrl = `${import.meta.env.BASE_URL}favicon-192.png`;
 
-const ExperienceCard: React.FC<ExperienceCardProps> = ({ exp, index, isActive, onClick }) => {
-    return (
-        <div className="relative pl-20 md:pl-40 pb-16 last:pb-0">
-            {/* Timeline line */}
-            <div
-                className="absolute top-0 bottom-0 w-px bg-slate-200 overflow-hidden"
-                style={{ left: 'var(--timeline-center)' }}
-            >
-                <div className="relative h-full w-full -translate-x-1/2">
-                    {isActive && (
-                        <motion.div
-                            initial={{ y: '-100%' }}
-                            animate={{ y: '100%' }}
-                            transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
-                            className="w-full h-32 bg-gradient-to-b from-transparent via-blue-600 to-transparent"
-                        />
-                    )}
-                </div>
-            </div>
-
-            {/* Timeline dot */}
-            <button
-                type="button"
-                onClick={onClick}
-                aria-label={`View details for ${exp.role} at ${exp.company}, ${exp.period}`}
-                className={`absolute top-1 w-8 h-8 rounded-full border flex items-center justify-center z-10 transition-all duration-500 bg-white group focus:outline-none -translate-x-1/2 ${isActive
-                    ? 'border-blue-600 shadow-lg shadow-blue-500/10'
-                    : 'border-slate-300 hover:border-blue-500'
-                    }`}
-                style={{ left: 'var(--timeline-center)' }}
-            >
-                <div
-                    className={`w-2 h-2 rounded-full transition-all duration-500 ${isActive
-                        ? 'bg-blue-600 scale-125'
-                        : 'bg-slate-300 group-hover:bg-blue-600'
-                        }`}
-                />
-            </button>
-
-            {/* Content */}
-            <div className="transition-all duration-500">
-                <div className="flex flex-col gap-6">
-                    {/* Header */}
-                    <div className="space-y-1">
-                        <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-2">
-                            <h3
-                                onClick={onClick}
-                                className="text-2xl md:text-3xl font-[900] text-slate-900 tracking-tighter leading-none cursor-pointer hover:text-blue-600 transition-colors"
-                            >
-                                {exp.role}
-                            </h3>
-                            <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">
-                                {exp.period}
-                            </span>
-                        </div>
-                        <p className="text-sm font-bold text-blue-600 uppercase tracking-widest">
-                            {exp.company}
-                        </p>
-                    </div>
-
-                    {/* Expanded Content */}
-                    <AnimatePresence mode="wait">
-                        {isActive && (
-                            <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: 'auto', opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                                className="overflow-hidden"
-                            >
-                                <div className="pt-2 pb-6">
-                                    {/* Description List */}
-                                    <ul className="grid gap-4">
-                                        {exp.description.map((desc, i) => (
-                                            <li key={i} className="flex gap-4 items-start">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-2.5 shrink-0 opacity-60" />
-                                                <p className="text-base text-slate-600 font-medium leading-relaxed">
-                                                    {desc}
-                                                </p>
-                                            </li>
-                                        ))}
-                                    </ul>
-
-                                    {exp.metrics && exp.metrics.length > 0 && (
-                                        <div className="mt-8 grid grid-cols-2 gap-4">
-                                            {exp.metrics.map((metric, i) => (
-                                                <div key={i} className="p-4 bg-slate-50 border border-slate-100 rounded-2xl group/metric">
-                                                    <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">{metric.label}</p>
-                                                    <p className="text-xl font-black text-slate-900 group-hover/metric:text-blue-600 transition-colors">{metric.value}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </div>
-            </div>
-        </div>
-    );
+const revealVariants = {
+    hidden: { opacity: 0, y: 28 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+            duration: 0.8,
+            ease: [0.16, 1, 0.3, 1],
+        },
+    },
 };
 
+const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.12,
+            delayChildren: 0.08,
+        },
+    },
+};
+
+const experienceRecords = [
+    {
+        role: 'Executive Administration & Operations',
+        company: 'Prominent Tec',
+        period: '2024 – Present',
+        summary: 'Connecting leadership priorities with daily operations and reporting, so administrative work stays organized and decisions are never delayed.',
+        focus: ['Executive Support', 'Vendor Coordination', 'Reporting'],
+        mark: 'PT',
+        color: '#316ff6',
+        current: true,
+    },
+    {
+        role: 'Program Coordination & Support',
+        company: 'Dreams IT Park',
+        period: '2022 – 2023',
+        summary: 'Kept training programs on track by coordinating resources, guiding participants, and preparing everything before each session.',
+        focus: ['Program Coordination', 'Participant Guidance', 'Resource Readiness'],
+        mark: 'D',
+        color: '#f36f3d',
+        current: false,
+    },
+    {
+        role: 'Lab Operations & Asset Coordination',
+        company: 'I-Con Computer Institute',
+        period: '2019 – 2021',
+        summary: 'Kept computer labs ready every day through equipment management, software setup, and organized asset records.',
+        focus: ['Lab Management', 'Asset Tracking', 'Learner Support'],
+        mark: 'I',
+        color: '#161616',
+        current: false,
+    },
+];
+
 const ExperienceTimeline: React.FC = () => {
-    const [activeIndex, setActiveIndex] = useState<number | null>(0);
-
     return (
-        <section
-            id="experience"
-            className="py-16 md:py-32 bg-white relative [--timeline-center:40px] md:[--timeline-center:80px]"
-        >
-            <div className="max-w-7xl mx-auto px-6 relative z-10">
-                {/* Header */}
-                <div className="max-w-3xl mb-24 space-y-6">
-                    <div className="flex items-center gap-4">
-                        <SectionLabel>Professional Record</SectionLabel>
-                        <div className="h-px bg-slate-100 flex-1" />
-                    </div>
-                    <h2 className="text-5xl md:text-8xl font-[900] tracking-tighter leading-none text-slate-900">
-                        Career Path.
-                    </h2>
-                    <p className="text-xl text-slate-500 font-medium leading-relaxed max-w-2xl">
-                        A strategic chronicle of executive support and systems engineering, mapping
-                        high-impact tenure and organizational transformation.
-                    </p>
-                </div>
+        <section id="experience" className="ritovex-experience">
+            <div className="ritovex-experience__container">
+                <div className="ritovex-experience__layout">
+                    <motion.div
+                        variants={revealVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-10%' }}
+                        className="ritovex-experience__title-wrapper"
+                    >
+                        <div className="ritovex-experience__subtitle-wrap">
+                            <div className="ritovex-experience__subtitle-single">
+                                <img src={profileLogoUrl} alt="" width={14} height={14} className="ritovex-experience__subtitle-icon" aria-hidden="true" />
+                                <div className="ritovex-experience__subtitle">Work Experience</div>
+                            </div>
+                        </div>
+                        <h2 className="ritovex-experience__title">Operations Experience</h2>
+                        <p className="ritovex-experience__description">
+                            A closer look at the roles where I’ve strengthened coordination, streamlined operations, and helped teams move forward.
+                        </p>
+                    </motion.div>
 
-                {/* Timeline */}
-                <div className="max-w-4xl">
-                    {EXPERIENCES.map((exp, i) => (
-                        <ExperienceCard
-                            key={i}
-                            exp={exp}
-                            index={i}
-                            isActive={activeIndex === i}
-                            onClick={() => setActiveIndex(activeIndex === i ? null : i)}
-                        />
-                    ))}
+                    <motion.div
+                        variants={staggerContainer}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-10%' }}
+                        className="ritovex-experience__timeline-panel"
+                    >
+                        <h3 className="ritovex-experience__timeline-title">Where I’ve Worked.</h3>
+
+                        <div className="ritovex-experience__timeline">
+                            {experienceRecords.map((record) => (
+                                <motion.article
+                                    variants={revealVariants}
+                                    key={`${record.company}-${record.role}`}
+                                    className={`ritovex-experience__record${record.current ? ' ritovex-experience__record--current' : ''}`}
+                                >
+                                    <div
+                                        className="ritovex-experience__company-mark"
+                                        style={{ '--company-color': record.color } as React.CSSProperties}
+                                        aria-hidden="true"
+                                    >
+                                        {record.mark}
+                                    </div>
+
+                                    <div className="ritovex-experience__record-body">
+                                        <p className="ritovex-experience__company">{record.company}</p>
+
+                                        <div className="ritovex-experience__role-block">
+                                            <div className="ritovex-experience__role-heading">
+                                                <h4 className="ritovex-experience__role">{record.role}</h4>
+                                                <BadgeCheck className="ritovex-experience__verified" strokeWidth={2.2} aria-hidden="true" />
+                                            </div>
+
+                                            <p className="ritovex-experience__meta">
+                                                <strong>{record.period}</strong>
+                                                {record.focus.map((item) => (
+                                                    <React.Fragment key={item}>
+                                                        <span aria-hidden="true">•</span>
+                                                        {item}
+                                                    </React.Fragment>
+                                                ))}
+                                            </p>
+
+                                            <p className="ritovex-experience__summary">{record.summary}</p>
+                                        </div>
+                                    </div>
+                                </motion.article>
+                            ))}
+                        </div>
+                    </motion.div>
                 </div>
             </div>
         </section>

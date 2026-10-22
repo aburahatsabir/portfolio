@@ -80,20 +80,20 @@ const HandoverIcon: React.FC = () => (
 const steps: ProcessStep[] = [
   {
     number: '01',
-    title: 'Audit & Strategy',
-    description: 'I start by mapping the real workflow, the manual handoffs, and the hidden exceptions before any system design begins.',
+    title: 'Assess & Prioritize',
+    description: 'I identify priorities, deadlines, and office needs, then decide what needs action, coordination, or approval.',
     icon: <AuditIcon />,
   },
   {
     number: '02',
-    title: 'Design & Automation',
-    description: 'I turn the process into owned dashboards, scripts, approvals, and controls using the tools already inside the business.',
+    title: 'Coordinate & Execute',
+    description: 'I bring together people, vendors, and resources, manage follow-ups, and keep tasks moving until each one is done.',
     icon: <BuildIcon />,
   },
   {
     number: '03',
-    title: 'Handover & Governance',
-    description: 'I document, train, and harden the system so your team can operate it cleanly without vendor lock-in or fragile dependency.',
+    title: 'Review & Improve',
+    description: 'I verify completed work, update records, and fix recurring issues, so administration stays accurate and consistent.',
     icon: <HandoverIcon />,
   },
 ];
@@ -147,14 +147,14 @@ const AdministrativeRoiFramework: React.FC = () => {
               </div>
             </div>
             <div className="working-process-section-title">
-              <h2 className="section-title working-process-main-title mb0">Explore My 3 Step Working Process</h2>
+              <h2 className="section-title working-process-main-title mb0">From Priorities to Follow-Through.</h2>
             </div>
             <div className="working-process-button-wrapper">
               <a href="#contact" className="primary-button" aria-label="Start a discussion">
                 <div className="primary-button-inner">
                   <div className="primary-button-text-wrap">
-                    <div className="primary-button-text-block">Start Discussion</div>
-                    <div className="primary-button-text-block is-text-absolute">Start Discussion</div>
+                    <div className="primary-button-text-block">Start a Discussion</div>
+                    <div className="primary-button-text-block is-text-absolute">Start a Discussion</div>
                   </div>
                 </div>
               </a>

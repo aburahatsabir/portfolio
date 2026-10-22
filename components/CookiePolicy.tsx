@@ -76,9 +76,6 @@ const CookiePolicy: React.FC = () => {
                 {[
                   { label: 'Privacy policy', href: '/privacy' },
                   { label: 'Cookie policy', href: '/cookies', active: true },
-                  { label: 'Accessibility statement', href: '/accessibility' },
-                  { label: 'Data security standards', href: '/governance' },
-                  { label: 'Code of conduct', href: '/conduct' },
                 ].map((link) => (
                   <li key={link.label}>
                     <a
@@ -127,14 +124,14 @@ const CookiePolicy: React.FC = () => {
                 1. GENERAL INFORMATION ABOUT COOKIES
               </h3>
               <p className="text-[16px] text-[#464646] leading-[1.6] mb-[12px]">
-                I utilize cookies on this portfolio site to customize its functioning, ensure structural security, and contribute to ease of use when navigating the various blueprints and case studies.
+                This portfolio stores your cookie preference in your browser and may use Google Analytics cookies only after you accept analytics.
               </p>
               
               <p className="text-[16px] text-[#464646] leading-[1.6] mb-[8px] font-semibold mt-[24px]">
                 What is a cookie?
               </p>
               <p className="text-[16px] text-[#464646] leading-[1.6] mb-[12px]">
-                A cookie is a small text file placed onto your device that enables the site's features and functionality. For example, cookies enable the portfolio to recall your consent preferences or measure system latency. They allow the storage of analytical data, such as:
+                A cookie is a small text file stored by your browser. Analytics cookies may help measure information such as:
               </p>
               <ul className="list-disc list-outside ml-[28px] space-y-[8px] text-[16px] text-[#464646] leading-[1.6] mb-[16px]">
                 <li>Network data (IP address, connection speed);</li>
@@ -149,9 +146,9 @@ const CookiePolicy: React.FC = () => {
                 I utilize cookies strictly to:
               </p>
               <ul className="list-disc list-outside ml-[28px] space-y-[8px] text-[16px] text-[#464646] leading-[1.6]">
-                <li><strong>Ensure System Integrity:</strong> To enable and support core infrastructural security and detect/neutralize malicious traffic requests globally.</li>
-                <li><strong>Research and Optimization:</strong> To understand, improve, and measure the performance of the portfolio content, ensuring high-value business insights are correctly positioned for returning executives.</li>
-                <li><strong>Persistent Experience:</strong> To recall returning visitors and avoid prompting repetitive actions (such as re-asking for consent).</li>
+                <li><strong>Preference storage:</strong> To remember whether you accepted or rejected analytics.</li>
+                <li><strong>Measurement:</strong> To understand aggregate visits and navigation after consent.</li>
+                <li><strong>Improvement:</strong> To identify content and performance issues.</li>
               </ul>
             </motion.section>
 
@@ -165,31 +162,40 @@ const CookiePolicy: React.FC = () => {
                 2. COOKIES USED ON THIS PORTFOLIO
               </h3>
               <p className="text-[16px] text-[#464646] leading-[1.6] mb-[12px]">
-                Each time you visit the portfolio, both <strong>persistent cookies</strong> (which remain in your browser securely to be read upon your return) and <strong>session cookies</strong> (which expire the moment you close your browser) may be created.
+                The application uses the following browser storage:
+              </p>
+              <ul className="list-disc list-outside ml-[28px] space-y-[8px] text-[16px] text-[#464646] leading-[1.6] mb-[12px]">
+                <li><strong>cookie-consent</strong> (local storage): remembers your analytics choice until you change it or clear browser data.</li>
+                <li><strong>darkMode</strong> (local storage): remembers the Journal display preference.</li>
+                <li><strong>analytics_event_queue</strong> (local storage): after consent only, temporarily holds unsent analytics events for no more than 24 hours.</li>
+                <li><strong>web-vitals</strong> and <strong>analytics_blocked_logged</strong> (session storage): avoid duplicate measurements or notices during the current browser session.</li>
+              </ul>
+              <p className="text-[16px] text-[#464646] leading-[1.6] mb-[12px]">
+                The Google Analytics script is requested only after you choose Accept. Google Analytics may then set its own cookies according to its service configuration.
               </p>
               <p className="text-[16px] text-[#464646] leading-[1.6] mb-[24px]">
-                Please note that blocking <em>Strictly Necessary</em> cookies will severely degrade the foundational operation of the website. Below are the classifications of cookies engaged on this architecture:
+                Rejecting analytics does not prevent you from reading or navigating the portfolio.
               </p>
 
               <h4 className="text-[16px] font-bold text-[#1d1d1d] mb-[8px]">
                 2.1 Strictly Necessary (Essential Infrastructure)
               </h4>
               <p className="text-[16px] text-[#464646] leading-[1.6] mb-[16px]">
-                These cookies are mandatory for the architectural stability of the site. They manage fundamental session state, cross-site request forgery (CSRF) protection, and load balancing across global edge nodes. Without these, secure operations are impossible.
+                The portfolio does not rely on an application login or shopping session. Hosting infrastructure may process normal request data to deliver and protect the site, but the application does not claim that such infrastructure cookies are required for ordinary browsing.
               </p>
 
               <h4 className="text-[16px] font-bold text-[#1d1d1d] mb-[8px]">
                 2.2 Preference &amp; Functionality
               </h4>
               <p className="text-[16px] text-[#464646] leading-[1.6] mb-[16px]">
-                These improve the experiential performance of the portfolio. They recall the settings you selected (such as your decision on the Cookie Consent banner itself). This spares you from adjusting UI states on subsequent visits.
+                The local <strong>cookie-consent</strong> value records your choice so the banner does not appear on every visit. The <strong>darkMode</strong> value records the Journal theme preference.
               </p>
 
               <h4 className="text-[16px] font-bold text-[#1d1d1d] mb-[8px]">
                 2.3 Statistical &amp; Analytics
               </h4>
               <p className="text-[16px] text-[#464646] leading-[1.6]">
-                These diagnostic cookies allow me to count the number of high-level users and analyze aggregated navigation pathways. This intelligence helps me consistently refine the content structure to better serve the expectations of operations leaders and founders. For instance, determining if certain case studies load too slowly or which blueprint methodologies garner the most attention.
+                After consent, Google Analytics may collect usage and navigation measurements. Advertising storage, ad personalization, and ad user-data storage remain denied. Rejecting or withdrawing consent clears the application's pending analytics queue and accessible Google Analytics cookies.
               </p>
             </motion.section>
 
@@ -207,14 +213,14 @@ const CookiePolicy: React.FC = () => {
                 Analytics and Reporting
               </h4>
               <p className="text-[16px] text-[#464646] leading-[1.6] mb-[16px]">
-                Some analytics cookies are provided by secure third-party entities. Specifically, this site utilizes Google Analytics to process de-identified traffic patterns. Google applies their own strictly governed Privacy and Cookie Policies to these tools, and they determine the duration of such persistent cookies (typically up to 26 months).
+                Google Analytics is the optional analytics provider. Google determines the cookies it sets and their duration under the Google Analytics configuration and Google's own privacy terms. This site does not claim a fixed provider-controlled retention period.
               </p>
 
               <h4 className="text-[16px] font-bold text-[#1d1d1d] mb-[8px]">
                 Infrastructure Vendors
               </h4>
               <p className="text-[16px] text-[#464646] leading-[1.6]">
-                External entities, such as Vercel (my hosting and edge network provider), may set network-level cookies designed to verify a secure and reliable connection. Due to the cryptographic nature of these cookies, this portfolio does not have direct access to alter the local data stored by infrastructure partners, nor do they access the application's local preference cookies.
+                Vercel hosts and delivers this portfolio and may process normal request and security logs under its own privacy terms. The portfolio does not use a Vercel cookie as its consent preference.
               </p>
             </motion.section>
 
@@ -228,10 +234,19 @@ const CookiePolicy: React.FC = () => {
                 4. REFUSAL OR BLOCKING OF COOKIES
               </h3>
               <p className="text-[16px] text-[#464646] leading-[1.6] mb-[12px]">
-                You possess absolute sovereign control over your browser configuration. You may, at your discretion, configure your device settings to block or systematically delete cookies and similar unique identifiers.
+                You can configure your browser to block or delete cookies and similar identifiers.
               </p>
               <p className="text-[16px] text-[#464646] leading-[1.6] mb-[16px]">
-                I strongly respect Do Not Track (DNT) browser signals. However, as noted, stripping the browser of Strictly Necessary cookies may render certain interactive components of the portfolio inaccessible or dysfunctional.
+                Browser Do Not Track signals are not currently used as a separate preference mechanism. Analytics remains denied unless you explicitly accept it through the site's preference control.
+              </p>
+              <p className="text-[16px] text-[#464646] leading-[1.6] mb-[16px]">
+                <button
+                  type="button"
+                  onClick={() => window.dispatchEvent(new Event('open-cookie-settings'))}
+                  className="font-semibold text-[#673DE6] underline underline-offset-4"
+                >
+                  Review or change analytics preferences
+                </button>
               </p>
               <p className="text-[16px] text-[#464646] leading-[1.6] mb-[16px]">
                 <strong>Google Analytics Opt-Out:</strong> You can completely opt out of Google Analytics without affecting how you experience this site globally. For instructions on opting out permanently across all sites, visit the official Google page at:{' '}

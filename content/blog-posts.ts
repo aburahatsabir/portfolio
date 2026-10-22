@@ -6,15 +6,6 @@ export const BLOG_AUTHOR: BlogPost["author"] = {
   avatar: "/images/hero/Abu Rahat Hero 01.webp",
 };
 
-export const BLOG_POST_ROUTE_ALIASES: Record<string, string> = {
-  "blog-02": "resume-writing-guide-getting-shortlisted",
-  "blog-semrush-bing-ai": "how-to-learn-computer-networking",
-};
-
-export function resolveBlogPostRouteId(routeId: string): string {
-  return BLOG_POST_ROUTE_ALIASES[routeId] ?? routeId;
-}
-
 export const BLOG_POSTS: BlogPost[] = [
   {
     id: "resume-writing-guide-getting-shortlisted",

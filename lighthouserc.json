@@ -1,13 +1,20 @@
 {
     "ci": {
         "collect": {
-            "numberOfRuns": 3,
-            "startServerCommand": "npm run preview",
+            "numberOfRuns": 1,
+            "startServerCommand": "npm run preview -- --host 127.0.0.1 --port 4173",
+            "startServerReadyPattern": "Local",
             "url": [
-                "http://localhost:4173/",
-                "http://localhost:4173/#/work",
-                "http://localhost:4173/#/about",
-                "http://localhost:4173/#/solutions"
+                "http://127.0.0.1:4173/",
+                "http://127.0.0.1:4173/about",
+                "http://127.0.0.1:4173/work",
+                "http://127.0.0.1:4173/blog",
+                "http://127.0.0.1:4173/contact",
+                "http://127.0.0.1:4173/certifications",
+                "http://127.0.0.1:4173/privacy",
+                "http://127.0.0.1:4173/cookies",
+                "http://127.0.0.1:4173/blog/resume-writing-guide-getting-shortlisted",
+                "http://127.0.0.1:4173/blog/how-to-learn-computer-networking"
             ]
         },
         "assert": {

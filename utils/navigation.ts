@@ -2,7 +2,7 @@ import React from 'react';
 
 /**
  * Navigate to a route using History API (for clean URLs without hash)
- * @param path - The pathname to navigate to (e.g., '/about', '/work/fmcg-erp')
+ * @param path - The pathname to navigate to (e.g., '/about', '/work')
  */
 export function navigateTo(path: string) {
     window.history.pushState({}, '', path);

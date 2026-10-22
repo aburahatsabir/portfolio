@@ -28,7 +28,7 @@
 
 .portfolio-footer__grid {
   display: grid;
-  grid-template-columns: 196px repeat(4, minmax(0, 1fr));
+  grid-template-columns: 196px repeat(3, minmax(0, 1fr));
   column-gap: 64px;
   row-gap: 44px;
   align-items: start;

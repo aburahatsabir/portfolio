@@ -4,7 +4,7 @@ export const TESTIMONIALS: Testimonial[] = [
   {
     name: 'Md Tanvir Morshed',
     position: 'CEO, Prominent Tec',
-    content: "Rahat automated our board pack process. What took 3 days now happens in minutes. Our investors get real-time updates instead of waiting for monthly reports.",
+    content: "Rahat understood what needed my attention and what he could handle independently. He kept priorities organized, followed up without reminders, and made my day easier by taking ownership of the details.",
     avatar: '/images/testimonial/Md Tanvir Morshed.webp',
     linkedInProfile: 'https://www.linkedin.com/in/mdtanvirmorshed/',
     companyLinkedIn: 'https://www.linkedin.com/company/prominent-tec/'
@@ -12,7 +12,7 @@ export const TESTIMONIALS: Testimonial[] = [
   {
     name: 'Md. Moshiur Rahman',
     position: 'MD, Texicon BD',
-    content: "Invoicing used to take 20 minutes per order. Rahat's system cut that to 4 minutes. Zero pricing errors since we launched. Simple, but it changed everything.",
+    content: "Whether it was a vendor issue, workplace requirement, or urgent request, Rahat was someone we could depend on. He didn't just pass problems along—he stayed involved until they were resolved.",
     avatar: '/images/testimonial/Md.Moshiur Rahman.webp',
     linkedInProfile: 'https://www.linkedin.com/in/md-moshiur-rahman-283a3060/',
     companyLinkedIn: 'https://www.linkedin.com/company/texicon-bd/'
@@ -20,7 +20,7 @@ export const TESTIMONIALS: Testimonial[] = [
   {
     name: 'Muntasir Mahmood',
     position: 'COO, Cikitsa International',
-    content: "We were losing track of commissions across 49 hospitals. Rahat built a ledger that recovered 15% in revenue we didn't know was missing. Paid for itself in month one.",
+    content: "Rahat was dependable when things got busy. He kept documentation organized, coordinated with different teams, and made sure important follow-ups weren't missed. That consistency made a real difference to our daily work.",
     avatar: '/images/testimonial/Muntasir Mahmood.webp',
     linkedInProfile: 'https://www.linkedin.com/in/muntasirmahmood/',
     companyLinkedIn: 'https://www.linkedin.com/company/cikitsa-international'

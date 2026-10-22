@@ -1,15 +1,14 @@
 import { Project, Experience, Testimonial, PostMortemEntry, SuccessStory, IndustryBlueprint, Standard, BlogPost } from '../types';
-import { WORK_ROUTE_TITLES } from './work-route-titles';
 
 export const PROJECTS: Project[] = [
   {
     id: 'fmcg-erp',
-    title: WORK_ROUTE_TITLES['fmcg-erp'],
+    title: 'Integrated FMCG Distribution ERP',
     headline: 'From Ledger Chaos to Real-Time Control',
     badge: 'Production-Grade ERP • Zero-Code Architecture',
     category: 'Systems',
     description: 'A 106-column spreadsheet couldn\'t keep up with a business growing 66× in 14 months. I replaced it with a modular, field-ready operations system — purpose-built for R Group\'s DOHA Brand distribution across Sylhet Division.',
-    image: '/images/projects/fmcg-erp.webp',
+    image: '/images/projects/office-operations-task-coordination.svg',
     client: 'FMCG Wholesale Sector',
     impact: '80% Faster Invoicing',
     confidential: false,
@@ -258,12 +257,12 @@ export const PROJECTS: Project[] = [
 
   {
     id: 'mocs',
-    title: WORK_ROUTE_TITLES.mocs,
+    title: 'Medical Operations Control System',
     headline: 'Engineering Control in Medical Logistics',
     badge: 'Operational Systems Architecture',
     category: 'Systems',
     description: 'Moving beyond fragmented spreadsheets to a governed, audit-ready operations system. I architected a "Zero-Cost ERP" to govern the complex lifecycle of 3,100+ international patients.',
-    image: '/images/projects/med-ops.webp',
+    image: '/images/projects/vendor-sourcing-office-procurement.svg',
     client: 'International Healthcare Logistics',
     impact: 'Zero Pipeline Failures',
     confidential: false,
@@ -307,12 +306,12 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 'hr-docs',
-    title: WORK_ROUTE_TITLES['hr-docs'],
+    title: 'HR Documentation & Control System',
     headline: 'HR Documentation for SME Governance',
     badge: 'HR Documentation | Compliance Workflows',
     category: 'Governance',
     description: 'A compliance-focused HR control system for SMEs that unifies records, approvals, payroll readiness, document expiry, and audit trails in one governed workflow.',
-    image: '/images/projects/hr-docs.webp',
+    image: '/images/projects/petty-cash-expense-tracking.svg',
     client: 'SME HR Operations',
     impact: 'Weeks of manual payroll removed',
     technologies: ['Approval Workflows', 'Document Control', 'Audit Logging'],
@@ -358,7 +357,7 @@ export const PROJECTS: Project[] = [
     badge: 'Operational Systems Architecture • Payroll Controls',
     category: 'Automation',
     description: 'Built a zero-error payroll engine (Google Sheets + App Script) that enforces pro-rata salary logic, manages complex exceptions, and produces audit-ready compensation artifacts across 9 entities.',
-    image: '/images/projects/payroll-control.webp',
+    image: '/images/projects/executive-reporting-action-tracking.svg',
     client: 'Multi-National Enterprise',
     impact: '100% Payroll Accuracy',
     performanceData: [15, 12, 8, 4, 1, 0],
@@ -405,7 +404,7 @@ export const PROJECTS: Project[] = [
     badge: 'Trade Finance Governance Â· Financial Controls',
     category: 'Finance',
     description: 'Architecting a zero-cost financial operations system to govern cross-border indent transactions. This system synchronizes Letter of Credit (LC) timelines with shipment milestones and ensures 100% commission reconciliation.',
-    image: '/images/projects/trade-finance.webp',
+    image: '/images/projects/office-inventory-asset-records.svg',
     client: 'Global Trading Partner',
     impact: '15% Revenue Recovery',
     performanceData: [2, 5, 8, 11, 14, 15],

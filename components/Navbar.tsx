@@ -1,7 +1,6 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Button from './shared/Button';
 import SocialLinks from './shared/SocialLinks';
 import { trackResumeDownload } from '../utils/analytics';
 
@@ -11,6 +10,8 @@ const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDarkThemePage, setIsDarkThemePage] = useState(false);
   const [isBlogIndexPage, setIsBlogIndexPage] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
@@ -20,7 +21,7 @@ const Navbar: React.FC = () => {
     const checkTheme = () => {
       const path = window.location.pathname;
       setIsBlogIndexPage(path === '/blog');
-      setIsDarkThemePage(path === '/blog' || path === '/privacy' || path === '/cookies' || path === '/accessibility' || path === '/conduct' || path === '/governance');
+      setIsDarkThemePage(path === '/blog' || path === '/privacy' || path === '/cookies');
     };
     checkTheme();
     window.addEventListener('popstate', checkTheme);
@@ -31,6 +32,61 @@ const Navbar: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    const menuButton = menuButtonRef.current;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const focusableSelector = [
+      'a[href]',
+      'button:not([disabled])',
+      'input:not([disabled])',
+      'select:not([disabled])',
+      'textarea:not([disabled])',
+      '[tabindex]:not([tabindex="-1"])',
+    ].join(',');
+
+    const focusFirstItem = requestAnimationFrame(() => {
+      menuRef.current?.querySelector<HTMLElement>(focusableSelector)?.focus();
+    });
+
+    const handleMenuKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setIsOpen(false);
+        return;
+      }
+
+      if (event.key !== 'Tab' || !menuRef.current) return;
+      const focusable = Array.from(
+        menuRef.current.querySelectorAll(focusableSelector),
+      ) as HTMLElement[];
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleMenuKeyDown);
+
+    return () => {
+      cancelAnimationFrame(focusFirstItem);
+      document.removeEventListener('keydown', handleMenuKeyDown);
+      document.body.style.overflow = previousOverflow;
+      (previouslyFocused ?? menuButton)?.focus();
+    };
+  }, [isOpen]);
+
   const handleLinkClick = () => {
     setIsOpen(false);
   };
@@ -39,7 +95,6 @@ const Navbar: React.FC = () => {
     { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
     { name: 'Work', path: '/work' },
-    { name: 'Solutions', path: '/solutions' },
     { name: 'Contact', path: '/contact' },
   ];
 
@@ -77,10 +132,14 @@ const Navbar: React.FC = () => {
     }
   };
 
+  const navChromeClass = isScrolled || isOpen
+    ? 'glass-nav border-b border-slate-100 shadow-sm'
+    : 'bg-transparent';
+
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-500 ${isScrolled || isOpen ? 'glass-nav border-b border-slate-100 py-4 shadow-sm' : 'bg-transparent py-8'}`}>
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+      <nav className={`fixed top-0 left-0 right-0 z-[80] py-8 transition-all duration-500 ${navChromeClass}`}>
+        <div className="site-nav-container">
           <a href="/" className="flex items-center gap-4 group" onClick={handleLinkClick}>
             <div className="relative w-[42px] h-[42px] flex items-center justify-center overflow-visible bg-transparent">
               <img
@@ -141,12 +200,14 @@ const Navbar: React.FC = () => {
             </button>
 
             <button
+              ref={menuButtonRef}
               type="button"
               onClick={() => setIsOpen(!isOpen)}
               className="lg:hidden w-12 h-12 flex flex-col items-center justify-center gap-1.5 relative focus:outline-none"
               aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
               aria-expanded={isOpen}
               aria-controls="mobile-menu"
+              aria-haspopup="dialog"
             >
               <motion.span
                 animate={isOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
@@ -168,18 +229,37 @@ const Navbar: React.FC = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            id="mobile-menu"
-            aria-hidden={!isOpen}
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-[70] bg-white lg:hidden overflow-y-auto"
+            className="fixed inset-0 z-[70] bg-slate-950/30 lg:hidden"
+            onPointerDown={(event) => {
+              if (event.target === event.currentTarget) setIsOpen(false);
+            }}
           >
-            <div className="pt-32 pb-12 px-8 flex flex-col min-h-screen">
+            <div
+              ref={menuRef}
+              id="mobile-menu"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="mobile-menu-title"
+              className="ml-auto min-h-screen w-full max-w-lg overflow-y-auto bg-white shadow-2xl"
+              onPointerDown={(event) => event.stopPropagation()}
+            >
+            <div className="pt-24 pb-12 px-8 flex flex-col min-h-screen">
+              <div className="mb-8 flex items-center justify-between gap-6">
+                <p id="mobile-menu-title" className="text-[10px] font-black uppercase tracking-[0.4em] text-blue-600">Navigation Menu</p>
+                <button
+                  type="button"
+                  onClick={() => setIsOpen(false)}
+                  className="rounded-lg border border-slate-200 px-4 py-2 text-xs font-black uppercase tracking-widest text-slate-700 focus-visible:outline-2 focus-visible:outline-blue-600 focus-visible:outline-offset-2"
+                  aria-label="Close navigation menu"
+                >
+                  Close
+                </button>
+              </div>
               <div className="flex-1 space-y-8">
-                <p className="text-[10px] font-black uppercase tracking-[0.4em] text-blue-600 mb-8">Navigation Menu</p>
-
                 <div className="flex flex-col gap-6">
                   {navLinks.map((link, idx) => (
                     <motion.a
@@ -235,6 +315,7 @@ const Navbar: React.FC = () => {
 
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 opacity-[0.02] text-[40vw] font-black pointer-events-none select-none">
               ARS
+            </div>
             </div>
           </motion.div>
         )}

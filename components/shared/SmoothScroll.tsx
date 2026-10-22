@@ -20,6 +20,13 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
             history.scrollRestoration = 'manual';
         }
 
+        // Native scrolling is the accessible default when reduced motion is
+        // requested; no animation loop is created in that mode.
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            window.__lenis = undefined;
+            return;
+        }
+
         const lenis = new Lenis({
             duration: 1.2,
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),

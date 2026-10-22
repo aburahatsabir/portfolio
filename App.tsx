@@ -10,23 +10,12 @@ import About from './components/About';
 import ScrollToTop from './components/ScrollToTop';
 import ErrorBoundary from './components/ErrorBoundary';
 import NotFoundPage from './components/NotFoundPage';
-import PersonaCTA from './components/PersonaCTA';
-import PersonaBanner from './components/PersonaBanner';
-import BottomCTA from './components/BottomCTA';
-import { lazyLoadPage, lazyLoad, PageLoadingFallback, LoadingFallback } from './utils/lazy-loading';
+import { lazyLoadPage, lazyLoad } from './utils/lazy-loading';
 
 // Route-based code splitting - lazy load page components
 const BlogSeries = lazyLoadPage(() => import('./components/BlogSeries'));
-const PersonaSpecificContent = lazyLoadPage(() => import('./components/PersonaSpecificContent'));
-const PersonaDirectory = lazyLoadPage(() => import('./components/PersonaDirectory'));
-const FMCGCaseStudy = lazyLoadPage(() => import('./components/FMCGCaseStudy'));
-const MocsCaseStudy = lazyLoadPage(() => import('./components/MocsCaseStudy'));
-const HRDocsCaseStudy = lazyLoadPage(() => import('./components/HRDocsCaseStudy'));
 const PrivacyPolicy = lazyLoadPage(() => import('./components/PrivacyPolicy'));
 const CookiePolicy = lazyLoadPage(() => import('./components/CookiePolicy'));
-const AccessibilityStatement = lazyLoadPage(() => import('./components/AccessibilityStatement'));
-const CodeOfConduct = lazyLoadPage(() => import('./components/CodeOfConduct'));
-const DataSecurityStandards = lazyLoadPage(() => import('./components/DataSecurityStandards'));
 const Certifications = lazyLoadPage(() => import('./components/Certifications'));
 
 // Below-the-fold components - lazy load for better initial load
@@ -39,11 +28,10 @@ const Work = lazyLoad(() => import('./components/Work'));
 import { motion, AnimatePresence } from 'framer-motion';
 import { updatePageMetadata, generateWebSiteSchema, generateFAQSchema, generateBreadcrumbSchema, injectSchema, removeSchema } from './utils/seo-utils';
 
-import { trackPageView, trackNavigation, trackError } from './utils/analytics';
+import { trackPageView, trackNavigation } from './utils/analytics';
 import { useScrollDepth } from './hooks/useScrollDepth';
 import { useEngagementTime } from './hooks/useEngagementTime';
 import { useExitIntent } from './hooks/useExitIntent';
-import { getWorkProjectIdFromRouteSegment, getWorkRoutePath, getWorkRouteTitle, normalizeWorkRoutePath } from './content/work-route-titles';
 import CookieConsent from './components/CookieConsent';
 import OfflineIndicator from './components/OfflineIndicator';
 
@@ -52,6 +40,11 @@ import OfflineIndicator from './components/OfflineIndicator';
 /**
  * Generate breadcrumb items for current route
  */
+function normalizePathname(pathname: string): string {
+    if (!pathname || pathname === '/') return '/';
+    return `/${pathname.replace(/^\/+|\/+$/g, '')}`;
+}
+
 function getBreadcrumbsForRoute(currentPath: string): Array<{ name: string; url: string }> {
     const baseUrl = window.location.origin;
     const breadcrumbs = [{ name: 'Home', url: `${baseUrl}/` }];
@@ -60,19 +53,6 @@ function getBreadcrumbsForRoute(currentPath: string): Array<{ name: string; url:
         return breadcrumbs;
     }
 
-    // Handle case study routes
-    if (currentPath.startsWith('/work/')) {
-        breadcrumbs.push({ name: 'Work', url: `${baseUrl}/work` });
-        const routeSegment = currentPath.replace('/work/', '');
-        const projectId = getWorkProjectIdFromRouteSegment(routeSegment) ?? routeSegment;
-        const project = {
-            id: projectId,
-            title: getWorkRouteTitle(projectId) ?? projectId.replace(/-/g, ' '),
-        };
-        const projectPath = getWorkRoutePath(projectId) ?? currentPath;
-        breadcrumbs.push({ name: project.title, url: `${baseUrl}${projectPath}` });
-        return breadcrumbs;
-    }
 
     // Handle blog routes
     if (currentPath.startsWith('/blog/')) {
@@ -82,27 +62,15 @@ function getBreadcrumbsForRoute(currentPath: string): Array<{ name: string; url:
         return breadcrumbs;
     }
 
-    // Handle persona routes
-    if (currentPath.startsWith('/persona/')) {
-        breadcrumbs.push({ name: 'For', url: `${baseUrl}/for` });
-        const personaId = currentPath.replace('/persona/', '');
-        const personaName = personaId.replace(/-/g, ' ');
-        breadcrumbs.push({ name: personaName, url: `${baseUrl}${currentPath}` });
-        return breadcrumbs;
-    }
-
     // Simple routes
     const routeNames: Record<string, string> = {
         '/work': 'Work',
         '/about': 'About',
         '/contact': 'Contact',
-        '/solutions': 'Solutions',
-        '/governance': 'Governance',
         '/blog': 'Blog',
-        '/for': 'For',
-        // '/certifications': 'Certifications',
+        '/certifications': 'Certifications',
         '/privacy': 'Privacy Policy',
-        '/cookies': 'Cookie Policy'
+        '/cookies': 'Cookie Policy',
     };
 
     if (routeNames[currentPath]) {
@@ -115,8 +83,9 @@ function getBreadcrumbsForRoute(currentPath: string): Array<{ name: string; url:
 import SmoothScroll from './components/shared/SmoothScroll';
 
 function App() {
-    const [currentPath, setCurrentPath] = useState(() => normalizeWorkRoutePath(window.location.pathname || '/'));
-    const [previousPath, setPreviousPath] = useState(() => normalizeWorkRoutePath(window.location.pathname || '/'));
+    const initialPath = normalizePathname(window.location.pathname);
+    const [currentPath, setCurrentPath] = useState(initialPath);
+    const [previousPath, setPreviousPath] = useState(initialPath);
 
     // Track scroll depth for the current page
     useScrollDepth(currentPath);
@@ -129,13 +98,6 @@ function App() {
 
 
     useEffect(() => {
-        const browserPath = window.location.pathname || '/';
-        const normalizedBrowserPath = normalizeWorkRoutePath(browserPath);
-
-        if (normalizedBrowserPath !== browserPath) {
-            window.history.replaceState(window.history.state, '', normalizedBrowserPath);
-        }
-
         // Update metadata on initial load and path change
         updatePageMetadata(currentPath);
 
@@ -177,11 +139,7 @@ function App() {
         }
 
         const handlePopState = () => {
-            const newPath = normalizeWorkRoutePath(window.location.pathname || '/');
-            if (newPath !== (window.location.pathname || '/')) {
-                window.history.replaceState(window.history.state, '', newPath);
-            }
-            setCurrentPath(newPath);
+            setCurrentPath(normalizePathname(window.location.pathname));
         };
 
         window.addEventListener('popstate', handlePopState);
@@ -189,13 +147,6 @@ function App() {
     }, [currentPath, previousPath]);
 
     const renderContent = () => {
-        const workRouteSegment = currentPath.startsWith('/work/')
-            ? currentPath.replace('/work/', '')
-            : null;
-        const workProjectId = workRouteSegment
-            ? getWorkProjectIdFromRouteSegment(workRouteSegment)
-            : undefined;
-
         if (currentPath.startsWith('/blog/')) {
             // CRITICAL FIX: The unique key forces React to fully unmount and remount
             // the component when transitioning between the list (/blog) and a post (/blog/id).
@@ -203,70 +154,28 @@ function App() {
             return <React.Fragment key={currentPath}><ErrorBoundary><BlogSeries /></ErrorBoundary></React.Fragment>;
         }
 
-        if (workProjectId === 'fmcg-erp') {
-            return <ErrorBoundary><FMCGCaseStudy /></ErrorBoundary>;
-        }
-
-        if (workProjectId === 'mocs') {
-            return <ErrorBoundary><MocsCaseStudy /></ErrorBoundary>;
-        }
-
-        if (workProjectId === 'hr-docs') {
-            return <ErrorBoundary><HRDocsCaseStudy /></ErrorBoundary>;
-        }
-
-        if (currentPath.startsWith('/work/')) {
-            return (
-                <ErrorBoundary>
-                    <NotFoundPage
-                        title="Case Study Not Found"
-                        message="This case study URL is not available. Browse the work library for current project pages."
-                    />
-                </ErrorBoundary>
-            );
-        }
-
-        if (currentPath.startsWith('/persona/')) {
-            const personaId = currentPath.replace('/persona/', '');
-            return <ErrorBoundary><PersonaSpecificContent personaId={personaId} /></ErrorBoundary>;
-        }
 
         switch (currentPath) {
-            case '/for':
-                return <div className="pt-20"><ErrorBoundary><PersonaDirectory /></ErrorBoundary></div>;
             case '/work':
-                return <div className="pt-20"><ErrorBoundary><Work /></ErrorBoundary></div>;
-
-            case '/governance':
-                return <ErrorBoundary><DataSecurityStandards /></ErrorBoundary>;
+                return <div className="pt-20"><h1 className="sr-only">Work Portfolio</h1><ErrorBoundary><Work /></ErrorBoundary></div>;
             case '/blog':
                 return <React.Fragment key={currentPath}><div className="pt-20"><ErrorBoundary><BlogSeries /></ErrorBoundary></div></React.Fragment>;
-            case '/solutions':
-                return (
-                    <div className="pt-20">
-                        <ErrorBoundary><PersonaDirectory /></ErrorBoundary>
-                    </div>
-                );
             case '/about':
                 return (
                     <div className="pt-20">
+                        <h1 className="sr-only">About Abu Rahat Sabir</h1>
                         <ErrorBoundary><About showStrategicPillars={true} /></ErrorBoundary>
                         <ErrorBoundary><ExperienceTimeline /></ErrorBoundary>
-                        <PersonaBanner />
                     </div>
                 );
             case '/contact':
-                return <div className="pt-20"><ErrorBoundary><Contact /></ErrorBoundary></div>;
+                return <div className="pt-20"><h1 className="sr-only">Contact Abu Rahat Sabir</h1><ErrorBoundary><Contact /></ErrorBoundary></div>;
             case '/certifications':
-                return <div className="pt-20"><ErrorBoundary><Certifications /></ErrorBoundary></div>;
+                return <ErrorBoundary><Certifications /></ErrorBoundary>;
             case '/privacy':
                 return <ErrorBoundary><PrivacyPolicy /></ErrorBoundary>;
             case '/cookies':
                 return <ErrorBoundary><CookiePolicy /></ErrorBoundary>;
-            case '/accessibility':
-                return <ErrorBoundary><AccessibilityStatement /></ErrorBoundary>;
-            case '/conduct':
-                return <ErrorBoundary><CodeOfConduct /></ErrorBoundary>;
             case '/':
                 return (
                     <>
@@ -295,6 +204,7 @@ function App() {
                 {/* Skip to content link for screen readers */}
                 <a
                     href="#main-content"
+                    onClick={() => requestAnimationFrame(() => document.getElementById('main-content')?.focus())}
                     className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-blue-600 focus:text-white focus:px-6 focus:py-3 focus:rounded-lg focus:outline-2 focus:outline-white focus:outline-offset-2 focus:shadow-xl focus:font-semibold"
                 >
                     Skip to main content
@@ -309,8 +219,8 @@ function App() {
                 </ErrorBoundary>
 
                 <ErrorBoundary>
-                    <main id="main-content">
-                        <AnimatePresence 
+                    <main id="main-content" tabIndex={-1}>
+                        <AnimatePresence
                             mode="wait"
                             onExitComplete={() => {
                                 // Force hard scroll reset at the DOM level

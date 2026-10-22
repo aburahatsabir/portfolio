@@ -1,0 +1,350 @@
+.ritovex-experience {
+  --ritovex-experience-primary: #141414;
+  --ritovex-experience-gray: #494852;
+  --ritovex-experience-light-gray: #f6f6f9;
+  --ritovex-experience-white: #ffffff;
+  --ritovex-experience-theme: var(--brand-blue, #4f46e5);
+
+  background: var(--ritovex-experience-white);
+  color: var(--ritovex-experience-primary);
+  padding-top: 92px;
+  padding-bottom: 96px;
+}
+
+.ritovex-experience *,
+.ritovex-experience *::before,
+.ritovex-experience *::after {
+  box-sizing: border-box;
+  letter-spacing: 0;
+}
+
+.ritovex-experience__container {
+  width: 100%;
+  max-width: 1320px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.ritovex-experience__layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.72fr) minmax(0, 1.28fr);
+  align-items: start;
+  gap: clamp(64px, 8vw, 128px);
+}
+
+.ritovex-experience__title-wrapper {
+  max-width: 430px;
+  margin: 0;
+  text-align: left;
+}
+
+.ritovex-experience__subtitle-wrap {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 12px;
+}
+
+.ritovex-experience__subtitle-single {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border-radius: 4px;
+  background-color: var(--ritovex-experience-light-gray);
+  padding: 4px 6px;
+}
+
+.ritovex-experience__subtitle-icon {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  object-fit: contain;
+}
+
+.ritovex-experience__subtitle {
+  color: var(--ritovex-experience-primary);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 100%;
+}
+
+.ritovex-experience__title {
+  margin: 0 0 12px;
+  color: var(--ritovex-experience-primary);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.ritovex-experience__description {
+  max-width: 410px;
+  margin: 0;
+  color: var(--ritovex-experience-gray);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 150%;
+}
+
+.ritovex-experience__timeline-panel {
+  min-width: 0;
+  padding-top: 2px;
+}
+
+.ritovex-experience__timeline-title {
+  margin: 0 0 42px;
+  color: var(--ritovex-experience-primary);
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.ritovex-experience__timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 46px;
+}
+
+.ritovex-experience__record {
+  --record-line: #dfe3e8;
+  position: relative;
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  align-items: start;
+  column-gap: 20px;
+}
+
+.ritovex-experience__record--current {
+  --record-line: #13ad62;
+}
+
+.ritovex-experience__record:not(:last-child)::after {
+  position: absolute;
+  z-index: 0;
+  top: 48px;
+  bottom: -46px;
+  left: 25px;
+  width: 2px;
+  background: #e5e7eb;
+  content: '';
+}
+
+.ritovex-experience__company-mark {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  width: 52px;
+  height: 52px;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: var(--company-color);
+  box-shadow: 0 0 0 1px rgba(20, 20, 20, 0.12);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.ritovex-experience__record-body {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+.ritovex-experience__company {
+  min-height: 52px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  color: var(--ritovex-experience-primary);
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.ritovex-experience__role-block {
+  position: relative;
+  margin-top: 15px;
+  padding-left: 0;
+}
+
+.ritovex-experience__role-block::before {
+  position: absolute;
+  z-index: 2;
+  top: -38px;
+  left: -47px;
+  width: 31px;
+  height: 50px;
+  border-bottom: 3px solid var(--record-line);
+  border-left: 3px solid var(--record-line);
+  border-radius: 0 0 0 22px;
+  content: '';
+}
+
+.ritovex-experience__role-heading {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ritovex-experience__role {
+  margin: 0;
+  color: var(--ritovex-experience-primary);
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.ritovex-experience__verified {
+  width: 23px;
+  height: 23px;
+  flex: 0 0 auto;
+  color: #12ad62;
+  fill: #12ad62;
+  stroke: #fff;
+}
+
+.ritovex-experience__meta {
+  display: flex;
+  margin: 8px 0 0;
+  flex-wrap: wrap;
+  gap: 4px 9px;
+  color: #737780;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.ritovex-experience__meta strong {
+  font-weight: 700;
+}
+
+.ritovex-experience__summary {
+  max-width: 640px;
+  margin: 9px 0 0;
+  color: var(--ritovex-experience-gray);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.55;
+}
+
+@media screen and (max-width: 991px) {
+  .ritovex-experience {
+    padding-top: 76px;
+    padding-bottom: 76px;
+  }
+
+  .ritovex-experience__layout {
+    grid-template-columns: 1fr;
+    gap: 54px;
+  }
+
+  .ritovex-experience__title-wrapper {
+    max-width: 690px;
+  }
+
+  .ritovex-experience__description {
+    max-width: 650px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .ritovex-experience {
+    padding-top: 64px;
+    padding-bottom: 64px;
+  }
+
+  .ritovex-experience__title-wrapper {
+    margin-bottom: 0;
+  }
+
+  .ritovex-experience__description {
+    font-size: 16px;
+  }
+
+  .ritovex-experience__timeline-title {
+    margin-bottom: 34px;
+    font-size: 30px;
+  }
+
+  .ritovex-experience__timeline {
+    gap: 40px;
+  }
+
+  .ritovex-experience__role {
+    font-size: 22px;
+  }
+
+  .ritovex-experience__meta {
+    font-size: 15px;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  .ritovex-experience {
+    padding-top: 52px;
+    padding-bottom: 52px;
+  }
+
+  .ritovex-experience__layout {
+    gap: 44px;
+  }
+
+  .ritovex-experience__record {
+    grid-template-columns: 44px minmax(0, 1fr);
+    column-gap: 15px;
+  }
+
+  .ritovex-experience__company-mark {
+    width: 44px;
+    height: 44px;
+    font-size: 12px;
+  }
+
+  .ritovex-experience__company {
+    min-height: 44px;
+    font-size: 19px;
+  }
+
+  .ritovex-experience__record:not(:last-child)::after {
+    top: 42px;
+    bottom: -40px;
+    left: 21px;
+  }
+
+  .ritovex-experience__role-block {
+    margin-top: 13px;
+  }
+
+  .ritovex-experience__role-block::before {
+    top: -33px;
+    left: -38px;
+    width: 25px;
+    height: 44px;
+  }
+
+  .ritovex-experience__role {
+    font-size: 20px;
+  }
+
+  .ritovex-experience__verified {
+    width: 20px;
+    height: 20px;
+  }
+
+  .ritovex-experience__meta {
+    gap: 3px 7px;
+    font-size: 14px;
+  }
+
+  .ritovex-experience__summary {
+    font-size: 14px;
+  }
+}

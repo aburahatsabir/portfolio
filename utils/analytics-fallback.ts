@@ -22,10 +22,36 @@ class AnalyticsFallback {
     private isGA4Available = false;
 
     constructor() {
+        if (this.hasConsent()) {
+            this.enable();
+        } else {
+            this.clearQueue();
+        }
+
+        window.addEventListener('analytics-consent-change', this.handleConsentChange);
+    }
+
+    private hasConsent(): boolean {
+        return localStorage.getItem('cookie-consent') === 'accepted';
+    }
+
+    private enable(): void {
         this.loadQueue();
         this.startRetryLoop();
         this.checkGA4Availability();
     }
+
+    private handleConsentChange = (event: Event): void => {
+        const granted = (event as CustomEvent<{ granted: boolean }>).detail?.granted === true;
+        if (granted) {
+            this.enable();
+            this.flushQueue();
+        } else {
+            this.stopRetryLoop();
+            this.isGA4Available = false;
+            this.clearQueue();
+        }
+    };
 
     /**
      * Check if GA4 is loaded and available
@@ -91,6 +117,8 @@ class AnalyticsFallback {
      * Add event to queue
      */
     queueEvent(eventName: string, params: Record<string, any> = {}): void {
+        if (!this.hasConsent()) return;
+
         // Remove PII before queuing
         const sanitizedParams = this.sanitizeParams(params);
 
@@ -129,7 +157,7 @@ class AnalyticsFallback {
      * Flush queued events to GA4
      */
     private flushQueue(): void {
-        if (!this.checkGA4Availability() || this.queue.length === 0) {
+        if (!this.hasConsent() || !this.checkGA4Availability() || this.queue.length === 0) {
             return;
         }
 
@@ -141,12 +169,12 @@ class AnalyticsFallback {
         this.saveQueue();
 
         // Send all queued events
-        eventsToFlush.forEach(({ eventName, params }) => {
+        eventsToFlush.forEach(({ eventName, params, timestamp }) => {
             try {
                 gtag('event', eventName, {
                     ...params,
                     queued: true, // Mark as queued event
-                    queue_delay_ms: Date.now() - params.timestamp,
+                    queue_delay_ms: Date.now() - timestamp,
                 });
             } catch (error) {
                 console.warn('[AnalyticsFallback] Failed to flush event:', eventName, error);

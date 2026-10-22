@@ -87,9 +87,6 @@ const PrivacyPolicy: React.FC = () => {
                 {[
                   { label: 'Privacy policy', href: '/privacy', active: true },
                   { label: 'Cookie policy', href: '/cookies' },
-                  { label: 'Accessibility statement', href: '/accessibility' },
-                  { label: 'Data security standards', href: '/governance' },
-                  { label: 'Code of conduct', href: '/conduct' },
                 ].map((link) => (
                   <li key={link.label}>
                     <a
@@ -178,15 +175,15 @@ const PrivacyPolicy: React.FC = () => {
                 3.1 Information You Provide Directly
               </p>
               <ul className="list-disc list-outside ml-[28px] space-y-[8px] text-[16px] text-[#464646] leading-[1.6] mb-[16px]">
-                <li><strong>Contact Information:</strong> When you utilize the contact form, I collect your name, email address, company name, and the contents of your message to accurately assess your needs and respond professionally.</li>
+                  <li><strong>Contact Information:</strong> When you use the contact form, I collect your name, email address, subject, and message so I can respond to your inquiry.</li>
               </ul>
 
               <p className="text-[16px] text-[#464646] leading-[1.6] mb-[8px] font-semibold">
                 3.2 Information Collected Automatically
               </p>
               <ul className="list-disc list-outside ml-[28px] space-y-[8px] text-[16px] text-[#464646] leading-[1.6]">
-                <li><strong>Analytics Data:</strong> I utilize anonymized analytics (Google Analytics) to understand which case studies and pages are most relevant to visitors. This includes general device types, browser information, and aggregated traffic patterns. No personally identifiable information is stored.</li>
-                <li><strong>Network Data:</strong> IP addresses and referral URLs are automatically captured by Vercel's edge network infrastructure solely for security monitoring, uptime, and performance purposes.</li>
+                <li><strong>Analytics Data:</strong> After you consent, Google Analytics may process page views, navigation, approximate device and browser details, and performance measurements. Google may process identifiers under its own privacy terms.</li>
+                <li><strong>Network Data:</strong> Vercel may process IP addresses, request details, and referral information while delivering and protecting the site.</li>
                 <li><strong>Cookies:</strong> Essential cookies manage site preferences (e.g., your Cookie Consent selection). Non-essential analytics cookies are only activated upon your explicit consent. Please review the <a href="/cookies" className="text-[#673DE6] hover:underline font-semibold">Cookie Policy</a> for full details.</li>
               </ul>
             </motion.section>
@@ -240,13 +237,13 @@ const PrivacyPolicy: React.FC = () => {
                 6. THIRD-PARTY INFRASTRUCTURE
               </h3>
               <p className="text-[16px] text-[#464646] leading-[1.6] mb-[12px]">
-                To provide a seamless, modern web experience, this portfolio utilizes industry-leading infrastructure. These providers process data strictly on my behalf and are bound by their own privacy commitments:
+                This portfolio relies on the following service providers, each operating under its own terms and privacy commitments:
               </p>
               <ul className="list-disc list-outside ml-[28px] space-y-[8px] text-[16px] text-[#464646] leading-[1.6]">
-                <li><strong>EmailJS:</strong> Securely routes contact form submissions to my private inbox. EmailJS does not use your data for their own marketing purposes.</li>
-                <li><strong>Vercel:</strong> Hosts this portfolio and processes standard server edge logs globally to maintain uptime and performance. Vercel's infrastructure is SOC 2 Type 2 certified.</li>
+                <li><strong>EmailJS:</strong> Routes contact form submissions to my inbox when you choose to submit the form.</li>
+                <li><strong>Vercel:</strong> Hosts and delivers this portfolio and processes standard request and security logs.</li>
                 <li>
-                  <strong>Google Analytics</strong> (operated by Google LLC, Alphabet Inc.): Aggregates anonymized visitor behavior data to help refine the portfolio experience. You may opt out of Google Analytics tracking at any time via&nbsp;
+                  <strong>Google Analytics</strong> (operated by Google LLC): Processes optional site-usage measurements only after consent. You may opt out at any time through this site's cookie settings or&nbsp;
                   <a
                     href="https://tools.google.com/dlpage/gaoptout"
                     target="_blank"
@@ -256,6 +253,7 @@ const PrivacyPolicy: React.FC = () => {
                     Google's opt-out tool
                   </a>.
                 </li>
+                <li><strong>Sentry:</strong> If error reporting is configured for the deployment, Sentry receives application error diagnostics. Performance tracing and session replay are disabled.</li>
               </ul>
             </motion.section>
 
@@ -269,10 +267,10 @@ const PrivacyPolicy: React.FC = () => {
                 7. INTERNATIONAL DATA TRANSFERS
               </h3>
               <p className="text-[16px] text-[#464646] leading-[1.6] mb-[12px]">
-                This portfolio is operated from Bangladesh. However, some of the third-party services listed above — specifically Vercel and Google LLC — are headquartered in and may process data within the United States.
+                This portfolio is operated from Bangladesh. The service providers listed above may process data in other countries, including the United States.
               </p>
               <p className="text-[16px] text-[#464646] leading-[1.6]">
-                Where data is transferred internationally, both Vercel and Google maintain Standard Contractual Clauses (SCCs) and other appropriate safeguards compliant with international data transfer requirements. By using this site, you acknowledge that your data may be transferred, stored, and processed in jurisdictions outside your country of residence.
+                International processing is governed by each provider's current terms, privacy notice, and applicable transfer safeguards. Those provider-controlled arrangements may change independently of this site.
               </p>
             </motion.section>
 
@@ -308,8 +306,8 @@ const PrivacyPolicy: React.FC = () => {
               <ul className="list-disc list-outside ml-[28px] space-y-[8px] text-[16px] text-[#464646] leading-[1.6]">
                 <li><strong>Contact Inquiries (no engagement):</strong> Communication records are purged within 90 days from the date of last correspondence if a professional engagement is not pursued.</li>
                 <li><strong>Contact Inquiries (active or completed engagement):</strong> Records may be retained for the duration of the engagement plus 12 months thereafter for professional accountability and reference purposes.</li>
-                <li><strong>Analytics Data:</strong> Aggregated Google Analytics data is retained for 26 months per Google's default settings, after which older user data records are automatically purged.</li>
-                <li><strong>Server / Edge Logs (Vercel):</strong> Retained for a short operational window, typically up to 30 days, then automatically deleted.</li>
+                <li><strong>Analytics Data:</strong> Google Analytics retention is controlled by the current analytics-account settings and Google's terms. The application does not promise a fixed provider-controlled period.</li>
+                <li><strong>Hosting and Error Logs:</strong> Vercel and, when configured, Sentry retain service data according to the applicable account settings and provider terms.</li>
               </ul>
             </motion.section>
 

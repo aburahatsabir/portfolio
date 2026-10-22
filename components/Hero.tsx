@@ -21,15 +21,15 @@ const Hero: React.FC = () => {
             className="ritovex-hero__typography"
           >
             <div className="ritovex-hero__subtitle-wrapper">
-              <div className="ritovex-hero__subtitle">Executive Admin &amp; Automation</div>
+              <div className="ritovex-hero__subtitle">Executive Administration &amp; Operations</div>
             </div>
 
             <div className="ritovex-hero__title-description">
-              <h1 className="ritovex-hero__title">Engineering Institutional Sovereignty.</h1>
+              <h1 className="ritovex-hero__title">Executive Operations Specialist</h1>
               <p className="ritovex-hero__description">
-                I design self-governing operations infrastructure for organizations that refuse to
-                hire their way out of inefficiency&mdash;eliminating the &apos;Human-Bridge&apos; debt
-                between silos.
+                I find what slows teams down, fix the process behind it, and document the solution,
+                so executive support, office operations, and reporting stay consistent without
+                constant follow-up.
               </p>
             </div>
 
@@ -47,12 +47,12 @@ const Hero: React.FC = () => {
               >
                 <span className="ritovex-hero__primary-button-inner">
                   <span className="ritovex-hero__button-text-wrap" aria-hidden="true">
-                    <span className="ritovex-hero__button-text">Start Discussion</span>
+                    <span className="ritovex-hero__button-text">Let’s Connect</span>
                     <span className="ritovex-hero__button-text ritovex-hero__button-text--absolute">
-                      Start Discussion
+                      Let’s Connect
                     </span>
                   </span>
-                  <span className="sr-only">Start Discussion</span>
+                  <span className="sr-only">Let’s Connect</span>
                 </span>
               </a>
 

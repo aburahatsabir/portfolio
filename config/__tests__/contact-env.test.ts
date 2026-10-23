@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import {
-  assertProductionContactConfig,
+  reportProductionContactConfig,
   resolveEmailJsConfig,
 } from '../contact-env.js';
 
@@ -25,16 +25,29 @@ describe('contact environment', () => {
     })).toBeNull();
   });
 
-  it('blocks a Vercel production build when required configuration is missing', () => {
-    expect(() => assertProductionContactConfig({
+  it('reports missing production configuration so the form can fail closed', () => {
+    const warn = vi.fn();
+    const missing = reportProductionContactConfig({
       VERCEL_ENV: 'production',
       VITE_EMAILJS_SERVICE_ID: '',
       VITE_EMAILJS_TEMPLATE_ID: '',
       VITE_EMAILJS_PUBLIC_KEY: '',
-    })).toThrow(/VITE_EMAILJS_SERVICE_ID.*VITE_EMAILJS_TEMPLATE_ID.*VITE_EMAILJS_PUBLIC_KEY/);
+    }, warn);
+
+    expect(missing).toEqual([
+      'VITE_EMAILJS_SERVICE_ID',
+      'VITE_EMAILJS_TEMPLATE_ID',
+      'VITE_EMAILJS_PUBLIC_KEY',
+    ]);
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringMatching(/VITE_EMAILJS_SERVICE_ID.*VITE_EMAILJS_TEMPLATE_ID.*VITE_EMAILJS_PUBLIC_KEY/),
+    );
   });
 
-  it('allows non-production builds to show the fail-closed fallback', () => {
-    expect(() => assertProductionContactConfig({ VERCEL_ENV: 'preview' })).not.toThrow();
+  it('does not report configuration for non-production builds', () => {
+    const warn = vi.fn();
+
+    expect(reportProductionContactConfig({ VERCEL_ENV: 'preview' }, warn)).toEqual([]);
+    expect(warn).not.toHaveBeenCalled();
   });
 });

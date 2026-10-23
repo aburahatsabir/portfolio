@@ -14,16 +14,18 @@ export function resolveEmailJsConfig(environment) {
     : null;
 }
 
-export function assertProductionContactConfig(environment) {
-  if (environment.VERCEL_ENV !== 'production') return;
+export function reportProductionContactConfig(environment, warn = console.warn) {
+  if (environment.VERCEL_ENV !== 'production') return [];
 
   const missing = REQUIRED_CONTACT_ENV.filter(
     (key) => !environment[key]?.trim(),
   );
 
   if (missing.length > 0) {
-    throw new Error(
-      `Production contact form configuration is missing: ${missing.join(', ')}`,
+    warn(
+      `Production contact form is disabled because configuration is missing: ${missing.join(', ')}`,
     );
   }
+
+  return missing;
 }
